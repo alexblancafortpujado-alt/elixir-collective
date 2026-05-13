@@ -2442,22 +2442,69 @@
     min-height: 520px;
     border-radius: 16px;
     overflow: hidden;
-    background:
-      radial-gradient(ellipse at center, rgba(80,60,40,0.10) 0%, transparent 55%),
-      radial-gradient(ellipse at 20% 20%, rgba(107,168,227,0.05) 0%, transparent 40%),
-      radial-gradient(ellipse at 80% 80%, rgba(184,155,233,0.05) 0%, transparent 40%),
-      #0A0A0C;
+    background: #07070A;
     border: 1px solid rgba(255,255,255,0.06);
     cursor: grab;
     user-select: none;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.5), inset 0 0 80px rgba(0,0,0,0.4);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.55), inset 0 0 80px rgba(0,0,0,0.5);
     touch-action: none;
+    isolation: isolate;
+  }
+  .stv2-canvas-wrap::before {
+    content: '';
+    position: absolute;
+    inset: -10%;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 28% 32%, rgba(107,168,227,0.16) 0%, transparent 35%),
+      radial-gradient(circle at 72% 68%, rgba(184,155,233,0.16) 0%, transparent 35%),
+      radial-gradient(circle at 62% 22%, rgba(255,142,114,0.12) 0%, transparent 30%),
+      radial-gradient(circle at 22% 78%, rgba(107,227,164,0.10) 0%, transparent 32%),
+      radial-gradient(circle at 50% 50%, rgba(255,216,158,0.07) 0%, transparent 28%);
+    filter: blur(28px);
+    animation: stv2-nebula-drift 38s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+  @keyframes stv2-nebula-drift {
+    0%   { transform: rotate(0deg) scale(1.0); }
+    50%  { transform: rotate(180deg) scale(1.08); }
+    100% { transform: rotate(360deg) scale(1.0); }
+  }
+  .stv2-canvas-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 3;
+    background: radial-gradient(circle at center, transparent 55%, rgba(0,0,0,0.55) 100%);
   }
   .stv2-canvas-wrap.is-panning { cursor: grabbing; }
   .stv2-canvas-wrap svg {
     display: block;
     width: 100%;
     height: 100%;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Cursor sparkles */
+  .stv2-sparkle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 0 8px rgba(255,255,255,0.9), 0 0 16px rgba(255,216,158,0.6);
+    pointer-events: none;
+    z-index: 4;
+    animation: stv2-sparkle-fade 0.75s ease-out forwards;
+    margin-left: -2px;
+    margin-top: -2px;
+  }
+  @keyframes stv2-sparkle-fade {
+    0%   { transform: translateY(0) scale(1); opacity: 0.9; }
+    100% { transform: translateY(-14px) scale(0.2); opacity: 0; }
   }
 
   .stv2-stars { opacity: 0.7; }
@@ -2480,12 +2527,38 @@
     stroke-width: 2.4;
     opacity: 0.92;
     filter: drop-shadow(0 0 6px var(--day-color)) drop-shadow(0 0 2px var(--day-color));
-    animation: stv2-line-breathe 4.5s ease-in-out infinite;
+    stroke-dasharray: 4 22;
+    animation: stv2-line-flow 5.5s linear infinite, stv2-line-breathe 4.5s ease-in-out infinite;
   }
   @keyframes stv2-line-breathe {
-    0%, 100% { opacity: 0.78; }
+    0%, 100% { opacity: 0.80; }
     50% { opacity: 1; }
   }
+  @keyframes stv2-line-flow {
+    to { stroke-dashoffset: -260; }
+  }
+
+  /* Entry stagger animation — node content scales in from center */
+  .stv2-node-spawn-wrap {
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: stv2-node-spawn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+    animation-delay: var(--spawn-delay, 0s);
+  }
+  @keyframes stv2-node-spawn {
+    0%   { opacity: 0; transform: scale(0.15); }
+    60%  { opacity: 1; transform: scale(1.12); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  .stv2-line {
+    animation: stv2-line-fade-in 0.55s ease-out backwards;
+    animation-delay: var(--spawn-delay, 0s);
+  }
+  @keyframes stv2-line-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  /* When line becomes lit, its `animation` property is overridden by .is-lit rule above */
 
   .stv2-node { cursor: pointer; }
   .stv2-node-glow {
@@ -5645,49 +5718,74 @@ Right-click any image on Pinterest and choose &quot;Copy image address&quot;."><
     if (data.sgIdx !== undefined) g.dataset.sgIdx = data.sgIdx;
     if (data.tIdx !== undefined) g.dataset.tIdx = data.tIdx;
 
+    // Stagger spawn delay by radial distance
+    const dist = Math.hypot(data.x, data.y);
+    const delay = 0.05 + (dist / 800) * 0.5; // 50ms..650ms
+    g.style.setProperty('--spawn-delay', delay.toFixed(3) + 's');
+
+    // Spawn wrapper — allows entry animation without conflicting with hover scale
+    const wrap = document.createElementNS(SVG_NS, 'g');
+    wrap.setAttribute('class', 'stv2-node-spawn-wrap');
+
     const glow = document.createElementNS(SVG_NS, 'circle');
     glow.setAttribute('r', r * 2.6);
     glow.setAttribute('class', 'stv2-node-glow');
-    g.appendChild(glow);
+    wrap.appendChild(glow);
 
-    // Decorative ring for chapter
     if (data.type === 'chapter') {
       const ring = document.createElementNS(SVG_NS, 'circle');
       ring.setAttribute('r', r * 1.55);
       ring.setAttribute('class', 'stv2-chapter-ring');
-      g.appendChild(ring);
+      wrap.appendChild(ring);
     }
 
     const bg = document.createElementNS(SVG_NS, 'circle');
     bg.setAttribute('r', r);
     bg.setAttribute('class', 'stv2-node-bg');
-    g.appendChild(bg);
+    wrap.appendChild(bg);
 
     const inner = document.createElementNS(SVG_NS, 'circle');
     inner.setAttribute('r', r * 0.45);
     inner.setAttribute('class', 'stv2-node-inner');
-    g.appendChild(inner);
+    wrap.appendChild(inner);
 
-    // Hub gets a decorative rotating ring
     if (data.type === 'hub') {
       const hubRing = document.createElementNS(SVG_NS, 'circle');
       hubRing.setAttribute('r', r * 1.8);
       hubRing.setAttribute('class', 'stv2-hub-ring');
-      g.appendChild(hubRing);
+      wrap.appendChild(hubRing);
     }
 
+    g.appendChild(wrap);
     return g;
   }
 
-  function stv2CreateLine(x1, y1, x2, y2, color) {
-    const line = document.createElementNS(SVG_NS, 'line');
-    line.setAttribute('x1', x1);
-    line.setAttribute('y1', y1);
-    line.setAttribute('x2', x2);
-    line.setAttribute('y2', y2);
-    line.setAttribute('class', 'stv2-line');
-    line.style.setProperty('--day-color', color);
-    return line;
+  function stv2CurvePath(x1, y1, x2, y2) {
+    // Quadratic bezier with perpendicular outward bend for an organic constellation feel.
+    const mx = (x1 + x2) / 2;
+    const my = (y1 + y2) / 2;
+    const dx = x2 - x1, dy = y2 - y1;
+    const len = Math.hypot(dx, dy) || 1;
+    // Perpendicular unit vector (rotate 90° CCW)
+    const perpX = -dy / len, perpY = dx / len;
+    // Decide bend direction so curve bulges away from origin
+    const radial = Math.hypot(mx, my) || 1;
+    const radX = mx / radial, radY = my / radial;
+    const dot = perpX * radX + perpY * radY;
+    const sign = dot >= 0 ? 1 : -1;
+    const bend = Math.min(len * 0.13, 36);
+    const cx = mx + perpX * bend * sign;
+    const cy = my + perpY * bend * sign;
+    return 'M' + x1 + ',' + y1 + ' Q' + cx + ',' + cy + ' ' + x2 + ',' + y2;
+  }
+
+  function stv2CreateLine(x1, y1, x2, y2, color, spawnDelay) {
+    const path = document.createElementNS(SVG_NS, 'path');
+    path.setAttribute('d', stv2CurvePath(x1, y1, x2, y2));
+    path.setAttribute('class', 'stv2-line');
+    path.style.setProperty('--day-color', color);
+    if (spawnDelay !== undefined) path.style.setProperty('--spawn-delay', spawnDelay.toFixed(3) + 's');
+    return path;
   }
 
   function renderSkilltreeV2() {
@@ -5803,7 +5901,7 @@ Right-click any image on Pinterest and choose &quot;Copy image address&quot;."><
       nodesG.appendChild(chEl);
       stv2State.nodes.push({ ...chData, el: chEl });
 
-      const hubLine = stv2CreateLine(0, 0, chX, chY, ch.color);
+      const hubLine = stv2CreateLine(0, 0, chX, chY, ch.color, 0.05 + (Math.hypot(chX, chY) / 800) * 0.5);
       linesG.appendChild(hubLine);
       stv2State.lines.push({ el: hubLine, fromType: 'hub', toType: 'chapter', toChIdx: chIdx, color: ch.color });
 
@@ -5826,7 +5924,7 @@ Right-click any image on Pinterest and choose &quot;Copy image address&quot;."><
         nodesG.appendChild(sgEl);
         stv2State.nodes.push({ ...sgData, el: sgEl });
 
-        const sgLine = stv2CreateLine(chX, chY, sgX, sgY, ch.color);
+        const sgLine = stv2CreateLine(chX, chY, sgX, sgY, ch.color, 0.05 + (Math.hypot(sgX, sgY) / 800) * 0.5);
         linesG.appendChild(sgLine);
         stv2State.lines.push({ el: sgLine, fromType: 'chapter', toType: 'subgroup', toChIdx: chIdx, toSgIdx: sgIdx, color: ch.color });
 
@@ -5850,7 +5948,7 @@ Right-click any image on Pinterest and choose &quot;Copy image address&quot;."><
           nodesG.appendChild(tEl);
           stv2State.nodes.push({ ...tData, el: tEl });
 
-          const tLine = stv2CreateLine(sgX, sgY, tX, tY, ch.color);
+          const tLine = stv2CreateLine(sgX, sgY, tX, tY, ch.color, 0.05 + (Math.hypot(tX, tY) / 800) * 0.5);
           linesG.appendChild(tLine);
           stv2State.lines.push({ el: tLine, fromType: 'subgroup', toType: 'task', toChIdx: chIdx, toSgIdx: sgIdx, toTIdx: tIdx, color: ch.color });
         });
@@ -5878,6 +5976,45 @@ Right-click any image on Pinterest and choose &quot;Copy image address&quot;."><
     v.y = anchorSvgY - rY * newH;
     v.w = newW; v.h = newH;
     stv2UpdateViewBox(svg);
+  }
+
+  // Smooth animated zoom — used on wheel events for buttery feel
+  let stv2ZoomTarget = null;
+  let stv2ZoomAnimating = false;
+  function stv2SmoothZoom(factor, anchorSvgX, anchorSvgY, svg) {
+    const baseV = stv2ZoomTarget || stv2State.viewBox;
+    const newW = Math.max(500, Math.min(4000, baseV.w * factor));
+    const newH = newW * (baseV.h / baseV.w);
+    const rX = (anchorSvgX - baseV.x) / baseV.w;
+    const rY = (anchorSvgY - baseV.y) / baseV.h;
+    stv2ZoomTarget = {
+      x: anchorSvgX - rX * newW,
+      y: anchorSvgY - rY * newH,
+      w: newW, h: newH
+    };
+    if (!stv2ZoomAnimating) {
+      stv2ZoomAnimating = true;
+      const step = () => {
+        if (!stv2ZoomTarget) { stv2ZoomAnimating = false; return; }
+        const v = stv2State.viewBox;
+        const t = stv2ZoomTarget;
+        const ease = 0.22;
+        v.x += (t.x - v.x) * ease;
+        v.y += (t.y - v.y) * ease;
+        v.w += (t.w - v.w) * ease;
+        v.h += (t.h - v.h) * ease;
+        stv2UpdateViewBox(svg);
+        if (Math.abs(t.w - v.w) > 0.5 || Math.abs(t.x - v.x) > 0.5 || Math.abs(t.y - v.y) > 0.5) {
+          requestAnimationFrame(step);
+        } else {
+          v.x = t.x; v.y = t.y; v.w = t.w; v.h = t.h;
+          stv2UpdateViewBox(svg);
+          stv2ZoomTarget = null;
+          stv2ZoomAnimating = false;
+        }
+      };
+      requestAnimationFrame(step);
+    }
   }
 
   function stv2ScreenToSvg(svg, clientX, clientY) {
@@ -5915,8 +6052,30 @@ Right-click any image on Pinterest and choose &quot;Copy image address&quot;."><
     svg.addEventListener('wheel', (e) => {
       e.preventDefault();
       const p = stv2ScreenToSvg(svg, e.clientX, e.clientY);
-      stv2Zoom(e.deltaY > 0 ? 1.12 : 0.88, p.x, p.y, svg);
+      stv2SmoothZoom(e.deltaY > 0 ? 1.18 : 0.85, p.x, p.y, svg);
     }, { passive: false });
+
+    // Cursor sparkle trail (throttled, only when not panning)
+    let lastSparkleAt = 0;
+    wrap.addEventListener('mousemove', (e) => {
+      if (isPanning) return;
+      const now = performance.now();
+      if (now - lastSparkleAt < 90) return;
+      lastSparkleAt = now;
+      const rect = wrap.getBoundingClientRect();
+      const sp = document.createElement('div');
+      sp.className = 'stv2-sparkle';
+      sp.style.left = (e.clientX - rect.left) + 'px';
+      sp.style.top = (e.clientY - rect.top) + 'px';
+      // Slight randomness in size for variety
+      const sz = 3 + Math.random() * 3;
+      sp.style.width = sz + 'px';
+      sp.style.height = sz + 'px';
+      sp.style.marginLeft = (-sz / 2) + 'px';
+      sp.style.marginTop = (-sz / 2) + 'px';
+      wrap.appendChild(sp);
+      setTimeout(() => sp.remove(), 800);
+    });
 
     // Touch — single-finger pan + two-finger pinch zoom
     let touchPanStart = null, pinchStart = null;
@@ -5965,17 +6124,40 @@ Right-click any image on Pinterest and choose &quot;Copy image address&quot;."><
       if (e.touches.length === 0) { touchPanStart = null; pinchStart = null; }
     });
 
-    // Zoom buttons
-    const c = stv2State.viewBox;
+    // Zoom buttons (smooth)
     document.getElementById('stv2ZoomIn').addEventListener('click', () => {
-      stv2Zoom(0.85, c.x + c.w / 2, c.y + c.h / 2, svg);
+      const c = stv2State.viewBox;
+      stv2SmoothZoom(0.78, c.x + c.w / 2, c.y + c.h / 2, svg);
     });
     document.getElementById('stv2ZoomOut').addEventListener('click', () => {
-      stv2Zoom(1.18, c.x + c.w / 2, c.y + c.h / 2, svg);
+      const c = stv2State.viewBox;
+      stv2SmoothZoom(1.28, c.x + c.w / 2, c.y + c.h / 2, svg);
     });
     document.getElementById('stv2ZoomFit').addEventListener('click', () => {
-      stv2State.viewBox = { ...STV2_DEFAULT_VIEWBOX };
-      stv2UpdateViewBox(svg);
+      stv2ZoomTarget = { ...STV2_DEFAULT_VIEWBOX };
+      if (!stv2ZoomAnimating) {
+        stv2ZoomAnimating = true;
+        const step = () => {
+          if (!stv2ZoomTarget) { stv2ZoomAnimating = false; return; }
+          const v = stv2State.viewBox;
+          const t = stv2ZoomTarget;
+          const ease = 0.18;
+          v.x += (t.x - v.x) * ease;
+          v.y += (t.y - v.y) * ease;
+          v.w += (t.w - v.w) * ease;
+          v.h += (t.h - v.h) * ease;
+          stv2UpdateViewBox(svg);
+          if (Math.abs(t.w - v.w) > 0.5 || Math.abs(t.x - v.x) > 0.5) {
+            requestAnimationFrame(step);
+          } else {
+            v.x = t.x; v.y = t.y; v.w = t.w; v.h = t.h;
+            stv2UpdateViewBox(svg);
+            stv2ZoomTarget = null;
+            stv2ZoomAnimating = false;
+          }
+        };
+        requestAnimationFrame(step);
+      }
     });
 
     // Hover for tooltip + click
