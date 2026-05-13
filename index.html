@@ -2945,6 +2945,223 @@
     .stv2-tooltip { font-size: 12px; max-width: 260px; }
   }
 
+  /* Admin */
+  .tab-btn-admin { display: none; }
+  .tab-btn-admin.is-revealed { display: inline-flex; }
+  .tab-btn-admin.is-revealed {
+    background: rgba(242,192,99,0.10);
+    border: 1px solid rgba(242,192,99,0.35);
+    color: #F2C063;
+  }
+  .tab-btn-admin.is-revealed:hover {
+    background: rgba(242,192,99,0.16);
+    color: #FFE4B0;
+  }
+  .tab-btn-admin.is-revealed.is-active {
+    background: rgba(242,192,99,0.20);
+    color: #FFE4B0;
+    box-shadow: 0 0 16px rgba(242,192,99,0.25);
+  }
+
+  .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .admin-title {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+  }
+  .admin-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11.5px;
+    color: var(--text-tertiary);
+    letter-spacing: 0.04em;
+  }
+  .admin-refresh-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.10);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+    transition: all 0.2s ease;
+  }
+  .admin-refresh-btn:hover {
+    background: rgba(255,255,255,0.08);
+    color: var(--text-primary);
+    border-color: rgba(255,255,255,0.22);
+    transform: rotate(60deg);
+  }
+  .admin-refresh-btn.is-loading {
+    animation: admin-spin 1s linear infinite;
+    pointer-events: none;
+  }
+  @keyframes admin-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .admin-body { display: flex; flex-direction: column; gap: 12px; }
+  .admin-empty, .admin-error {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 28px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-tertiary);
+    font-style: italic;
+  }
+  .admin-error { color: var(--danger); border-color: rgba(255,107,107,0.3); }
+
+  .admin-row {
+    background: rgba(255,255,255,0.04);
+    border-radius: 14px;
+    padding: 16px 18px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.35);
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+  }
+  .admin-row:hover {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.12);
+  }
+  .admin-row.is-me {
+    border-color: rgba(242,192,99,0.35);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.35), 0 0 18px rgba(242,192,99,0.10);
+  }
+  .admin-row-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .admin-row-id {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 0.02em;
+  }
+  .admin-row-badge {
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(242,192,99,0.20);
+    color: #F2C063;
+  }
+  .admin-row-activity {
+    margin-left: auto;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 10.5px;
+    color: var(--text-tertiary);
+    letter-spacing: 0.04em;
+  }
+  .admin-progress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .admin-progress-bar {
+    flex: 1;
+    height: 8px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .admin-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #6BE3A4 0%, #6BA8E3 28%, #B89BE9 52%, #F2C063 78%, #FF8E72 100%);
+    box-shadow: 0 0 10px rgba(242,192,99,0.35);
+    transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .admin-progress-text {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    font-size: 12.5px;
+    color: var(--text-primary);
+    min-width: 130px;
+    text-align: right;
+  }
+  .admin-chapters {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .admin-chip {
+    flex: 1;
+    min-width: 80px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid color-mix(in srgb, var(--ch-color) 30%, transparent);
+    border-radius: 8px;
+    padding: 6px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .admin-chip.is-complete {
+    background: color-mix(in srgb, var(--ch-color) 12%, transparent);
+    border-color: var(--ch-color);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--ch-color) 30%, transparent);
+  }
+  .admin-chip-name {
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--ch-color);
+  }
+  .admin-chip-bar {
+    height: 4px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .admin-chip-fill {
+    height: 100%;
+    background: var(--ch-color);
+    box-shadow: 0 0 6px var(--ch-color);
+    transition: width 0.4s ease;
+  }
+  .admin-chip-count {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 10.5px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-secondary);
+  }
+  .admin-chip.is-complete .admin-chip-count { color: var(--ch-color); }
+
+  @media (max-width: 480px) {
+    .admin-progress-text { font-size: 11px; min-width: 100px; }
+    .admin-chip { min-width: 65px; padding: 5px 6px; }
+    .admin-chip-name { font-size: 8.5px; }
+    .admin-chapters { gap: 4px; }
+  }
+
   /* Auth gate (Clerk) */
   body.auth-pending > *:not(.auth-gate):not(#authGate) {
     visibility: hidden;
@@ -3152,6 +3369,7 @@
   <button class="tab-btn" data-tab="portal" type="button">Portal</button>
   <button class="tab-btn" data-tab="skilltree" type="button">Checklist</button>
   <button class="tab-btn" data-tab="skilltree-v2" type="button">Skilltree</button>
+  <button class="tab-btn tab-btn-admin" data-tab="admin" type="button">Admin</button>
 </nav>
 
 <div class="tab-panel is-active" data-tab="dashboard">
@@ -3360,6 +3578,23 @@
     <div class="stv2-hint">Drag to pan · Scroll to zoom · Click a node to toggle</div>
   </div>
 </div><!-- /tab-panel skilltree-v2 -->
+
+<div class="tab-panel" data-tab="admin">
+  <div class="section">
+    <div class="section-title">Admin</div>
+    <div class="admin-header">
+      <div class="admin-title">Student Progress</div>
+      <div class="admin-meta-row">
+        <span class="admin-count" id="adminCount">— students</span>
+        <span class="admin-refresh-time" id="adminRefreshTime">never</span>
+        <button class="admin-refresh-btn" id="adminRefreshBtn" type="button" title="Refresh">⟳</button>
+      </div>
+    </div>
+    <div class="admin-body" id="adminBody">
+      <div class="admin-empty">Loading…</div>
+    </div>
+  </div>
+</div><!-- /tab-panel admin -->
 
 <div class="cal-modal-bg" id="portalModalBg" style="display:none;">
   <div class="cal-modal portal-modal" role="dialog" aria-modal="true">
@@ -6635,6 +6870,204 @@ Right-click any image on Pinterest and choose &quot;Copy image address&quot;."><
     }
   }
 
+  // ─── Admin ────────────────────────────────────────────────────────
+  const ADMIN_FALLBACK_USER_IDS = ['user_3DcDLCQMXs1Dh3kLMzxiqRq3oJQ'];
+
+  function isAdmin() {
+    if (!window.Clerk || !window.Clerk.user) return false;
+    const u = window.Clerk.user;
+    if (u.publicMetadata && u.publicMetadata.role === 'admin') return true;
+    if (u.unsafeMetadata && u.unsafeMetadata.role === 'admin') return true;
+    if (ADMIN_FALLBACK_USER_IDS.indexOf(u.id) >= 0) return true;
+    return false;
+  }
+
+  function adminComputeChapterTotals(moduleId) {
+    const m = SKILLTREE_MODULES.find(x => x.id === moduleId);
+    if (!m) return [];
+    return m.chapters.map(ch => ch.subgroups.reduce((s, sg) => s + sg.tasks.length, 0));
+  }
+  function adminComputeChapterCounts(stateValue, moduleId) {
+    const m = SKILLTREE_MODULES.find(x => x.id === moduleId);
+    if (!m) return [];
+    const counts = new Array(m.chapters.length).fill(0);
+    if (!stateValue || typeof stateValue !== 'object') return counts;
+    for (const key in stateValue) {
+      if (stateValue[key] !== true) continue;
+      // key shape: 'modo-creativo/c{idx}/g{idx}/t{idx}'
+      const ix = key.indexOf('/c');
+      if (ix < 0) continue;
+      const tail = key.slice(ix + 2);
+      const slash = tail.indexOf('/');
+      const cIdx = parseInt(slash > 0 ? tail.slice(0, slash) : tail, 10);
+      if (!isNaN(cIdx) && cIdx >= 0 && cIdx < counts.length) counts[cIdx]++;
+    }
+    return counts;
+  }
+  function adminRelativeTime(iso) {
+    if (!iso) return '—';
+    const t = new Date(iso).getTime();
+    if (isNaN(t)) return '—';
+    const diff = Date.now() - t;
+    const s = Math.floor(diff / 1000);
+    if (s < 60) return s + 's ago';
+    const min = Math.floor(s / 60);
+    if (min < 60) return min + 'm ago';
+    const h = Math.floor(min / 60);
+    if (h < 24) return h + 'h ago';
+    const d = Math.floor(h / 24);
+    if (d < 30) return d + 'd ago';
+    const mo = Math.floor(d / 30);
+    if (mo < 12) return mo + 'mo ago';
+    return Math.floor(mo / 12) + 'y ago';
+  }
+  function adminShortId(uid) {
+    if (!uid) return '—';
+    if (uid.length <= 16) return uid;
+    return uid.slice(0, 8) + '…' + uid.slice(-6);
+  }
+
+  async function loadAdminData() {
+    const body = document.getElementById('adminBody');
+    const countEl = document.getElementById('adminCount');
+    const refreshTimeEl = document.getElementById('adminRefreshTime');
+    const refreshBtn = document.getElementById('adminRefreshBtn');
+    if (!body || !isAdmin()) return;
+    if (!supabaseClient) {
+      body.innerHTML = '<div class="admin-error">Supabase client not initialized.</div>';
+      return;
+    }
+    refreshBtn && refreshBtn.classList.add('is-loading');
+
+    const moduleId = SKILLTREE_MODULES[0].id;
+    const chapterTotals = adminComputeChapterTotals(moduleId);
+    const moduleTotal = chapterTotals.reduce((s, n) => s + n, 0);
+
+    try {
+      const { data, error } = await supabaseClient
+        .from('user_state')
+        .select('user_id, value, updated_at')
+        .eq('key', 'skilltree_v1');
+      if (error) throw error;
+
+      const myId = (window.Clerk && window.Clerk.user) ? window.Clerk.user.id : null;
+      const students = (data || []).map(row => {
+        const v = row.value || {};
+        const completed = Object.values(v).filter(x => x === true).length;
+        const perChapter = adminComputeChapterCounts(v, moduleId);
+        return {
+          userId: row.user_id,
+          completed,
+          percentage: moduleTotal > 0 ? Math.round((completed / moduleTotal) * 100) : 0,
+          perChapter,
+          updatedAt: row.updated_at,
+          isMe: row.user_id === myId
+        };
+      }).sort((a, b) => b.completed - a.completed);
+
+      countEl.textContent = students.length + ' student' + (students.length === 1 ? '' : 's');
+      refreshTimeEl.textContent = 'updated ' + adminRelativeTime(new Date().toISOString());
+      renderAdminTable(students, moduleId, chapterTotals, moduleTotal);
+    } catch (e) {
+      console.error('[admin] load failed', e);
+      body.innerHTML = '<div class="admin-error">Failed to load: ' + (e.message || 'unknown error') +
+        '. Make sure the admin RLS policy is set up in Supabase.</div>';
+    } finally {
+      refreshBtn && refreshBtn.classList.remove('is-loading');
+    }
+  }
+
+  function renderAdminTable(students, moduleId, chapterTotals, moduleTotal) {
+    const body = document.getElementById('adminBody');
+    if (!body) return;
+    if (students.length === 0) {
+      body.innerHTML = '<div class="admin-empty">No student activity yet.</div>';
+      return;
+    }
+    const module = SKILLTREE_MODULES.find(m => m.id === moduleId);
+    body.innerHTML = '';
+    for (const st of students) {
+      const row = document.createElement('div');
+      row.className = 'admin-row' + (st.isMe ? ' is-me' : '');
+
+      const header = document.createElement('div');
+      header.className = 'admin-row-header';
+      const idEl = document.createElement('span');
+      idEl.className = 'admin-row-id';
+      idEl.title = st.userId;
+      idEl.textContent = adminShortId(st.userId);
+      header.appendChild(idEl);
+      if (st.isMe) {
+        const badge = document.createElement('span');
+        badge.className = 'admin-row-badge';
+        badge.textContent = 'YOU';
+        header.appendChild(badge);
+      }
+      const activity = document.createElement('span');
+      activity.className = 'admin-row-activity';
+      activity.textContent = adminRelativeTime(st.updatedAt);
+      header.appendChild(activity);
+      row.appendChild(header);
+
+      const prog = document.createElement('div');
+      prog.className = 'admin-progress';
+      const bar = document.createElement('div');
+      bar.className = 'admin-progress-bar';
+      const fill = document.createElement('div');
+      fill.className = 'admin-progress-fill';
+      fill.style.width = st.percentage + '%';
+      bar.appendChild(fill);
+      const txt = document.createElement('div');
+      txt.className = 'admin-progress-text';
+      txt.textContent = st.completed + ' / ' + moduleTotal + ' · ' + st.percentage + '%';
+      prog.appendChild(bar);
+      prog.appendChild(txt);
+      row.appendChild(prog);
+
+      const chaps = document.createElement('div');
+      chaps.className = 'admin-chapters';
+      module.chapters.forEach((ch, ci) => {
+        const chip = document.createElement('div');
+        chip.className = 'admin-chip';
+        const done = st.perChapter[ci] || 0;
+        const total = chapterTotals[ci];
+        if (total > 0 && done === total) chip.classList.add('is-complete');
+        chip.style.setProperty('--ch-color', ch.color);
+        const name = document.createElement('div');
+        name.className = 'admin-chip-name';
+        name.textContent = ch.name;
+        const cbar = document.createElement('div');
+        cbar.className = 'admin-chip-bar';
+        const cfill = document.createElement('div');
+        cfill.className = 'admin-chip-fill';
+        cfill.style.width = (total > 0 ? (done / total) * 100 : 0) + '%';
+        cbar.appendChild(cfill);
+        const cnt = document.createElement('div');
+        cnt.className = 'admin-chip-count';
+        cnt.textContent = done + ' / ' + total;
+        chip.appendChild(name);
+        chip.appendChild(cbar);
+        chip.appendChild(cnt);
+        chaps.appendChild(chip);
+      });
+      row.appendChild(chaps);
+
+      body.appendChild(row);
+    }
+  }
+
+  function setupAdminControls() {
+    const btn = document.getElementById('adminRefreshBtn');
+    if (btn) btn.addEventListener('click', loadAdminData);
+  }
+
+  function revealAdminTabIfNeeded() {
+    const tabBtn = document.querySelector('.tab-btn-admin');
+    if (!tabBtn) return;
+    if (isAdmin()) tabBtn.classList.add('is-revealed');
+    else tabBtn.classList.remove('is-revealed');
+  }
+
   // ─── Tabs ─────────────────────────────────────────────────────────
   function setActiveTab(name) {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('is-active', b.dataset.tab === name));
@@ -6648,6 +7081,8 @@ Right-click any image on Pinterest and choose &quot;Copy image address&quot;."><
       renderSkilltree();
     } else if (name === 'skilltree-v2') {
       renderSkilltreeV2();
+    } else if (name === 'admin') {
+      loadAdminData();
     }
   }
   document.querySelectorAll('.tab-btn').forEach(b => {
@@ -6727,6 +7162,8 @@ Right-click any image on Pinterest and choose &quot;Copy image address&quot;."><
         Clerk.mountUserButton(ubEl, { appearance: CLERK_APPEARANCE });
         _userButtonMounted = true;
       }
+      revealAdminTabIfNeeded();
+      setupAdminControls();
       bootApp();
     } else {
       document.body.classList.add('auth-pending');
