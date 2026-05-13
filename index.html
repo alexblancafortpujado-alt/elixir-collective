@@ -2312,7 +2312,35 @@
   .boss-defeat-row {
     display: flex;
     justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
     margin-bottom: 56px;
+  }
+  .boss-export-btn {
+    padding: 14px 28px;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-weight: 700;
+    font-size: 11.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,0.14);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+  }
+  .boss-export-btn:hover {
+    color: var(--text-primary);
+    border-color: rgba(255,255,255,0.32);
+    background: rgba(255,255,255,0.04);
+  }
+  .boss-export-btn:disabled,
+  .boss-export-btn.is-success {
+    color: #6BE3A4;
+    border-color: rgba(107,227,164,0.45);
+    background: rgba(107,227,164,0.06);
+    cursor: default;
   }
   .boss-defeat-btn {
     padding: 14px 36px;
@@ -2507,16 +2535,33 @@
   }
   .boss-trophy:hover .boss-trophy-skull { color: rgba(255,120,140,0.95); }
   .boss-trophy-skull svg { width: 100%; height: 100%; display: block; }
+  .boss-trophy-actions {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+  .boss-trophy-export,
   .boss-trophy-del {
     background: transparent;
     border: 1px solid transparent;
     color: var(--text-tertiary);
     font-size: 13px;
+    line-height: 1;
     cursor: pointer;
-    padding: 4px 8px;
+    padding: 5px 9px;
     font-family: inherit;
     border-radius: 6px;
     transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+  .boss-trophy-export:hover {
+    color: #6BE3A4;
+    border-color: rgba(107,227,164,0.4);
+    background: rgba(107,227,164,0.06);
+  }
+  .boss-trophy-export.is-success {
+    color: #6BE3A4;
+    border-color: rgba(107,227,164,0.5);
+    background: rgba(107,227,164,0.08);
   }
   .boss-trophy-del:hover {
     color: #ff5060;
@@ -4294,6 +4339,7 @@
         <div class="boss-notes-list" id="bossNotesList"></div>
 
         <div class="boss-defeat-row">
+          <button id="bossExportBtn" class="boss-export-btn" type="button">Exportar conocimiento</button>
           <button id="bossDefeatBtn" class="boss-defeat-btn" type="button">Derrotar Boss</button>
         </div>
       </div>
@@ -7946,6 +7992,96 @@
     return 'b' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
   }
 
+  function bossSlug(name) {
+    return (name || 'boss')
+      .toLowerCase()
+      .normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 40) || 'boss';
+  }
+
+  function bossToMarkdown(boss, isDefeated) {
+    const notes = boss.notes || [];
+    const created = boss.createdAt ? formatDate(boss.createdAt) : '—';
+    const out = [];
+    out.push('# Boss Fight: ' + boss.name);
+    out.push('');
+    if (isDefeated) {
+      const killed = boss.defeatedAt ? formatDate(boss.defeatedAt) : '—';
+      out.push('**Estado:** Derrotado el ' + killed + ' · Invocado el ' + created + ' · ' + notes.length + ' apuntes');
+    } else {
+      const hp = bossHpFromNotes(notes);
+      out.push('**Estado:** Activo desde ' + created + ' · HP ' + hp + '/100 · ' + notes.length + ' apuntes');
+    }
+    out.push('');
+    out.push('---');
+    out.push('');
+
+    const groups = {
+      belief:   { title: 'Creencias limitantes', notes: [] },
+      learning: { title: 'Aprendizajes',         notes: [] },
+      solution: { title: 'Soluciones',           notes: [] }
+    };
+    for (const n of notes) {
+      const g = groups[n.type] || groups.belief;
+      g.notes.push(n);
+    }
+    for (const key of ['belief', 'learning', 'solution']) {
+      const g = groups[key];
+      if (!g.notes.length) continue;
+      out.push('## ' + g.title);
+      out.push('');
+      for (const n of g.notes) {
+        const date = n.ts ? formatDate(n.ts) : '—';
+        const text = (n.text || '').replace(/\r?\n/g, ' ').trim();
+        out.push('- (' + date + ') ' + text);
+      }
+      out.push('');
+    }
+    return out.join('\n');
+  }
+
+  function bossDownloadFile(filename, text) {
+    try {
+      const blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch (e) { console.warn('[boss] download failed', e); }
+  }
+
+  function flashBossBtn(btn, successText, durationMs) {
+    if (!btn) return;
+    if (!btn.dataset.originalLabel) btn.dataset.originalLabel = btn.textContent;
+    btn.textContent = successText;
+    btn.classList.add('is-success');
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.textContent = btn.dataset.originalLabel;
+      btn.classList.remove('is-success');
+      btn.disabled = false;
+    }, durationMs || 2000);
+  }
+
+  function exportBoss(boss, isDefeated, sourceBtn, successText) {
+    if (!boss) return;
+    const md = bossToMarkdown(boss, isDefeated);
+    const today = new Date().toISOString().slice(0, 10);
+    const filename = 'boss-' + bossSlug(boss.name) + '-' + today + '.md';
+    bossDownloadFile(filename, md);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(md).catch(() => {});
+    }
+    flashBossBtn(sourceBtn, successText || '✓ Copiado y descargado', 2200);
+    if (typeof chime === 'function') chime('pop');
+  }
+
   function bossNoteDamage(note) {
     const len = (note && typeof note.text === 'string') ? note.text.length : 0;
     let dmg = Math.min(15, Math.floor(len / 50) + 1);
@@ -8073,11 +8209,26 @@
       const att = document.createElement('div');
       att.className = 'boss-trophy-attacks';
       att.textContent = (b.notes || []).length + ' ataques';
+      const actions = document.createElement('div');
+      actions.className = 'boss-trophy-actions';
+
+      const exp = document.createElement('button');
+      exp.className = 'boss-trophy-export';
+      exp.type = 'button';
+      exp.textContent = '⤓';
+      exp.title = 'Exportar conocimiento (markdown)';
+      exp.setAttribute('aria-label', 'Exportar conocimiento de ' + b.name);
+      exp.addEventListener('click', (e) => {
+        e.stopPropagation();
+        exportBoss(b, true, e.currentTarget, '✓');
+      });
+
       const del = document.createElement('button');
       del.className = 'boss-trophy-del';
       del.type = 'button';
       del.textContent = '✕';
       del.title = 'Borrar del cementerio';
+      del.setAttribute('aria-label', 'Borrar a ' + b.name + ' del cementerio');
       del.addEventListener('click', (e) => {
         e.stopPropagation();
         if (!confirm('¿Borrar a "' + b.name + '" del cementerio?')) return;
@@ -8087,10 +8238,13 @@
         renderBossGraveyard(d.defeated);
       });
 
+      actions.appendChild(exp);
+      actions.appendChild(del);
+
       row.appendChild(skull);
       row.appendChild(info);
       row.appendChild(att);
-      row.appendChild(del);
+      row.appendChild(actions);
 
       const notesPanel = document.createElement('div');
       notesPanel.className = 'boss-trophy-notes';
@@ -8290,6 +8444,11 @@
       if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); attackBoss(); }
     });
     document.getElementById('bossDefeatBtn')?.addEventListener('click', defeatBoss);
+    document.getElementById('bossExportBtn')?.addEventListener('click', (e) => {
+      const d = getBossData();
+      if (!d.active) return;
+      exportBoss(d.active, false, e.currentTarget);
+    });
   }
 
   // ─── Tabs ─────────────────────────────────────────────────────────
