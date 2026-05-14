@@ -3321,9 +3321,13 @@
     justify-content: center;
   }
   .exam-boss-svg {
-    width: 200px;
-    height: 220px;
-    filter: drop-shadow(0 18px 28px rgba(255,30,60,0.35));
+    width: 220px;
+    height: 240px;
+    object-fit: contain;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    filter: drop-shadow(0 18px 28px rgba(160,40,180,0.5));
     animation: boss-idle 3.4s ease-in-out infinite;
     transform-origin: 50% 100%;
   }
@@ -8938,52 +8942,7 @@
   }
 
   function _bossSvgMarkup() {
-    return ''
-      + '<svg class="exam-boss-svg" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">'
-      +   '<defs>'
-      +     '<filter id="bossGlow" x="-60%" y="-60%" width="220%" height="220%">'
-      +       '<feGaussianBlur stdDeviation="3.5" result="b"/>'
-      +       '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>'
-      +     '</filter>'
-      +     '<radialGradient id="bossBody" cx="50%" cy="35%" r="70%">'
-      +       '<stop offset="0%" stop-color="#3a1320"/>'
-      +       '<stop offset="60%" stop-color="#180408"/>'
-      +       '<stop offset="100%" stop-color="#0a0205"/>'
-      +     '</radialGradient>'
-      +     '<radialGradient id="bossSkull" cx="50%" cy="40%" r="60%">'
-      +       '<stop offset="0%" stop-color="#dad2c4"/>'
-      +       '<stop offset="70%" stop-color="#7a6f60"/>'
-      +       '<stop offset="100%" stop-color="#2c2620"/>'
-      +     '</radialGradient>'
-      +   '</defs>'
-      // Aura / shadow
-      +   '<ellipse cx="100" cy="225" rx="70" ry="10" fill="#000" opacity="0.55"/>'
-      // Horns
-      +   '<path d="M 55 60 Q 38 18 30 0 Q 52 22 70 50 Z" fill="#1a070d" stroke="#3a1622" stroke-width="1.5"/>'
-      +   '<path d="M 145 60 Q 162 18 170 0 Q 148 22 130 50 Z" fill="#1a070d" stroke="#3a1622" stroke-width="1.5"/>'
-      // Body / hood
-      +   '<path d="M 30 230 Q 28 130 55 95 Q 100 65 145 95 Q 172 130 170 230 Z" fill="url(#bossBody)" stroke="#3a1622" stroke-width="2"/>'
-      // Hood inner shadow
-      +   '<path d="M 60 100 Q 100 80 140 100 Q 138 150 100 155 Q 62 150 60 100 Z" fill="#0a0205" opacity="0.7"/>'
-      // Skull face
-      +   '<ellipse cx="100" cy="115" rx="44" ry="50" fill="url(#bossSkull)" stroke="#1a0a0e" stroke-width="1.5"/>'
-      // Cheekbones
-      +   '<path d="M 65 130 Q 80 145 100 142 Q 120 145 135 130" fill="none" stroke="#2c2620" stroke-width="1.5" opacity="0.6"/>'
-      // Eye sockets
-      +   '<ellipse cx="82" cy="108" rx="12" ry="14" fill="#000"/>'
-      +   '<ellipse cx="118" cy="108" rx="12" ry="14" fill="#000"/>'
-      // Glowing eyes
-      +   '<circle class="exam-boss-eye" cx="82" cy="110" r="5" fill="#ff3050" filter="url(#bossGlow)"/>'
-      +   '<circle class="exam-boss-eye" cx="118" cy="110" r="5" fill="#ff3050" filter="url(#bossGlow)"/>'
-      // Nose hollow
-      +   '<path d="M 96 130 Q 100 138 104 130 Q 100 142 96 130 Z" fill="#000"/>'
-      // Teeth / mouth
-      +   '<path d="M 72 148 L 76 162 L 80 148 L 84 164 L 88 148 L 92 166 L 96 148 L 100 166 L 104 148 L 108 166 L 112 148 L 116 164 L 120 148 L 124 162 L 128 148 L 72 148 Z" fill="#e8e0d2" stroke="#1a0a0e" stroke-width="1"/>'
-      // Crown spikes on hood
-      +   '<path d="M 95 78 L 100 62 L 105 78 Z" fill="#1a070d" stroke="#3a1622" stroke-width="1"/>'
-      +   '<path d="M 78 84 L 82 70 L 86 84 Z" fill="#1a070d" stroke="#3a1622" stroke-width="1"/>'
-      +   '<path d="M 114 84 L 118 70 L 122 84 Z" fill="#1a070d" stroke="#3a1622" stroke-width="1"/>'
-      + '</svg>';
+    return '<img class="exam-boss-svg" src="boss-modo-creativo.png" alt="Boss Final" draggable="false" />';
   }
 
   function _examCorrectsSoFar(data) {
