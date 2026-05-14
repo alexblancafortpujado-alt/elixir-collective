@@ -3084,6 +3084,339 @@
     50% { box-shadow: 0 0 60px rgba(242,192,99,0.40); }
   }
 
+  /* ─── Boss Final (module exam) ───────────────────────────────── */
+  .st-boss-cta {
+    margin-top: 16px;
+    padding: 18px 20px;
+    border-radius: 14px;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(255,60,80,0.18), transparent 70%),
+      linear-gradient(180deg, rgba(40,8,14,0.85), rgba(20,4,8,0.85));
+    border: 1px solid rgba(255,60,80,0.35);
+    box-shadow: 0 0 36px rgba(255,60,80,0.18), inset 0 1px 0 rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .st-boss-cta-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .st-boss-cta-eyebrow {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.24em;
+    color: rgba(255,90,110,0.85);
+    text-transform: uppercase;
+    font-weight: 800;
+  }
+  .st-boss-cta-title {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.015em;
+    color: #fff;
+    text-shadow: 0 0 18px rgba(255,60,80,0.35);
+  }
+  .st-boss-cta-sub {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    margin-top: 2px;
+  }
+  .st-boss-cta-btn {
+    padding: 13px 26px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #cc1f3a, #8a0020);
+    color: #fff;
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    border: 1px solid rgba(255,80,100,0.55);
+    box-shadow: 0 10px 28px rgba(204,31,58,0.4), inset 0 1px 0 rgba(255,255,255,0.18);
+    cursor: pointer;
+    font-family: inherit;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  }
+  .st-boss-cta-btn:hover { transform: translateY(-1px); box-shadow: 0 14px 36px rgba(204,31,58,0.55); filter: brightness(1.1); }
+  .st-boss-cta-btn.is-disabled {
+    background: linear-gradient(180deg, #2a1418, #170a0c);
+    border-color: rgba(255,80,100,0.2);
+    color: rgba(255,180,190,0.6);
+    box-shadow: none;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  .st-boss-cta.is-defeated {
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(242,192,99,0.22), transparent 70%),
+      linear-gradient(180deg, rgba(40,28,8,0.85), rgba(20,14,4,0.85));
+    border-color: rgba(242,192,99,0.5);
+    box-shadow: 0 0 40px rgba(242,192,99,0.25), inset 0 1px 0 rgba(255,255,255,0.06);
+  }
+  .st-boss-cta.is-defeated .st-boss-cta-eyebrow { color: #F2C063; }
+  .st-boss-cta.is-defeated .st-boss-cta-title { text-shadow: 0 0 18px rgba(242,192,99,0.45); }
+  .st-boss-cta.is-locked {
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.04), transparent 70%),
+      linear-gradient(180deg, rgba(20,20,28,0.85), rgba(10,10,14,0.85));
+    border-color: rgba(255,255,255,0.10);
+    box-shadow: 0 0 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+  .st-boss-cta.is-locked .st-boss-cta-eyebrow { color: rgba(255,255,255,0.4); letter-spacing: 0.22em; }
+  .st-boss-cta.is-locked .st-boss-cta-title { color: rgba(255,255,255,0.55); text-shadow: none; }
+  .st-boss-cta.is-locked .st-boss-cta-sub { color: var(--text-tertiary); }
+
+  /* Exam view */
+  .exam-stage {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 12px 0 40px;
+  }
+  .exam-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+  }
+  .exam-back {
+    background: transparent;
+    border: none;
+    color: var(--text-tertiary);
+    font-size: 13px;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 6px 0;
+  }
+  .exam-back:hover { color: var(--text-primary); }
+  .exam-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .exam-eyebrow {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.28em;
+    color: rgba(255,90,110,0.85);
+    text-transform: uppercase;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+  .exam-title {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #fff;
+    text-shadow: 0 0 28px rgba(255,60,80,0.35);
+  }
+  .exam-meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 18px;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+  }
+  .exam-lives {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .exam-heart {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #ff6e7f, #cc1f3a 70%);
+    box-shadow: 0 0 10px rgba(255,60,80,0.55);
+  }
+  .exam-heart.is-lost {
+    background: #2a1418;
+    box-shadow: none;
+  }
+  .exam-progress {
+    flex: 1;
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+    max-width: 240px;
+  }
+  .exam-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #cc1f3a, #ff6e7f);
+    transition: width 0.4s ease;
+  }
+  .exam-question-card {
+    padding: 28px 26px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(20px) saturate(1.2);
+    -webkit-backdrop-filter: blur(20px) saturate(1.2);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+  .exam-q-text {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--text-primary);
+    margin-bottom: 22px;
+    letter-spacing: -0.01em;
+  }
+  .exam-options { display: flex; flex-direction: column; gap: 10px; }
+  .exam-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--text-primary);
+    font-size: 14.5px;
+    line-height: 1.4;
+    text-align: left;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+  }
+  .exam-option:hover:not(:disabled) {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.18);
+  }
+  .exam-option:disabled { cursor: default; }
+  .exam-option-letter {
+    flex: 0 0 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+  }
+  .exam-option-text { flex: 1; }
+  .exam-option.is-correct {
+    background: rgba(107,227,164,0.14);
+    border-color: rgba(107,227,164,0.55);
+    color: #fff;
+  }
+  .exam-option.is-correct .exam-option-letter {
+    background: #6BE3A4;
+    color: #042614;
+  }
+  .exam-option.is-wrong {
+    background: rgba(255,60,80,0.14);
+    border-color: rgba(255,60,80,0.55);
+    color: #fff;
+  }
+  .exam-option.is-wrong .exam-option-letter {
+    background: #cc1f3a;
+    color: #fff;
+  }
+  @keyframes exam-shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+  }
+  .exam-question-card.is-hit { animation: exam-shake 0.45s ease; }
+
+  /* Exam result */
+  .exam-result {
+    max-width: 640px;
+    margin: 32px auto;
+    padding: 40px 28px;
+    text-align: center;
+    border-radius: 18px;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(242,192,99,0.20), transparent 70%),
+      rgba(255,255,255,0.03);
+    border: 1px solid rgba(242,192,99,0.35);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.5), 0 0 60px rgba(242,192,99,0.18);
+  }
+  .exam-result.is-fail {
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(255,60,80,0.20), transparent 70%),
+      rgba(20,4,8,0.85);
+    border-color: rgba(255,60,80,0.35);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.5), 0 0 60px rgba(255,60,80,0.18);
+  }
+  .exam-result-eyebrow {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    color: rgba(242,192,99,0.95);
+    font-weight: 800;
+    margin-bottom: 10px;
+  }
+  .exam-result.is-fail .exam-result-eyebrow { color: rgba(255,90,110,0.95); }
+  .exam-result-title {
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: #fff;
+    margin-bottom: 14px;
+    text-shadow: 0 0 28px rgba(242,192,99,0.45);
+  }
+  .exam-result.is-fail .exam-result-title { text-shadow: 0 0 28px rgba(255,60,80,0.45); }
+  .exam-result-sub {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 22px;
+    line-height: 1.5;
+  }
+  .exam-result-cooldown {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 28px;
+    font-weight: 800;
+    color: #ff6e7f;
+    letter-spacing: 0.06em;
+    margin-bottom: 22px;
+  }
+  .exam-result-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .exam-result-btn {
+    padding: 12px 24px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    color: var(--text-primary);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,0.14);
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+  .exam-result-btn:hover { background: rgba(255,255,255,0.14); }
+  .exam-result-btn.is-primary {
+    background: linear-gradient(180deg, #cc1f3a, #8a0020);
+    border-color: rgba(255,80,100,0.55);
+    color: #fff;
+    box-shadow: 0 10px 28px rgba(204,31,58,0.4);
+  }
+  .exam-result-btn.is-gold {
+    background: linear-gradient(180deg, #F2C063, #B8841C);
+    border-color: rgba(242,192,99,0.55);
+    color: #2a1c08;
+    box-shadow: 0 10px 28px rgba(242,192,99,0.35);
+  }
+
   .st-chapter {
     background: rgba(255,255,255,0.04);
     border-radius: 16px;
@@ -5485,7 +5818,8 @@
     check:       [{ f: 880,    g: 0.13, dt: 0.000, dur: 0.20 }, { f: 1318.51, g: 0.10, dt: 0.045, dur: 0.24 }],
     pop:         [{ f: 587.33, g: 0.11, dt: 0.000, dur: 0.16 }, { f: 880,     g: 0.10, dt: 0.055, dur: 0.22 }],
     celebration: [{ f: 523.25, g: 0.16, dt: 0.000, dur: 0.42 }, { f: 783.99,  g: 0.16, dt: 0.055, dur: 0.42 }, { f: 1046.5,  g: 0.16, dt: 0.110, dur: 0.45 }, { f: 1318.51, g: 0.13, dt: 0.180, dur: 0.55 }],
-    finale:      [{ f: 523.25, g: 0.18, dt: 0.000, dur: 0.50 }, { f: 659.25,  g: 0.18, dt: 0.060, dur: 0.50 }, { f: 783.99,  g: 0.18, dt: 0.120, dur: 0.50 }, { f: 1046.5,  g: 0.18, dt: 0.200, dur: 0.65 }, { f: 1318.51, g: 0.16, dt: 0.280, dur: 0.65 }, { f: 1567.98, g: 0.13, dt: 0.360, dur: 0.70 }]
+    finale:      [{ f: 523.25, g: 0.18, dt: 0.000, dur: 0.50 }, { f: 659.25,  g: 0.18, dt: 0.060, dur: 0.50 }, { f: 783.99,  g: 0.18, dt: 0.120, dur: 0.50 }, { f: 1046.5,  g: 0.18, dt: 0.200, dur: 0.65 }, { f: 1318.51, g: 0.16, dt: 0.280, dur: 0.65 }, { f: 1567.98, g: 0.13, dt: 0.360, dur: 0.70 }],
+    wrong:       [{ f: 220,    g: 0.16, dt: 0.000, dur: 0.30 }, { f: 164.81,  g: 0.14, dt: 0.090, dur: 0.40 }]
   };
   function chime(type) {
     try {
@@ -7282,7 +7616,6 @@
               'Entender que la vida es el mejor videojuego de la historia',
               'Entender la diferencia entre Modo Supervivencia y Modo Creativo',
               'Entender que la mayoría nunca desbloqueará el Modo Creativo',
-              'Firmar contrato',
             ]},
             { name: 'Vídeo 2: Inspiración vs Exploración', tasks: [
               'Entender la importancia de aprender',
@@ -7297,16 +7630,18 @@
             ]},
             { name: 'Vídeo 4: Ingeniería inversa', tasks: [
               'Entender qué es la Ingeniería Inversa',
-              'Entender que vida → acciones → decisiones → creencias',
-              'Entender que las creencias son el input que crea la vida ideal',
+              'Entender que debemos descubrir los inputs para el output que deseamos',
+              'Entender que las acciones son el input que crea la vida ideal',
             ]},
             { name: 'Vídeo 5: Metáfora del escultor', tasks: [
               'Entender que tu vida es una roca y tú eres un escultor',
+              'Entender que los picotazos son las acciones, cuanto mejores acciones mejor vida',
               'Entender los 5 errores que toda persona mediocre comete',
             ]},
             { name: 'Vídeo 6: Simio vs Ángel', tasks: [
               'Entender la importancia del dolor y del deseo',
               'Entender la diferencia entre desear desde el Simio y el Ángel',
+              'Entender cómo las redes sociales influyen en lo que deseas (y cambia cómo actúas)',
             ]},
             { name: 'Vídeo 7: Slides', tasks: [
               'Entender que existen recuerdos del futuro',
@@ -7319,7 +7654,8 @@
             ]},
             { name: 'Vídeo 8: Teoría del portal', tasks: [
               'Entender qué es la Teoría del Portal',
-              'Entender qué es el Anti-portal',
+              'Entender por qué es una visualización tan potente',
+              'Entender que las decisiones → acciones → hacer el portal real',
             ]},
             { name: 'Práctica 2: Portal', tasks: [
               'Crear tu Portal', 'Crear tu Anti-Portal', 'Haz el post de comunidad',
@@ -7332,14 +7668,16 @@
             { name: 'Vídeo 1: Problem Solver', tasks: [
               'Entender que los problemas tienen calidad',
               'Entender que la calidad de tu vida depende de la calidad de tus problemas',
-              'Entender que la clave está en convertirse en un Problem Solver',
+              'Entender que la calidad de los problemas se mejora solucionando problemas',
+              'Entender que es clave convertirse en un Problem Solver',
             ]},
             { name: 'Vídeo 2: Percepción', tasks: [
               'Entender la Selección Natural',
               'Entender que todo lo que percibimos pasa por nuestros 6 sentidos pochos',
-              'Entender las diferencias entre la Realidad y la Interfaz',
+              'Entender que la realidad que percibimos no es la realidad objetiva',
             ]},
             { name: 'Vídeo 3: Creencias', tasks: [
+              'Entender que las creencias son lo que te está deparando de hacer lo que debes hacer',
               'Entender que la realidad también la filtramos por las creencias',
               'Entender la metáfora del mando de la play',
               'Entender la metáfora de los surfers',
@@ -7349,17 +7687,20 @@
               'Entender la metáfora de las Balanzas Mágicas',
               'Entender que las creencias provienen de las experiencias',
               'Entender la historia del surf y por qué las creencias son tan importantes',
+              'Entender cómo yo uso las creencias a mi favor para invocar mi vida ideal',
             ]},
             { name: 'Vídeo 5: Abre tu mente', tasks: [
+              'Entender la importancia de ser consciente de tus creencias',
               'Entender la importancia de no aferrarse a las creencias',
               'Entender que el cerebro no quiere cambiar creencias',
-              'Entender que las creencias son un lifestyle',
+              'Entender que ser un mago de las creencias es un lifestyle',
               'Entender que la mayoría de creencias que tienes te limitan y es la razón por la que no ganas',
             ]},
             { name: 'Vídeo 6: Ciclos', tasks: [
+              'Entender qué significa "la profecía autocumplida"',
               'Entender la metáfora de Mike el cocinero',
-              'Entender la diferencia entre un Ciclo Positivo vs un Ciclo Negativo',
-              'Entender cómo esto se aplica a tu vida',
+              'Entender qué es un Ciclo Positivo vs un Ciclo Negativo',
+              'Entender cómo salir y entrar con las balanzas mágicas',
             ]},
             { name: 'Práctica 1: Método Científico', tasks: [
               'Entender qué es el método científico',
@@ -7386,6 +7727,7 @@
             { name: 'Vídeo 3: Ama el villano', tasks: [
               'Entender la importancia de Bowser',
               'Entender que el dolor, la resistencia, es la clave de la felicidad y el progreso',
+              'Entender que debemos ser Masocas del Progreso',
             ]},
             { name: 'Práctica 1: Método científico aplicado al dolor', tasks: [
               'Encontrar cuello de botella: evitar el dolor',
@@ -7425,12 +7767,130 @@
             { name: 'Vídeo 5: Protocolo 1k', tasks: [
               'Entender la historia de Alekai',
               'Entender el Protocolo 1k',
+              'Entender la diferencia entre expertice y exposición',
+            ]},
+          ]
+        },
+        {
+          id: 'dia-5', name: 'Día 5', subtitle: 'Speedrun Portal', color: '#E96B97',
+          subgroups: [
+            { name: 'Vídeo 1: Become Him', tasks: [
+              'Entender la importancia de convertirte en la persona capaz de…',
+              'Entender el straight 7 system',
+            ]},
+            { name: 'Vídeo 2: Desaparece 6 meses', tasks: [
+              'Entender que debes callarte la boca',
+              'Qué pasa si sigues Heroes Academy durante 6 meses (visualiza)',
+              'Explicar cómo usar Heroes Academy al máximo',
+            ]},
+            { name: 'Práctica 1', tasks: [
+              'Entender la importancia de Trackear y tener un To-do',
+              'Aprender a hacerlo',
+            ]},
+            { name: 'Práctica 2', tasks: [
+              'Entender el reto de 14 días de Re-Set',
+              'Firmar contrato para comprometerse',
             ]},
           ]
         },
       ]
     },
   ];
+
+  // ─── Module final exam (BOSS) ─────────────────────────────────────
+  const MODULE_EXAMS = {
+    'modo-creativo': {
+      moduleId: 'modo-creativo',
+      title: 'Boss Final · Modo Creativo',
+      maxWrong: 3,
+      cooldownMs: 60 * 60 * 1000, // 1 hour
+      questions: [
+        { q: '¿Cuál es la función real de la dopamina?',
+          options: ['Generar placer tras una recompensa', 'Mantener equilibrio emocional', 'Impulsar la acción hacia una recompensa anticipada', 'Reducir el estrés'], answer: 2 },
+        { q: '¿Por qué las actividades de gratificación instantánea son un "préstamo dopaminérgico"?',
+          options: ['Elevan dopamina sin esfuerzo', 'Producen picos que luego reducen la línea base', 'Sustituyen motivación por placer', 'Inhiben dopamina futura'], answer: 1 },
+        { q: 'En Modo Creativo, vivir bien implica:',
+          options: ['Evitar bajadas emocionales', 'Maximizar picos', 'Estabilizar una dopamina orientada al futuro', 'Eliminar gratificación instantánea'], answer: 2 },
+        { q: 'La diferencia entre Mike y Mark se explica por:',
+          options: ['Talento y voluntad', 'Consciencia y genética', 'Acumulación sostenida de gratificación tardía', 'Capacidad intelectual'], answer: 2 },
+        { q: '¿Por qué Mark tolera mejor tareas difíciles?',
+          options: ['Dopamina más rápida', 'Sin resistencia emocional', 'Dopamina base más alta', 'Evita tareas'], answer: 2 },
+        { q: 'Un objetivo rígido es problemático porque:',
+          options: ['Reduce motivación', 'Es una apuesta desde la ignorancia del presente', 'Limita creatividad', 'Genera dependencia'], answer: 1 },
+        { q: '¿Qué define mejor un constraint?',
+          options: ['Marco que guía decisiones sin definir resultado', 'Límite temporal', 'Plan rígido', 'Visualización futura'], answer: 0 },
+        { q: 'La metáfora del jazz explica que:',
+          options: ['Improvisación > planificación', 'Talento espontáneo', 'Evitar error', 'La vida responde mejor a límites que a guiones'], answer: 3 },
+        { q: 'El cuello de botella es:',
+          options: ['Peores resultados', 'Hábito difícil', 'Factor que bloquea el progreso global', 'Creencia antigua'], answer: 2 },
+        { q: '¿Por qué mejorar un poco en todo es ineficaz?',
+          options: ['Dispersa energía en lo no crítico', 'Sobrecarga cognitiva', 'Refuerza procrastinación', 'Impide especialización'], answer: 0 },
+        { q: 'Las creencias cambian cuando:',
+          options: ['Se repiten', 'Se entienden', 'Se actúa y se obtiene evidencia vivida', 'Se visualizan'], answer: 2 },
+        { q: 'En las balanzas mágicas pesa más:',
+          options: ['Visualizar', 'Entender', 'Escuchar otros', 'Actuar alineado con presencia'], answer: 3 },
+        { q: 'Error común al cambiar creencias:',
+          options: ['No definir opuesta', 'Falta motivación', 'Creencia ambiciosa', 'No exponerse a experiencias reales'], answer: 3 },
+        { q: 'La latencia es:',
+          options: ['Adaptación cerebral', 'Desfase entre identidad interna y resultados externos', 'Resistencia inicial', 'Periodo de duda'], answer: 1 },
+        { q: 'El jugador infinito:',
+          options: ['Busca ganar', 'Evita error', 'Usa el error como información', 'Defiende creencias'], answer: 2 },
+        { q: 'La realidad objetiva:',
+          options: ['No existe', 'Inaccesible', 'Existe, pero la experiencia es subjetiva', 'Depende del consenso'], answer: 2 },
+        { q: 'El filtro de la realidad es:',
+          options: ['Entorno', 'Lenguaje', 'Emociones', 'Creencias'], answer: 3 },
+        { q: 'El cuadrado y el círculo ilustran que:',
+          options: ['Percepción errónea', 'Realidad cambia', 'El objeto no cambia, cambia la interpretación', 'Verdad relativa'], answer: 2 },
+        { q: 'La vida ideal:',
+          options: ['Fantasía', 'Estándar de validación de creencias', 'Ajustarse al presente', 'Independiente'], answer: 1 },
+        { q: 'Secuencia del cambio profundo:',
+          options: ['Consciencia → creencias → decisiones → vida', 'Motivación → disciplina → hábitos → éxito', 'Acción → creencia → identidad → resultados', 'Objetivos → planificación → ejecución → logro'], answer: 0 },
+      ]
+    }
+  };
+
+  const ME_PREFIX = 'module_exam_';
+  function getModuleExamState(moduleId) {
+    const v = storeGet(ME_PREFIX + moduleId) || {};
+    return {
+      attempts: Array.isArray(v.attempts) ? v.attempts : [],
+      passed: !!v.passed,
+      passedAt: typeof v.passedAt === 'number' ? v.passedAt : null
+    };
+  }
+  function setModuleExamState(moduleId, state) {
+    storeSet(ME_PREFIX + moduleId, state);
+  }
+  function moduleExamCanAttempt(moduleId) {
+    const exam = MODULE_EXAMS[moduleId];
+    if (!exam) return { ok: false, status: 'no-exam' };
+    const state = getModuleExamState(moduleId);
+    if (state.passed) return { ok: false, status: 'passed' };
+    const last = state.attempts[state.attempts.length - 1];
+    if (last && !last.passed) {
+      const elapsed = Date.now() - last.ts;
+      if (elapsed < exam.cooldownMs) {
+        return { ok: false, status: 'cooldown', msLeft: exam.cooldownMs - elapsed };
+      }
+    }
+    return { ok: true, status: 'ready' };
+  }
+  function isModuleFullyComplete(moduleId) {
+    const module = SKILLTREE_MODULES.find(m => m.id === moduleId);
+    if (!module) return false;
+    const state = getSkilltreeState();
+    for (let chIdx = 0; chIdx < module.chapters.length; chIdx++) {
+      const ch = module.chapters[chIdx];
+      for (let sgIdx = 0; sgIdx < ch.subgroups.length; sgIdx++) {
+        const sg = ch.subgroups[sgIdx];
+        for (let tIdx = 0; tIdx < sg.tasks.length; tIdx++) {
+          const tid = stTaskId(moduleId, chIdx, sgIdx, tIdx);
+          if (!state[tid]) return false;
+        }
+      }
+    }
+    return true;
+  }
 
   const SKILLTREE_LOCKED_MODULES = [
     { icon: '🔒', name: 'Módulo 2 · próximamente' },
@@ -7497,9 +7957,20 @@
     return { total: sg.tasks.length, done, complete: done === sg.tasks.length };
   }
 
+  // View router for the Checklist tab
+  let _stView = 'checklist'; // 'checklist' | 'exam' | 'result'
+  let _examAnswers = null;
+  let _examResult = null;
+
   function renderSkilltree() {
     const content = document.getElementById('stContent');
     if (!content) return;
+    if (_stView === 'exam') return _renderExamView(content);
+    if (_stView === 'result') return _renderExamResult(content);
+    return _renderChecklist(content);
+  }
+
+  function _renderChecklist(content) {
     renderSkilltreeModuleTabs();
     const module = SKILLTREE_MODULES.find(m => m.id === stCurrentModuleId) || SKILLTREE_MODULES[0];
     const state = getSkilltreeState();
@@ -7525,6 +7996,7 @@
       '</div>' +
       (mastered ? '<div class="st-mastery-banner">✦ MASTERY UNLOCKED ✦</div>' : '');
     content.appendChild(header);
+    _ensureBossCta(header, module.id, { mastered, doneTasks, totalTasks });
 
     module.chapters.forEach((ch, chIdx) => {
       const stats = computeChapterStats(module, chIdx, state);
@@ -7690,6 +8162,7 @@
             banner.textContent = '✦ MASTERY UNLOCKED ✦';
             header.appendChild(banner);
           }
+          _ensureBossCta(header, module.id, { mastered: true, doneTasks: totalTasks, totalTasks });
         }
         chime('finale');
         if (navigator.vibrate) navigator.vibrate([20, 60, 40, 60, 60, 80, 100]);
@@ -7703,6 +8176,350 @@
         document.body.appendChild(flash);
         setTimeout(() => flash.remove(), 780);
       }, 450);
+    }
+  }
+
+  // ─── Boss Final (module exam) UI ──────────────────────────────────
+  function _formatExamCooldown(msLeft) {
+    const s = Math.max(0, Math.ceil(msLeft / 1000));
+    const m = Math.floor(s / 60);
+    const r = s % 60;
+    return (m < 10 ? '0' : '') + m + ':' + (r < 10 ? '0' : '') + r;
+  }
+
+  function _ensureBossCta(headerEl, moduleId, progress) {
+    if (!headerEl) return;
+    const existing = headerEl.querySelector('.st-boss-cta');
+    if (existing) existing.remove();
+    const exam = MODULE_EXAMS[moduleId];
+    if (!exam) return;
+    const status = moduleExamCanAttempt(moduleId);
+    const examState = getModuleExamState(moduleId);
+    const mastered = !!(progress && progress.mastered);
+    const doneTasks = progress ? progress.doneTasks : 0;
+    const totalTasks = progress ? progress.totalTasks : 0;
+
+    const cta = document.createElement('div');
+    cta.className = 'st-boss-cta'
+      + (examState.passed ? ' is-defeated' : '')
+      + (!mastered && !examState.passed ? ' is-locked' : '');
+
+    const textWrap = document.createElement('div');
+    textWrap.className = 'st-boss-cta-text';
+
+    const eyebrow = document.createElement('div');
+    eyebrow.className = 'st-boss-cta-eyebrow';
+    const title = document.createElement('div');
+    title.className = 'st-boss-cta-title';
+    const sub = document.createElement('div');
+    sub.className = 'st-boss-cta-sub';
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'st-boss-cta-btn';
+
+    if (examState.passed) {
+      eyebrow.textContent = '✦ Trofeo desbloqueado';
+      title.textContent = exam.title + ' · DERROTADO';
+      sub.textContent = 'Has cruzado el portal. El jefe permanece vencido.';
+      btn.textContent = 'Trofeo';
+      btn.classList.add('is-disabled');
+    } else if (!mastered) {
+      const missing = Math.max(0, totalTasks - doneTasks);
+      eyebrow.textContent = '🔒 Boss bloqueado';
+      title.textContent = exam.title;
+      sub.textContent = 'Completa el checklist para invocar al jefe. '
+        + 'Quedan ' + missing + ' tareas · 20 preguntas · máx 3 fallos.';
+      btn.textContent = doneTasks + ' / ' + totalTasks;
+      btn.classList.add('is-disabled');
+    } else if (status.status === 'cooldown') {
+      eyebrow.textContent = '⏳ Boss respawning';
+      title.textContent = exam.title;
+      sub.textContent = 'El jefe te ha matado. Vuelve cuando reaparezca.';
+      btn.textContent = _formatExamCooldown(status.msLeft);
+      btn.classList.add('is-disabled');
+      // Live countdown
+      const tick = () => {
+        const s2 = moduleExamCanAttempt(moduleId);
+        if (s2.status === 'cooldown') {
+          btn.textContent = _formatExamCooldown(s2.msLeft);
+          setTimeout(tick, 1000);
+        } else {
+          // Cooldown ended — re-render CTA so user sees "Challenge" button
+          _ensureBossCta(headerEl, moduleId);
+        }
+      };
+      setTimeout(tick, 1000);
+    } else {
+      eyebrow.textContent = '⚔ Boss desbloqueado';
+      title.textContent = exam.title;
+      sub.textContent = '20 preguntas · máximo 3 fallos · 1 hora de cooldown si caes';
+      btn.textContent = 'Empezar';
+      btn.addEventListener('click', () => _startExam(moduleId));
+    }
+
+    textWrap.appendChild(eyebrow);
+    textWrap.appendChild(title);
+    textWrap.appendChild(sub);
+    cta.appendChild(textWrap);
+    cta.appendChild(btn);
+    headerEl.appendChild(cta);
+  }
+
+  function _startExam(moduleId) {
+    const exam = MODULE_EXAMS[moduleId];
+    if (!exam) return;
+    const status = moduleExamCanAttempt(moduleId);
+    if (!status.ok) return;
+    _examAnswers = {
+      moduleId,
+      qIdx: 0,
+      answers: [],
+      wrongs: 0,
+      locked: false
+    };
+    _stView = 'exam';
+    renderSkilltree();
+  }
+
+  function _renderExamView(content) {
+    const data = _examAnswers;
+    if (!data) { _stView = 'checklist'; return renderSkilltree(); }
+    const exam = MODULE_EXAMS[data.moduleId];
+    if (!exam) { _stView = 'checklist'; return renderSkilltree(); }
+    const q = exam.questions[data.qIdx];
+    const total = exam.questions.length;
+    const maxWrong = exam.maxWrong;
+    const livesLeft = Math.max(0, (maxWrong + 1) - data.wrongs);
+
+    content.innerHTML = '';
+
+    const stage = document.createElement('div');
+    stage.className = 'exam-stage';
+
+    const topbar = document.createElement('div');
+    topbar.className = 'exam-topbar';
+    const back = document.createElement('button');
+    back.type = 'button';
+    back.className = 'exam-back';
+    back.textContent = '← Abandonar pelea';
+    back.addEventListener('click', () => {
+      if (!confirm('¿Abandonar la Boss Fight? Tu progreso en este intento se perderá.')) return;
+      _examAnswers = null;
+      _stView = 'checklist';
+      renderSkilltree();
+    });
+    topbar.appendChild(back);
+    stage.appendChild(topbar);
+
+    const header = document.createElement('div');
+    header.className = 'exam-header';
+    header.innerHTML =
+      '<div class="exam-eyebrow">Boss Final</div>' +
+      '<div class="exam-title"></div>';
+    header.querySelector('.exam-title').textContent = exam.title;
+    stage.appendChild(header);
+
+    const meta = document.createElement('div');
+    meta.className = 'exam-meta-row';
+    const lives = document.createElement('div');
+    lives.className = 'exam-lives';
+    for (let i = 0; i < (maxWrong + 1); i++) {
+      const h = document.createElement('span');
+      h.className = 'exam-heart' + (i < (maxWrong + 1) - livesLeft ? ' is-lost' : '');
+      lives.appendChild(h);
+    }
+    meta.appendChild(lives);
+    const progressWrap = document.createElement('div');
+    progressWrap.className = 'exam-progress';
+    const progressFill = document.createElement('div');
+    progressFill.className = 'exam-progress-fill';
+    progressFill.style.width = ((data.qIdx / total) * 100) + '%';
+    progressWrap.appendChild(progressFill);
+    meta.appendChild(progressWrap);
+    const counter = document.createElement('div');
+    counter.textContent = (data.qIdx + 1) + ' / ' + total;
+    meta.appendChild(counter);
+    stage.appendChild(meta);
+
+    const card = document.createElement('div');
+    card.className = 'exam-question-card';
+    const qText = document.createElement('div');
+    qText.className = 'exam-q-text';
+    qText.textContent = q.q;
+    card.appendChild(qText);
+
+    const opts = document.createElement('div');
+    opts.className = 'exam-options';
+    const LETTERS = ['A', 'B', 'C', 'D'];
+    q.options.forEach((optText, i) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'exam-option';
+      btn.dataset.optIdx = String(i);
+      btn.innerHTML =
+        '<span class="exam-option-letter">' + LETTERS[i] + '</span>' +
+        '<span class="exam-option-text"></span>';
+      btn.querySelector('.exam-option-text').textContent = optText;
+      btn.addEventListener('click', () => _submitExamAnswer(i, card, opts));
+      opts.appendChild(btn);
+    });
+    card.appendChild(opts);
+    stage.appendChild(card);
+
+    content.appendChild(stage);
+  }
+
+  function _submitExamAnswer(optIdx, cardEl, optsEl) {
+    const data = _examAnswers;
+    if (!data || data.locked) return;
+    data.locked = true;
+    const exam = MODULE_EXAMS[data.moduleId];
+    const q = exam.questions[data.qIdx];
+    const correctIdx = q.answer;
+    const isCorrect = optIdx === correctIdx;
+    data.answers.push({ qIdx: data.qIdx, picked: optIdx, correct: isCorrect });
+
+    const buttons = optsEl.querySelectorAll('.exam-option');
+    buttons.forEach(b => { b.disabled = true; });
+    const correctBtn = optsEl.querySelector('[data-opt-idx="' + correctIdx + '"]');
+    const pickedBtn = optsEl.querySelector('[data-opt-idx="' + optIdx + '"]');
+    if (isCorrect) {
+      pickedBtn.classList.add('is-correct');
+      try { chime('check'); } catch (e) {}
+      if (navigator.vibrate) navigator.vibrate(10);
+    } else {
+      pickedBtn.classList.add('is-wrong');
+      if (correctBtn) correctBtn.classList.add('is-correct');
+      data.wrongs++;
+      cardEl.classList.add('is-hit');
+      try { chime('wrong'); } catch (e) {}
+      if (navigator.vibrate) navigator.vibrate([18, 40, 22]);
+      // Update lives UI live
+      const lives = document.querySelector('.exam-lives');
+      if (lives) {
+        const hearts = lives.querySelectorAll('.exam-heart');
+        const lost = data.wrongs;
+        hearts.forEach((h, i) => {
+          h.classList.toggle('is-lost', i < lost);
+        });
+      }
+    }
+
+    const delay = isCorrect ? 700 : 1200;
+    setTimeout(() => {
+      const total = exam.questions.length;
+      const failed = data.wrongs > exam.maxWrong;
+      const finished = (data.qIdx + 1) >= total;
+      if (failed || finished) {
+        _finalizeExam(!failed);
+      } else {
+        data.qIdx++;
+        data.locked = false;
+        renderSkilltree();
+      }
+    }, delay);
+  }
+
+  function _finalizeExam(passed) {
+    const data = _examAnswers;
+    if (!data) return;
+    const exam = MODULE_EXAMS[data.moduleId];
+    const total = exam.questions.length;
+    const state = getModuleExamState(data.moduleId);
+    state.attempts.push({
+      ts: Date.now(),
+      passed: passed,
+      wrongs: data.wrongs,
+      answers: data.answers
+    });
+    if (passed) {
+      state.passed = true;
+      state.passedAt = Date.now();
+    }
+    setModuleExamState(data.moduleId, state);
+    _examResult = {
+      moduleId: data.moduleId,
+      passed: passed,
+      wrongs: data.wrongs,
+      total: total
+    };
+    _examAnswers = null;
+    _stView = 'result';
+    renderSkilltree();
+  }
+
+  function _renderExamResult(content) {
+    const r = _examResult;
+    if (!r) { _stView = 'checklist'; return renderSkilltree(); }
+    const exam = MODULE_EXAMS[r.moduleId];
+    content.innerHTML = '';
+
+    const stage = document.createElement('div');
+    stage.className = 'exam-stage';
+
+    const box = document.createElement('div');
+    box.className = 'exam-result' + (r.passed ? '' : ' is-fail');
+
+    if (r.passed) {
+      box.innerHTML =
+        '<div class="exam-result-eyebrow">✦ Boss Defeated ✦</div>' +
+        '<div class="exam-result-title">¡Has cruzado el portal!</div>' +
+        '<div class="exam-result-sub">Fallos: ' + r.wrongs + ' / ' + exam.maxWrong + ' · Aciertos: ' + (r.total - r.wrongs) + ' / ' + r.total + '<br>Modo Creativo desbloqueado. Sigue construyendo.</div>' +
+        '<div class="exam-result-actions">' +
+          '<button type="button" class="exam-result-btn is-gold" data-action="back">Volver al checklist</button>' +
+        '</div>';
+    } else {
+      const status = moduleExamCanAttempt(r.moduleId);
+      const cdLabel = status.status === 'cooldown' ? _formatExamCooldown(status.msLeft) : '00:00';
+      box.innerHTML =
+        '<div class="exam-result-eyebrow">⚔ Boss Wins</div>' +
+        '<div class="exam-result-title">El jefe te ha matado</div>' +
+        '<div class="exam-result-sub">Fallos: ' + r.wrongs + ' (máximo permitido: ' + exam.maxWrong + ')<br>El boss reaparece en:</div>' +
+        '<div class="exam-result-cooldown" data-role="cooldown">' + cdLabel + '</div>' +
+        '<div class="exam-result-actions">' +
+          '<button type="button" class="exam-result-btn" data-action="back">Volver al checklist</button>' +
+        '</div>';
+      // Live countdown
+      const cdEl = box.querySelector('[data-role="cooldown"]');
+      const tick = () => {
+        if (!document.body.contains(cdEl)) return;
+        const s2 = moduleExamCanAttempt(r.moduleId);
+        if (s2.status === 'cooldown') {
+          cdEl.textContent = _formatExamCooldown(s2.msLeft);
+          setTimeout(tick, 1000);
+        } else {
+          cdEl.textContent = '¡Listo para reintentar!';
+        }
+      };
+      setTimeout(tick, 1000);
+    }
+
+    box.addEventListener('click', (e) => {
+      const t = e.target;
+      if (!(t instanceof HTMLElement)) return;
+      if (t.dataset.action === 'back') {
+        _examResult = null;
+        _stView = 'checklist';
+        renderSkilltree();
+      }
+    });
+
+    stage.appendChild(box);
+    content.appendChild(stage);
+
+    if (r.passed) {
+      // Victory celebration
+      setTimeout(() => {
+        try { chime('finale'); } catch (e) {}
+        if (navigator.vibrate) navigator.vibrate([20, 60, 40, 60, 60, 80, 100]);
+        try {
+          spawnConfetti({ left: 0, top: -20, width: window.innerWidth, height: window.innerHeight * 0.5 }, {
+            count: 100,
+            colors: ['#F2C063', '#FFD89E', '#FFE4B0', '#FFFFFF', '#FFC857', '#FF9F1C', '#6BE3A4', '#6BA8E3', '#B89BE9', '#FF8E72']
+          });
+        } catch (e) {}
+      }, 120);
     }
   }
 
