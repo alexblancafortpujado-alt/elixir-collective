@@ -2990,6 +2990,117 @@
     100% { box-shadow: 0 12px 40px rgba(0,0,0,0.45); }
   }
 
+  /* Heroes Academy rank widget */
+  .rank-widget {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 16px 18px;
+    margin-bottom: 18px;
+    border-radius: 14px;
+    background:
+      radial-gradient(ellipse at 12% 50%, rgba(255,255,255,0.06), transparent 60%),
+      linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 0 28px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+  .rank-widget-img-wrap {
+    position: relative;
+    width: 64px; height: 64px;
+    flex: 0 0 64px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 50% 35%, rgba(255,255,255,0.16), rgba(255,255,255,0) 60%),
+      rgba(0,0,0,0.35);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 22px var(--rank-glow, rgba(255,255,255,0.15));
+    transition: box-shadow 0.4s ease;
+  }
+  .rank-widget-img {
+    width: 56px; height: 56px;
+    object-fit: contain;
+    image-rendering: pixelated;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.55));
+  }
+  .rank-widget-text { flex: 1; min-width: 0; }
+  .rank-widget-eyebrow {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.24em;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+  .rank-widget-name {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.015em;
+    color: #fff;
+    margin-bottom: 2px;
+    text-shadow: 0 0 14px var(--rank-glow, transparent);
+  }
+  .rank-widget-sub {
+    font-size: 12.5px;
+    color: var(--text-tertiary);
+    letter-spacing: 0.02em;
+  }
+  .rank-widget-progress {
+    flex: 0 0 auto;
+    text-align: right;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11px;
+    color: var(--text-tertiary);
+    letter-spacing: 0.08em;
+  }
+  .rank-widget-progress-num {
+    display: block;
+    font-size: 18px;
+    color: var(--text-primary);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin-bottom: 2px;
+  }
+  /* Rank-specific glows */
+  .rank-widget[data-rank="base"]       { --rank-glow: rgba(180,180,180,0.20); }
+  .rank-widget[data-rank="esmeralda"]  { --rank-glow: rgba(80,255,160,0.45); }
+  .rank-widget[data-rank="azurita"]    { --rank-glow: rgba(80,180,255,0.45); }
+  .rank-widget[data-rank="amatista"]   { --rank-glow: rgba(184,155,233,0.50); }
+  .rank-widget[data-rank="ruby"]       { --rank-glow: rgba(255,60,80,0.55); }
+  .rank-widget[data-rank="superheroe"] { --rank-glow: rgba(242,192,99,0.65); }
+
+  .st-module-tab-trophy {
+    margin-left: 4px;
+    font-size: 11px;
+    color: #F2C063;
+    text-shadow: 0 0 8px rgba(242,192,99,0.6);
+  }
+  .st-module-tab.is-final:not(.is-locked) {
+    background: linear-gradient(180deg, rgba(204,31,58,0.18), rgba(80,8,18,0.18));
+    border-color: rgba(255,80,100,0.4);
+    color: #ff9eb0;
+  }
+  .st-module-tab.is-cleared:not(.is-active):not(.is-locked) {
+    border-color: rgba(242,192,99,0.35);
+    color: rgba(255,232,180,0.85);
+  }
+
+  /* Empty/coming-soon module state */
+  .st-empty-state {
+    margin: 28px auto;
+    max-width: 540px;
+    padding: 36px 28px;
+    border-radius: 16px;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.05), transparent 70%),
+      rgba(255,255,255,0.03);
+    border: 1px dashed rgba(255,255,255,0.14);
+    text-align: center;
+  }
+  .st-empty-state-icon { font-size: 32px; margin-bottom: 10px; opacity: 0.7; }
+  .st-empty-state-title { font-size: 18px; font-weight: 800; color: var(--text-primary); margin-bottom: 6px; }
+  .st-empty-state-sub { font-size: 13px; color: var(--text-tertiary); line-height: 1.5; }
+
   /* Skilltree */
   .st-module-tabs {
     display: flex;
@@ -5529,6 +5640,7 @@
 <div class="tab-panel" data-tab="skilltree">
   <div class="section">
     <div class="section-title">Checklist</div>
+    <div class="rank-widget" id="rankWidget"></div>
     <div class="st-module-tabs" id="stModuleTabs"></div>
     <div id="stContent"></div>
   </div>
@@ -8203,12 +8315,51 @@
     grid.dataset.rendered = '1';
   }
 
+  // ─── Heroes Academy Ranks ────────────────────────────────────────
+  // Rank progression: defeat bosses → unlock the next rank.
+  // Computed on the fly from MODULE_EXAMS state.
+  const RANK_DEFS = [
+    { id: 'base',       name: 'Aspirante',       img: 'rango-base.png',       subtitle: 'Tu camino empieza aquí' },
+    { id: 'esmeralda',  name: 'Rango Esmeralda', img: 'rango-esmeralda.png',  subtitle: 'Modo Creativo desbloqueado · elige tu camino' },
+    { id: 'azurita',    name: 'Rango Azurita',   img: 'rango-azurita.png',    subtitle: 'Has matado tu primer boss del camino' },
+    { id: 'amatista',   name: 'Rango Amatista',  img: 'rango-amatista.png',   subtitle: 'Has llegado al curso avanzado' },
+    { id: 'ruby',       name: 'Rango Ruby',      img: 'rango-ruby.png',       subtitle: 'Todos los bosses caídos · Umbra te espera' },
+    { id: 'superheroe', name: 'Superhéroe',      img: 'rango-superheroe.png', subtitle: 'Has cruzado el portal final' }
+  ];
+
+  const RANK_TIER_2_IDS = ['salud-mental', 'social-natural', 'ultra-productividad', 'hybrid-athlete'];
+  const RANK_TIER_3_IDS = ['optimiza', 'heroes-love', 'aprendiz-de-10', 'skin-legendaria'];
+  const RANK_ALL_BOSS_IDS = ['modo-creativo'].concat(RANK_TIER_2_IDS, RANK_TIER_3_IDS);
+
+  function _bossDefeated(moduleId) {
+    return getModuleExamState(moduleId).passed === true;
+  }
+
+  function computeUserRank() {
+    if (_bossDefeated('umbra'))                       return 'superheroe';
+    if (RANK_ALL_BOSS_IDS.every(_bossDefeated))       return 'ruby';
+    if (RANK_TIER_3_IDS.some(_bossDefeated))          return 'amatista';
+    if (RANK_TIER_2_IDS.some(_bossDefeated))          return 'azurita';
+    if (_bossDefeated('modo-creativo'))               return 'esmeralda';
+    return 'base';
+  }
+
+  function isModuleUnlocked(moduleId) {
+    const m = SKILLTREE_MODULES.find(x => x.id === moduleId);
+    if (!m) return false;
+    if (m.id === 'umbra') return computeUserRank() === 'ruby' || computeUserRank() === 'superheroe';
+    if (!m.prereqs || m.prereqs.length === 0) return true;
+    return m.prereqs.every(_bossDefeated);
+  }
+
   // ─── Skilltree ────────────────────────────────────────────────────
   const SKILLTREE_MODULES = [
     {
       id: 'modo-creativo',
       name: 'Modo Creativo',
       subtitle: 'Mentalidad y bases · 5 días',
+      prereqs: [],
+      path: 'inicio',
       icon: '🎮',
       chapters: [
         {
@@ -8406,6 +8557,99 @@
           ]
         },
       ]
+    },
+
+    // ── Tier 2 · Esmeralda paths (4) ─────────────────────────────────
+    // Each unlocks once Modo Creativo's boss is dead. Defeating any of
+    // these grants Rango Azurita. Content arrives course by course.
+    {
+      id: 'salud-mental',
+      name: 'Salud Mental',
+      subtitle: 'Camino de la Salud',
+      icon: '🧠',
+      prereqs: ['modo-creativo'],
+      path: 'salud',
+      chapters: []
+    },
+    {
+      id: 'social-natural',
+      name: 'Social Natural',
+      subtitle: 'Camino Social',
+      icon: '💬',
+      prereqs: ['modo-creativo'],
+      path: 'social',
+      chapters: []
+    },
+    {
+      id: 'ultra-productividad',
+      name: 'Ultra Productividad',
+      subtitle: 'Camino de la Productividad',
+      icon: '⚡',
+      prereqs: ['modo-creativo'],
+      path: 'productividad',
+      chapters: []
+    },
+    {
+      id: 'hybrid-athlete',
+      name: 'Hybrid Athlete',
+      subtitle: 'Camino del Aspecto',
+      icon: '💪',
+      prereqs: ['modo-creativo'],
+      path: 'aspecto',
+      chapters: []
+    },
+
+    // ── Tier 3 · Amatista courses (4) ────────────────────────────────
+    // Each unlocks when its tier-2 predecessor's boss dies.
+    {
+      id: 'optimiza',
+      name: 'Optimiza',
+      subtitle: 'Avanzado · Salud',
+      icon: '🌿',
+      prereqs: ['salud-mental'],
+      path: 'salud',
+      chapters: []
+    },
+    {
+      id: 'heroes-love',
+      name: 'Heroes Love',
+      subtitle: 'Avanzado · Social',
+      icon: '❤️',
+      prereqs: ['social-natural'],
+      path: 'social',
+      chapters: []
+    },
+    {
+      id: 'aprendiz-de-10',
+      name: 'Aprendiz de 10',
+      subtitle: 'Avanzado · Productividad',
+      icon: '🎯',
+      prereqs: ['ultra-productividad'],
+      path: 'productividad',
+      chapters: []
+    },
+    {
+      id: 'skin-legendaria',
+      name: 'Skin Legendaria',
+      subtitle: 'Avanzado · Aspecto',
+      icon: '✨',
+      prereqs: ['hybrid-athlete'],
+      path: 'aspecto',
+      chapters: []
+    },
+
+    // ── Final boss · Umbra (7-day challenge) ─────────────────────────
+    // Unlocks at Rango Ruby (all 9 bosses dead). Defeating Umbra grants
+    // Rango Superhéroe. Format is special — not a 20-question exam.
+    {
+      id: 'umbra',
+      name: 'Umbra',
+      subtitle: 'Boss Final · 7 días',
+      icon: '👹',
+      prereqs: RANK_ALL_BOSS_IDS.slice(),
+      path: 'final',
+      isFinal: true,
+      chapters: []
     },
   ];
 
@@ -8665,11 +8909,6 @@
     return true;
   }
 
-  const SKILLTREE_LOCKED_MODULES = [
-    { icon: '🔒', name: 'Módulo 2 · próximamente' },
-    { icon: '🔒', name: 'Módulo 3 · próximamente' },
-  ];
-
   const ST_KEY = 'skilltree_v1';
   let stCurrentModuleId = SKILLTREE_MODULES[0].id;
   let stRendered = false;
@@ -8688,25 +8927,69 @@
     const tabs = document.getElementById('stModuleTabs');
     tabs.innerHTML = '';
     SKILLTREE_MODULES.forEach(m => {
+      const unlocked = isModuleUnlocked(m.id);
+      const defeated = _bossDefeated(m.id);
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'st-module-tab' + (m.id === stCurrentModuleId ? ' is-active' : '');
+      let cls = 'st-module-tab';
+      if (m.id === stCurrentModuleId) cls += ' is-active';
+      if (!unlocked) cls += ' is-locked';
+      if (defeated) cls += ' is-cleared';
+      if (m.isFinal) cls += ' is-final';
+      btn.className = cls;
       btn.dataset.moduleId = m.id;
-      btn.innerHTML = '<span class="st-module-tab-icon">' + m.icon + '</span><span class="st-module-tab-name">' + m.name + '</span>';
-      btn.addEventListener('click', () => {
-        stCurrentModuleId = m.id;
-        renderSkilltree();
-      });
+      const displayIcon = unlocked ? (m.icon || '·') : '🔒';
+      const trophy = defeated ? '<span class="st-module-tab-trophy">✦</span>' : '';
+      btn.innerHTML =
+        '<span class="st-module-tab-icon">' + displayIcon + '</span>' +
+        '<span class="st-module-tab-name"></span>' +
+        trophy;
+      btn.querySelector('.st-module-tab-name').textContent = m.name;
+      if (!unlocked) {
+        btn.disabled = true;
+        btn.title = _moduleUnlockHint(m);
+      } else {
+        btn.addEventListener('click', () => {
+          stCurrentModuleId = m.id;
+          renderSkilltree();
+        });
+      }
       tabs.appendChild(btn);
     });
-    SKILLTREE_LOCKED_MODULES.forEach(m => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'st-module-tab is-locked';
-      btn.disabled = true;
-      btn.innerHTML = '<span class="st-module-tab-icon">' + m.icon + '</span><span class="st-module-tab-name">' + m.name + '</span>';
-      tabs.appendChild(btn);
-    });
+  }
+
+  function _moduleUnlockHint(m) {
+    if (m.id === 'umbra') return 'Llega al rango Ruby (mata a los 9 jefes) para invocar a Umbra';
+    if (!m.prereqs || m.prereqs.length === 0) return '';
+    const pending = m.prereqs.filter(pid => !_bossDefeated(pid))
+      .map(pid => (SKILLTREE_MODULES.find(x => x.id === pid) || {}).name || pid);
+    if (pending.length === 0) return '';
+    return 'Bloqueado · mata primero al boss de: ' + pending.join(', ');
+  }
+
+  function renderRankWidget() {
+    const wrap = document.getElementById('rankWidget');
+    if (!wrap) return;
+    const rankId = computeUserRank();
+    const def = RANK_DEFS.find(r => r.id === rankId) || RANK_DEFS[0];
+    const defeated = RANK_ALL_BOSS_IDS.filter(_bossDefeated).length;
+    const totalBosses = RANK_ALL_BOSS_IDS.length;
+    wrap.dataset.rank = rankId;
+    wrap.innerHTML =
+      '<div class="rank-widget-img-wrap">' +
+        '<img class="rank-widget-img" src="' + def.img + '" alt="' + def.name + '" draggable="false" />' +
+      '</div>' +
+      '<div class="rank-widget-text">' +
+        '<div class="rank-widget-eyebrow">Tu rango</div>' +
+        '<div class="rank-widget-name"></div>' +
+        '<div class="rank-widget-sub"></div>' +
+      '</div>' +
+      '<div class="rank-widget-progress">' +
+        '<span class="rank-widget-progress-num">' + defeated + ' / ' + totalBosses + '</span>' +
+        'jefes caídos' +
+      '</div>';
+    wrap.querySelector('.rank-widget-name').textContent = def.name;
+    wrap.querySelector('.rank-widget-sub').textContent = def.subtitle;
   }
 
   function computeChapterStats(module, chIdx, state) {
@@ -8745,6 +9028,12 @@
 
   function _renderChecklist(content) {
     renderSkilltreeModuleTabs();
+    renderRankWidget();
+    // If the user landed on a locked module, snap back to the first unlocked one.
+    if (!isModuleUnlocked(stCurrentModuleId)) {
+      const fallback = SKILLTREE_MODULES.find(m => isModuleUnlocked(m.id));
+      if (fallback) stCurrentModuleId = fallback.id;
+    }
     const module = SKILLTREE_MODULES.find(m => m.id === stCurrentModuleId) || SKILLTREE_MODULES[0];
     const state = getSkilltreeState();
 
@@ -8770,6 +9059,23 @@
       (mastered ? '<div class="st-mastery-banner">✦ MASTERY UNLOCKED ✦</div>' : '');
     content.appendChild(header);
     _ensureBossCta(header, module.id, { mastered, doneTasks, totalTasks });
+
+    // Module without content yet → coming-soon placeholder.
+    if (!module.chapters || module.chapters.length === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'st-empty-state';
+      const isUmbra = module.id === 'umbra';
+      empty.innerHTML =
+        '<div class="st-empty-state-icon">' + (isUmbra ? '👹' : '⏳') + '</div>' +
+        '<div class="st-empty-state-title">' + (isUmbra ? 'Umbra duerme' : 'Curso en preparación') + '</div>' +
+        '<div class="st-empty-state-sub"></div>';
+      empty.querySelector('.st-empty-state-sub').textContent = isUmbra
+        ? 'El reto de 7 días se invocará cuando llegues al rango Ruby. Por ahora, sigue matando jefes.'
+        : 'La checklist de este módulo se añadirá pronto. Mientras tanto, completa los cursos que ya están listos.';
+      content.appendChild(empty);
+      stRendered = true;
+      return;
+    }
 
     module.chapters.forEach((ch, chIdx) => {
       const stats = computeChapterStats(module, chIdx, state);
@@ -9691,26 +9997,36 @@
     const module = SKILLTREE_MODULES.find(m => m.id === stv2State.moduleId) || SKILLTREE_MODULES[0];
     const state = getSkilltreeState();
 
-    // Module tabs
+    // Module tabs (use same unlock logic as the Checklist tab)
     tabsEl.innerHTML = '';
     SKILLTREE_MODULES.forEach(m => {
+      const unlocked = isModuleUnlocked(m.id);
+      const defeated = _bossDefeated(m.id);
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'st-module-tab' + (m.id === stv2State.moduleId ? ' is-active' : '');
-      btn.innerHTML = '<span class="st-module-tab-icon">' + m.icon + '</span><span class="st-module-tab-name">' + m.name + '</span>';
-      btn.addEventListener('click', () => {
-        stv2State.moduleId = m.id;
-        stv2State.viewBox = { ...STV2_DEFAULT_VIEWBOX };
-        renderSkilltreeV2();
-      });
-      tabsEl.appendChild(btn);
-    });
-    SKILLTREE_LOCKED_MODULES.forEach(m => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'st-module-tab is-locked';
-      btn.disabled = true;
-      btn.innerHTML = '<span class="st-module-tab-icon">' + m.icon + '</span><span class="st-module-tab-name">' + m.name + '</span>';
+      let cls = 'st-module-tab';
+      if (m.id === stv2State.moduleId) cls += ' is-active';
+      if (!unlocked) cls += ' is-locked';
+      if (defeated) cls += ' is-cleared';
+      if (m.isFinal) cls += ' is-final';
+      btn.className = cls;
+      const displayIcon = unlocked ? (m.icon || '·') : '🔒';
+      const trophy = defeated ? '<span class="st-module-tab-trophy">✦</span>' : '';
+      btn.innerHTML =
+        '<span class="st-module-tab-icon">' + displayIcon + '</span>' +
+        '<span class="st-module-tab-name"></span>' +
+        trophy;
+      btn.querySelector('.st-module-tab-name').textContent = m.name;
+      if (!unlocked) {
+        btn.disabled = true;
+        btn.title = _moduleUnlockHint(m);
+      } else {
+        btn.addEventListener('click', () => {
+          stv2State.moduleId = m.id;
+          stv2State.viewBox = { ...STV2_DEFAULT_VIEWBOX };
+          renderSkilltreeV2();
+        });
+      }
       tabsEl.appendChild(btn);
     });
 
