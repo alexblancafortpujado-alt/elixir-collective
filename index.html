@@ -1000,6 +1000,39 @@
     margin-bottom: 14px;
   }
 
+  /* Habits — sleep shade (active in the 9h before wake-up) */
+  .tab-panel[data-tab="habits"] #habitList,
+  .tab-panel[data-tab="habits"] .gm-card,
+  .tab-panel[data-tab="habits"] .empty-state {
+    transition: filter 0.7s ease, opacity 0.7s ease;
+  }
+  .tab-panel[data-tab="habits"].is-sleeping #habitList,
+  .tab-panel[data-tab="habits"].is-sleeping .gm-card,
+  .tab-panel[data-tab="habits"].is-sleeping .empty-state {
+    filter: brightness(0.45) saturate(0.55);
+    opacity: 0.85;
+  }
+  .habits-sleep-banner {
+    margin: -4px 0 18px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    background:
+      radial-gradient(ellipse at 12% 50%, rgba(140,120,220,0.18), transparent 60%),
+      linear-gradient(180deg, rgba(40,30,70,0.55), rgba(20,15,40,0.7));
+    border: 1px solid rgba(160,140,220,0.32);
+    color: #C8C2E0;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-align: center;
+    font-weight: 600;
+    box-shadow: 0 0 28px rgba(80,60,160,0.18), inset 0 1px 0 rgba(255,255,255,0.04);
+    animation: sleep-banner-breathe 4s ease-in-out infinite;
+  }
+  @keyframes sleep-banner-breathe {
+    0%, 100% { box-shadow: 0 0 28px rgba(80,60,160,0.18), inset 0 1px 0 rgba(255,255,255,0.04); }
+    50%      { box-shadow: 0 0 44px rgba(110,90,220,0.32), inset 0 1px 0 rgba(255,255,255,0.04); }
+  }
+
   /* Reward chip under the habit name */
   .habit-reward-row {
     display: flex;
@@ -6583,6 +6616,24 @@
     return h12 + ':' + (m < 10 ? '0' : '') + m + ' ' + ap;
   }
 
+  // Sleep window: 9h before wake (e.g. wake 8AM → sleeping 23:00–08:00).
+  function isInSleepWindow() {
+    const wake = getWakeHour();
+    const now = new Date();
+    const hours = now.getHours() + now.getMinutes() / 60;
+    const sleepStart = (wake - 9 + 24) % 24;
+    if (sleepStart < wake) return hours >= sleepStart && hours < wake;
+    return hours >= sleepStart || hours < wake;
+  }
+  function hoursUntilWake() {
+    const wake = getWakeHour();
+    const now = new Date();
+    const hours = now.getHours() + now.getMinutes() / 60;
+    let d = wake - hours;
+    if (d <= 0) d += 24;
+    return d;
+  }
+
   // ─── Backend config ───────────────────────────────────────────────
   // Flip to 'supabase' once Clerk ↔ Supabase JWT bridge is configured.
   // 'local' = legacy localStorage per browser.
@@ -6935,6 +6986,35 @@
     const remH = SLEEP_HOUR - hours;
     const h = Math.floor(remH), m = Math.round((remH - h) * 60);
     remainEl.textContent = h + 'h ' + m + 'm awake time left';
+
+    applyHabitsSleepShade();
+  }
+
+  function applyHabitsSleepShade() {
+    const panel = document.querySelector('.tab-panel[data-tab="habits"]');
+    if (!panel) return;
+    const sleeping = isInSleepWindow();
+    panel.classList.toggle('is-sleeping', sleeping);
+
+    let banner = panel.querySelector('.habits-sleep-banner');
+    if (sleeping) {
+      const remH = hoursUntilWake();
+      const h = Math.floor(remH);
+      const m = Math.round((remH - h) * 60);
+      const wakeFmt = fmtWakeHour(getWakeHour());
+      const text = '💤 Modo nocturno · te despiertas a las ' + wakeFmt + ' (' + h + 'h ' + m + 'm)';
+      if (!banner) {
+        banner = document.createElement('div');
+        banner.className = 'habits-sleep-banner';
+        const section = panel.querySelector('.section');
+        const title = section && section.querySelector('.section-title');
+        if (title && title.nextSibling) section.insertBefore(banner, title.nextSibling);
+        else if (section) section.insertBefore(banner, section.firstChild);
+      }
+      banner.textContent = text;
+    } else if (banner) {
+      banner.remove();
+    }
   }
 
   function _promptForWakeHour() {
@@ -8021,6 +8101,7 @@
       empty.style.display = 'none';
       habits.forEach((h, i) => list.appendChild(buildHabitCard(h, i)));
     }
+    if (typeof applyHabitsSleepShade === 'function') applyHabitsSleepShade();
   }
 
   document.getElementById('habitAddBtn').addEventListener('click', () => {
