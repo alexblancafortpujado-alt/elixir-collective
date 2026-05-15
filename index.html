@@ -1736,6 +1736,48 @@
     box-shadow: 0 12px 28px rgba(0,0,0,0.50);
     cursor: grabbing;
   }
+  .cal-event.is-habit {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.30), inset 0 0 0 1.5px rgba(255,255,255,0.55);
+  }
+  .cal-event.is-habit:hover {
+    box-shadow: 0 6px 18px rgba(0,0,0,0.40), inset 0 0 0 1.5px rgba(255,255,255,0.75);
+  }
+  .cal-event-habit-badge {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    font-size: 10px;
+    line-height: 1;
+    opacity: 0.85;
+    pointer-events: none;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+  }
+  .cal-modal-habit-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+    padding: 10px 12px;
+    border-radius: 9px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    cursor: pointer;
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    user-select: none;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .cal-modal-habit-toggle:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.18);
+    color: var(--text-primary);
+  }
+  .cal-modal-habit-toggle input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #6BE3A4;
+    cursor: pointer;
+  }
   .cal-hint {
     margin-top: 10px;
     font-size: 11px;
@@ -6603,6 +6645,10 @@
     </div>
     <div class="cal-modal-section-label">Color</div>
     <div class="cal-color-row" id="calModalColors"></div>
+    <label class="cal-modal-habit-toggle">
+      <input type="checkbox" id="calModalHabit" />
+      <span>🔁 Hábito · se repite todos los días desde hoy</span>
+    </label>
     <div class="cal-modal-actions">
       <button class="cal-modal-delete" id="calModalDelete" type="button">Delete</button>
       <div class="cal-modal-actions-right">
@@ -8144,10 +8190,28 @@
   let calCurrentDate = ymd(new Date());
   let calView = 'day'; // 'day' | 'week' | 'month'
 
-  function getCalendarEvents(d) { return storeGet('calendar:' + d) || []; }
+  // Habit-events: a single template per habit, replayed onto every
+  // day from its startDate forward. Identified by ids prefixed 'h'
+  // and an isHabit flag stamped at read time.
+  function getCalendarHabits() { return storeGet('calendar:habits') || []; }
+  function setCalendarHabits(arr) {
+    if (!arr || !arr.length) storeDelete('calendar:habits');
+    else storeSet('calendar:habits', arr);
+  }
+  function isHabitEventId(id) { return typeof id === 'string' && id.charAt(0) === 'h'; }
+
+  function getCalendarEvents(d) {
+    const own = storeGet('calendar:' + d) || [];
+    const habits = getCalendarHabits()
+      .filter(h => !h.startDate || h.startDate <= d)
+      .map(h => Object.assign({}, h, { isHabit: true }));
+    return own.concat(habits);
+  }
   function setCalendarEvents(d, arr) {
-    if (!arr || arr.length === 0) storeDelete('calendar:' + d);
-    else storeSet('calendar:' + d, arr);
+    // Habits live in their own bucket — never persist them per-day.
+    const ownOnly = (arr || []).filter(e => !e.isHabit && !isHabitEventId(e.id));
+    if (!ownOnly.length) storeDelete('calendar:' + d);
+    else storeSet('calendar:' + d, ownOnly);
   }
 
   function shiftDate(s, delta) {
@@ -8231,11 +8295,19 @@
   function buildEventElement(ev, dateStr) {
     dateStr = dateStr || calCurrentDate;
     const el = document.createElement('div');
-    el.className = 'cal-event';
+    const isHabit = !!(ev.isHabit || isHabitEventId(ev.id));
+    el.className = 'cal-event' + (isHabit ? ' is-habit' : '');
     el.dataset.id = ev.id;
     el.style.top = ev.startMin + 'px';
     el.style.height = (ev.endMin - ev.startMin) + 'px';
     el.style.background = ev.color;
+    if (isHabit) {
+      const badge = document.createElement('span');
+      badge.className = 'cal-event-habit-badge';
+      badge.textContent = '🔁';
+      badge.title = 'Hábito · se repite todos los días';
+      el.appendChild(badge);
+    }
 
     const t = document.createElement('div');
     t.className = 'cal-event-title';
@@ -8292,9 +8364,19 @@
           const newStart = parseInt(el.style.top, 10);
           ev.startMin = newStart;
           ev.endMin = newStart + dur;
-          const arr2 = getCalendarEvents(dateStr);
-          const idx = arr2.findIndex(x => x.id === ev.id);
-          if (idx >= 0) { arr2[idx] = ev; setCalendarEvents(dateStr, arr2); }
+          if (ev.isHabit || isHabitEventId(ev.id)) {
+            const habits = getCalendarHabits();
+            const hIdx = habits.findIndex(x => x.id === ev.id);
+            if (hIdx >= 0) {
+              habits[hIdx] = Object.assign({}, habits[hIdx], { startMin: newStart, endMin: newStart + dur });
+              setCalendarHabits(habits);
+              renderCalendar();
+            }
+          } else {
+            const arr2 = getCalendarEvents(dateStr);
+            const idx = arr2.findIndex(x => x.id === ev.id);
+            if (idx >= 0) { arr2[idx] = ev; setCalendarEvents(dateStr, arr2); }
+          }
         }
       }
       document.addEventListener('mousemove', onMove);
@@ -8330,9 +8412,19 @@
           el.dataset.suppressClick = '1';
           const newEnd = ev.startMin + parseInt(el.style.height, 10);
           ev.endMin = newEnd;
-          const arr2 = getCalendarEvents(dateStr);
-          const idx = arr2.findIndex(x => x.id === ev.id);
-          if (idx >= 0) { arr2[idx] = ev; setCalendarEvents(dateStr, arr2); }
+          if (ev.isHabit || isHabitEventId(ev.id)) {
+            const habits = getCalendarHabits();
+            const hIdx = habits.findIndex(x => x.id === ev.id);
+            if (hIdx >= 0) {
+              habits[hIdx] = Object.assign({}, habits[hIdx], { endMin: newEnd });
+              setCalendarHabits(habits);
+              renderCalendar();
+            }
+          } else {
+            const arr2 = getCalendarEvents(dateStr);
+            const idx = arr2.findIndex(x => x.id === ev.id);
+            if (idx >= 0) { arr2[idx] = ev; setCalendarEvents(dateStr, arr2); }
+          }
         }
       }
       document.addEventListener('mousemove', onMove);
@@ -8595,14 +8687,18 @@
     const cancelBtn = document.getElementById('calModalCancel');
     const saveBtn = document.getElementById('calModalSave');
 
+    const habitChk = document.getElementById('calModalHabit');
+
     populateTimeSelect(startSel);
     populateTimeSelect(endSel);
 
     const isNew = !ev.id;
-    heading.textContent = isNew ? 'New event' : 'Edit event';
+    const wasHabit = !!(ev.isHabit || isHabitEventId(ev.id));
+    heading.textContent = isNew ? 'New event' : (wasHabit ? 'Edit habit' : 'Edit event');
     titleInp.value = ev.title || '';
     startSel.value = String(ev.startMin);
     endSel.value = String(ev.endMin);
+    if (habitChk) habitChk.checked = wasHabit;
 
     let selectedColor = ev.color || CAL_COLORS[0].hex;
     colorsEl.innerHTML = '';
@@ -8629,17 +8725,48 @@
       const startMin = parseInt(startSel.value, 10);
       let endMin = parseInt(endSel.value, 10);
       if (endMin <= startMin) endMin = Math.min(1440, startMin + 15);
-      const arr = getCalendarEvents(dateStr);
+      const wantHabit = !!(habitChk && habitChk.checked);
       let savedId;
-      if (isNew) {
+
+      if (wantHabit) {
+        // Save (or upgrade to) a habit template.
+        const habits = getCalendarHabits();
+        if (wasHabit) {
+          savedId = ev.id;
+          const hIdx = habits.findIndex(x => x.id === ev.id);
+          if (hIdx >= 0) habits[hIdx] = Object.assign({}, habits[hIdx], { title, startMin, endMin, color: selectedColor });
+        } else {
+          // New habit OR converting a regular event into a habit.
+          if (!isNew && ev.id) {
+            const arr = getCalendarEvents(dateStr);
+            const idx = arr.findIndex(x => x.id === ev.id);
+            if (idx >= 0) { arr.splice(idx, 1); setCalendarEvents(dateStr, arr); }
+          }
+          savedId = 'h' + Date.now() + Math.floor(Math.random() * 1000);
+          habits.push({ id: savedId, title, startMin, endMin, color: selectedColor, startDate: dateStr });
+        }
+        setCalendarHabits(habits);
+      } else if (wasHabit) {
+        // Demoting habit → regular event for this day only.
+        const habits = getCalendarHabits().filter(x => x.id !== ev.id);
+        setCalendarHabits(habits);
+        const arr = getCalendarEvents(dateStr);
         savedId = 'e' + Date.now() + Math.floor(Math.random() * 1000);
         arr.push({ id: savedId, title, startMin, endMin, color: selectedColor });
+        setCalendarEvents(dateStr, arr);
       } else {
-        savedId = ev.id;
-        const idx = arr.findIndex(x => x.id === ev.id);
-        if (idx >= 0) arr[idx] = { ...arr[idx], title, startMin, endMin, color: selectedColor };
+        // Regular per-day event.
+        const arr = getCalendarEvents(dateStr);
+        if (isNew) {
+          savedId = 'e' + Date.now() + Math.floor(Math.random() * 1000);
+          arr.push({ id: savedId, title, startMin, endMin, color: selectedColor });
+        } else {
+          savedId = ev.id;
+          const idx = arr.findIndex(x => x.id === ev.id);
+          if (idx >= 0) arr[idx] = Object.assign({}, arr[idx], { title, startMin, endMin, color: selectedColor });
+        }
+        setCalendarEvents(dateStr, arr);
       }
-      setCalendarEvents(dateStr, arr);
       close();
       renderCalendar();
 
@@ -8665,10 +8792,19 @@
       });
     }
     function del() {
-      if (!confirm('Delete "' + (ev.title || 'event') + '"?')) return;
-      const arr = getCalendarEvents(dateStr);
-      const idx = arr.findIndex(x => x.id === ev.id);
-      if (idx >= 0) { arr.splice(idx, 1); setCalendarEvents(dateStr, arr); }
+      const isH = wasHabit;
+      const msg = isH
+        ? 'Eliminar el hábito "' + (ev.title || 'evento') + '"? Desaparecerá de todos los días.'
+        : 'Delete "' + (ev.title || 'event') + '"?';
+      if (!confirm(msg)) return;
+      if (isH) {
+        const habits = getCalendarHabits().filter(x => x.id !== ev.id);
+        setCalendarHabits(habits);
+      } else {
+        const arr = getCalendarEvents(dateStr);
+        const idx = arr.findIndex(x => x.id === ev.id);
+        if (idx >= 0) { arr.splice(idx, 1); setCalendarEvents(dateStr, arr); }
+      }
       close();
       renderCalendar();
     }
