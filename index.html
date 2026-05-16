@@ -14277,7 +14277,16 @@
       document.body.classList.add('auth-pending');
       const siEl = document.getElementById('clerkSignIn');
       if (siEl && !_signInMounted) {
-        Clerk.mountSignIn(siEl, { appearance: CLERK_APPEARANCE });
+        // Force Clerk to redirect back to this app's origin after both
+        // sign-in and sign-up — otherwise it falls back to its dev
+        // instance default-redirect page on accounts.dev.
+        Clerk.mountSignIn(siEl, {
+          appearance: CLERK_APPEARANCE,
+          signInForceRedirectUrl: window.location.origin + '/',
+          signUpForceRedirectUrl: window.location.origin + '/',
+          signInFallbackRedirectUrl: window.location.origin + '/',
+          signUpFallbackRedirectUrl: window.location.origin + '/'
+        });
         _signInMounted = true;
       }
     }
