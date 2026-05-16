@@ -7409,7 +7409,7 @@
 
   // Effective access: 'allowed' | 'blocked' | 'grace'
   // Used by the gate (commit 2) and by the admin panel to label rows.
-  function computeAccess(email, paying, overrides, syncMeta) {
+  function computeAccess(email, paying, overrides, syncMeta, firstSeenAt) {
     const e = String(email || '').trim().toLowerCase();
     if (!e) return { status: 'blocked', reason: 'no-email' };
     if (ADMIN_EMAILS.indexOf(e) >= 0) return { status: 'allowed', reason: 'admin' };
@@ -7417,9 +7417,16 @@
     if (ov && ov.override === 'block') return { status: 'blocked', reason: 'manual-block' };
     if (ov && ov.override === 'allow') return { status: 'allowed', reason: 'manual-allow' };
     if (paying.some(p => p.email === e)) return { status: 'allowed', reason: 'paying' };
-    // Not in CSV. If user has never seen a CSV upload, they're in grace.
+    // No CSV uploaded yet → grace for everyone.
     if (!syncMeta || !syncMeta.last_csv_synced_at) {
       return { status: 'allowed', reason: 'no-csv-yet' };
+    }
+    // Grace: user signed up AFTER the latest CSV — they'll be evaluated
+    // on the next sync. firstSeenAt comes from known_users; if missing
+    // (literally signing in for the first time), treat as now → grace.
+    const seen = firstSeenAt ? new Date(firstSeenAt) : new Date();
+    if (seen > new Date(syncMeta.last_csv_synced_at)) {
+      return { status: 'allowed', reason: 'grace-new-signup' };
     }
     return { status: 'blocked', reason: 'not-in-csv' };
   }
@@ -13273,15 +13280,25 @@
   // paywall overlay. Fail-open: if Supabase fails for any reason, the
   // user gets in (better one extra user than a wrong lockout).
   async function maybeApplyAccessGate() {
-    if (!ACCESS_GATE_ENFORCED) return; // commit 1: gate is off
+    if (!ACCESS_GATE_ENFORCED) return;
     const email = _userEmail();
     if (!email) return;
     if (ADMIN_EMAILS.indexOf(email) >= 0) return; // owner is always allowed
+    if (!supabaseClient) return; // fail-open if no client
     try {
+      // Snapshot first_seen_at BEFORE the upsertKnownUser that runs
+      // alongside us touches the row — needed to grace brand-new signups.
+      let firstSeenAt = null;
+      try {
+        const snap = await supabaseClient
+          .from('known_users').select('first_seen_at').eq('email', email).maybeSingle();
+        if (snap && snap.data) firstSeenAt = snap.data.first_seen_at;
+      } catch (e) { /* fall through with null = treat as new */ }
+
       const [paying, overrides, meta] = await Promise.all([
         fetchPayingMembers(), fetchAccessOverrides(), fetchSyncMeta()
       ]);
-      const access = computeAccess(email, paying, overrides, meta);
+      const access = computeAccess(email, paying, overrides, meta, firstSeenAt);
       if (access.status === 'blocked') showPaywall(access.reason);
     } catch (e) {
       console.error('[access] gate check failed, allowing through', e);
