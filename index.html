@@ -6633,6 +6633,286 @@
     position: relative;
     z-index: 1;
   }
+  /* Fragmentos chip — next to the avatar */
+  .fragments-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 11px 5px 5px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgba(120,80,200,0.16), rgba(60,30,120,0.16));
+    border: 1px solid rgba(170,120,255,0.32);
+    color: #e9d8ff;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    align-self: center;
+    margin-right: 4px;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+    box-shadow: 0 0 14px rgba(140,90,230,0.18), inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+  .fragments-chip:hover {
+    transform: translateY(-1px);
+    background: linear-gradient(180deg, rgba(140,100,220,0.24), rgba(70,40,140,0.24));
+    box-shadow: 0 0 24px rgba(160,110,250,0.32), inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+  .fragments-chip-icon {
+    width: 24px; height: 24px;
+    object-fit: contain;
+    image-rendering: pixelated;
+    filter: drop-shadow(0 0 6px rgba(170,120,255,0.55));
+  }
+  .fragments-chip-num {
+    font-variant-numeric: tabular-nums;
+    color: #fff;
+    text-shadow: 0 0 8px rgba(170,120,255,0.5);
+  }
+
+  /* Fragmentos modal */
+  .fragments-overlay {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 40%, rgba(50,30,90,0.55), rgba(0,0,0,0.88) 70%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 9994;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .fragments-overlay.is-visible { opacity: 1; }
+  .fragments-modal {
+    position: relative;
+    width: 100%;
+    max-width: 460px;
+    padding: 36px 28px 28px;
+    text-align: center;
+    border-radius: 22px;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(170,120,255,0.20), transparent 65%),
+      linear-gradient(180deg, #14101e 0%, #07050c 100%);
+    border: 1px solid rgba(170,120,255,0.45);
+    box-shadow:
+      0 30px 80px rgba(0,0,0,0.7),
+      0 0 80px rgba(140,90,230,0.20);
+    transform: translateY(16px) scale(0.97);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .fragments-overlay.is-visible .fragments-modal { transform: translateY(0) scale(1); }
+  .fragments-close {
+    position: absolute;
+    top: 12px; right: 12px;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.10);
+    color: var(--text-secondary);
+    font-size: 20px;
+    cursor: pointer;
+    font-family: inherit;
+    line-height: 1;
+  }
+  .fragments-close:hover { background: rgba(255,255,255,0.12); color: #fff; }
+  .fragments-eyebrow {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    color: #c9a8ff;
+    text-transform: uppercase;
+    font-weight: 800;
+    text-shadow: 0 0 12px rgba(170,120,255,0.4);
+    margin-bottom: 18px;
+  }
+  .fragments-hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+  .fragments-hero-icon {
+    width: 56px; height: 56px;
+    image-rendering: pixelated;
+    filter: drop-shadow(0 0 18px rgba(170,120,255,0.65));
+    animation: fragments-icon-breathe 3.6s ease-in-out infinite;
+  }
+  @keyframes fragments-icon-breathe {
+    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 14px rgba(170,120,255,0.5)); }
+    50%      { transform: scale(1.04); filter: drop-shadow(0 0 24px rgba(170,120,255,0.8)); }
+  }
+  .fragments-hero-num {
+    font-size: 48px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: #fff;
+    line-height: 1;
+    text-shadow: 0 0 18px rgba(170,120,255,0.5);
+    font-variant-numeric: tabular-nums;
+  }
+  .fragments-hero-target {
+    color: rgba(255,255,255,0.4);
+    font-size: 26px;
+    font-weight: 700;
+    margin-left: 2px;
+  }
+  .fragments-progress-bar {
+    position: relative;
+    height: 14px;
+    border-radius: 7px;
+    background: rgba(0,0,0,0.55);
+    border: 1px solid rgba(170,120,255,0.30);
+    overflow: hidden;
+    max-width: 360px;
+    margin: 0 auto 10px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.7);
+  }
+  .fragments-progress-fill {
+    position: absolute; inset: 0;
+    width: 0%;
+    background: linear-gradient(90deg, #6b4ea8 0%, #b89be9 50%, #e9d8ff 100%);
+    box-shadow: 0 0 14px rgba(170,120,255,0.6), inset 0 1px 0 rgba(255,255,255,0.25);
+    transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .fragments-progress-meta {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 22px;
+  }
+  .fragments-redeem-btn {
+    padding: 13px 28px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #b89be9, #6b4ea8);
+    color: #fff;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    border: 1px solid rgba(180,140,240,0.6);
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 10px 28px rgba(140,90,230,0.4);
+    transition: filter 0.15s ease, transform 0.15s ease;
+    margin-bottom: 12px;
+  }
+  .fragments-redeem-btn:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); }
+  .fragments-redeem-btn:disabled {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.10);
+    color: rgba(255,255,255,0.4);
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+  .fragments-redeem-note {
+    padding: 10px 14px;
+    border-radius: 9px;
+    background: rgba(107,227,164,0.10);
+    border: 1px solid rgba(107,227,164,0.32);
+    color: #b5f3cb;
+    font-size: 12.5px;
+    margin: 8px 0 14px;
+  }
+  .fragments-history-title {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    font-weight: 800;
+    margin: 18px 0 8px;
+    text-align: left;
+  }
+  .fragments-history {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 180px;
+    overflow-y: auto;
+    text-align: left;
+  }
+  .fragments-history-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.025);
+    font-size: 12.5px;
+  }
+  .fragments-history-delta {
+    flex: 0 0 auto;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-weight: 800;
+    min-width: 32px;
+    text-align: right;
+  }
+  .fragments-history-delta.is-pos { color: #6BE3A4; }
+  .fragments-history-delta.is-neg { color: #ff8e9a; }
+  .fragments-history-reason {
+    flex: 1;
+    color: var(--text-secondary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .fragments-history-when {
+    flex: 0 0 auto;
+    color: var(--text-tertiary);
+    font-size: 11px;
+  }
+  .fragments-history-empty {
+    padding: 14px;
+    text-align: center;
+    color: var(--text-tertiary);
+    font-size: 12.5px;
+    font-style: italic;
+  }
+
+  /* Fragmentos admin panel */
+  .fragments-admin-add {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr) 70px minmax(150px, 1fr) auto;
+    gap: 8px;
+    margin: 4px 0 14px;
+  }
+  .fragments-admin-add input {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 9px;
+    padding: 9px 12px;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+  }
+  .fragments-admin-add input:focus {
+    border-color: rgba(170,120,255,0.55);
+    background: rgba(170,120,255,0.06);
+  }
+  @media (max-width: 640px) {
+    .fragments-admin-add { grid-template-columns: 1fr; }
+  }
+  .access-row .fragments-balance {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-weight: 800;
+    font-size: 13px;
+    color: #d6c0ff;
+    text-shadow: 0 0 8px rgba(170,120,255,0.35);
+    margin-right: 8px;
+  }
+  .fragments-pending-claims .access-row {
+    border-color: rgba(242,192,99,0.30);
+    background: rgba(242,192,99,0.06);
+  }
+  .fragments-admin-log .access-row {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
   /* Rank-themed frame around the Clerk avatar (top-right). */
   .rank-avatar-frame {
     --rank-glow: rgba(255,255,255,0.25);
@@ -6818,6 +7098,10 @@
 
 <div class="dash-title-row">
   <h1 class="dash-title">Bienvenido, <span class="dash-name" id="dashName" title="Haz click para cambiar tu nombre">…</span></h1>
+  <button type="button" class="fragments-chip" id="fragmentsChip" title="Tus fragmentos">
+    <img class="fragments-chip-icon" src="fragmentos.png" alt="" draggable="false" />
+    <span class="fragments-chip-num" id="fragmentsChipNum">0</span>
+  </button>
   <div class="rank-avatar-frame" id="rankAvatarFrame" data-rank="base" title="Tu rango actual">
     <img class="rank-avatar-frame-img" alt="" draggable="false" />
     <div id="clerkUserButton"></div>
@@ -7152,6 +7436,31 @@
       </div>
 
       <div class="access-card">
+        <div class="access-card-eyebrow">💎 Fragmentos <span id="fragmentsAdminCount" class="access-pill">0</span></div>
+        <div class="access-card-sub">Moneda comunitaria. 10 fragmentos = 1 mensualidad gratis. Cada cambio queda registrado.</div>
+
+        <div class="fragments-admin-add">
+          <input type="email" id="fragmentsAdminEmail" placeholder="email@ejemplo.com" autocomplete="off" />
+          <input type="number" id="fragmentsAdminDelta" placeholder="±N" value="1" step="1" />
+          <input type="text" id="fragmentsAdminReason" placeholder="motivo (ej. Reto semanal)" autocomplete="off" />
+          <button type="button" class="access-add-btn" id="fragmentsAdminApply">Aplicar</button>
+        </div>
+
+        <div class="access-list" id="fragmentsUsersList"></div>
+
+        <div class="fragments-pending-claims" id="fragmentsPendingClaims" style="display:none;">
+          <div class="access-card-eyebrow" style="margin-top:14px;">⏳ Canjes pendientes <span id="fragmentsPendingCount" class="access-pill">0</span></div>
+          <div class="access-card-sub">Usuarios que han canjeado 10 fragmentos y esperan su mensualidad gratis.</div>
+          <div class="access-list" id="fragmentsPendingList"></div>
+        </div>
+
+        <div class="fragments-admin-log">
+          <div class="access-card-eyebrow" style="margin-top:14px;">📜 Audit log</div>
+          <div class="access-list" id="fragmentsAdminLog"></div>
+        </div>
+      </div>
+
+      <div class="access-card">
         <div class="access-card-eyebrow">🛠 Debug · forzar rango</div>
         <div class="access-card-sub">Solo para pruebas visuales. Override del rango calculado por bosses.</div>
         <div class="rank-debug-row" id="rankDebugRow"></div>
@@ -7159,6 +7468,29 @@
     </div>
   </div>
 </div><!-- /tab-panel admin -->
+
+<!-- Fragmentos modal — user-facing balance + progress + redeem -->
+<div class="fragments-overlay" id="fragmentsOverlay" style="display:none;">
+  <div class="fragments-modal">
+    <button class="fragments-close" id="fragmentsClose" type="button" aria-label="Cerrar">×</button>
+    <div class="fragments-eyebrow">✦ Tus Fragmentos ✦</div>
+    <div class="fragments-hero">
+      <img class="fragments-hero-icon" src="fragmentos.png" alt="" draggable="false" />
+      <div class="fragments-hero-num">
+        <span class="fragments-hero-balance" id="fragmentsModalBalance">0</span>
+        <span class="fragments-hero-target">/ <span id="fragmentsModalTarget">10</span></span>
+      </div>
+    </div>
+    <div class="fragments-progress-bar"><div class="fragments-progress-fill" id="fragmentsModalProgressFill"></div></div>
+    <div class="fragments-progress-meta" id="fragmentsModalMeta">Te faltan 10 fragmentos para una mensualidad gratis</div>
+    <button class="fragments-redeem-btn" id="fragmentsRedeemBtn" disabled>Canjear 10 fragmentos por 1 mensualidad gratis</button>
+    <div class="fragments-redeem-note" id="fragmentsRedeemNote" style="display:none;">
+      ✓ Canje solicitado. Te contactaremos por Skool para darte la mensualidad gratis.
+    </div>
+    <div class="fragments-history-title">Historial reciente</div>
+    <div class="fragments-history" id="fragmentsModalHistory"></div>
+  </div>
+</div>
 
 <!-- Paywall overlay — shown when access gate denies a user -->
 <div class="paywall-overlay" id="paywallOverlay" style="display:none;">
@@ -7415,6 +7747,75 @@
     if (isHardcodedAdmin(e)) return true;
     if (_dynamicAdmins.has(e)) return true;
     return false;
+  }
+
+  // ─── Fragmentos (community currency) ─────────────────────────────
+  // Users earn fragmentos via challenges/events; 10 fragmentos → 1 free
+  // monthly subscription. Admin can add/subtract via the Admin tab.
+  // Storage: user_fragments (per-email balance) + fragment_log (audit).
+  const FRAGMENTS_PER_REDEMPTION = 10;
+
+  async function fetchUserFragmentBalance(email) {
+    if (!supabaseClient || !email) return 0;
+    const e = String(email).trim().toLowerCase();
+    const { data, error } = await supabaseClient
+      .from('user_fragments').select('balance').eq('email', e).maybeSingle();
+    if (error) { console.error('[fragments] fetch balance', error); return 0; }
+    return (data && data.balance) || 0;
+  }
+
+  async function fetchAllFragments() {
+    if (!supabaseClient) return [];
+    const { data, error } = await supabaseClient
+      .from('user_fragments').select('email, balance, updated_at').order('balance', { ascending: false });
+    if (error) { console.error('[fragments] fetch all', error); return []; }
+    return data || [];
+  }
+
+  async function fetchFragmentLog(opts) {
+    if (!supabaseClient) return [];
+    opts = opts || {};
+    let q = supabaseClient.from('fragment_log').select('*').order('created_at', { ascending: false });
+    if (opts.email) q = q.eq('email', String(opts.email).trim().toLowerCase());
+    if (opts.reason) q = q.eq('reason', opts.reason);
+    q = q.limit(opts.limit || 50);
+    const { data, error } = await q;
+    if (error) { console.error('[fragments] fetch log', error); return []; }
+    return data || [];
+  }
+
+  async function adjustFragments(targetEmail, delta, reason, opts) {
+    if (!supabaseClient) return { ok: false, error: 'No Supabase' };
+    const e = String(targetEmail || '').trim().toLowerCase();
+    const d = parseInt(delta, 10);
+    if (!e || e.indexOf('@') < 0) return { ok: false, error: 'Email no válido' };
+    if (!Number.isFinite(d) || d === 0) return { ok: false, error: 'Delta no válido' };
+    opts = opts || {};
+
+    const { data: existing, error: readErr } = await supabaseClient
+      .from('user_fragments').select('balance, user_id').eq('email', e).maybeSingle();
+    if (readErr) return { ok: false, error: readErr.message };
+    const oldBalance = (existing && existing.balance) || 0;
+    const newBalance = Math.max(0, oldBalance + d);
+
+    const upsertRow = { email: e, balance: newBalance, updated_at: new Date().toISOString() };
+    if (opts.userId) upsertRow.user_id = opts.userId;
+    else if (existing && existing.user_id) upsertRow.user_id = existing.user_id;
+    const upRes = await supabaseClient.from('user_fragments').upsert(upsertRow, { onConflict: 'email' });
+    if (upRes.error) return { ok: false, error: upRes.error.message };
+
+    const actor = _userEmail() || 'unknown';
+    const logRes = await supabaseClient.from('fragment_log').insert({
+      email: e,
+      delta: d,
+      balance_after: newBalance,
+      reason: reason || null,
+      actor: actor,
+      created_at: new Date().toISOString()
+    });
+    if (logRes.error) console.error('[fragments] log insert failed', logRes.error);
+
+    return { ok: true, balance: newBalance, oldBalance };
   }
 
   async function fetchAppAdmins() {
@@ -16534,6 +16935,238 @@
     });
   }
 
+  // ─── Fragmentos · user UI ───────────────────────────────────────
+  function _fragmentsRelTime(iso) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    const secs = Math.max(0, Math.floor((Date.now() - d.getTime()) / 1000));
+    if (secs < 60) return 'hace un momento';
+    const mins = Math.floor(secs / 60);
+    if (mins < 60) return 'hace ' + mins + ' min';
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return 'hace ' + hrs + ' h';
+    const days = Math.floor(hrs / 24);
+    if (days < 30) return 'hace ' + days + ' d';
+    return d.toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
+  }
+
+  async function refreshFragmentsChip() {
+    const chipEl = document.getElementById('fragmentsChip');
+    const numEl = document.getElementById('fragmentsChipNum');
+    if (!chipEl || !numEl) return;
+    const email = _userEmail();
+    if (!email) { chipEl.style.display = 'none'; return; }
+    chipEl.style.display = '';
+    const balance = await fetchUserFragmentBalance(email);
+    numEl.textContent = String(balance);
+    chipEl.title = balance + ' fragmento' + (balance === 1 ? '' : 's');
+  }
+
+  async function openFragmentsModal() {
+    const ov = document.getElementById('fragmentsOverlay');
+    if (!ov) return;
+    const email = _userEmail();
+    if (!email) return;
+
+    const balance = await fetchUserFragmentBalance(email);
+    const target = FRAGMENTS_PER_REDEMPTION;
+    const remaining = Math.max(0, target - balance);
+    const pct = Math.min(100, Math.round((balance / target) * 100));
+
+    document.getElementById('fragmentsModalBalance').textContent = String(balance);
+    document.getElementById('fragmentsModalTarget').textContent = String(target);
+    document.getElementById('fragmentsModalProgressFill').style.width = pct + '%';
+    const metaEl = document.getElementById('fragmentsModalMeta');
+    metaEl.textContent = balance >= target
+      ? '¡Listo para canjear! Tienes ' + balance + ' fragmentos.'
+      : 'Te faltan ' + remaining + ' fragmentos para una mensualidad gratis · ' + pct + '%';
+
+    const redeemBtn = document.getElementById('fragmentsRedeemBtn');
+    redeemBtn.disabled = balance < target;
+    redeemBtn.dataset.email = email;
+    redeemBtn.textContent = balance >= target
+      ? 'Canjear ' + target + ' fragmentos por 1 mensualidad gratis'
+      : 'Necesitas ' + target + ' fragmentos para canjear';
+    document.getElementById('fragmentsRedeemNote').style.display = 'none';
+
+    // History
+    const log = await fetchFragmentLog({ email, limit: 30 });
+    const histEl = document.getElementById('fragmentsModalHistory');
+    if (log.length === 0) {
+      histEl.innerHTML = '<div class="fragments-history-empty">Aún no has ganado fragmentos. Participa en retos y eventos.</div>';
+    } else {
+      histEl.innerHTML = log.map(row => {
+        const sign = row.delta > 0 ? '+' : '';
+        const cls  = row.delta > 0 ? 'is-pos' : 'is-neg';
+        return '<div class="fragments-history-row">' +
+          '<span class="fragments-history-delta ' + cls + '">' + sign + row.delta + '</span>' +
+          '<span class="fragments-history-reason">' + _esc(row.reason || (row.delta < 0 ? 'Canje' : 'Sin motivo')) + '</span>' +
+          '<span class="fragments-history-when">' + _esc(_fragmentsRelTime(row.created_at)) + '</span>' +
+        '</div>';
+      }).join('');
+    }
+
+    ov.style.display = '';
+    requestAnimationFrame(() => ov.classList.add('is-visible'));
+  }
+
+  function closeFragmentsModal() {
+    const ov = document.getElementById('fragmentsOverlay');
+    if (!ov) return;
+    ov.classList.remove('is-visible');
+    setTimeout(() => { ov.style.display = 'none'; }, 280);
+  }
+
+  async function redeemFragments() {
+    const btn = document.getElementById('fragmentsRedeemBtn');
+    const email = btn && btn.dataset.email;
+    if (!email) return;
+    if (!confirm('¿Canjear ' + FRAGMENTS_PER_REDEMPTION + ' fragmentos por 1 mensualidad gratis? Te contactaremos por Skool para darte el código.')) return;
+    btn.disabled = true;
+    btn.textContent = 'Procesando…';
+    const r = await adjustFragments(email, -FRAGMENTS_PER_REDEMPTION, 'Canje · mensualidad gratis');
+    if (!r.ok) {
+      alert('Error: ' + (r.error || 'no se pudo canjear'));
+      btn.disabled = false;
+      return;
+    }
+    document.getElementById('fragmentsRedeemNote').style.display = '';
+    refreshFragmentsChip();
+    // Re-render modal contents after a short delay so the user sees the change.
+    setTimeout(openFragmentsModal, 600);
+  }
+
+  function wireFragmentsUserUI() {
+    const chip = document.getElementById('fragmentsChip');
+    if (chip && !chip.dataset.wired) {
+      chip.dataset.wired = '1';
+      chip.addEventListener('click', openFragmentsModal);
+    }
+    const closeBtn = document.getElementById('fragmentsClose');
+    if (closeBtn && !closeBtn.dataset.wired) {
+      closeBtn.dataset.wired = '1';
+      closeBtn.addEventListener('click', closeFragmentsModal);
+    }
+    const ov = document.getElementById('fragmentsOverlay');
+    if (ov && !ov.dataset.wired) {
+      ov.dataset.wired = '1';
+      ov.addEventListener('click', (e) => { if (e.target === ov) closeFragmentsModal(); });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && ov.classList.contains('is-visible')) closeFragmentsModal();
+      });
+    }
+    const redeemBtn = document.getElementById('fragmentsRedeemBtn');
+    if (redeemBtn && !redeemBtn.dataset.wired) {
+      redeemBtn.dataset.wired = '1';
+      redeemBtn.addEventListener('click', redeemFragments);
+    }
+  }
+
+  // ─── Fragmentos · admin panel ───────────────────────────────────
+  async function renderFragmentsAdminPanel() {
+    const [users, log] = await Promise.all([fetchAllFragments(), fetchFragmentLog({ limit: 50 })]);
+
+    const countEl = document.getElementById('fragmentsAdminCount');
+    if (countEl) countEl.textContent = String(users.length);
+
+    // Users list
+    const listEl = document.getElementById('fragmentsUsersList');
+    if (listEl) {
+      if (users.length === 0) {
+        listEl.innerHTML = '<div class="access-empty">Aún no hay usuarios con fragmentos. Añade el primero arriba.</div>';
+      } else {
+        listEl.innerHTML = users.map(u =>
+          '<div class="access-row" data-email="' + _esc(u.email) + '">' +
+            '<div class="access-row-info">' +
+              '<div class="access-row-email">' + _esc(u.email) + '</div>' +
+              '<div class="access-row-meta">actualizado ' + _esc(_fragmentsRelTime(u.updated_at)) + '</div>' +
+            '</div>' +
+            '<span class="fragments-balance">' + u.balance + ' 💎</span>' +
+            '<button type="button" class="access-btn" data-action="plus">+1</button>' +
+            '<button type="button" class="access-btn access-btn-remove" data-action="minus">−1</button>' +
+          '</div>'
+        ).join('');
+        listEl.querySelectorAll('.access-btn[data-action]').forEach(b => {
+          b.addEventListener('click', async () => {
+            const email = b.closest('.access-row').dataset.email;
+            const delta = b.dataset.action === 'plus' ? 1 : -1;
+            const reason = prompt('Motivo (opcional):', delta > 0 ? 'Ajuste admin' : 'Ajuste admin');
+            if (reason === null) return;
+            b.disabled = true;
+            const r = await adjustFragments(email, delta, reason || null);
+            if (!r.ok) { alert('Error: ' + (r.error || '')); b.disabled = false; }
+            else renderFragmentsAdminPanel();
+          });
+        });
+      }
+    }
+
+    // Pending claims (last 30d redemptions)
+    const pendingWrap = document.getElementById('fragmentsPendingClaims');
+    const pendingList = document.getElementById('fragmentsPendingList');
+    const pendingCount = document.getElementById('fragmentsPendingCount');
+    const claims = log.filter(r => r.delta < 0 && (r.reason || '').toLowerCase().indexOf('canje') >= 0);
+    if (pendingWrap) pendingWrap.style.display = claims.length ? '' : 'none';
+    if (pendingCount) pendingCount.textContent = String(claims.length);
+    if (pendingList) {
+      pendingList.innerHTML = claims.map(c =>
+        '<div class="access-row">' +
+          '<div class="access-row-info">' +
+            '<div class="access-row-email">' + _esc(c.email) + '</div>' +
+            '<div class="access-row-meta">' + _esc(_fragmentsRelTime(c.created_at)) + ' · ' + _esc(c.reason || 'Canje') + '</div>' +
+          '</div>' +
+          '<span class="fragments-balance">−' + Math.abs(c.delta) + ' 💎</span>' +
+        '</div>'
+      ).join('');
+    }
+
+    // Audit log
+    const logEl = document.getElementById('fragmentsAdminLog');
+    if (logEl) {
+      if (log.length === 0) {
+        logEl.innerHTML = '<div class="access-empty">Sin actividad todavía.</div>';
+      } else {
+        logEl.innerHTML = log.map(r => {
+          const sign = r.delta > 0 ? '+' : '';
+          return '<div class="access-row">' +
+            '<div class="access-row-info">' +
+              '<div class="access-row-email">' + _esc(r.email) + ' <span style="color:rgba(255,255,255,0.3);font-weight:400;">·</span> ' +
+                '<span class="fragments-history-delta ' + (r.delta > 0 ? 'is-pos' : 'is-neg') + '">' + sign + r.delta + '</span></div>' +
+              '<div class="access-row-meta">' +
+                _esc(r.reason || '—') +
+                ' · por ' + _esc(r.actor || 'unknown') +
+                ' · ' + _esc(_fragmentsRelTime(r.created_at)) +
+              '</div>' +
+            '</div>' +
+          '</div>';
+        }).join('');
+      }
+    }
+  }
+
+  function wireFragmentsAdminUI() {
+    const btn = document.getElementById('fragmentsAdminApply');
+    if (btn && !btn.dataset.wired) {
+      btn.dataset.wired = '1';
+      btn.addEventListener('click', async () => {
+        const email = document.getElementById('fragmentsAdminEmail').value;
+        const delta = document.getElementById('fragmentsAdminDelta').value;
+        const reason = document.getElementById('fragmentsAdminReason').value;
+        if (!email || !delta) { alert('Email y delta son obligatorios'); return; }
+        btn.disabled = true;
+        const r = await adjustFragments(email, delta, reason || null);
+        btn.disabled = false;
+        if (!r.ok) { alert('Error: ' + (r.error || '')); return; }
+        document.getElementById('fragmentsAdminEmail').value = '';
+        document.getElementById('fragmentsAdminDelta').value = '1';
+        document.getElementById('fragmentsAdminReason').value = '';
+        renderFragmentsAdminPanel();
+        refreshFragmentsChip();
+      });
+    }
+    renderFragmentsAdminPanel();
+  }
+
   function renderRankDebugRow() {
     const row = document.getElementById('rankDebugRow');
     if (!row) return;
@@ -16645,6 +17278,7 @@
     }
     renderAccessAdminPanel();
     renderAppAdminsList();
+    if (typeof wireFragmentsAdminUI === 'function') wireFragmentsAdminUI();
     renderRankDebugRow();
   }
 
@@ -17462,6 +18096,11 @@
       await loadDynamicAdmins();
       revealAdminTabIfNeeded();
     } catch (e) { console.error('[admin] dynamic admins load failed', e); }
+    // Wire fragmentos chip + modal and load the user's balance.
+    try {
+      if (typeof wireFragmentsUserUI === 'function') wireFragmentsUserUI();
+      if (typeof refreshFragmentsChip === 'function') refreshFragmentsChip();
+    } catch (e) { console.error('[fragments] init failed', e); }
 
     renderDashName();
     runRollover();
