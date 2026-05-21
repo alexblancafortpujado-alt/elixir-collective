@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>Creator Stuffs Checklist</title>
+<title>Elixir Collective Checklist</title>
 <style>
   :root {
     --bg: #0B0D12;
@@ -7569,8 +7569,8 @@
 <script
   async
   crossorigin="anonymous"
-  data-clerk-publishable-key="pk_test_bWlnaHR5LWJhYm9vbi0zMi5jbGVyay5hY2NvdW50cy5kZXYk"
-  src="https://mighty-baboon-32.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
+  data-clerk-publishable-key="pk_test_b3B0aW11bS1xdWV0emFsLTE3LmNsZXJrLmFjY291bnRzLmRldiQ"
+  src="https://optimum-quetzal-17.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
   type="text/javascript"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -7578,14 +7578,14 @@
 
 <div class="auth-gate" id="authGate">
   <div class="auth-gate-inner">
-    <div class="auth-gate-title">Creator Stuffs</div>
+    <div class="auth-gate-title">Elixir Collective</div>
     <div class="auth-gate-sub">Inicia sesión para acceder a la checklist.</div>
     <div id="clerkSignIn"></div>
   </div>
 </div>
 
 <div class="dash-title-row">
-  <h1 class="dash-title">Creator Stuffs</h1>
+  <h1 class="dash-title">Elixir Collective</h1>
   <div id="clerkUserButton"></div>
 </div>
 
@@ -7711,7 +7711,7 @@
 <!-- Paywall overlay — shown when access gate denies a user -->
 <div class="paywall-overlay" id="paywallOverlay" style="display:none;">
   <div class="paywall-card">
-    <div class="paywall-eyebrow">Creator Stuffs</div>
+    <div class="paywall-eyebrow">Elixir Collective</div>
     <div class="paywall-title">Tu cuenta no tiene acceso</div>
     <div class="paywall-sub">
       Tu email no está en la lista de miembros activos. Si crees que es un error, contáctanos.
@@ -7773,14 +7773,14 @@
   // Flip to 'supabase' once Clerk ↔ Supabase JWT bridge is configured.
   // 'local' = legacy localStorage per browser.
   const STORAGE_MODE = 'supabase';
-  const SUPABASE_URL = 'https://yslvamsjgxhfecjluvri.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlzbHZhbXNqZ3hoZmVjamx1dnJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNjEzNzQsImV4cCI6MjA5NDkzNzM3NH0.0gFLByOhXGPfYhoCh4GuykjQ44k51VI-JJHxA80G8zI';
+  const SUPABASE_URL = 'https://wjdwigbizjsgkoaogubi.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndqZHdpZ2JpempzZ2tvYW9ndWJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNjk2NDcsImV4cCI6MjA5NDk0NTY0N30.tHid2u1P2paJMc-SpmFsD6WTHXGeeGVZ5qcpUjgbcGI';
 
   // ─── Access control (Skool subscription gate) ─────────────────────
   // Hardcoded so the owner can NEVER lock themselves out, even if
   // Supabase is down or the CSV is malformed.
   const ADMIN_EMAILS = ['alexblancafortpujado@gmail.com'];
-  const SKOOL_URL = 'https://www.skool.com/heroesacademy';
+  const SKOOL_URL = 'https://www.skool.com/elixir-collective-5215';
   // While ACCESS_GATE_ENFORCED=false the app behaves normally — admin can
   // upload CSVs, see lists, etc. but no one is blocked. true = paywall
   // is active for anyone not in paying_members or access_overrides 'allow'.

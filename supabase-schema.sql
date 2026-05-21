@@ -1,10 +1,10 @@
 -- ─────────────────────────────────────────────────────────────────────────
--- Creator Stuffs Checklist — Supabase schema
+-- Elixir Collective Checklist — Supabase schema
 -- Run this in Supabase → SQL Editor → New query, then "Run".
 --
 -- REQUIRES: Clerk ↔ Supabase third-party auth provider already configured
 -- (Supabase Dashboard → Authentication → Sign In / Providers → add Clerk,
--- domain: mighty-baboon-32.clerk.accounts.dev). Without it the JWT bridge
+-- domain: optimum-quetzal-17.clerk.accounts.dev). Without it the JWT bridge
 -- won't verify and every query will fail RLS.
 -- ─────────────────────────────────────────────────────────────────────────
 

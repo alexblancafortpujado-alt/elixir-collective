@@ -1,6 +1,6 @@
-# Creator Stuffs Checklist
+# Elixir Collective Checklist
 
-Checklist + SOPs para Creator Stuffs.
+Checklist + SOPs para Elixir Collective.
 
 ## Stack
 
@@ -12,7 +12,7 @@ Checklist + SOPs para Creator Stuffs.
 ## Desarrollo local
 
 ```bash
-cd /Users/againstoddssl/Documents/CreatorsStuffsChecklist
+cd "/Users/againstoddssl/Documents/Elixir Collective Checklist"
 python3 -m http.server 4321
 ```
 
