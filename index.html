@@ -1183,6 +1183,22 @@
     font-variant-numeric: tabular-nums;
     min-width: 36px;
     text-align: right;
+    transition: color 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  /* Completed state — picks up the moment the checklist hits 100%.
+     Pairs with the confetti burst to make finishing feel snappy. */
+  .checklist-detail-progress.is-complete .checklist-detail-progress-fill {
+    box-shadow: 0 0 14px var(--accent-glow);
+    animation: progress-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .checklist-detail-progress.is-complete .checklist-detail-progress-text {
+    color: var(--accent);
+    transform: scale(1.08);
+  }
+  @keyframes progress-pop {
+    0%   { transform: scaleY(1); }
+    50%  { transform: scaleY(1.6); }
+    100% { transform: scaleY(1); }
   }
 
   /* Item list inside a checklist */
@@ -7652,6 +7668,7 @@
   src="https://optimum-quetzal-17.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
   type="text/javascript"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 </head>
 <body class="auth-pending">
 
@@ -18828,6 +18845,23 @@
     return { done, total: checkItems.length, pct: Math.round((done / checkItems.length) * 100) };
   }
 
+  // Multi-burst confetti played the moment a checklist flips to 100%.
+  // No-op if canvas-confetti hasn't loaded (CDN blocked / offline) so a
+  // missing dep degrades to silently no celebration rather than crashing.
+  function fireCompletionConfetti() {
+    if (typeof window.confetti !== 'function') return;
+    const colors = ['#A855F7', '#C084FC', '#E9D5FF', '#FFFFFF', '#7C3AED'];
+    window.confetti({ particleCount: 80, angle: 60,  spread: 70, startVelocity: 55, origin: { x: 0.05, y: 0.75 }, colors });
+    window.confetti({ particleCount: 80, angle: 120, spread: 70, startVelocity: 55, origin: { x: 0.95, y: 0.75 }, colors });
+    setTimeout(() => {
+      window.confetti({ particleCount: 140, spread: 110, startVelocity: 45, scalar: 1.1, ticks: 220, origin: { y: 0.6 }, colors });
+    }, 220);
+    setTimeout(() => {
+      window.confetti({ particleCount: 60, spread: 140, startVelocity: 25, decay: 0.94, scalar: 0.9, ticks: 260, origin: { y: 0.65 }, colors });
+    }, 520);
+    if (navigator.vibrate) { try { navigator.vibrate([18, 50, 28]); } catch (e) {} }
+  }
+
   function renderChecklistCard(c) {
     if (c.comingSoon) {
       return ''
@@ -18879,6 +18913,8 @@
     const text = document.getElementById('checklistDetailProgressText');
     if (fill) fill.style.width = p.pct + '%';
     if (text) text.textContent = p.pct + '%';
+    const wrap = fill && fill.closest('.checklist-detail-progress');
+    if (wrap) wrap.classList.toggle('is-complete', p.pct === 100);
   }
 
   function openChecklistDetail(id) {
@@ -18948,6 +18984,7 @@
       row.addEventListener('click', () => {
         const key = row.dataset.key;
         if (!key) return;
+        const wasComplete = getChecklistProgress(id).pct === 100;
         const map = checklistDoneMap(id);
         const newDone = !map[key];
         if (newDone) map[key] = true;
@@ -18962,16 +18999,22 @@
         }
         // If this checkbox lives inside a Práctica block, recompute that
         // block's completion state so the title strikes through (or
-        // un-strikes) the moment the last item flips.
+        // un-strikes) the moment the last item flips. We read from `map`
+        // (source of truth) rather than the classList because the bounce
+        // animation above has already cleared this row's is-done class.
         const practica = row.closest('.ck-practica');
         if (practica) {
           const allRows = practica.querySelectorAll('.ck-row.ck-check');
-          const allDone = Array.from(allRows).every(r => r.classList.contains('is-done'));
+          const allDone = Array.from(allRows).every(r => !!map[r.dataset.key]);
           practica.classList.toggle('is-complete', allDone);
         }
         // Subtle haptic on supporting mobile devices.
         if (navigator.vibrate) { try { navigator.vibrate(newDone ? 12 : 6); } catch (e) {} }
         updateChecklistDetailProgress(id);
+        // Dopamine: if this tick takes the whole checklist from
+        // anything less than 100% to a clean 100, fire confetti.
+        const nowComplete = getChecklistProgress(id).pct === 100;
+        if (nowComplete && !wasComplete) fireCompletionConfetti();
       });
     });
 
