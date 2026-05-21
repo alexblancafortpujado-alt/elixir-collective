@@ -1430,6 +1430,43 @@
   .ck-row.ck-check.is-indent {
     margin-left: 28px;
   }
+
+  /* Sequential flow — bookended by start/end pills, with arrows between
+     each step to make the order explicit. Used for processes like the
+     Idea → Prenda fabricada production pipeline. */
+  .ck-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 18px 0 10px;
+  }
+  .ck-flow-pill {
+    align-self: flex-start;
+    padding: 8px 18px;
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .ck-flow-pill.is-end.is-complete {
+    border-color: var(--success);
+    color: var(--success);
+    background: rgba(52,211,153,0.14);
+    box-shadow: 0 0 18px rgba(52,211,153,0.30);
+  }
+  .ck-flow-arrow {
+    color: var(--text-tertiary);
+    font-size: 18px;
+    line-height: 1;
+    padding: 4px 0;
+    margin-left: 18px;
+    user-select: none;
+  }
   .tab-panel { display: none; }
   .tab-panel.is-active { display: block; animation: tab-fade 0.35s ease; }
   @keyframes tab-fade {
@@ -18747,6 +18784,10 @@
   //                                                  checklist items; the title strikes
   //                                                  through when every inner item is
   //                                                  ticked.
+  //   { type: 'flow', start, end, items: […] }    → sequential pipeline rendered as
+  //                                                  start pill → ↓ → checks → ↓ → end
+  //                                                  pill. The end pill lights up green
+  //                                                  once every step is ticked.
   // Items with type 'notion' or 'link' and a null url render as muted/disabled.
   // Storage key for a checkbox = item.key || item.title — use key to disambiguate
   // duplicate titles inside the same checklist.
@@ -18793,6 +18834,73 @@
       { type: 'practica',  title: 'Determina tu oferta V1', items: [
         { type: 'checklist', title: 'Seguir la práctica y determinar la v1 de la Oferta' },
       ]},
+
+      { type: 'section',   title: 'Identidad de Marca' },
+      { type: 'group',     title: 'Paso 1:' },
+      { type: 'notion',    title: 'El alma de tu marca', url: 'https://steadfast-chance-fc7.notion.site/El-alma-de-tu-marca-3354ff25b33f80aa8704e279c9267775?source=copy_link' },
+      { type: 'checklist', title: 'Entender la importancia de crear una comunidad' },
+      { type: 'checklist', title: 'Entender los tipos de clientes' },
+      { type: 'checklist', title: 'Entender que las comunidades se crean en torno a una idea' },
+      { type: 'checklist', title: 'Entender cómo encontrar la Gran Idea de tu marca' },
+
+      { type: 'group',     title: 'Paso 2:' },
+      { type: 'notion',    title: 'Naming', url: 'https://steadfast-chance-fc7.notion.site/Naming-3354ff25b33f805cb607c5cf17b4fc33?source=copy_link' },
+      { type: 'checklist', title: 'Entender la importancia del nombre' },
+      { type: 'checklist', title: 'Entender cómo crear un nombre' },
+
+      { type: 'group',     title: 'Paso 3:' },
+      { type: 'notion',    title: 'Cómo construir el universo visual de tu marca', url: 'https://steadfast-chance-fc7.notion.site/C-mo-construir-el-universo-visual-de-tu-marca-3354ff25b33f802d998ffe2c1c9346c9?source=copy_link' },
+      { type: 'checklist', title: 'Entender qué es un Moodboard y por qué es tan esencial' },
+      { type: 'checklist', title: 'Entender las 4 fuentes' },
+
+      { type: 'group',     title: 'Paso 4:' },
+      { type: 'notion',    title: 'Prototipo Identidad Visual', url: 'https://steadfast-chance-fc7.notion.site/Prototipo-Identidad-Visual-3354ff25b33f807c9d39ff021bfc648f?source=copy_link' },
+      { type: 'checklist', title: 'Entender qué es una Paleta de Colores y por qué importa' },
+      { type: 'checklist', title: 'Entender qué es la Tipografía y por qué importa' },
+      { type: 'checklist', title: 'Entender qué es un Logo y por qué importa' },
+
+      { type: 'group',     title: 'Paso 5:' },
+      { type: 'practica',  title: 'Crea tu brand pack', items: [
+        { type: 'checklist', title: 'Escoge una gran idea' },
+        { type: 'checklist', title: 'Escoge un nombre' },
+        { type: 'checklist', title: 'Crea el universo de marca' },
+        { type: 'checklist', title: 'Crea la identidad visual' },
+      ]},
+    ],
+    'disena-tus-prendas': [
+      { type: 'section',   title: 'Diseño de Prendas' },
+
+      { type: 'group',     title: 'Paso 1:' },
+      { type: 'notion',    title: 'Mentalidad y Punto de Partida', url: 'https://steadfast-chance-fc7.notion.site/Mentalidad-y-Punto-de-Partida-3364ff25b33f80b79239cb0103f5d7c2?source=copy_link' },
+      { type: 'checklist', title: 'Entender las 5 preguntas que crean el punto de partida' },
+      { type: 'checklist', title: 'Entender la mentalidad de Rick Rubin' },
+      { type: 'checklist', title: 'Entender los dos tipos de moodboard' },
+      { type: 'practica',  title: 'Crea el Punto de Partida (5 preguntas + moodboard + inspiración)', items: [
+        { type: 'checklist', title: 'Responder las 5 preguntas' },
+        { type: 'checklist', title: 'Crear tu moodboard' },
+        { type: 'checklist', title: 'Inspirarte' },
+      ]},
+
+      { type: 'group',     title: 'Paso 2:' },
+      { type: 'notion',    title: 'Outlier Connection', url: 'https://steadfast-chance-fc7.notion.site/Outlier-Connection-3364ff25b33f80faa0eaed6746ffc687?source=copy_link' },
+      { type: 'checklist', title: 'Entender qué es Outlier Connection' },
+      { type: 'checklist', title: 'Aprender el proceso para crear prendas excelentes' },
+      { type: 'practica',  title: 'Mina Outliers', items: [
+        { type: 'checklist', title: 'Crea tu banco de prendas' },
+        { type: 'checklist', title: 'Estudia y empieza a unir' },
+      ]},
+
+      // Production pipeline from concept to manufactured garment. The
+      // flow renderer bookends this with Idea → ↓ → … → ↓ → Prenda
+      // fabricada and lights the end pill green when all six steps tick.
+      { type: 'flow', start: 'Idea', end: 'Prenda fabricada', items: [
+        { type: 'checklist', title: 'Hacer el diseño digital de la prenda' },
+        { type: 'checklist', title: 'Determinar las medidas y el patrón' },
+        { type: 'checklist', title: 'Crear el Tech Pack' },
+        { type: 'checklist', title: 'Encontrar fabricante y pedir muestra' },
+        { type: 'checklist', title: 'Revisión de muestra y ajustes' },
+        { type: 'checklist', title: 'Producción' },
+      ]},
     ],
     'comunidad':          [],
     'contenido-outlier':  [],
@@ -18820,14 +18928,14 @@
   }
 
   // Walk the checklist content and pull out every 'checklist' item,
-  // including those nested inside a 'practica' wrapper. Order matches
-  // the visual order in the rendered detail view.
+  // including those nested inside a 'practica' or 'flow' wrapper. Order
+  // matches the visual order in the rendered detail view.
   function flattenChecklistItems(items) {
     const out = [];
     for (const item of items) {
       if (item.type === 'checklist') {
         out.push(item);
-      } else if (item.type === 'practica' && Array.isArray(item.items)) {
+      } else if ((item.type === 'practica' || item.type === 'flow') && Array.isArray(item.items)) {
         for (const sub of item.items) {
           if (sub.type === 'checklist') out.push(sub);
         }
@@ -18976,6 +19084,16 @@
           +   inner.map(sub => sub.type === 'checklist' ? renderCheckRow(sub) : '').join('')
           + '</div>';
       }
+      if (item.type === 'flow') {
+        const inner = Array.isArray(item.items) ? item.items : [];
+        const checks = inner.filter(i => i.type === 'checklist');
+        const allDone = checks.length > 0 && checks.every(i => !!doneMap[checklistItemKey(i)]);
+        const arrow = '<div class="ck-flow-arrow" aria-hidden="true">↓</div>';
+        const start = item.start ? '<div class="ck-flow-pill is-start">' + escapeHtml(item.start) + '</div>' : '';
+        const end   = item.end   ? '<div class="ck-flow-pill is-end' + (allDone ? ' is-complete' : '') + '">' + escapeHtml(item.end) + '</div>' : '';
+        const middle = checks.map(sub => arrow + renderCheckRow(sub)).join('');
+        return '<div class="ck-flow">' + start + middle + arrow + end + '</div>';
+      }
       // Fallback: notion or link row.
       return renderLinkRow(item);
     }).join('');
@@ -19007,6 +19125,15 @@
           const allRows = practica.querySelectorAll('.ck-row.ck-check');
           const allDone = Array.from(allRows).every(r => !!map[r.dataset.key]);
           practica.classList.toggle('is-complete', allDone);
+        }
+        // Same idea for the production flow's end pill: light it up in
+        // success-green the moment every step in the pipeline is ticked.
+        const flow = row.closest('.ck-flow');
+        if (flow) {
+          const allRows = flow.querySelectorAll('.ck-row.ck-check');
+          const allDone = Array.from(allRows).every(r => !!map[r.dataset.key]);
+          const endPill = flow.querySelector('.ck-flow-pill.is-end');
+          if (endPill) endPill.classList.toggle('is-complete', allDone);
         }
         // Subtle haptic on supporting mobile devices.
         if (navigator.vibrate) { try { navigator.vibrate(newDone ? 12 : 6); } catch (e) {} }
