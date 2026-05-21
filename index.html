@@ -15379,10 +15379,17 @@
     const exam = MODULE_EXAMS[data.moduleId];
     const pool = data.questions || exam.questions;
     const total = pool.length;
-    // Defensive: if qIdx ever lands past the pool, treat as boss-wins
-    // rather than rendering an undefined question.
+    // Defensive: if qIdx ever lands past the pool, decide the outcome
+    // by the win condition (corrects ≥ needed) instead of always handing
+    // the win to the boss. Without this, ending the exam by running out
+    // of questions while you still had the corrects to win was treated
+    // as a loss.
     if (data.qIdx >= total) {
-      _bossKillsPlayer(data);
+      const needed = _correctsNeeded(data);
+      const corrects = _examCorrectsSoFar(data);
+      const playerDead = data.wrongs > exam.maxWrong;
+      if (!playerDead && corrects >= needed) _playerKillsBoss(data);
+      else _bossKillsPlayer(data);
       return;
     }
     const q = pool[data.qIdx];
