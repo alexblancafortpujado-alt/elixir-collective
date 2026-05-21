@@ -1353,6 +1353,64 @@
     height: 1px;
     background: linear-gradient(90deg, rgba(255,255,255,0.08), transparent);
   }
+  /* Big purple section header — used for capitalised section titles
+     like "NICHO Y AVATAR", "OFERTA". Visually heavier than ck-step. */
+  .ck-section {
+    margin: 32px 0 10px;
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  .ck-section:first-child { margin-top: 8px; }
+
+  /* Práctica block — a callout containing one or more checklist items.
+     When every checkbox inside is ticked the title strikes through and
+     the whole block dims, mirroring the per-item completion feel. */
+  .ck-practica {
+    position: relative;
+    margin: 14px 0 6px;
+    padding: 14px 16px 8px 18px;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 12px;
+    background: linear-gradient(180deg, var(--accent-soft) 0%, transparent 70%);
+    transition: opacity 0.3s ease, border-color 0.3s ease;
+  }
+  .ck-practica-eyebrow {
+    color: var(--accent);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .ck-practica-title {
+    color: var(--text-primary);
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    transition: color 0.3s ease, text-decoration-color 0.3s ease;
+    text-decoration: line-through transparent;
+  }
+  .ck-practica.is-complete {
+    opacity: 0.55;
+    border-left-color: var(--text-tertiary);
+  }
+  .ck-practica.is-complete .ck-practica-title {
+    color: var(--text-tertiary);
+    text-decoration: line-through var(--text-tertiary);
+  }
+  .ck-practica.is-complete .ck-practica-eyebrow {
+    color: var(--text-tertiary);
+  }
+
+  /* Indented sub-checkbox used for nested items like the four
+     "Fórmula de la Oferta" sub-points. */
+  .ck-row.ck-check.is-indent {
+    margin-left: 28px;
+  }
   .tab-panel { display: none; }
   .tab-panel.is-active { display: block; animation: tab-fade 0.35s ease; }
   @keyframes tab-fade {
@@ -18656,16 +18714,66 @@
   // Flat list for lookups by id.
   const CHECKLISTS = CHECKLIST_GROUPS.flatMap(g => g.checklists);
 
-  // Per-checklist content. Items are rendered in order. Three kinds:
-  //   { type: 'group',     title }              → step header, not clickable
-  //   { type: 'notion',    title, url }         → opens Notion link in new tab
-  //   { type: 'link',      title, url }         → opens external URL in new tab
-  //   { type: 'checklist', title }              → checkbox that toggles + counts toward %
+  // Per-checklist content. Items are rendered in order. Supported kinds:
+  //   { type: 'group',     title }                 → small uppercase divider ("Paso 1:")
+  //   { type: 'section',   title }                 → big purple section header
+  //   { type: 'notion',    title, url }            → opens Notion link in new tab
+  //   { type: 'link',      title, url }            → opens external URL in new tab
+  //   { type: 'checklist', title, [indent], [key] } → checkbox that counts toward %.
+  //                                                  indent=true renders an indented
+  //                                                  sub-checkbox. key disambiguates
+  //                                                  duplicate titles within a checklist.
+  //   { type: 'practica',  title, items: […] }    → highlighted block with nested
+  //                                                  checklist items; the title strikes
+  //                                                  through when every inner item is
+  //                                                  ticked.
   // Items with type 'notion' or 'link' and a null url render as muted/disabled.
+  // Storage key for a checkbox = item.key || item.title — use key to disambiguate
+  // duplicate titles inside the same checklist.
   const CHECKLIST_CONTENT = {
     'onboarding':         [],
-    'empieza-tu-imperio': [],
-    'disena-tus-prendas': [],
+    'empieza-tu-imperio': [
+      { type: 'notion',    title: 'Las Fundaciones de tu Marca de Ropa', url: 'https://steadfast-chance-fc7.notion.site/Las-Fundaciones-de-tu-Marca-de-Ropa-3354ff25b33f80078cc6f27b45c80aa4?source=copy_link' },
+      // The top-level "Entender que es la Oferta" collides with the same
+      // string inside the OFERTA section below — disambiguate with an
+      // explicit key so each toggles independently.
+      { type: 'checklist', title: 'Entender qué es un Nicho' },
+      { type: 'checklist', title: 'Entender qué es el Problema' },
+      { type: 'checklist', title: 'Entender qué es la Solución' },
+      { type: 'checklist', title: 'Entender qué es el Resultado' },
+      { type: 'checklist', title: 'Entender qué es la Oferta', key: 'fundaciones-oferta' },
+
+      { type: 'section',   title: 'Nicho y Avatar' },
+      { type: 'notion',    title: 'Escoge tu nicho', url: 'https://steadfast-chance-fc7.notion.site/Escoge-tu-nicho-3354ff25b33f8064891af1250d22420c?source=copy_link' },
+      { type: 'checklist', title: 'Entender la importancia del nicho' },
+      { type: 'checklist', title: 'Entender la falacia de querer hablar a todo el mundo' },
+      { type: 'checklist', title: 'Entender qué define a un nicho de primera' },
+      { type: 'checklist', title: 'Entender qué significa Pick & Stick' },
+      { type: 'practica',  title: 'Selecciona tu nicho', items: [
+        { type: 'checklist', title: 'Responder las preguntas y seleccionar el Nicho' },
+      ]},
+      { type: 'notion',    title: 'Comprende tu Avatar', url: 'https://steadfast-chance-fc7.notion.site/Comprende-tu-Avatar-3434ff25b33f802a9ef6d5fd73423891?source=copy_link' },
+      { type: 'checklist', title: 'Entender qué es un Avatar' },
+      { type: 'checklist', title: 'Entender los 28 cubos' },
+      { type: 'checklist', title: 'Entender la Estrategia de Inmersión' },
+      { type: 'practica',  title: 'Determina tu Avatar V1', items: [
+        { type: 'checklist', title: 'Hacer una inmersión de nicho' },
+        { type: 'checklist', title: 'Seguir la práctica y determinar la v1 del Avatar' },
+      ]},
+
+      { type: 'section',   title: 'Oferta' },
+      { type: 'notion',    title: 'Qué vendes realmente', url: 'https://steadfast-chance-fc7.notion.site/Qu-vendes-realmente-3354ff25b33f802b94fee3178b02a53b?source=copy_link' },
+      { type: 'checklist', title: 'Entender qué es la Brecha' },
+      { type: 'checklist', title: 'Entender qué es la Oferta' },
+      { type: 'checklist', title: 'Entender la Fórmula de la Oferta' },
+      { type: 'checklist', title: 'Entender el Nicho',          indent: true, key: 'formula-nicho' },
+      { type: 'checklist', title: 'Entender el Resultado',      indent: true, key: 'formula-resultado' },
+      { type: 'checklist', title: 'Entender el Risk Reversion', indent: true },
+      { type: 'checklist', title: 'Entender el Pricing',        indent: true },
+      { type: 'practica',  title: 'Determina tu oferta V1', items: [
+        { type: 'checklist', title: 'Seguir la práctica y determinar la v1 de la Oferta' },
+      ]},
+    ],
     'comunidad':          [],
     'contenido-outlier':  [],
     'eleva-tu-branding':  [],
@@ -18687,12 +18795,33 @@
     return (typeof storeGet === 'function' ? storeGet('checklist_done.' + id) : null) || {};
   }
 
+  function checklistItemKey(item) {
+    return item.key || item.title;
+  }
+
+  // Walk the checklist content and pull out every 'checklist' item,
+  // including those nested inside a 'practica' wrapper. Order matches
+  // the visual order in the rendered detail view.
+  function flattenChecklistItems(items) {
+    const out = [];
+    for (const item of items) {
+      if (item.type === 'checklist') {
+        out.push(item);
+      } else if (item.type === 'practica' && Array.isArray(item.items)) {
+        for (const sub of item.items) {
+          if (sub.type === 'checklist') out.push(sub);
+        }
+      }
+    }
+    return out;
+  }
+
   function getChecklistProgress(id) {
     const items = CHECKLIST_CONTENT[id] || [];
-    const checkItems = items.filter(i => i.type === 'checklist');
+    const checkItems = flattenChecklistItems(items);
     if (checkItems.length === 0) return { done: 0, total: 0, pct: 0 };
     const doneMap = checklistDoneMap(id);
-    const done = checkItems.filter(i => doneMap[i.title]).length;
+    const done = checkItems.filter(i => doneMap[checklistItemKey(i)]).length;
     return { done, total: checkItems.length, pct: Math.round((done / checkItems.length) * 100) };
   }
 
@@ -18767,41 +18896,59 @@
       return;
     }
 
-    container.innerHTML = items.map((item, idx) => {
-      const safeTitle = escapeHtml(item.title);
-      if (item.type === 'group') {
-        return '<div class="ck-step">' + safeTitle + '</div>';
-      }
-      if (item.type === 'checklist') {
-        const isDone = !!doneMap[item.title];
-        return ''
-          + '<button class="ck-row ck-check' + (isDone ? ' is-done' : '') + '" type="button" data-idx="' + idx + '">'
-          +   '<span class="ck-row-icon"><span class="ck-checkbox"><span class="ck-checkbox-tick">✓</span></span></span>'
-          +   '<span class="ck-row-title">' + safeTitle + '</span>'
-          + '</button>';
-      }
-      // notion or link
+    const renderCheckRow = (item) => {
+      const key  = checklistItemKey(item);
+      const done = !!doneMap[key];
+      const cls  = 'ck-row ck-check' + (done ? ' is-done' : '') + (item.indent ? ' is-indent' : '');
+      return ''
+        + '<button class="' + cls + '" type="button" data-key="' + escapeHtml(key) + '">'
+        +   '<span class="ck-row-icon"><span class="ck-checkbox"><span class="ck-checkbox-tick">✓</span></span></span>'
+        +   '<span class="ck-row-title">' + escapeHtml(item.title) + '</span>'
+        + '</button>';
+    };
+
+    const renderLinkRow = (item) => {
       const hasUrl = !!item.url;
       const icon = item.type === 'notion' ? ICON_NOTION : ICON_LINK;
       const cls  = 'ck-row ck-' + item.type + (hasUrl ? '' : ' is-disabled');
       return ''
         + '<' + (hasUrl ? 'a' : 'div') + ' class="' + cls + '"'
         +   (hasUrl ? ' href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener noreferrer"' : '')
-        +   ' data-idx="' + idx + '">'
+        +   '>'
         +   '<span class="ck-row-icon">' + icon + '</span>'
-        +   '<span class="ck-row-title">' + safeTitle + '</span>'
+        +   '<span class="ck-row-title">' + escapeHtml(item.title) + '</span>'
         +   '<span class="ck-row-trailing">' + ICON_ARROW + '</span>'
         + '</' + (hasUrl ? 'a' : 'div') + '>';
+    };
+
+    container.innerHTML = items.map((item) => {
+      const safeTitle = escapeHtml(item.title);
+      if (item.type === 'group')   return '<div class="ck-step">'    + safeTitle + '</div>';
+      if (item.type === 'section') return '<div class="ck-section">' + safeTitle + '</div>';
+      if (item.type === 'checklist') return renderCheckRow(item);
+      if (item.type === 'practica') {
+        const inner = Array.isArray(item.items) ? item.items : [];
+        const checks = inner.filter(i => i.type === 'checklist');
+        const allDone = checks.length > 0 && checks.every(i => !!doneMap[checklistItemKey(i)]);
+        return ''
+          + '<div class="ck-practica' + (allDone ? ' is-complete' : '') + '">'
+          +   '<div class="ck-practica-eyebrow">Práctica</div>'
+          +   '<div class="ck-practica-title">' + safeTitle + '</div>'
+          +   inner.map(sub => sub.type === 'checklist' ? renderCheckRow(sub) : '').join('')
+          + '</div>';
+      }
+      // Fallback: notion or link row.
+      return renderLinkRow(item);
     }).join('');
 
     container.querySelectorAll('.ck-row.ck-check').forEach(row => {
       row.addEventListener('click', () => {
-        const idx = parseInt(row.dataset.idx, 10);
-        const it = items[idx];
+        const key = row.dataset.key;
+        if (!key) return;
         const map = checklistDoneMap(id);
-        const newDone = !map[it.title];
-        if (newDone) map[it.title] = true;
-        else delete map[it.title];
+        const newDone = !map[key];
+        if (newDone) map[key] = true;
+        else delete map[key];
         if (typeof storeSet === 'function') storeSet('checklist_done.' + id, map);
         // Re-run the bounce/burst animations every click by removing then
         // re-applying the class on the next frame (CSS animations only fire
@@ -18809,6 +18956,15 @@
         row.classList.remove('is-done');
         if (newDone) {
           requestAnimationFrame(() => requestAnimationFrame(() => row.classList.add('is-done')));
+        }
+        // If this checkbox lives inside a Práctica block, recompute that
+        // block's completion state so the title strikes through (or
+        // un-strikes) the moment the last item flips.
+        const practica = row.closest('.ck-practica');
+        if (practica) {
+          const allRows = practica.querySelectorAll('.ck-row.ck-check');
+          const allDone = Array.from(allRows).every(r => r.classList.contains('is-done'));
+          practica.classList.toggle('is-complete', allDone);
         }
         // Subtle haptic on supporting mobile devices.
         if (navigator.vibrate) { try { navigator.vibrate(newDone ? 12 : 6); } catch (e) {} }
