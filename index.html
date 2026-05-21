@@ -868,6 +868,121 @@
     border-radius: 12px;
     background: var(--surface);
   }
+
+  /* Checklist tab — folder grid */
+  .checklist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .checklist-card {
+    appearance: none;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    border-radius: 14px;
+    overflow: hidden;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .checklist-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.35);
+  }
+  .checklist-card:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .checklist-card-thumb {
+    aspect-ratio: 16 / 10;
+    background: #F1ECE0;
+    background-image: url('folder.png');
+    background-size: 52%;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* SVG fallback: shown when folder.png 404s (image element below has display:block; bg-image absent). */
+  .checklist-card-thumb-svg {
+    width: 52%;
+    height: auto;
+    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.18));
+  }
+  .checklist-card-foot {
+    background: var(--surface);
+    padding: 14px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .checklist-card-name {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.3;
+  }
+  .checklist-card-progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .checklist-card-progress-bar {
+    flex: 1;
+    height: 4px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .checklist-card-progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.35s ease;
+  }
+  .checklist-card-progress-text {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    min-width: 30px;
+    text-align: right;
+  }
+
+  /* Checklist detail view */
+  .checklist-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 12.5px;
+    cursor: pointer;
+    margin-bottom: 18px;
+    transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  }
+  .checklist-back:hover {
+    background: var(--accent-soft);
+    color: var(--accent-hover);
+    border-color: rgba(59,130,246,0.25);
+  }
+  .checklist-detail-title {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0 0 18px 0;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
   .tab-panel { display: none; }
   .tab-panel.is-active { display: block; animation: tab-fade 0.35s ease; }
   @keyframes tab-fade {
@@ -7134,8 +7249,19 @@
 
 <div class="tab-panel is-active" data-tab="checklist">
   <div class="section">
-    <div class="section-title">Checklist</div>
-    <div class="placeholder-empty">El contenido de la checklist aparecerá aquí.</div>
+    <div class="section-title" id="checklistSectionTitle">Checklist</div>
+
+    <!-- Grid view: list of all checklists as folder cards -->
+    <div class="checklist-grid" id="checklistGrid"></div>
+
+    <!-- Detail view: rendered when a folder is clicked -->
+    <div class="checklist-detail" id="checklistDetail" style="display:none;">
+      <button class="checklist-back" id="checklistBackBtn" type="button">
+        <span aria-hidden="true">←</span> Volver
+      </button>
+      <h2 class="checklist-detail-title" id="checklistDetailTitle"></h2>
+      <div class="placeholder-empty">El contenido de esta checklist aparecerá aquí cuando lo pases.</div>
+    </div>
   </div>
 </div><!-- /tab-panel checklist -->
 
@@ -18096,7 +18222,80 @@
         requestAnimationFrame(() => scrollCalendarToNow());
       }
     } catch (e) {}
+
+    // Refresh checklist progress now that Supabase cache is hydrated.
+    try { renderChecklistGrid(); } catch (e) {}
   }
+
+  // ─── Checklist folder grid ────────────────────────────────────────
+  // 6 folders user-facing. Order here = order on screen. The id is the
+  // storage key under user_state ("checklist_items.<id>") so changing
+  // an id resets a user's progress for that checklist.
+  const CHECKLISTS = [
+    { id: 'onboarding',        name: 'Onboarding' },
+    { id: 'mapea-tu-imperio',  name: 'Mapea tu imperio' },
+    { id: 'estrategia',        name: 'Estrategia' },
+    { id: 'contenido-outlier', name: 'Contenido Outlier' },
+    { id: 'feedback-loop',     name: 'Feedback Loop' },
+    { id: 'equipo',            name: 'Equipo' },
+  ];
+
+  // SVG folder shown when ./folder.png is missing (development fallback).
+  // Drop a folder.png in the repo root and CSS background-image takes over.
+  const CHECKLIST_FOLDER_SVG = ''
+    + '<svg class="checklist-card-thumb-svg" viewBox="0 0 100 70" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
+    + '  <path d="M8 18 L36 18 L42 12 L88 12 Q92 12 92 16 L92 22 L8 22 Z" fill="#D89B36"/>'
+    + '  <path d="M8 22 L92 22 L92 58 Q92 64 86 64 L14 64 Q8 64 8 58 Z" fill="#F0BE4E"/>'
+    + '  <rect x="8" y="22" width="84" height="2" fill="rgba(255,255,255,0.4)"/>'
+    + '</svg>';
+
+  function getChecklistProgress(id) {
+    const items = (typeof storeGet === 'function') ? (storeGet('checklist_items.' + id) || []) : [];
+    const total = items.length;
+    const done  = items.filter(i => i && i.done).length;
+    const pct   = total > 0 ? Math.round((done / total) * 100) : 0;
+    return { done, total, pct };
+  }
+
+  function renderChecklistGrid() {
+    const grid = document.getElementById('checklistGrid');
+    if (!grid) return;
+    grid.innerHTML = CHECKLISTS.map(c => {
+      const p = getChecklistProgress(c.id);
+      return ''
+        + '<button class="checklist-card" type="button" data-checklist="' + c.id + '">'
+        +   '<div class="checklist-card-thumb">' + CHECKLIST_FOLDER_SVG + '</div>'
+        +   '<div class="checklist-card-foot">'
+        +     '<div class="checklist-card-name">' + c.name + '</div>'
+        +     '<div class="checklist-card-progress">'
+        +       '<div class="checklist-card-progress-bar"><div class="checklist-card-progress-fill" style="width:' + p.pct + '%"></div></div>'
+        +       '<div class="checklist-card-progress-text">' + p.pct + '%</div>'
+        +     '</div>'
+        +   '</div>'
+        + '</button>';
+    }).join('');
+    grid.querySelectorAll('.checklist-card').forEach(card => {
+      card.addEventListener('click', () => openChecklistDetail(card.dataset.checklist));
+    });
+  }
+
+  function openChecklistDetail(id) {
+    const c = CHECKLISTS.find(x => x.id === id);
+    if (!c) return;
+    document.getElementById('checklistGrid').style.display = 'none';
+    document.getElementById('checklistDetail').style.display = 'block';
+    document.getElementById('checklistDetailTitle').textContent = c.name;
+    document.getElementById('checklistSectionTitle').textContent = 'Checklist · ' + c.name;
+  }
+
+  function closeChecklistDetail() {
+    document.getElementById('checklistDetail').style.display = 'none';
+    document.getElementById('checklistGrid').style.display = '';
+    document.getElementById('checklistSectionTitle').textContent = 'Checklist';
+  }
+
+  document.getElementById('checklistBackBtn')?.addEventListener('click', closeChecklistDetail);
+  renderChecklistGrid();
 
   // ─── Clerk auth gate ──────────────────────────────────────────────
   const CLERK_APPEARANCE = {
