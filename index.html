@@ -944,18 +944,85 @@
     min-width: 30px;
     text-align: right;
   }
-  /* SOPs variant: count text where the progress bar would be */
-  .checklist-card-count {
+  /* SOPs tab — horizontal row cards, distinct from the Checklist grid */
+  .sops-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .sops-card {
+    appearance: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+    display: flex;
+    align-items: stretch;
+    padding: 0;
+    width: 100%;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .sops-card:hover {
+    border-color: rgba(255,255,255,0.16);
+    background: rgba(255,255,255,0.03);
+  }
+  .sops-card:active { transform: scale(0.995); }
+  .sops-card:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .sops-card-thumb {
+    flex: 0 0 130px;
+    aspect-ratio: 3 / 2;
+    background-image: url('folder.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  .sops-card-content {
+    flex: 1;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    min-width: 0;
+  }
+  .sops-card-name {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.3;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .sops-card-count {
     font-size: 11.5px;
     color: var(--text-tertiary);
     font-weight: 600;
     letter-spacing: 0.04em;
     font-variant-numeric: tabular-nums;
   }
-  /* "Ejemplos" badge on the SOP card with example creator SOPs */
-  .checklist-card-badge {
+  .sops-card-arrow {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    padding-right: 18px;
+    color: var(--text-tertiary);
+    transition: transform 0.15s ease, color 0.15s ease;
+  }
+  .sops-card:hover .sops-card-arrow {
+    color: var(--accent-hover);
+    transform: translateX(2px);
+  }
+  /* "Ejemplos" badge — used on the SOP card with example creator SOPs */
+  .sops-card-badge {
     display: inline-block;
-    margin-left: 8px;
     padding: 2px 7px;
     border-radius: 4px;
     background: var(--accent-soft);
@@ -964,7 +1031,6 @@
     font-weight: 700;
     letter-spacing: 0.10em;
     text-transform: uppercase;
-    vertical-align: middle;
   }
 
   /* Checklist detail view */
@@ -7490,8 +7556,8 @@
   <div class="section">
     <div class="section-title" id="sopsSectionTitle">SOPs</div>
 
-    <!-- Grid view: SOP categories as folder cards -->
-    <div class="checklist-grid" id="sopsGrid"></div>
+    <!-- List view: SOP categories as horizontal rows -->
+    <div class="sops-list" id="sopsGrid"></div>
 
     <!-- Detail view: list of SOPs inside a category -->
     <div class="checklist-detail" id="sopsDetail" style="display:none;">
@@ -18676,17 +18742,18 @@
     grid.innerHTML = SOPS.map(s => {
       const count = (SOP_CONTENT[s.id] || []).length;
       const countLabel = count === 1 ? '1 SOP' : count + ' SOPs';
-      const badgeHtml = s.badge ? '<span class="checklist-card-badge">' + escapeHtml(s.badge) + '</span>' : '';
+      const badgeHtml = s.badge ? '<span class="sops-card-badge">' + escapeHtml(s.badge) + '</span>' : '';
       return ''
-        + '<button class="checklist-card" type="button" data-sop="' + s.id + '">'
-        +   '<div class="checklist-card-thumb" role="img" aria-label="Carpeta"></div>'
-        +   '<div class="checklist-card-foot">'
-        +     '<div class="checklist-card-name">' + escapeHtml(s.name) + badgeHtml + '</div>'
-        +     '<div class="checklist-card-count">' + countLabel + '</div>'
+        + '<button class="sops-card" type="button" data-sop="' + s.id + '">'
+        +   '<div class="sops-card-thumb" role="img" aria-label="Carpeta"></div>'
+        +   '<div class="sops-card-content">'
+        +     '<div class="sops-card-name">' + escapeHtml(s.name) + badgeHtml + '</div>'
+        +     '<div class="sops-card-count">' + countLabel + '</div>'
         +   '</div>'
+        +   '<div class="sops-card-arrow">' + ICON_ARROW + '</div>'
         + '</button>';
     }).join('');
-    grid.querySelectorAll('.checklist-card').forEach(card => {
+    grid.querySelectorAll('.sops-card').forEach(card => {
       card.addEventListener('click', () => openSopDetail(card.dataset.sop));
     });
   }
