@@ -8240,6 +8240,7 @@
   }
 
   function makeAddHandlers(input, addBtn, polishBtn, key, statusEl, reload) {
+    if (!input || !addBtn || !polishBtn) return; // DOM removed in Creator Stuffs reset
     function add(text) {
       const v = (text == null ? input.value : text).trim();
       if (!v) return;
