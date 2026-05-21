@@ -1467,6 +1467,187 @@
     margin-left: 18px;
     user-select: none;
   }
+
+  /* Kanban board — horizontal columns the user fills with garment ideas.
+     Cards are drag-and-drop (Sortable.js) between columns; the final
+     column ("Prenda fabricada") fires confetti when a card lands there. */
+  .ck-kanban {
+    margin: 24px 0 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .ck-kanban-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 0 2px;
+  }
+  .ck-kanban-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .ck-kanban-add {
+    appearance: none;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    padding: 7px 16px;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.12s ease;
+  }
+  .ck-kanban-add:hover { background: var(--accent); color: #0B0612; }
+  .ck-kanban-add:active { transform: scale(0.97); }
+  .ck-kanban-input {
+    display: flex;
+    gap: 8px;
+    padding: 4px 2px 2px;
+  }
+  .ck-kanban-input[hidden] { display: none; }
+  .ck-kanban-input input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 13px;
+  }
+  .ck-kanban-input input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  .ck-kanban-input-add {
+    appearance: none;
+    background: var(--accent);
+    color: #0B0612;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 18px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .ck-kanban-board {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(180px, 1fr));
+    gap: 10px;
+    overflow-x: auto;
+    padding: 4px 2px 14px;
+    /* iOS momentum scroll */
+    -webkit-overflow-scrolling: touch;
+  }
+  .ck-kanban-col {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 220px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .ck-kanban-col.is-finish {
+    border-color: rgba(52,211,153,0.35);
+    background: linear-gradient(180deg, rgba(52,211,153,0.06) 0%, var(--surface) 60%);
+  }
+  .ck-kanban-col-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .ck-kanban-col-name { flex: 1; margin-right: 8px; }
+  .ck-kanban-col-count {
+    color: var(--text-tertiary);
+    font-variant-numeric: tabular-nums;
+    background: var(--surface-raised);
+    border-radius: 999px;
+    padding: 2px 8px;
+    font-size: 10.5px;
+  }
+  .ck-kanban-col.is-finish .ck-kanban-col-name { color: var(--success); }
+  .ck-kanban-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 80px; /* always a visible drop target */
+    flex: 1;
+  }
+  .ck-kanban-card {
+    background: var(--surface-raised);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 13px;
+    color: var(--text-primary);
+    cursor: grab;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 6px;
+    transition: border-color 0.15s ease, background 0.15s ease, transform 0.12s ease;
+    word-break: break-word;
+  }
+  .ck-kanban-card:hover {
+    border-color: var(--border-strong);
+    background: #23232E;
+  }
+  .ck-kanban-card.sortable-drag { cursor: grabbing; opacity: 0.95; box-shadow: 0 8px 22px rgba(0,0,0,0.55); }
+  .ck-kanban-card.sortable-ghost {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: transparent;
+  }
+  .ck-kanban-card-text { flex: 1; line-height: 1.35; }
+  .ck-kanban-card-delete {
+    appearance: none;
+    background: none;
+    border: none;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    padding: 0 2px;
+    opacity: 0;
+    transition: opacity 0.15s ease, color 0.15s ease;
+  }
+  .ck-kanban-card:hover .ck-kanban-card-delete { opacity: 1; }
+  .ck-kanban-card-delete:hover { color: var(--danger); }
+  .ck-kanban-empty {
+    color: var(--text-tertiary);
+    font-size: 12px;
+    font-style: italic;
+    padding: 6px 4px;
+    pointer-events: none;
+  }
+
+  /* On narrow screens, ditch the auto-fit grid and give each column a
+     fixed width so the user horizontally scrolls through them. */
+  @media (max-width: 760px) {
+    .ck-kanban-board {
+      grid-template-columns: repeat(5, 230px);
+    }
+    .ck-kanban-card-delete { opacity: 1; }
+  }
   .tab-panel { display: none; }
   .tab-panel.is-active { display: block; animation: tab-fade 0.35s ease; }
   @keyframes tab-fade {
@@ -7706,6 +7887,7 @@
   type="text/javascript"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
 <body class="auth-pending">
 
@@ -18788,6 +18970,11 @@
   //                                                  start pill → ↓ → checks → ↓ → end
   //                                                  pill. The end pill lights up green
   //                                                  once every step is ticked.
+  //   { type: 'kanban', columns: [{ id, name }] }  → horizontal kanban board the user
+  //                                                  fills with garment ideas. Cards
+  //                                                  persist under kanban.<checklistId>
+  //                                                  and confetti fires when a card
+  //                                                  lands in the final column.
   // Items with type 'notion' or 'link' and a null url render as muted/disabled.
   // Storage key for a checkbox = item.key || item.title — use key to disambiguate
   // duplicate titles inside the same checklist.
@@ -18890,16 +19077,16 @@
         { type: 'checklist', title: 'Estudia y empieza a unir' },
       ]},
 
-      // Production pipeline from concept to manufactured garment. The
-      // flow renderer bookends this with Idea → ↓ → … → ↓ → Prenda
-      // fabricada and lights the end pill green when all six steps tick.
-      { type: 'flow', start: 'Idea', end: 'Prenda fabricada', items: [
-        { type: 'checklist', title: 'Hacer el diseño digital de la prenda' },
-        { type: 'checklist', title: 'Determinar las medidas y el patrón' },
-        { type: 'checklist', title: 'Crear el Tech Pack' },
-        { type: 'checklist', title: 'Encontrar fabricante y pedir muestra' },
-        { type: 'checklist', title: 'Revisión de muestra y ajustes' },
-        { type: 'checklist', title: 'Producción' },
+      // Kanban board for tracking individual garment ideas through the
+      // production pipeline. The user adds cards (one per prenda) and
+      // drags them across the five columns. The last column fires a
+      // confetti burst whenever a card arrives.
+      { type: 'kanban', columns: [
+        { id: 'idea',      name: 'Diseño de idea' },
+        { id: 'digital',   name: 'Diseño digital' },
+        { id: 'patron',    name: 'Medidas y patrón' },
+        { id: 'techpack',  name: 'Techpack' },
+        { id: 'fabricada', name: 'Prenda fabricada' },
       ]},
     ],
     'comunidad':          [],
@@ -18968,6 +19155,189 @@
       window.confetti({ particleCount: 60, spread: 140, startVelocity: 25, decay: 0.94, scalar: 0.9, ticks: 260, origin: { y: 0.65 }, colors });
     }, 520);
     if (navigator.vibrate) { try { navigator.vibrate([18, 50, 28]); } catch (e) {} }
+  }
+
+  // Lighter burst played when a single Kanban card lands in the final
+  // column ("Prenda fabricada"). Green-leaning palette to read as "shipped".
+  function fireKanbanFinishConfetti() {
+    if (typeof window.confetti !== 'function') return;
+    const colors = ['#34D399', '#10B981', '#A855F7', '#FFFFFF'];
+    window.confetti({ particleCount: 110, spread: 95, startVelocity: 45, scalar: 0.95, origin: { y: 0.55 }, colors });
+    if (navigator.vibrate) { try { navigator.vibrate([14, 36, 22]); } catch (e) {} }
+  }
+
+  // ─── Kanban state ──────────────────────────────────────────────────
+  // Cards are stored as a flat array under kanban.<checklistId>; each
+  // card has a stable id, a title, and the column it currently lives in.
+  // Order within a column follows array order, so a drag/drop reorder
+  // also reorders the slice we filter for that column.
+  function kanbanStorageKey(id) { return 'kanban.' + id; }
+  function loadKanbanCards(id) {
+    const raw = (typeof storeGet === 'function') ? storeGet(kanbanStorageKey(id)) : null;
+    return Array.isArray(raw) ? raw : [];
+  }
+  function saveKanbanCards(id, cards) {
+    if (typeof storeSet === 'function') storeSet(kanbanStorageKey(id), cards);
+  }
+  function newKanbanCardId() {
+    return 'k-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 7);
+  }
+
+  function renderKanbanCard(card) {
+    return ''
+      + '<div class="ck-kanban-card" data-card-id="' + escapeHtml(card.id) + '">'
+      +   '<span class="ck-kanban-card-text">' + escapeHtml(card.title) + '</span>'
+      +   '<button class="ck-kanban-card-delete" type="button" aria-label="Eliminar prenda">×</button>'
+      + '</div>';
+  }
+
+  function renderKanban(checklistId, kanban) {
+    const cards = loadKanbanCards(checklistId);
+    const cols  = Array.isArray(kanban.columns) ? kanban.columns : [];
+    const finishColId = cols.length ? cols[cols.length - 1].id : null;
+    const board = cols.map(col => {
+      const colCards = cards.filter(c => c.columnId === col.id);
+      const cardHtml = colCards.length
+        ? colCards.map(renderKanbanCard).join('')
+        : '<div class="ck-kanban-empty">Sin prendas</div>';
+      return ''
+        + '<div class="ck-kanban-col' + (col.id === finishColId ? ' is-finish' : '') + '" data-col="' + escapeHtml(col.id) + '">'
+        +   '<div class="ck-kanban-col-header">'
+        +     '<span class="ck-kanban-col-name">' + escapeHtml(col.name) + '</span>'
+        +     '<span class="ck-kanban-col-count">' + colCards.length + '</span>'
+        +   '</div>'
+        +   '<div class="ck-kanban-cards" data-col="' + escapeHtml(col.id) + '">'
+        +     cardHtml
+        +   '</div>'
+        + '</div>';
+    }).join('');
+    return ''
+      + '<div class="ck-kanban" data-kanban-id="' + escapeHtml(checklistId) + '">'
+      +   '<div class="ck-kanban-toolbar">'
+      +     '<div class="ck-kanban-title">Tu pipeline</div>'
+      +     '<button class="ck-kanban-add" type="button">+ Añadir prenda</button>'
+      +   '</div>'
+      +   '<div class="ck-kanban-input" hidden>'
+      +     '<input type="text" placeholder="Nombre de la prenda…" maxlength="80" />'
+      +     '<button class="ck-kanban-input-add" type="button">Añadir</button>'
+      +   '</div>'
+      +   '<div class="ck-kanban-board">' + board + '</div>'
+      + '</div>';
+  }
+
+  // Refresh the small "X cards" badge in each column header from the
+  // current DOM (cheap; re-counts after add/delete/move).
+  function refreshKanbanCounts(boardEl) {
+    boardEl.querySelectorAll('.ck-kanban-col').forEach(col => {
+      const cards = col.querySelectorAll('.ck-kanban-card').length;
+      const badge = col.querySelector('.ck-kanban-col-count');
+      if (badge) badge.textContent = cards;
+      // Empty-state placeholder: show only when the column has no cards.
+      const zone = col.querySelector('.ck-kanban-cards');
+      const empty = zone && zone.querySelector('.ck-kanban-empty');
+      if (zone) {
+        if (cards === 0 && !empty) {
+          zone.insertAdjacentHTML('beforeend', '<div class="ck-kanban-empty">Sin prendas</div>');
+        } else if (cards > 0 && empty) {
+          empty.remove();
+        }
+      }
+    });
+  }
+
+  function wireKanban(boardEl, checklistId, kanban) {
+    const cols = kanban.columns || [];
+    const firstColId  = cols[0] && cols[0].id;
+    const finishColId = cols.length ? cols[cols.length - 1].id : null;
+    if (!firstColId) return;
+
+    const addBtn   = boardEl.querySelector('.ck-kanban-add');
+    const inputRow = boardEl.querySelector('.ck-kanban-input');
+    const input    = inputRow && inputRow.querySelector('input');
+    const inputAdd = inputRow && inputRow.querySelector('.ck-kanban-input-add');
+
+    function showInput()  { if (inputRow) { inputRow.hidden = false; input.focus(); } }
+    function hideInput()  { if (inputRow) { inputRow.hidden = true; input.value = ''; } }
+    function commitNew() {
+      const title = (input.value || '').trim();
+      if (!title) { hideInput(); return; }
+      const card = { id: newKanbanCardId(), title, columnId: firstColId };
+      const cards = loadKanbanCards(checklistId);
+      cards.push(card);
+      saveKanbanCards(checklistId, cards);
+      const zone = boardEl.querySelector('.ck-kanban-cards[data-col="' + firstColId + '"]');
+      if (zone) {
+        const emptyEl = zone.querySelector('.ck-kanban-empty');
+        if (emptyEl) emptyEl.remove();
+        zone.insertAdjacentHTML('beforeend', renderKanbanCard(card));
+      }
+      refreshKanbanCounts(boardEl);
+      hideInput();
+    }
+
+    if (addBtn) addBtn.addEventListener('click', showInput);
+    if (inputAdd) inputAdd.addEventListener('click', commitNew);
+    if (input) input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); commitNew(); }
+      if (e.key === 'Escape') hideInput();
+    });
+
+    // Delete via event delegation.
+    boardEl.addEventListener('click', e => {
+      const btn = e.target.closest('.ck-kanban-card-delete');
+      if (!btn) return;
+      const card = btn.closest('.ck-kanban-card');
+      if (!card) return;
+      const cardId = card.dataset.cardId;
+      const cards = loadKanbanCards(checklistId).filter(c => c.id !== cardId);
+      saveKanbanCards(checklistId, cards);
+      card.remove();
+      refreshKanbanCounts(boardEl);
+    });
+
+    // Drag-and-drop between columns, plus reorder within. Persists the
+    // new state by re-reading the DOM order column-by-column — that way
+    // any reorder/move is captured no matter which Sortable fires.
+    if (typeof window.Sortable === 'function') {
+      const persistFromDom = (movedCardId, toColId) => {
+        const allRows = boardEl.querySelectorAll('.ck-kanban-cards');
+        const next = [];
+        allRows.forEach(zone => {
+          const colId = zone.dataset.col;
+          zone.querySelectorAll('.ck-kanban-card').forEach(cardEl => {
+            const cid = cardEl.dataset.cardId;
+            // Pull the title out of the existing saved state so we don't
+            // lose it if the DOM lacks an entry (defensive).
+            const existing = loadKanbanCards(checklistId).find(c => c.id === cid);
+            next.push({ id: cid, columnId: colId, title: existing ? existing.title : cardEl.querySelector('.ck-kanban-card-text')?.textContent || '' });
+          });
+        });
+        saveKanbanCards(checklistId, next);
+        refreshKanbanCounts(boardEl);
+        if (movedCardId && toColId === finishColId) {
+          fireKanbanFinishConfetti();
+        }
+      };
+      boardEl.querySelectorAll('.ck-kanban-cards').forEach(zone => {
+        new window.Sortable(zone, {
+          group: 'kanban-' + checklistId,
+          animation: 200,
+          ghostClass: 'sortable-ghost',
+          dragClass: 'sortable-drag',
+          forceFallback: false,
+          onEnd: (evt) => {
+            // Strip out any leftover empty-state placeholder from the
+            // source so it doesn't sit on top of the now-empty column.
+            boardEl.querySelectorAll('.ck-kanban-empty').forEach(n => n.remove());
+            const cardEl = evt.item;
+            const toCol  = evt.to && evt.to.dataset.col;
+            const fromCol = evt.from && evt.from.dataset.col;
+            const cardMoved = toCol && fromCol && toCol !== fromCol;
+            persistFromDom(cardMoved ? cardEl.dataset.cardId : null, toCol);
+          },
+        });
+      });
+    }
   }
 
   function renderChecklistCard(c) {
@@ -19094,9 +19464,18 @@
         const middle = checks.map(sub => arrow + renderCheckRow(sub)).join('');
         return '<div class="ck-flow">' + start + middle + arrow + end + '</div>';
       }
+      if (item.type === 'kanban') {
+        return renderKanban(id, item);
+      }
       // Fallback: notion or link row.
       return renderLinkRow(item);
     }).join('');
+
+    // Wire any kanban boards we just rendered (drag-drop + add + delete).
+    container.querySelectorAll('.ck-kanban').forEach(board => {
+      const kanbanCfg = items.find(it => it.type === 'kanban' && it.columns);
+      if (kanbanCfg) wireKanban(board, id, kanbanCfg);
+    });
 
     container.querySelectorAll('.ck-row.ck-check').forEach(row => {
       row.addEventListener('click', () => {
