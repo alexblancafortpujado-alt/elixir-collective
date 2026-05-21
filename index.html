@@ -6,15 +6,18 @@
 <title>Elixir Collective Checklist</title>
 <style>
   :root {
-    --bg: #000000;
-    --surface: #0E0E12;
-    --border: rgba(255,255,255,0.08);
-    --text-primary: #ECEEF2;
-    --text-secondary: #9CA3AF;
-    --text-tertiary: #6B7280;
-    --accent: #A855F7;
-    --accent-hover: #C084FC;
-    --accent-soft: rgba(168,85,247,0.14);
+    --bg: #07070B;
+    --surface: #16161E;
+    --surface-raised: #1E1E28;
+    --border: rgba(255,255,255,0.14);
+    --border-strong: rgba(255,255,255,0.22);
+    --text-primary: #F3F4F8;
+    --text-secondary: #B7BCC7;
+    --text-tertiary: #828896;
+    --accent: #B26BFF;
+    --accent-hover: #C99AFF;
+    --accent-soft: rgba(178,107,255,0.18);
+    --accent-glow: rgba(178,107,255,0.35);
     --success: #34D399;
     --warning: #FBBF24;
     --danger: #F87171;
@@ -961,8 +964,11 @@
     transition: transform 0.18s ease, box-shadow 0.18s ease;
   }
   .checklist-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(0,0,0,0.35);
+    transform: translateY(-3px);
+    box-shadow: 0 16px 32px rgba(0,0,0,0.45), 0 0 0 1px var(--accent-glow), 0 8px 24px var(--accent-soft);
+  }
+  .checklist-card:hover .checklist-card-foot {
+    background: var(--surface-raised);
   }
   .checklist-card:focus-visible {
     outline: 2px solid var(--accent);
@@ -975,6 +981,18 @@
     background-repeat: no-repeat;
     background-position: center;
   }
+  /* Per-checklist folder artwork. The id on data-checklist matches a PNG
+     of the same name (see CHECKLIST_GROUPS). Cards without a dedicated
+     image fall through to the generic folder.png above. */
+  .checklist-card[data-checklist="onboarding"]         .checklist-card-thumb { background-image: url('onboarding.png'); }
+  .checklist-card[data-checklist="empieza-tu-imperio"] .checklist-card-thumb { background-image: url('empieza-tu-imperio.png'); }
+  .checklist-card[data-checklist="disena-tus-prendas"] .checklist-card-thumb { background-image: url('disena-tus-prendas.png'); }
+  .checklist-card[data-checklist="comunidad"]          .checklist-card-thumb { background-image: url('comunidad.png'); }
+  .checklist-card[data-checklist="contenido-outlier"]  .checklist-card-thumb { background-image: url('contenido-outlier.png'); }
+  .checklist-card[data-checklist="eleva-tu-branding"]  .checklist-card-thumb { background-image: url('eleva-tu-branding.png'); }
+  .checklist-card[data-checklist="web"]                .checklist-card-thumb { background-image: url('web.png'); }
+  .checklist-card[data-checklist="lanzamiento"]        .checklist-card-thumb { background-image: url('lanzamiento.png'); }
+  .checklist-card[data-checklist="shipping"]           .checklist-card-thumb { background-image: url('shipping.png'); }
   .checklist-card-foot {
     background: var(--surface);
     padding: 18px 20px 20px;
