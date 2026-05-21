@@ -19082,12 +19082,16 @@
       // drags them across the five columns. The last column fires a
       // confetti burst whenever a card arrives.
       { type: 'kanban', columns: [
-        { id: 'idea',      name: 'Diseño de idea' },
-        { id: 'digital',   name: 'Diseño digital' },
-        { id: 'patron',    name: 'Medidas y patrón' },
-        { id: 'techpack',  name: 'Techpack' },
-        { id: 'fabricada', name: 'Prenda fabricada' },
+        { id: 'idea',             name: 'Idea' },
+        { id: 'digital',          name: 'Diseño Digital' },
+        { id: 'techpack',         name: 'Tech Pack' },
+        { id: 'enviar-fabricante', name: 'Enviar a fabricante' },
+        { id: 'fabricada',        name: 'Prenda fabricada' },
       ]},
+
+      { type: 'group',     title: 'Postproducción' },
+      { type: 'checklist', title: 'Muestra comprobada' },
+      { type: 'checklist', title: 'Prenda fabricándose' },
     ],
     'comunidad':          [],
     'contenido-outlier':  [],
@@ -19192,9 +19196,19 @@
   }
 
   function renderKanban(checklistId, kanban) {
-    const cards = loadKanbanCards(checklistId);
     const cols  = Array.isArray(kanban.columns) ? kanban.columns : [];
     const finishColId = cols.length ? cols[cols.length - 1].id : null;
+    // Card migration — if the columns config changed (rename/remove)
+    // any cards left pointing at a missing column slide to the first
+    // column so they stay visible instead of vanishing.
+    const cards = loadKanbanCards(checklistId);
+    if (cols.length) {
+      const valid = new Set(cols.map(c => c.id));
+      const firstId = cols[0].id;
+      let dirty = false;
+      cards.forEach(c => { if (!valid.has(c.columnId)) { c.columnId = firstId; dirty = true; } });
+      if (dirty) saveKanbanCards(checklistId, cards);
+    }
     const board = cols.map(col => {
       const colCards = cards.filter(c => c.columnId === col.id);
       const cardHtml = colCards.length
