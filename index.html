@@ -966,12 +966,163 @@
     color: var(--accent-hover);
     border-color: rgba(59,130,246,0.25);
   }
+  .checklist-detail-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin: 0 0 22px 0;
+  }
   .checklist-detail-title {
     font-size: 22px;
     font-weight: 600;
-    margin: 0 0 18px 0;
+    margin: 0;
     color: var(--text-primary);
     letter-spacing: -0.01em;
+  }
+  .checklist-detail-progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 180px;
+  }
+  .checklist-detail-progress-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .checklist-detail-progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+    transition: width 0.35s ease;
+    width: 0%;
+  }
+  .checklist-detail-progress-text {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    min-width: 36px;
+    text-align: right;
+  }
+
+  /* Item list inside a checklist */
+  .checklist-items {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .ck-row {
+    appearance: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 14px;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.05s ease;
+    text-decoration: none;
+    width: 100%;
+  }
+  .ck-row:hover {
+    background: rgba(255,255,255,0.03);
+    border-color: rgba(255,255,255,0.14);
+  }
+  .ck-row:active { transform: translateY(1px); }
+
+  /* Icon slot */
+  .ck-row-icon {
+    flex: 0 0 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-tertiary);
+  }
+  .ck-row-title {
+    flex: 1;
+    line-height: 1.35;
+  }
+  .ck-row-trailing {
+    flex: 0 0 auto;
+    color: var(--text-tertiary);
+    font-size: 14px;
+    transition: transform 0.15s ease, color 0.15s ease;
+  }
+  .ck-row:hover .ck-row-trailing { color: var(--accent-hover); transform: translateX(2px); }
+
+  /* Type: Notion link */
+  .ck-row.ck-notion .ck-row-icon { color: var(--text-secondary); }
+  /* Type: External link */
+  .ck-row.ck-link .ck-row-icon { color: var(--text-secondary); }
+  /* Type: Link / Notion that has no URL — visually muted, not clickable */
+  .ck-row.is-disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+  .ck-row.is-disabled:hover { background: var(--surface); border-color: var(--border); }
+  .ck-row.is-disabled .ck-row-trailing { display: none; }
+
+  /* Type: Checklist (checkbox) */
+  .ck-row.ck-check .ck-row-icon {
+    color: transparent;
+  }
+  .ck-checkbox {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    border: 1.5px solid rgba(255,255,255,0.18);
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.18s ease, border-color 0.18s ease;
+  }
+  .ck-row.ck-check.is-done .ck-checkbox {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .ck-checkbox-tick {
+    color: white;
+    font-size: 13px;
+    line-height: 1;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+  .ck-row.ck-check.is-done .ck-checkbox-tick { opacity: 1; }
+  .ck-row.ck-check.is-done .ck-row-title {
+    color: var(--text-tertiary);
+    text-decoration: line-through;
+    text-decoration-thickness: 1px;
+  }
+  .ck-row.ck-check .ck-row-trailing { display: none; }
+
+  /* Group / step header — not a button, just a divider with label */
+  .ck-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 4px 6px;
+    color: var(--text-tertiary);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .ck-group::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.08), transparent);
   }
   .tab-panel { display: none; }
   .tab-panel.is-active { display: block; animation: tab-fade 0.35s ease; }
@@ -7249,8 +7400,14 @@
       <button class="checklist-back" id="checklistBackBtn" type="button">
         <span aria-hidden="true">←</span> Volver
       </button>
-      <h2 class="checklist-detail-title" id="checklistDetailTitle"></h2>
-      <div class="placeholder-empty">El contenido de esta checklist aparecerá aquí cuando lo pases.</div>
+      <div class="checklist-detail-header">
+        <h2 class="checklist-detail-title" id="checklistDetailTitle"></h2>
+        <div class="checklist-detail-progress">
+          <div class="checklist-detail-progress-bar"><div class="checklist-detail-progress-fill" id="checklistDetailProgressFill"></div></div>
+          <span class="checklist-detail-progress-text" id="checklistDetailProgressText">0%</span>
+        </div>
+      </div>
+      <div class="checklist-items" id="checklistItems"></div>
     </div>
   </div>
 </div><!-- /tab-panel checklist -->
@@ -18219,7 +18376,7 @@
 
   // ─── Checklist folder grid ────────────────────────────────────────
   // 6 folders user-facing. Order here = order on screen. The id is the
-  // storage key under user_state ("checklist_items.<id>") so changing
+  // storage key under user_state ("checklist_done.<id>") so changing
   // an id resets a user's progress for that checklist.
   const CHECKLISTS = [
     { id: 'onboarding',        name: 'Onboarding' },
@@ -18230,12 +18387,63 @@
     { id: 'equipo',            name: 'Equipo' },
   ];
 
+  // Per-checklist content. Items are rendered in order. Three kinds:
+  //   { type: 'group',     title }              → step header, not clickable
+  //   { type: 'notion',    title, url }         → opens Notion link in new tab
+  //   { type: 'link',      title, url }         → opens external URL in new tab
+  //   { type: 'checklist', title }              → checkbox that toggles + counts toward %
+  // Items with type 'notion' or 'link' and a null url render as muted/disabled.
+  const CHECKLIST_CONTENT = {
+    'onboarding':        [],
+    'mapea-tu-imperio': [
+      { type: 'notion',    title: 'El mayor problema que todo creador de contenido tiene', url: 'https://steadfast-chance-fc7.notion.site/El-mayor-problema-que-todo-creador-tiene-3494ff25b33f80f3998cfd179851ad6a?source=copy_link' },
+      { type: 'checklist', title: 'Entender la metáfora del Ferrari sin GPS' },
+      { type: 'checklist', title: 'Entender la importancia de probar, fallar y autoconocerse' },
+      { type: 'group',     title: 'Paso 1:' },
+      { type: 'link',      title: 'Mapea tu canal actual', url: 'https://tally.so/r/PdBPLB' },
+      { type: 'checklist', title: 'Hacer el mapeo de tu canal actual' },
+      { type: 'group',     title: 'Paso 2:' },
+      { type: 'link',      title: 'Mapea tu canal ideal', url: 'https://tally.so/r/RGBqy4' },
+      { type: 'checklist', title: 'Hacer el mapeo de tu canal ideal' },
+      { type: 'notion',    title: 'El arte de solucionar problemas', url: 'https://steadfast-chance-fc7.notion.site/El-arte-de-solucionar-problemas-3494ff25b33f80d5a421e8a8108e6112?source=copy_link' },
+      { type: 'checklist', title: 'Entender que existe calidad a los problemas' },
+      { type: 'checklist', title: 'Entender que es un cuello de botella y un problem solver' },
+      { type: 'group',     title: 'Paso 3:' },
+      { type: 'link',      title: 'Recibe tu diagnóstico (link a Calendly, aun no esta montado)', url: null },
+      { type: 'checklist', title: 'Recibe el diagnostico' },
+      { type: 'checklist', title: 'Entiendelo y empieza a actuar.' },
+      { type: 'group',     title: 'Paso 4:' },
+      { type: 'notion',    title: 'Claude Code', url: null },
+      { type: 'checklist', title: 'Descargar Visual Studio' },
+      { type: 'checklist', title: 'Instalar Claude Code' },
+      { type: 'checklist', title: 'Descargar y abrir Dani Carrero AI' },
+    ],
+    'estrategia':        [],
+    'contenido-outlier': [],
+    'feedback-loop':     [],
+    'equipo':            [],
+  };
+
+  // Inline icons — small SVGs so they inherit currentColor.
+  const ICON_NOTION = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h12l4 4v12a0 0 0 0 1 0 0H4z"/><path d="M16 4v4h4"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="14" y2="17"/></svg>';
+  const ICON_LINK   = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>';
+  const ICON_ARROW  = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>';
+
+  function escapeHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  function checklistDoneMap(id) {
+    return (typeof storeGet === 'function' ? storeGet('checklist_done.' + id) : null) || {};
+  }
+
   function getChecklistProgress(id) {
-    const items = (typeof storeGet === 'function') ? (storeGet('checklist_items.' + id) || []) : [];
-    const total = items.length;
-    const done  = items.filter(i => i && i.done).length;
-    const pct   = total > 0 ? Math.round((done / total) * 100) : 0;
-    return { done, total, pct };
+    const items = CHECKLIST_CONTENT[id] || [];
+    const checkItems = items.filter(i => i.type === 'checklist');
+    if (checkItems.length === 0) return { done: 0, total: 0, pct: 0 };
+    const doneMap = checklistDoneMap(id);
+    const done = checkItems.filter(i => doneMap[i.title]).length;
+    return { done, total: checkItems.length, pct: Math.round((done / checkItems.length) * 100) };
   }
 
   function renderChecklistGrid() {
@@ -18247,7 +18455,7 @@
         + '<button class="checklist-card" type="button" data-checklist="' + c.id + '">'
         +   '<div class="checklist-card-thumb" role="img" aria-label="Carpeta"></div>'
         +   '<div class="checklist-card-foot">'
-        +     '<div class="checklist-card-name">' + c.name + '</div>'
+        +     '<div class="checklist-card-name">' + escapeHtml(c.name) + '</div>'
         +     '<div class="checklist-card-progress">'
         +       '<div class="checklist-card-progress-bar"><div class="checklist-card-progress-fill" style="width:' + p.pct + '%"></div></div>'
         +       '<div class="checklist-card-progress-text">' + p.pct + '%</div>'
@@ -18260,19 +18468,82 @@
     });
   }
 
+  function updateChecklistDetailProgress(id) {
+    const p = getChecklistProgress(id);
+    const fill = document.getElementById('checklistDetailProgressFill');
+    const text = document.getElementById('checklistDetailProgressText');
+    if (fill) fill.style.width = p.pct + '%';
+    if (text) text.textContent = p.pct + '%';
+  }
+
   function openChecklistDetail(id) {
     const c = CHECKLISTS.find(x => x.id === id);
     if (!c) return;
+    const items = CHECKLIST_CONTENT[id] || [];
+    const doneMap = checklistDoneMap(id);
+
     document.getElementById('checklistGrid').style.display = 'none';
     document.getElementById('checklistDetail').style.display = 'block';
     document.getElementById('checklistDetailTitle').textContent = c.name;
     document.getElementById('checklistSectionTitle').textContent = 'Checklist · ' + c.name;
+
+    const container = document.getElementById('checklistItems');
+    if (items.length === 0) {
+      container.innerHTML = '<div class="placeholder-empty">El contenido de esta checklist aparecerá aquí cuando lo pases.</div>';
+      updateChecklistDetailProgress(id);
+      return;
+    }
+
+    container.innerHTML = items.map((item, idx) => {
+      const safeTitle = escapeHtml(item.title);
+      if (item.type === 'group') {
+        return '<div class="ck-group">' + safeTitle + '</div>';
+      }
+      if (item.type === 'checklist') {
+        const isDone = !!doneMap[item.title];
+        return ''
+          + '<button class="ck-row ck-check' + (isDone ? ' is-done' : '') + '" type="button" data-idx="' + idx + '">'
+          +   '<span class="ck-row-icon"><span class="ck-checkbox"><span class="ck-checkbox-tick">✓</span></span></span>'
+          +   '<span class="ck-row-title">' + safeTitle + '</span>'
+          + '</button>';
+      }
+      // notion or link
+      const hasUrl = !!item.url;
+      const icon = item.type === 'notion' ? ICON_NOTION : ICON_LINK;
+      const cls  = 'ck-row ck-' + item.type + (hasUrl ? '' : ' is-disabled');
+      return ''
+        + '<' + (hasUrl ? 'a' : 'div') + ' class="' + cls + '"'
+        +   (hasUrl ? ' href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener noreferrer"' : '')
+        +   ' data-idx="' + idx + '">'
+        +   '<span class="ck-row-icon">' + icon + '</span>'
+        +   '<span class="ck-row-title">' + safeTitle + '</span>'
+        +   '<span class="ck-row-trailing">' + ICON_ARROW + '</span>'
+        + '</' + (hasUrl ? 'a' : 'div') + '>';
+    }).join('');
+
+    container.querySelectorAll('.ck-row.ck-check').forEach(row => {
+      row.addEventListener('click', () => {
+        const idx = parseInt(row.dataset.idx, 10);
+        const it = items[idx];
+        const map = checklistDoneMap(id);
+        const newDone = !map[it.title];
+        if (newDone) map[it.title] = true;
+        else delete map[it.title];
+        if (typeof storeSet === 'function') storeSet('checklist_done.' + id, map);
+        row.classList.toggle('is-done', newDone);
+        updateChecklistDetailProgress(id);
+      });
+    });
+
+    updateChecklistDetailProgress(id);
   }
 
   function closeChecklistDetail() {
     document.getElementById('checklistDetail').style.display = 'none';
     document.getElementById('checklistGrid').style.display = '';
     document.getElementById('checklistSectionTitle').textContent = 'Checklist';
+    // Re-render grid so the card's progress bar reflects any toggles we made.
+    renderChecklistGrid();
   }
 
   document.getElementById('checklistBackBtn')?.addEventListener('click', closeChecklistDetail);
