@@ -6,15 +6,15 @@
 <title>Elixir Collective Checklist</title>
 <style>
   :root {
-    --bg: #0B0D12;
-    --surface: #11141B;
+    --bg: #000000;
+    --surface: #0E0E12;
     --border: rgba(255,255,255,0.08);
     --text-primary: #ECEEF2;
     --text-secondary: #9CA3AF;
     --text-tertiary: #6B7280;
-    --accent: #3B82F6;
-    --accent-hover: #60A5FA;
-    --accent-soft: rgba(59,130,246,0.12);
+    --accent: #A855F7;
+    --accent-hover: #C084FC;
+    --accent-soft: rgba(168,85,247,0.14);
     --success: #34D399;
     --warning: #FBBF24;
     --danger: #F87171;
@@ -18606,32 +18606,32 @@
   const CHECKLIST_GROUPS = [
     {
       paso: 'Paso 1',
-      title: 'Contenido',
-      subtitle: 'crea tu estrategia',
+      title: 'Producto',
+      subtitle: 'diseña tu marca',
       checklists: [
-        { id: 'onboarding',       name: 'Onboarding' },
-        { id: 'mapea-tu-imperio', name: 'Mapea tu imperio' },
-        { id: 'estrategia',       name: 'Estrategia' },
+        { id: 'onboarding',         name: 'Onboarding' },
+        { id: 'empieza-tu-imperio', name: 'Empieza tu imperio' },
+        { id: 'disena-tus-prendas', name: 'Diseña tus prendas' },
       ],
     },
     {
       paso: 'Paso 2',
-      title: 'Crecimiento',
-      subtitle: 'haz mejor contenido',
+      title: 'Marketing',
+      subtitle: 'haz que te conozcan',
       checklists: [
-        { id: 'crea-videos-outliers', name: 'Crea videos outliers' },
-        { id: 'feedback-loop',        name: 'Feedback loop' },
-        { id: 'equipo',               name: 'Equipo' },
+        { id: 'comunidad',         name: 'Comunidad' },
+        { id: 'contenido-outlier', name: 'Contenido outlier' },
+        { id: 'eleva-tu-branding', name: 'Eleva tu branding' },
       ],
     },
     {
       paso: 'Paso 3',
-      title: 'Cash',
-      subtitle: 'leverage',
+      title: 'Ventas',
+      subtitle: 'vende y entrega',
       checklists: [
-        { id: 'nutricion',   name: 'Nutrición' },
-        { id: 'sponsors',    name: 'Sponsors' },
-        { id: 'coming-soon', name: 'Coming soon…', comingSoon: true },
+        { id: 'web',         name: 'Web' },
+        { id: 'lanzamiento', name: 'Lanzamiento' },
+        { id: 'shipping',    name: 'Shipping' },
       ],
     },
   ];
@@ -18645,37 +18645,15 @@
   //   { type: 'checklist', title }              → checkbox that toggles + counts toward %
   // Items with type 'notion' or 'link' and a null url render as muted/disabled.
   const CHECKLIST_CONTENT = {
-    'onboarding':            [],
-    'estrategia':            [],
-    'crea-videos-outliers':  [],
-    'feedback-loop':         [],
-    'equipo':                [],
-    'nutricion':             [],
-    'sponsors':              [],
-    'coming-soon':           [],
-    'mapea-tu-imperio': [
-      { type: 'notion',    title: 'El mayor problema que todo creador de contenido tiene', url: 'https://steadfast-chance-fc7.notion.site/El-mayor-problema-que-todo-creador-tiene-3494ff25b33f80f3998cfd179851ad6a?source=copy_link' },
-      { type: 'checklist', title: 'Entender la metáfora del Ferrari sin GPS' },
-      { type: 'checklist', title: 'Entender la importancia de probar, fallar y autoconocerse' },
-      { type: 'group',     title: 'Paso 1:' },
-      { type: 'link',      title: 'Mapea tu canal actual', url: 'https://tally.so/r/PdBPLB' },
-      { type: 'checklist', title: 'Hacer el mapeo de tu canal actual' },
-      { type: 'group',     title: 'Paso 2:' },
-      { type: 'link',      title: 'Mapea tu canal ideal', url: 'https://tally.so/r/RGBqy4' },
-      { type: 'checklist', title: 'Hacer el mapeo de tu canal ideal' },
-      { type: 'notion',    title: 'El arte de solucionar problemas', url: 'https://steadfast-chance-fc7.notion.site/El-arte-de-solucionar-problemas-3494ff25b33f80d5a421e8a8108e6112?source=copy_link' },
-      { type: 'checklist', title: 'Entender que existe calidad a los problemas' },
-      { type: 'checklist', title: 'Entender que es un cuello de botella y un problem solver' },
-      { type: 'group',     title: 'Paso 3:' },
-      { type: 'link',      title: 'Recibe tu diagnóstico (link a Calendly, aun no esta montado)', url: null },
-      { type: 'checklist', title: 'Recibe el diagnostico' },
-      { type: 'checklist', title: 'Entiendelo y empieza a actuar.' },
-      { type: 'group',     title: 'Paso 4:' },
-      { type: 'notion',    title: 'Claude Code', url: null },
-      { type: 'checklist', title: 'Descargar Visual Studio' },
-      { type: 'checklist', title: 'Instalar Claude Code' },
-      { type: 'checklist', title: 'Descargar y abrir Dani Carrero AI' },
-    ],
+    'onboarding':         [],
+    'empieza-tu-imperio': [],
+    'disena-tus-prendas': [],
+    'comunidad':          [],
+    'contenido-outlier':  [],
+    'eleva-tu-branding':  [],
+    'web':                [],
+    'lanzamiento':        [],
+    'shipping':           [],
   };
 
   // Inline icons — small SVGs so they inherit currentColor.
