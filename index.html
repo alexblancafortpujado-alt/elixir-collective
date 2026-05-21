@@ -900,20 +900,10 @@
   }
   .checklist-card-thumb {
     aspect-ratio: 16 / 10;
-    background: #F1ECE0;
     background-image: url('folder.png');
-    background-size: 52%;
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  /* SVG fallback: shown when folder.png 404s (image element below has display:block; bg-image absent). */
-  .checklist-card-thumb-svg {
-    width: 52%;
-    height: auto;
-    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.18));
   }
   .checklist-card-foot {
     background: var(--surface);
@@ -18240,15 +18230,6 @@
     { id: 'equipo',            name: 'Equipo' },
   ];
 
-  // SVG folder shown when ./folder.png is missing (development fallback).
-  // Drop a folder.png in the repo root and CSS background-image takes over.
-  const CHECKLIST_FOLDER_SVG = ''
-    + '<svg class="checklist-card-thumb-svg" viewBox="0 0 100 70" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
-    + '  <path d="M8 18 L36 18 L42 12 L88 12 Q92 12 92 16 L92 22 L8 22 Z" fill="#D89B36"/>'
-    + '  <path d="M8 22 L92 22 L92 58 Q92 64 86 64 L14 64 Q8 64 8 58 Z" fill="#F0BE4E"/>'
-    + '  <rect x="8" y="22" width="84" height="2" fill="rgba(255,255,255,0.4)"/>'
-    + '</svg>';
-
   function getChecklistProgress(id) {
     const items = (typeof storeGet === 'function') ? (storeGet('checklist_items.' + id) || []) : [];
     const total = items.length;
@@ -18264,7 +18245,7 @@
       const p = getChecklistProgress(c.id);
       return ''
         + '<button class="checklist-card" type="button" data-checklist="' + c.id + '">'
-        +   '<div class="checklist-card-thumb">' + CHECKLIST_FOLDER_SVG + '</div>'
+        +   '<div class="checklist-card-thumb" role="img" aria-label="Carpeta"></div>'
         +   '<div class="checklist-card-foot">'
         +     '<div class="checklist-card-name">' + c.name + '</div>'
         +     '<div class="checklist-card-progress">'
