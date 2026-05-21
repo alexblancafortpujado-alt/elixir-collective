@@ -1370,30 +1370,33 @@
      the whole block dims, mirroring the per-item completion feel. */
   .ck-practica {
     position: relative;
-    margin: 14px 0 6px;
-    padding: 14px 16px 8px 18px;
+    margin: 22px 0 14px;
+    padding: 22px 22px 22px 24px;
     border: 1px solid var(--border);
     border-left: 3px solid var(--accent);
-    border-radius: 12px;
-    background: linear-gradient(180deg, var(--accent-soft) 0%, transparent 70%);
+    border-radius: 14px;
+    background: linear-gradient(180deg, var(--accent-soft) 0%, transparent 75%);
     transition: opacity 0.3s ease, border-color 0.3s ease;
   }
   .ck-practica-eyebrow {
     color: var(--accent);
     font-size: 10.5px;
     font-weight: 700;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
-    margin-bottom: 2px;
+    margin-bottom: 8px;
   }
   .ck-practica-title {
     color: var(--text-primary);
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 600;
-    margin-bottom: 8px;
+    margin-bottom: 18px;
     transition: color 0.3s ease, text-decoration-color 0.3s ease;
     text-decoration: line-through transparent;
   }
+  /* Space the individual checklist rows inside a Práctica so they
+     don't crowd each other or the bottom edge of the callout. */
+  .ck-practica .ck-row + .ck-row { margin-top: 8px; }
   .ck-practica.is-complete {
     opacity: 0.55;
     border-left-color: var(--text-tertiary);
