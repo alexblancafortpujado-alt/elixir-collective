@@ -873,13 +873,14 @@
   .checklist-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 16px;
+    gap: 22px;
   }
 
   /* Grouped grid: 3 fixed cols (one per checklist in each step) */
   .ck-group {
-    margin-bottom: 32px;
+    margin-bottom: 52px;
   }
+  .ck-group:first-child { margin-top: 8px; }
   .ck-group:last-child { margin-bottom: 0; }
   /* Header mirrors .section-title — same dash, same tiny uppercase, so groups
      read as a subtle subdivision instead of competing for attention. */
@@ -892,7 +893,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    margin: 0 0 14px;
+    margin: 0 0 22px;
   }
   .ck-group-header::before {
     content: '';
@@ -976,10 +977,10 @@
   }
   .checklist-card-foot {
     background: var(--surface);
-    padding: 14px 16px 16px;
+    padding: 18px 20px 20px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
   }
   .checklist-card-name {
     font-size: 14.5px;
