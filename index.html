@@ -878,30 +878,40 @@
 
   /* Grouped grid: 3 fixed cols (one per checklist in each step) */
   .ck-group {
-    margin-bottom: 36px;
+    margin-bottom: 32px;
   }
   .ck-group:last-child { margin-bottom: 0; }
+  /* Header mirrors .section-title — same dash, same tiny uppercase, so groups
+     read as a subtle subdivision instead of competing for attention. */
   .ck-group-header {
-    margin: 0 0 14px;
-  }
-  .ck-group-paso {
-    font-size: 10px;
+    font-size: 10.5px;
     font-weight: 700;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 4px;
+    color: var(--text-tertiary);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 14px;
   }
-  .ck-group-title {
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin: 0;
-    letter-spacing: -0.01em;
+  .ck-group-header::before {
+    content: '';
+    width: 18px;
+    height: 1px;
+    background: var(--text-tertiary);
+    opacity: 0.6;
+  }
+  .ck-group-header::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.08), transparent);
   }
   .ck-group-subtitle {
-    color: var(--text-tertiary);
-    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0.02em;
+    font-weight: 500;
+    opacity: 0.75;
     margin-left: 4px;
   }
   .ck-group .checklist-grid {
@@ -18719,8 +18729,8 @@
     container.innerHTML = CHECKLIST_GROUPS.map(g => ''
       + '<div class="ck-group">'
       +   '<div class="ck-group-header">'
-      +     '<div class="ck-group-paso">' + escapeHtml(g.paso) + '</div>'
-      +     '<h3 class="ck-group-title">' + escapeHtml(g.title) + ' <span class="ck-group-subtitle">— ' + escapeHtml(g.subtitle) + '</span></h3>'
+      +     '<span>' + escapeHtml(g.paso) + ': ' + escapeHtml(g.title) + '</span>'
+      +     '<span class="ck-group-subtitle">— ' + escapeHtml(g.subtitle) + '</span>'
       +   '</div>'
       +   '<div class="checklist-grid">' + g.checklists.map(renderChecklistCard).join('') + '</div>'
       + '</div>'
