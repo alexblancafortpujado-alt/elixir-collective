@@ -7360,6 +7360,14 @@
     color: var(--text-secondary);
   }
   .admin-chip.is-complete .admin-chip-count { color: var(--ch-color); }
+  /* Checklist without authored content yet — muted so the admin sees
+     at a glance which ones still need to be filled in. */
+  .admin-chip.is-empty {
+    opacity: 0.45;
+    border-color: var(--border);
+  }
+  .admin-chip.is-empty .admin-chip-name { color: var(--text-tertiary); }
+  .admin-chip.is-empty .admin-chip-fill { background: var(--text-tertiary); box-shadow: none; }
 
   @media (max-width: 480px) {
     .admin-progress-text { font-size: 11px; min-width: 100px; }
@@ -17267,6 +17275,30 @@
     }
     return counts;
   }
+
+  // ─── Admin: per-checklist totals/counts ───────────────────────────
+  // Used by the admin "Student progress" view to break down each user's
+  // progress by the 9 Paso checklists. Mirrors getChecklistProgress but
+  // is callable against a doneMap loaded straight from Supabase rather
+  // than the current user's cache.
+  function adminChecklistTotals() {
+    const out = {};
+    let grand = 0;
+    for (const c of CHECKLISTS) {
+      const items = CHECKLIST_CONTENT[c.id] || [];
+      const total = flattenChecklistItems(items).length;
+      out[c.id] = total;
+      grand += total;
+    }
+    out.__grand = grand;
+    return out;
+  }
+  function adminChecklistDoneCount(checklistId, doneMap) {
+    const items = CHECKLIST_CONTENT[checklistId] || [];
+    const flat = flattenChecklistItems(items);
+    if (flat.length === 0 || !doneMap || typeof doneMap !== 'object') return 0;
+    return flat.filter(i => doneMap[checklistItemKey(i)]).length;
+  }
   function adminRelativeTime(iso) {
     if (!iso) return '—';
     const t = new Date(iso).getTime();
@@ -17302,13 +17334,14 @@
     }
     refreshBtn && refreshBtn.classList.add('is-loading');
 
-    const moduleId = SKILLTREE_MODULES[0].id;
-    const chapterTotals = adminComputeChapterTotals(moduleId);
-    const moduleTotal = chapterTotals.reduce((s, n) => s + n, 0);
+    const totals = adminChecklistTotals();
+    const moduleTotal = totals.__grand;
 
     try {
       const [stateRes, namesRes] = await Promise.all([
-        supabaseClient.from('user_state').select('user_id, value, updated_at').eq('key', 'skilltree_v1'),
+        // All per-checklist doneMaps for every user. One row per
+        // (user, checklist) — we aggregate client-side.
+        supabaseClient.from('user_state').select('user_id, key, value, updated_at').like('key', 'checklist_done.%'),
         supabaseClient.from('user_state').select('user_id, value').eq('key', DISPLAY_NAME_KEY)
       ]);
       if (stateRes.error) throw stateRes.error;
@@ -17319,25 +17352,41 @@
         if (typeof r.value === 'string' && r.value.trim()) namesByUser[r.user_id] = r.value.trim();
       }
 
+      // Group rows by user_id → { [checklistId]: doneMap, latestUpdate }.
+      const byUser = new Map();
+      for (const row of (stateRes.data || [])) {
+        const checklistId = row.key.replace('checklist_done.', '');
+        if (!byUser.has(row.user_id)) byUser.set(row.user_id, { maps: {}, latestUpdate: null });
+        const u = byUser.get(row.user_id);
+        u.maps[checklistId] = row.value || {};
+        if (!u.latestUpdate || row.updated_at > u.latestUpdate) u.latestUpdate = row.updated_at;
+      }
+
       const myId = (window.Clerk && window.Clerk.user) ? window.Clerk.user.id : null;
-      const students = (stateRes.data || []).map(row => {
-        const v = row.value || {};
-        const completed = Object.values(v).filter(x => x === true).length;
-        const perChapter = adminComputeChapterCounts(v, moduleId);
-        return {
-          userId: row.user_id,
-          displayName: namesByUser[row.user_id] || null,
+      const students = [];
+      for (const [userId, u] of byUser) {
+        const perChecklist = {};
+        let completed = 0;
+        for (const c of CHECKLISTS) {
+          const done = adminChecklistDoneCount(c.id, u.maps[c.id]);
+          perChecklist[c.id] = done;
+          completed += done;
+        }
+        students.push({
+          userId,
+          displayName: namesByUser[userId] || null,
           completed,
           percentage: moduleTotal > 0 ? Math.round((completed / moduleTotal) * 100) : 0,
-          perChapter,
-          updatedAt: row.updated_at,
-          isMe: row.user_id === myId
-        };
-      }).sort((a, b) => b.completed - a.completed);
+          perChecklist,
+          updatedAt: u.latestUpdate,
+          isMe: userId === myId,
+        });
+      }
+      students.sort((a, b) => b.completed - a.completed);
 
       countEl.textContent = students.length + ' student' + (students.length === 1 ? '' : 's');
       refreshTimeEl.textContent = 'updated ' + adminRelativeTime(new Date().toISOString());
-      renderAdminTable(students, moduleId, chapterTotals, moduleTotal);
+      renderAdminTable(students, totals, moduleTotal);
     } catch (e) {
       console.error('[admin] load failed', e);
       body.innerHTML = '<div class="admin-error">Failed to load: ' + (e.message || 'unknown error') +
@@ -17347,14 +17396,13 @@
     }
   }
 
-  function renderAdminTable(students, moduleId, chapterTotals, moduleTotal) {
+  function renderAdminTable(students, totals, moduleTotal) {
     const body = document.getElementById('adminBody');
     if (!body) return;
     if (students.length === 0) {
       body.innerHTML = '<div class="admin-empty">No student activity yet.</div>';
       return;
     }
-    const module = SKILLTREE_MODULES.find(m => m.id === moduleId);
     body.innerHTML = '';
     for (const st of students) {
       const row = document.createElement('div');
@@ -17403,18 +17451,23 @@
       prog.appendChild(txt);
       row.appendChild(prog);
 
-      const chaps = document.createElement('div');
-      chaps.className = 'admin-chapters';
-      module.chapters.forEach((ch, ci) => {
+      // One chip per checklist, grouped under their Paso. Each chip
+      // shows name + a mini progress bar + done/total. Chips with no
+      // authored content (total = 0) render as a muted "—" so the
+      // admin sees at a glance what's still to be filled in.
+      const chips = document.createElement('div');
+      chips.className = 'admin-chapters';
+      for (const c of CHECKLISTS) {
+        const done = st.perChecklist[c.id] || 0;
+        const total = totals[c.id];
         const chip = document.createElement('div');
         chip.className = 'admin-chip';
-        const done = st.perChapter[ci] || 0;
-        const total = chapterTotals[ci];
+        if (total === 0) chip.classList.add('is-empty');
         if (total > 0 && done === total) chip.classList.add('is-complete');
-        chip.style.setProperty('--ch-color', ch.color);
+        chip.style.setProperty('--ch-color', 'var(--accent)');
         const name = document.createElement('div');
         name.className = 'admin-chip-name';
-        name.textContent = ch.name;
+        name.textContent = c.name;
         const cbar = document.createElement('div');
         cbar.className = 'admin-chip-bar';
         const cfill = document.createElement('div');
@@ -17423,13 +17476,13 @@
         cbar.appendChild(cfill);
         const cnt = document.createElement('div');
         cnt.className = 'admin-chip-count';
-        cnt.textContent = done + ' / ' + total;
+        cnt.textContent = total > 0 ? (done + ' / ' + total) : '—';
         chip.appendChild(name);
         chip.appendChild(cbar);
         chip.appendChild(cnt);
-        chaps.appendChild(chip);
-      });
-      row.appendChild(chaps);
+        chips.appendChild(chip);
+      }
+      row.appendChild(chips);
 
       body.appendChild(row);
     }
