@@ -7418,6 +7418,17 @@
     gap: 14px;
   }
   .dash-title-row .dash-title { margin-bottom: 0; }
+  .dash-title-block {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+  .dash-greeting {
+    color: var(--text-secondary);
+    font-size: 13.5px;
+    font-weight: 500;
+  }
   .dash-name {
     outline: none;
     cursor: text;
@@ -7908,7 +7919,10 @@
 </div>
 
 <div class="dash-title-row">
-  <h1 class="dash-title">Elixir Collective</h1>
+  <div class="dash-title-block">
+    <h1 class="dash-title">Elixir Collective</h1>
+    <div class="dash-greeting">Hey, <span class="dash-name" id="dashName" title="Click to edit your name" tabindex="0">amigo</span> 👋</div>
+  </div>
   <div id="clerkUserButton"></div>
 </div>
 
