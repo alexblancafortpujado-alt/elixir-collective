@@ -900,19 +900,6 @@
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
-  .overall-progress::before {
-    /* Connector track behind the segments. Sits low so it crosses the
-       progress bars and ties the whole thing together. */
-    content: '';
-    position: absolute;
-    left: 24px;
-    right: 24px;
-    bottom: 24px;
-    height: 2px;
-    background: repeating-linear-gradient(90deg, var(--border) 0 6px, transparent 6px 12px);
-    z-index: 0;
-    pointer-events: none;
-  }
   .overall-seg {
     position: relative;
     z-index: 1;
@@ -19585,6 +19572,16 @@
     renderOverallProgress();
   }
 
+  // Short labels for the 9-segment overall timeline — the folder grid
+  // keeps the full names ("Empieza tu imperio", …) but the timeline is
+  // tight so we use a one-word version when available.
+  const OVERALL_SHORT_NAMES = {
+    'empieza-tu-imperio': 'Imperio',
+    'disena-tus-prendas': 'Prendas',
+    'contenido-outlier':  'Contenido',
+    'eleva-tu-branding':  'Branding',
+  };
+
   // Build / refresh the 9-segment timeline above the checklist grid.
   // Each segment lives at <id>-progress.png and pulls its percent live
   // from getChecklistProgress so it stays in sync with the same data
@@ -19595,10 +19592,11 @@
     wrap.innerHTML = CHECKLISTS.map(c => {
       const p = getChecklistProgress(c.id);
       const ratio = p.total > 0 ? (p.done / p.total) : 0;
+      const label = OVERALL_SHORT_NAMES[c.id] || c.name;
       return ''
         + '<div class="overall-seg" data-checklist="' + escapeHtml(c.id) + '" data-pct="' + p.pct + '" data-progress="1" style="--p:' + ratio.toFixed(3) + '">'
         +   '<div class="overall-seg-img" style="background-image:url(\'' + c.id + '-progress.png\')"></div>'
-        +   '<div class="overall-seg-name">' + escapeHtml(c.name) + '</div>'
+        +   '<div class="overall-seg-name">' + escapeHtml(label) + '</div>'
         +   '<div class="overall-seg-bar"><div class="overall-seg-fill" style="width:' + p.pct + '%"></div></div>'
         +   '<div class="overall-seg-pct">' + p.pct + '%</div>'
         + '</div>';
