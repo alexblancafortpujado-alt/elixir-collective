@@ -8545,7 +8545,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    min-height: 190px;
+    min-height: 124px;
     overflow: hidden;
     padding: 20px;
     border-radius: 24px;
@@ -8762,6 +8762,299 @@
   @media (max-width: 620px) {
     .inicio-modules { grid-template-columns: 1fr; }
   }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     RECURSOS — biblioteca de recursos calcada de Espresso (header +
+     buscador + grid de tarjetas con icono, descripción y acción).
+     ═══════════════════════════════════════════════════════════════════ */
+  .page-head { margin-bottom: 28px; }
+  .page-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+  }
+  .page-eyebrow .inicio-dot { margin: 0; }
+  .page-title {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 10px 0 0;
+    color: #fff;
+  }
+  .page-desc { font-size: 14px; color: rgba(255,255,255,0.45); margin: 8px 0 0; max-width: 640px; }
+
+  .res-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .res-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+  .res-tab {
+    border: 1px solid rgba(255,255,255,0.06);
+    background: #141414;
+    color: rgba(255,255,255,0.50);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  }
+  .res-tab:hover { color: #fff; }
+  .res-tab.is-active { background: #fff; color: #0a0a0a; border-color: #fff; }
+  .res-tab-count { margin-left: 6px; font-size: 12px; color: rgba(255,255,255,0.30); }
+  .res-tab.is-active .res-tab-count { color: rgba(10,10,10,0.5); }
+  .res-search { position: relative; max-width: 280px; width: 100%; }
+  .res-search svg {
+    position: absolute;
+    left: 12px; top: 50%;
+    transform: translateY(-50%);
+    width: 16px; height: 16px;
+    color: rgba(255,255,255,0.35);
+    pointer-events: none;
+  }
+  .res-search input {
+    width: 100%;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: #141414;
+    border-radius: 8px;
+    padding: 10px 12px 10px 36px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #fff;
+    outline: none;
+  }
+  .res-search input::placeholder { color: rgba(255,255,255,0.35); }
+  .res-search input:focus { border-color: rgba(255,255,255,0.20); }
+
+  .res-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .res-card {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    background: linear-gradient(180deg, #1c1c1c 0%, #141414 100%);
+    padding: 20px;
+    cursor: pointer;
+    font-family: inherit;
+    color: inherit;
+    box-shadow:
+      inset 0 1px 0 0 rgba(255,255,255,0.045),
+      0 1px 2px 0 rgba(0,0,0,0.4),
+      0 16px 48px -32px rgba(0,0,0,0.95);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .res-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255,255,255,0.14);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255,255,255,0.07),
+      0 2px 4px 0 rgba(0,0,0,0.5),
+      0 28px 60px -28px rgba(0,0,0,0.95);
+  }
+  .res-card-top { display: flex; align-items: flex-start; justify-content: space-between; }
+  .res-card-icon {
+    display: grid;
+    place-items: center;
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: #1a1a1a;
+    color: rgba(255,255,255,0.70);
+  }
+  .res-card-icon svg { width: 20px; height: 20px; }
+  .res-card-badge {
+    border-radius: 999px;
+    background: rgba(255,255,255,0.06);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.70);
+  }
+  .res-card-title { margin: 16px 0 0; font-size: 15px; font-weight: 500; line-height: 1.35; color: #fff; }
+  .res-card-desc { margin: 6px 0 0; flex: 1 1 auto; font-size: 14px; line-height: 1.5; color: rgba(255,255,255,0.45); }
+  .res-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.40);
+  }
+  .res-card-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.05);
+    padding: 2px 8px;
+  }
+  .res-card-tag-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.45); }
+  .res-card-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+    width: 100%;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    background: #1a1a1a;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.90);
+    transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+  }
+  .res-card-action svg { width: 16px; height: 16px; }
+  .res-card:hover .res-card-action { border-color: rgba(255,255,255,0.20); background: #1f1f1f; color: #fff; }
+  .res-empty { padding: 64px 24px; text-align: center; font-size: 14px; color: rgba(255,255,255,0.45); }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     TRACKING — lista de alumnos + ficha de alumno, calcado de Espresso.
+     ═══════════════════════════════════════════════════════════════════ */
+  .track-list { display: flex; flex-direction: column; gap: 10px; }
+  .track-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    text-align: left;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    background: linear-gradient(180deg, #1c1c1c 0%, #141414 100%);
+    padding: 16px 18px;
+    cursor: pointer;
+    font-family: inherit;
+    color: inherit;
+    box-shadow:
+      inset 0 1px 0 0 rgba(255,255,255,0.045),
+      0 1px 2px 0 rgba(0,0,0,0.4),
+      0 16px 48px -32px rgba(0,0,0,0.95);
+    transition: transform 0.25s ease, border-color 0.25s ease;
+  }
+  .track-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.14); }
+  .track-avatar {
+    display: grid;
+    place-items: center;
+    width: 44px; height: 44px;
+    flex: 0 0 44px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.10);
+    background: #1a1a1a;
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.80);
+  }
+  .track-card-main { min-width: 0; flex: 1 1 auto; }
+  .track-card-name { font-size: 15px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .track-card-sub { font-size: 12px; color: rgba(255,255,255,0.40); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+  .track-card-prog { flex: 0 0 160px; width: 160px; }
+  .track-card-prog-row { display: flex; align-items: center; justify-content: space-between; font-size: 12px; margin-bottom: 5px; }
+  .track-card-prog-row span:first-child { color: rgba(255,255,255,0.40); }
+  .track-card-prog-row span:last-child { color: rgba(255,255,255,0.70); font-variant-numeric: tabular-nums; }
+  .track-card-prog-bar { height: 6px; border-radius: 999px; background: rgba(255,255,255,0.08); overflow: hidden; }
+  .track-card-prog-fill { height: 100%; border-radius: 999px; background: rgba(255,255,255,0.80); transition: width 0.7s cubic-bezier(0.16,1,0.3,1); }
+  .track-card-time { flex: 0 0 92px; text-align: right; font-size: 12px; color: rgba(255,255,255,0.40); }
+  .track-card-chev { flex: 0 0 auto; color: rgba(255,255,255,0.30); display: grid; place-items: center; transition: color 0.2s ease; }
+  .track-card-chev svg { width: 20px; height: 20px; }
+  .track-card:hover .track-card-chev { color: rgba(255,255,255,0.70); }
+  .track-card.is-me .track-avatar { border-color: rgba(255,255,255,0.30); }
+
+  /* Detalle de alumno */
+  .track-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,0.50);
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    margin-bottom: 24px;
+    transition: color 0.15s ease;
+  }
+  .track-back:hover { color: #fff; }
+  .track-back svg { width: 16px; height: 16px; }
+  .track-detail-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-bottom: 24px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .track-detail-avatar {
+    display: grid;
+    place-items: center;
+    width: 48px; height: 48px;
+    flex: 0 0 48px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.10);
+    background: #1a1a1a;
+    font-size: 17px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.80);
+  }
+  .track-detail-name { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; color: #fff; }
+  .track-detail-sub { font-size: 13px; color: rgba(255,255,255,0.40); margin-top: 2px; }
+
+  .track-kpis {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .track-kpi {
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    background: linear-gradient(180deg, #1c1c1c 0%, #141414 100%);
+    padding: 18px;
+    box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.045), 0 16px 48px -32px rgba(0,0,0,0.95);
+  }
+  .track-kpi-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.35); }
+  .track-kpi-value { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; color: #fff; margin-top: 8px; }
+  .track-kpi-hint { font-size: 12px; color: rgba(255,255,255,0.40); margin-top: 4px; }
+
+  .track-panel {
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    background: linear-gradient(180deg, #1c1c1c 0%, #141414 100%);
+    padding: 24px;
+    box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.045), 0 16px 48px -32px rgba(0,0,0,0.95);
+    margin-bottom: 28px;
+  }
+  .track-panel-title { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; color: #fff; margin: 0 0 20px; }
+  .track-modbar { margin-bottom: 14px; }
+  .track-modbar:last-child { margin-bottom: 0; }
+  .track-modbar-row { display: flex; align-items: center; gap: 8px; font-size: 14px; margin-bottom: 6px; }
+  .track-modbar-name { flex: 1 1 auto; color: rgba(255,255,255,0.80); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .track-modbar-count { flex: 0 0 auto; color: rgba(255,255,255,0.45); font-variant-numeric: tabular-nums; }
+  .track-modbar-bar { height: 8px; border-radius: 999px; background: rgba(255,255,255,0.06); overflow: hidden; }
+  .track-modbar-fill { height: 100%; border-radius: 999px; background: rgba(255,255,255,0.80); transition: width 0.7s cubic-bezier(0.16,1,0.3,1); }
+  .track-modbar.is-empty .track-modbar-name { color: rgba(255,255,255,0.35); }
+
+  @media (max-width: 1000px) {
+    .res-grid { grid-template-columns: repeat(2, 1fr); }
+    .track-kpis { grid-template-columns: repeat(2, 1fr); }
+    .track-card-prog, .track-card-time { display: none; }
+  }
+  @media (max-width: 620px) {
+    .res-grid { grid-template-columns: 1fr; }
+  }
 </style>
 <script
   async
@@ -8847,9 +9140,6 @@
 
     <div class="inicio-cards">
       <div class="inicio-card inicio-card-progress ec-fade-up">
-        <span class="inicio-hero-cog" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
-        </span>
         <div class="inicio-card-eyebrow">Progreso del protocolo</div>
         <div class="inicio-pct"><span id="inicioPct">0</span><span class="inicio-pct-sign">%</span></div>
         <div class="inicio-hero-meta">
@@ -8920,18 +9210,39 @@
 
 <div class="tab-panel" data-tab="sops">
   <div class="section">
-    <div class="section-title" id="sopsSectionTitle">Recursos</div>
 
-    <!-- List view: SOP categories as horizontal rows -->
-    <div class="sops-list" id="sopsGrid"></div>
+    <!-- List view: biblioteca de recursos (estilo Espresso) -->
+    <div id="sopsListView">
+      <div class="page-head">
+        <div class="page-eyebrow"><span class="inicio-dot"></span> Biblioteca</div>
+        <h1 class="page-title" id="sopsSectionTitle">Recursos</h1>
+        <p class="page-desc">Todos los SOPs, plantillas y procesos del protocolo, organizados por categoría. Entra en una para ver sus documentos.</p>
+      </div>
 
-    <!-- Detail view: list of SOPs inside a category -->
-    <div class="checklist-detail" id="sopsDetail" style="display:none;">
-      <button class="checklist-back" id="sopsBackBtn" type="button">
-        <span aria-hidden="true">←</span> Volver
+      <div class="res-toolbar">
+        <div class="res-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="sopsSearch" type="text" placeholder="Buscar recurso…" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="res-grid" id="sopsGrid"></div>
+    </div>
+
+    <!-- Detail view: documentos dentro de una categoría -->
+    <div id="sopsDetail" style="display:none;">
+      <button class="track-back" id="sopsBackBtn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Volver a recursos
       </button>
-      <div class="checklist-detail-header">
-        <h2 class="checklist-detail-title" id="sopsDetailTitle"></h2>
+      <div class="track-detail-head">
+        <span class="track-detail-avatar" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </span>
+        <div class="min-w-0">
+          <div class="track-detail-name" id="sopsDetailTitle"></div>
+          <div class="track-detail-sub" id="sopsDetailSub"></div>
+        </div>
       </div>
       <div class="checklist-items" id="sopsItems"></div>
     </div>
@@ -8941,18 +9252,22 @@
 
 <div class="tab-panel" data-tab="admin">
   <div class="section">
-    <div class="section-title">Tracking</div>
-    <div class="admin-header">
-      <div class="admin-title">Progreso de alumnos</div>
-      <div class="admin-meta-row">
-        <span class="admin-count" id="adminCount">— students</span>
-        <span class="admin-refresh-time" id="adminRefreshTime">never</span>
-        <button class="admin-refresh-btn" id="adminRefreshBtn" type="button" title="Refresh">⟳</button>
+
+    <!-- List view: tus alumnos (estilo Espresso) -->
+    <div id="adminListView">
+      <div class="page-head">
+        <div class="page-eyebrow"><span class="inicio-dot"></span> Panel privado</div>
+        <h1 class="page-title">Tus alumnos</h1>
+        <p class="page-desc">Cada alumno y su progreso. Entra en uno para ver su ficha y ponerle tareas.</p>
+        <div class="admin-meta-row" style="margin-top:14px;">
+          <span class="admin-count" id="adminCount">— alumnos</span>
+          <span class="admin-refresh-time" id="adminRefreshTime">never</span>
+          <button class="admin-refresh-btn" id="adminRefreshBtn" type="button" title="Refrescar">⟳</button>
+        </div>
       </div>
-    </div>
-    <div class="admin-body" id="adminBody">
-      <div class="admin-empty">Loading…</div>
-    </div>
+      <div class="track-list" id="adminBody">
+        <div class="admin-empty">Cargando…</div>
+      </div>
 
     <!-- Access & subscriptions -->
     <div class="admin-section access-section">
@@ -8999,6 +9314,10 @@
       </div>
 
     </div>
+    </div><!-- /adminListView -->
+
+    <!-- Detail view: ficha del alumno -->
+    <div id="adminDetail" style="display:none;"></div>
   </div>
 </div><!-- /tab-panel admin -->
 
@@ -18386,121 +18705,131 @@
     }
   }
 
+  // Keep the last loaded tracking data around so the student detail
+  // view can be built without re-querying Supabase.
+  let _trackingData = null;
+
+  const ICON_CHEVRON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
+  const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>';
+
+  // Name of the first not-yet-finished checklist — shown as "current module".
+  function currentModuleName(st, totals) {
+    for (const c of CHECKLISTS) {
+      const total = totals[c.id];
+      const done = st.perChecklist[c.id] || 0;
+      if (total > 0 && done < total) return c.name;
+    }
+    return 'Completado';
+  }
+
   function renderAdminTable(students, totals, moduleTotal, tasksByUser) {
     tasksByUser = tasksByUser || {};
+    _trackingData = { students, totals, moduleTotal, tasksByUser };
+    // Always land on the list when (re)rendering.
+    const lv = document.getElementById('adminListView');
+    const dt = document.getElementById('adminDetail');
+    if (lv) lv.style.display = '';
+    if (dt) dt.style.display = 'none';
+
     const body = document.getElementById('adminBody');
     if (!body) return;
     if (students.length === 0) {
-      body.innerHTML = '<div class="admin-empty">No student activity yet.</div>';
+      body.innerHTML = '<div class="admin-empty">Aún no hay actividad de alumnos.</div>';
       return;
     }
-    body.innerHTML = '';
-    for (const st of students) {
-      const row = document.createElement('div');
-      row.className = 'admin-row' + (st.isMe ? ' is-me' : '');
+    body.innerHTML = students.map(st => {
+      const name = st.displayName || 'Sin nombre';
+      const initial = (name || '?').charAt(0).toUpperCase();
+      const current = currentModuleName(st, totals);
+      const sub = adminShortId(st.userId) + (current ? ' · ' + current : '');
+      return ''
+        + '<button class="track-card' + (st.isMe ? ' is-me' : '') + '" type="button" data-uid="' + escapeHtml(st.userId) + '">'
+        +   '<span class="track-avatar">' + escapeHtml(initial) + '</span>'
+        +   '<div class="track-card-main">'
+        +     '<div class="track-card-name">' + escapeHtml(name) + (st.isMe ? ' · tú' : '') + '</div>'
+        +     '<div class="track-card-sub">' + escapeHtml(sub) + '</div>'
+        +   '</div>'
+        +   '<div class="track-card-prog">'
+        +     '<div class="track-card-prog-row"><span>Progreso</span><span>' + st.percentage + '%</span></div>'
+        +     '<div class="track-card-prog-bar"><div class="track-card-prog-fill" style="width:' + st.percentage + '%"></div></div>'
+        +   '</div>'
+        +   '<div class="track-card-time">' + escapeHtml(adminRelativeTime(st.updatedAt)) + '</div>'
+        +   '<span class="track-card-chev">' + ICON_CHEVRON + '</span>'
+        + '</button>';
+    }).join('');
+    body.querySelectorAll('.track-card').forEach(card => {
+      card.addEventListener('click', () => openStudentDetail(card.dataset.uid));
+    });
+  }
 
-      const header = document.createElement('div');
-      header.className = 'admin-row-header';
+  function _trackKpi(label, value, hint) {
+    return ''
+      + '<div class="track-kpi">'
+      +   '<div class="track-kpi-label">' + escapeHtml(label) + '</div>'
+      +   '<div class="track-kpi-value">' + escapeHtml(String(value)) + '</div>'
+      +   (hint ? '<div class="track-kpi-hint">' + escapeHtml(hint) + '</div>' : '')
+      + '</div>';
+  }
 
-      const nameEl = document.createElement('span');
-      nameEl.className = 'admin-row-name' + (st.displayName ? '' : ' is-unset');
-      nameEl.textContent = st.displayName || 'Sin nombre';
-      nameEl.title = st.userId;
-      header.appendChild(nameEl);
+  function openStudentDetail(uid) {
+    if (!_trackingData) return;
+    const { students, totals, moduleTotal, tasksByUser } = _trackingData;
+    const st = students.find(s => s.userId === uid);
+    if (!st) return;
+    const detail = document.getElementById('adminDetail');
+    const listView = document.getElementById('adminListView');
+    if (!detail || !listView) return;
 
-      const idEl = document.createElement('span');
-      idEl.className = 'admin-row-id';
-      idEl.title = st.userId;
-      idEl.textContent = adminShortId(st.userId);
-      header.appendChild(idEl);
+    const name = st.displayName || 'Sin nombre';
+    const initial = (name || '?').charAt(0).toUpperCase();
+    const modulesDone = CHECKLISTS.filter(c => totals[c.id] > 0 && (st.perChecklist[c.id] || 0) === totals[c.id]).length;
 
-      if (st.isMe) {
-        const badge = document.createElement('span');
-        badge.className = 'admin-row-badge';
-        badge.textContent = 'YOU';
-        header.appendChild(badge);
-      }
+    const bars = CHECKLISTS.map(c => {
+      const total = totals[c.id];
+      const done = st.perChecklist[c.id] || 0;
+      const empty = total === 0;
+      const rate = empty ? 0 : Math.round((done / total) * 100);
+      return ''
+        + '<div class="track-modbar' + (empty ? ' is-empty' : '') + '">'
+        +   '<div class="track-modbar-row"><span class="track-modbar-name">' + escapeHtml(c.name) + '</span>'
+        +     '<span class="track-modbar-count">' + (empty ? '—' : done + '/' + total) + '</span></div>'
+        +   '<div class="track-modbar-bar"><div class="track-modbar-fill" style="width:' + rate + '%"></div></div>'
+        + '</div>';
+    }).join('');
 
-      const activity = document.createElement('span');
-      activity.className = 'admin-row-activity';
-      activity.textContent = adminRelativeTime(st.updatedAt);
-      header.appendChild(activity);
-      row.appendChild(header);
+    detail.innerHTML = ''
+      + '<button class="track-back" type="button" id="trackBackBtn">' + ICON_BACK + ' Volver a alumnos</button>'
+      + '<div class="track-detail-head">'
+      +   '<span class="track-detail-avatar">' + escapeHtml(initial) + '</span>'
+      +   '<div style="min-width:0"><div class="track-detail-name">' + escapeHtml(name) + '</div>'
+      +     '<div class="track-detail-sub">' + escapeHtml(adminShortId(st.userId)) + '</div></div>'
+      + '</div>'
+      + '<div class="track-kpis">'
+      +   _trackKpi('Progreso', st.percentage + '%', st.completed + '/' + moduleTotal + ' pasos')
+      +   _trackKpi('Pasos hechos', st.completed, 'de ' + moduleTotal)
+      +   _trackKpi('Módulos completos', modulesDone, 'de ' + CHECKLISTS.length)
+      +   _trackKpi('Última actividad', adminRelativeTime(st.updatedAt), '')
+      + '</div>'
+      + '<div class="track-panel"><h2 class="track-panel-title">Progreso por módulo</h2>' + bars + '</div>'
+      + '<div class="track-panel"><h2 class="track-panel-title">Deberes</h2>'
+      +   '<p style="font-size:13px;color:rgba(255,255,255,0.45);margin:-10px 0 16px">Ponle tareas con fecha. Aparecen en su panel de Inicio.</p>'
+      +   '<div id="trackTaskHost"></div>'
+      + '</div>';
 
-      const prog = document.createElement('div');
-      prog.className = 'admin-progress';
-      const bar = document.createElement('div');
-      bar.className = 'admin-progress-bar';
-      const fill = document.createElement('div');
-      fill.className = 'admin-progress-fill';
-      fill.style.width = st.percentage + '%';
-      bar.appendChild(fill);
-      const txt = document.createElement('div');
-      txt.className = 'admin-progress-text';
-      txt.textContent = st.completed + ' / ' + moduleTotal + ' · ' + st.percentage + '%';
-      prog.appendChild(bar);
-      prog.appendChild(txt);
-      row.appendChild(prog);
+    document.getElementById('trackBackBtn').addEventListener('click', closeStudentDetail);
+    const host = document.getElementById('trackTaskHost');
+    if (host) renderStudentTaskManager(host, st.userId, null, (tasksByUser[st.userId] || []).slice());
 
-      // One chip per checklist, grouped under their Paso. Each chip
-      // shows name + a mini progress bar + done/total. Chips with no
-      // authored content (total = 0) render as a muted "—" so the
-      // admin sees at a glance what's still to be filled in.
-      const chips = document.createElement('div');
-      chips.className = 'admin-chapters';
-      for (const c of CHECKLISTS) {
-        const done = st.perChecklist[c.id] || 0;
-        const total = totals[c.id];
-        const chip = document.createElement('div');
-        chip.className = 'admin-chip';
-        if (total === 0) chip.classList.add('is-empty');
-        if (total > 0 && done === total) chip.classList.add('is-complete');
-        chip.style.setProperty('--ch-color', 'var(--accent)');
-        const name = document.createElement('div');
-        name.className = 'admin-chip-name';
-        name.textContent = c.name;
-        const cbar = document.createElement('div');
-        cbar.className = 'admin-chip-bar';
-        const cfill = document.createElement('div');
-        cfill.className = 'admin-chip-fill';
-        cfill.style.width = (total > 0 ? (done / total) * 100 : 0) + '%';
-        cbar.appendChild(cfill);
-        const cnt = document.createElement('div');
-        cnt.className = 'admin-chip-count';
-        cnt.textContent = total > 0 ? (done + ' / ' + total) : '—';
-        chip.appendChild(name);
-        chip.appendChild(cbar);
-        chip.appendChild(cnt);
-        chips.appendChild(chip);
-      }
-      row.appendChild(chips);
+    listView.style.display = 'none';
+    detail.style.display = 'block';
+    window.scrollTo(0, 0);
+  }
 
-      // ── Per-student task assignment ──
-      const myTasks = (tasksByUser[st.userId] || []).slice();
-      const taskToggle = document.createElement('button');
-      taskToggle.type = 'button';
-      taskToggle.className = 'admin-row-tasks-toggle';
-      taskToggle.innerHTML = '📋 Tareas <span class="admin-task-pill" data-task-count>0</span>';
-      updateTaskPill(taskToggle, myTasks);
-
-      const taskPanel = document.createElement('div');
-      taskPanel.className = 'admin-task-panel';
-      taskPanel.style.display = 'none';
-
-      taskToggle.addEventListener('click', () => {
-        const show = taskPanel.style.display === 'none';
-        taskPanel.style.display = show ? 'block' : 'none';
-        if (show && !taskPanel.dataset.loaded) {
-          taskPanel.dataset.loaded = '1';
-          renderStudentTaskManager(taskPanel, st.userId, taskToggle, myTasks);
-        }
-      });
-
-      row.appendChild(taskToggle);
-      row.appendChild(taskPanel);
-
-      body.appendChild(row);
-    }
+  function closeStudentDetail() {
+    const detail = document.getElementById('adminDetail');
+    const listView = document.getElementById('adminListView');
+    if (detail) detail.style.display = 'none';
+    if (listView) listView.style.display = '';
   }
 
   // Update the little count pill on a student's "Tareas" toggle.
@@ -20787,8 +21116,6 @@
       if (p.total > 0 && p.pct < 100) { activeId = c.id; break; }
     }
 
-    const COG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>';
-
     wrap.innerHTML = CHECKLISTS.map((c, i) => {
       const p = getChecklistProgress(c.id);
       const paso = checklistPaso(c.id);
@@ -20798,14 +21125,11 @@
       const sub = checklistSubtitle(c.id);
       return ''
         + '<button class="folder ec-fade-up' + (isActive ? ' is-active' : '') + '" type="button" data-checklist="' + escapeHtml(c.id) + '" style="animation-delay:' + (i * 50) + 'ms">'
-        +   '<div class="folder-tab-row"><div class="folder-tab">' + COG
-        +     (tag ? '<span class="folder-tab-tag">' + tag + '</span>' : '')
+        +   '<div class="folder-tab-row"><div class="folder-tab">'
+        +     (tag ? '<span class="folder-tab-tag">' + tag + '</span>' : '<span></span>')
         +   '</div></div>'
         +   '<div class="folder-body">'
         +     '<span class="folder-sheen"></span>'
-        +     '<span class="folder-icon-wrap"><span class="folder-icon-halo"></span>'
-        +       '<span class="folder-icon" style="background-image:url(\'' + c.id + '-progress.png\')"></span>'
-        +     '</span>'
         +     '<div class="folder-foot">'
         +       '<span class="folder-dot"></span>'
         +       '<div class="folder-name">' + escapeHtml(c.name) + '</div>'
@@ -21014,24 +21338,35 @@
     'ejemplos':          [],
   };
 
+  // Espresso-style document icon for resource cards.
+  const ICON_DOC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>';
+  const ICON_OPEN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
+
+  let _sopsQuery = '';
+
   function renderSopsGrid() {
     const grid = document.getElementById('sopsGrid');
     if (!grid) return;
-    grid.innerHTML = SOPS.map(s => {
+    const q = _sopsQuery.trim().toLowerCase();
+    const list = SOPS.filter(s => !q || s.name.toLowerCase().includes(q));
+    if (list.length === 0) {
+      grid.innerHTML = '<div class="res-empty" style="grid-column:1/-1">No hay recursos que coincidan con tu búsqueda.</div>';
+      return;
+    }
+    grid.innerHTML = list.map((s, i) => {
       const count = (SOP_CONTENT[s.id] || []).length;
-      const countLabel = count === 1 ? '1 SOP' : count + ' SOPs';
-      const badgeHtml = s.badge ? '<span class="sops-card-badge">' + escapeHtml(s.badge) + '</span>' : '';
+      const countLabel = count === 1 ? '1 documento' : count + ' documentos';
+      const badgeHtml = s.badge ? '<span class="res-card-badge">' + escapeHtml(s.badge) + '</span>' : '';
       return ''
-        + '<button class="sops-card" type="button" data-sop="' + s.id + '">'
-        +   '<div class="sops-card-thumb" role="img" aria-label="Carpeta"></div>'
-        +   '<div class="sops-card-content">'
-        +     '<div class="sops-card-name">' + escapeHtml(s.name) + badgeHtml + '</div>'
-        +     '<div class="sops-card-count">' + countLabel + '</div>'
-        +   '</div>'
-        +   '<div class="sops-card-arrow">' + ICON_ARROW + '</div>'
+        + '<button class="res-card ec-fade-up" type="button" data-sop="' + s.id + '" style="animation-delay:' + (i * 40) + 'ms">'
+        +   '<div class="res-card-top"><div class="res-card-icon">' + ICON_DOC + '</div>' + badgeHtml + '</div>'
+        +   '<h3 class="res-card-title">' + escapeHtml(s.name) + '</h3>'
+        +   '<p class="res-card-desc">Procedimientos, plantillas y procesos de esta categoría.</p>'
+        +   '<div class="res-card-meta"><span class="res-card-tag"><span class="res-card-tag-dot"></span>' + countLabel + '</span></div>'
+        +   '<span class="res-card-action">' + ICON_OPEN + ' Abrir</span>'
         + '</button>';
     }).join('');
-    grid.querySelectorAll('.sops-card').forEach(card => {
+    grid.querySelectorAll('.res-card').forEach(card => {
       card.addEventListener('click', () => openSopDetail(card.dataset.sop));
     });
   }
@@ -21040,15 +21375,17 @@
     const s = SOPS.find(x => x.id === id);
     if (!s) return;
     const items = SOP_CONTENT[id] || [];
+    const count = items.length;
 
-    document.getElementById('sopsGrid').style.display = 'none';
+    document.getElementById('sopsListView').style.display = 'none';
     document.getElementById('sopsDetail').style.display = 'block';
     document.getElementById('sopsDetailTitle').textContent = s.name;
-    document.getElementById('sopsSectionTitle').textContent = 'SOPs · ' + s.name;
+    const subEl = document.getElementById('sopsDetailSub');
+    if (subEl) subEl.textContent = count === 1 ? '1 documento' : count + ' documentos';
 
     const container = document.getElementById('sopsItems');
     if (items.length === 0) {
-      container.innerHTML = '<div class="placeholder-empty">Los SOPs de esta categoría aparecerán aquí cuando los pases.</div>';
+      container.innerHTML = '<div class="placeholder-empty">Los documentos de esta categoría aparecerán aquí cuando los añadas.</div>';
       return;
     }
     container.innerHTML = items.map(item => {
@@ -21067,11 +21404,14 @@
 
   function closeSopDetail() {
     document.getElementById('sopsDetail').style.display = 'none';
-    document.getElementById('sopsGrid').style.display = '';
-    document.getElementById('sopsSectionTitle').textContent = 'SOPs';
+    document.getElementById('sopsListView').style.display = '';
   }
 
   document.getElementById('sopsBackBtn')?.addEventListener('click', closeSopDetail);
+  document.getElementById('sopsSearch')?.addEventListener('input', (e) => {
+    _sopsQuery = e.target.value || '';
+    renderSopsGrid();
+  });
   renderSopsGrid();
 
   // ─── Clerk auth gate ──────────────────────────────────────────────
