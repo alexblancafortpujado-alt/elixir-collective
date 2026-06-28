@@ -38,9 +38,9 @@
 
   body {
     position: relative;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: max(env(safe-area-inset-top), 28px) 24px 80px;
+    max-width: none;
+    margin: 0;
+    padding: 0;
     overflow-x: hidden;
   }
 
@@ -7997,6 +7997,565 @@
     .pv2-eyebrow { margin-bottom: 10px; }
     .pv2-block { margin-bottom: 36px; }
   }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     APP SHELL — left sidebar + main content. Replaces the old centered
+     top-tab layout. The sidebar holds the brand, the section nav
+     (Inicio / El Protocolo / Recursos / Tracking) and the user profile.
+     ═══════════════════════════════════════════════════════════════════ */
+  .app-shell {
+    display: flex;
+    align-items: stretch;
+    min-height: 100vh;
+    width: 100%;
+  }
+
+  .sidebar {
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    height: 100vh;
+    flex: 0 0 250px;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 22px 14px 18px;
+    border-right: 1px solid var(--border);
+    background:
+      linear-gradient(180deg, rgba(178,107,255,0.05) 0%, transparent 38%),
+      rgba(255,255,255,0.018);
+  }
+
+  .sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 6px 8px 14px;
+  }
+  .sidebar-brand-logo {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+    background: linear-gradient(150deg, var(--accent), #7C3AED);
+    box-shadow: 0 4px 16px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.25);
+  }
+  .sidebar-brand-text { min-width: 0; }
+  .sidebar-brand-name {
+    font-size: 14.5px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .sidebar-brand-sub {
+    font-size: 11.5px;
+    color: var(--text-tertiary);
+    margin-top: 1px;
+  }
+
+  .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+  .sidebar-nav-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    padding: 8px 12px 6px;
+  }
+  /* .tab-btn class kept on each button so the existing click-wiring and
+     setActiveTab() toggling keep working — only the look changes here. */
+  .side-btn {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    width: 100%;
+    padding: 9px 12px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    text-transform: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: left;
+    transition: color 0.18s ease, background 0.18s ease;
+    font-family: inherit;
+  }
+  .side-btn svg { width: 18px; height: 18px; flex: 0 0 18px; opacity: 0.85; }
+  .side-btn:hover { color: var(--text-primary); background: rgba(255,255,255,0.04); }
+  .side-btn.is-active {
+    color: var(--text-primary);
+    background: rgba(255,255,255,0.07);
+    box-shadow: inset 0 0 0 1px var(--border);
+  }
+  .side-btn.is-active svg { opacity: 1; color: var(--accent-hover); }
+
+  /* Tracking (admin) nav button — hidden until revealed for admins.
+     Needs the .side-btn.tab-btn-admin compound selector so it beats the
+     plain .side-btn { display:flex } rule defined later in this block. */
+  .side-btn.tab-btn-admin { display: none; }
+  .side-btn.tab-btn-admin.is-revealed {
+    display: flex;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+  }
+  .side-btn.tab-btn-admin.is-revealed:hover {
+    background: rgba(255,255,255,0.04);
+    color: var(--text-primary);
+  }
+  .side-btn.tab-btn-admin.is-revealed.is-active {
+    background: rgba(255,255,255,0.07);
+    color: var(--text-primary);
+    box-shadow: inset 0 0 0 1px var(--border);
+  }
+
+  .sidebar-foot {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 8px 4px;
+    margin-top: 6px;
+    border-top: 1px solid var(--border);
+  }
+  .sidebar-user-meta { min-width: 0; flex: 1 1 auto; }
+  .sidebar-user-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .sidebar-user-email {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .app-main {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 40px clamp(20px, 4vw, 56px) 96px;
+  }
+  .app-main .tab-panel { max-width: 1200px; }
+
+  /* ─── Inicio (home dashboard) ─────────────────────────────────────── */
+  .inicio-hero { margin-bottom: 26px; }
+  .inicio-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 12px;
+  }
+  .inicio-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent-glow);
+  }
+  .inicio-greeting {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin: 0 0 8px;
+    color: var(--text-primary);
+  }
+  .inicio-sub {
+    font-size: 14.5px;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .inicio-cards {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 18px;
+    margin-bottom: 40px;
+  }
+  .inicio-card {
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px 26px;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+  }
+  .inicio-card-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+  .inicio-card-progress { position: relative; overflow: hidden; min-height: 200px; display: flex; flex-direction: column; }
+  .inicio-pct {
+    display: flex;
+    align-items: flex-start;
+    line-height: 1;
+    margin: 18px 0 6px;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: var(--text-primary);
+  }
+  .inicio-pct > span:first-child { font-size: 86px; }
+  .inicio-pct-sign { font-size: 30px; color: var(--text-tertiary); margin-top: 8px; margin-left: 4px; }
+  .inicio-progress-meta {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: auto;
+    margin-bottom: 14px;
+  }
+  .inicio-progress-bar {
+    height: 6px;
+    border-radius: 99px;
+    background: rgba(255,255,255,0.07);
+    overflow: hidden;
+  }
+  .inicio-progress-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+    box-shadow: 0 0 12px var(--accent-glow);
+    transition: width 0.5s cubic-bezier(0.22,1,0.36,1);
+  }
+
+  .inicio-card-tasks { display: flex; flex-direction: column; }
+  .inicio-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .inicio-tasks-status {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--success);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .inicio-tasks { display: flex; flex-direction: column; gap: 4px; flex: 1 1 auto; }
+  .inicio-task {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 6px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    text-align: left;
+    border: none;
+    background: transparent;
+    color: inherit;
+    font-family: inherit;
+    width: 100%;
+  }
+  .inicio-task:hover { background: rgba(255,255,255,0.03); }
+  .inicio-task-check {
+    flex: 0 0 20px;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-strong);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .inicio-task-check svg { width: 12px; height: 12px; opacity: 0; color: #0A0A10; }
+  .inicio-task.is-done .inicio-task-check {
+    background: var(--success);
+    border-color: var(--success);
+  }
+  .inicio-task.is-done .inicio-task-check svg { opacity: 1; }
+  .inicio-task-body { min-width: 0; flex: 1 1 auto; }
+  .inicio-task-title { font-size: 14px; color: var(--text-primary); }
+  .inicio-task.is-done .inicio-task-title {
+    text-decoration: line-through;
+    color: var(--text-tertiary);
+  }
+  .inicio-task-due {
+    font-size: 11.5px;
+    color: var(--text-tertiary);
+    margin-top: 2px;
+  }
+  .inicio-task-due.is-overdue { color: var(--danger); }
+  .inicio-tasks-empty {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    padding: 24px 6px;
+    text-align: center;
+  }
+
+  .inicio-modules-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    gap: 14px;
+  }
+  .inicio-modules-title {
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--text-primary);
+  }
+  .inicio-modules-title span { color: var(--text-tertiary); font-weight: 600; }
+  .inicio-modules-sub { font-size: 13px; color: var(--text-tertiary); margin: 4px 0 0; }
+  .inicio-see-all {
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 6px 4px;
+    white-space: nowrap;
+    transition: color 0.15s ease;
+  }
+  .inicio-see-all:hover { color: var(--text-primary); }
+
+  .inicio-modules {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 16px;
+  }
+  .inicio-module {
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 18px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.008));
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+  .inicio-module:hover {
+    transform: translateY(-3px);
+    border-color: var(--border-strong);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  }
+  .inicio-module-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .inicio-module-icon {
+    width: 46px; height: 46px;
+    border-radius: 12px;
+    background-size: cover;
+    background-position: center;
+    background-color: var(--surface-raised);
+    box-shadow: inset 0 0 0 1px var(--border);
+  }
+  .inicio-module-tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    padding: 4px 9px;
+    border-radius: 99px;
+    border: 1px solid var(--border);
+  }
+  .inicio-module-tag.is-active { color: var(--accent-hover); border-color: var(--accent-soft); background: var(--accent-soft); }
+  .inicio-module-tag.is-done { color: var(--success); border-color: rgba(52,211,153,0.3); }
+  .inicio-module-name {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+  }
+  .inicio-module-sub { font-size: 12.5px; color: var(--text-tertiary); margin-top: 2px; }
+  .inicio-module-bar {
+    height: 5px;
+    border-radius: 99px;
+    background: rgba(255,255,255,0.07);
+    overflow: hidden;
+    margin-top: 2px;
+  }
+  .inicio-module-fill {
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+  }
+
+  /* ─── Tracking (admin) — per-student task assignment ───────────────── */
+  .admin-row-tasks-toggle {
+    margin-top: 12px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    font-family: inherit;
+    padding: 7px 13px;
+    border-radius: 9px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .admin-row-tasks-toggle:hover { color: var(--text-primary); border-color: var(--border-strong); }
+  .admin-row-tasks-toggle .admin-task-pill {
+    font-size: 10.5px;
+    background: var(--accent-soft);
+    color: var(--accent-hover);
+    padding: 1px 7px;
+    border-radius: 99px;
+    font-variant-numeric: tabular-nums;
+  }
+  .admin-task-panel {
+    margin-top: 12px;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: rgba(0,0,0,0.18);
+  }
+  .admin-task-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+  .admin-task-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 9px;
+    background: rgba(255,255,255,0.025);
+  }
+  .admin-task-row.is-done .admin-task-row-title { text-decoration: line-through; color: var(--text-tertiary); }
+  .admin-task-row-title { flex: 1 1 auto; font-size: 13px; color: var(--text-primary); min-width: 0; }
+  .admin-task-row-due {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .admin-task-row-del {
+    border: none;
+    background: transparent;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 1;
+    padding: 2px 4px;
+    border-radius: 6px;
+    transition: color 0.15s ease, background 0.15s ease;
+  }
+  .admin-task-row-del:hover { color: var(--danger); background: rgba(248,113,113,0.12); }
+  .admin-task-empty { font-size: 12.5px; color: var(--text-tertiary); padding: 6px 2px 12px; }
+  .admin-task-add {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .admin-task-add input[type="text"] {
+    flex: 1 1 180px;
+    min-width: 140px;
+    padding: 9px 12px;
+    border-radius: 9px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.03);
+    color: var(--text-primary);
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+  }
+  .admin-task-add input[type="date"] {
+    padding: 8px 10px;
+    border-radius: 9px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.03);
+    color: var(--text-secondary);
+    font-size: 12.5px;
+    font-family: inherit;
+    color-scheme: dark;
+    outline: none;
+  }
+  .admin-task-add input:focus { border-color: var(--border-strong); }
+  .admin-task-add-btn {
+    padding: 9px 16px;
+    border-radius: 9px;
+    border: none;
+    background: var(--accent);
+    color: #0A0A10;
+    font-size: 12.5px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .admin-task-add-btn:hover { background: var(--accent-hover); }
+  .admin-task-add-btn:disabled { opacity: 0.5; cursor: default; }
+
+  /* ─── Responsive: collapse the sidebar into a top bar ──────────────── */
+  @media (max-width: 880px) {
+    .app-shell { flex-direction: column; }
+    .sidebar {
+      position: static;
+      height: auto;
+      width: auto;
+      flex: none;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 4px;
+      padding: 12px 14px;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+    .sidebar-brand { padding: 4px 6px; flex: 0 0 auto; }
+    .sidebar-nav {
+      flex-direction: row;
+      flex: 1 1 100%;
+      order: 3;
+      gap: 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .sidebar-nav-label { display: none; }
+    .side-btn { width: auto; white-space: nowrap; padding: 8px 12px; }
+    .sidebar-foot {
+      margin: 0 0 0 auto;
+      padding: 0;
+      border-top: none;
+      order: 2;
+      flex: 0 0 auto;
+    }
+    .sidebar-user-meta { display: none; }
+    .app-main { padding: 24px 18px 72px; }
+    .inicio-greeting { font-size: 30px; }
+    .inicio-cards { grid-template-columns: 1fr; }
+    .inicio-pct > span:first-child { font-size: 64px; }
+  }
 </style>
 <script
   async
@@ -8018,27 +8577,93 @@
   </div>
 </div>
 
-<div class="dash-title-row">
-  <div class="dash-title-block">
-    <h1 class="dash-title">Elixir Collective</h1>
-    <div class="dash-greeting">Hey, <span class="dash-name" id="dashName" title="Click to edit your name" tabindex="0">amigo</span> 👋</div>
+<div class="app-shell">
+
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-logo" aria-hidden="true">⚗️</div>
+      <div class="sidebar-brand-text">
+        <div class="sidebar-brand-name">Elixir Collective</div>
+        <div class="sidebar-brand-sub">El Protocolo</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav" id="tabNav" aria-label="Secciones">
+      <div class="sidebar-nav-label">Menú</div>
+      <button class="tab-btn side-btn is-active" data-tab="inicio" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        <span>Inicio</span>
+      </button>
+      <button class="tab-btn side-btn" data-tab="checklist" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 2 2 3-3"/><path d="m3 17 2 2 3-3"/><line x1="12" y1="6" x2="21" y2="6"/><line x1="12" y1="18" x2="21" y2="18"/><line x1="12" y1="12" x2="21" y2="12"/><path d="m3 12 2 2 3-3"/></svg>
+        <span>El Protocolo</span>
+      </button>
+      <button class="tab-btn side-btn" data-tab="sops" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        <span>Recursos</span>
+      </button>
+      <button class="tab-btn side-btn tab-btn-admin" data-tab="admin" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>Tracking</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-foot">
+      <div id="clerkUserButton"></div>
+      <div class="sidebar-user-meta">
+        <div class="sidebar-user-name" id="sidebarUserName">—</div>
+        <div class="sidebar-user-email" id="sidebarUserEmail"></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="app-main">
+
+<div class="tab-panel is-active" data-tab="inicio">
+  <div class="inicio">
+    <div class="inicio-hero">
+      <div class="inicio-eyebrow"><span class="inicio-dot"></span> Tu progreso</div>
+      <h1 class="inicio-greeting">Hola, <span class="dash-name" id="dashName" title="Click para editar tu nombre" tabindex="0">amigo</span></h1>
+      <p class="inicio-sub">El camino para construir tu marca, paso a paso.</p>
+    </div>
+
+    <div class="inicio-cards">
+      <div class="inicio-card inicio-card-progress">
+        <div class="inicio-card-eyebrow">Progreso del protocolo</div>
+        <div class="inicio-pct"><span id="inicioPct">0</span><span class="inicio-pct-sign">%</span></div>
+        <div class="inicio-progress-meta" id="inicioSteps">0 de 0 pasos completados</div>
+        <div class="inicio-progress-bar"><div class="inicio-progress-fill" id="inicioProgressFill"></div></div>
+      </div>
+
+      <div class="inicio-card inicio-card-tasks">
+        <div class="inicio-card-head">
+          <div class="inicio-card-eyebrow">Tus tareas</div>
+          <span class="inicio-tasks-status" id="inicioTasksStatus"></span>
+        </div>
+        <div class="inicio-tasks" id="inicioTasks">
+          <div class="inicio-tasks-empty">Cargando…</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="inicio-modules-head">
+      <div>
+        <h2 class="inicio-modules-title">Tus módulos <span id="inicioModulesCount"></span></h2>
+        <p class="inicio-modules-sub">El protocolo, módulo a módulo</p>
+      </div>
+      <button class="inicio-see-all" type="button" id="inicioSeeAll">Ver todo →</button>
+    </div>
+    <div class="inicio-modules" id="inicioModules"></div>
   </div>
-  <div id="clerkUserButton"></div>
-</div>
-
-<nav class="tab-nav" id="tabNav" aria-label="Sections">
-  <button class="tab-btn is-active" data-tab="checklist" type="button">Checklist</button>
-  <button class="tab-btn" data-tab="sops" type="button">SOPs</button>
-  <button class="tab-btn tab-btn-admin" data-tab="admin" type="button">Admin</button>
-</nav>
+</div><!-- /tab-panel inicio -->
 
 
 
 
 
-<div class="tab-panel is-active" data-tab="checklist">
+<div class="tab-panel" data-tab="checklist">
   <div class="section">
-    <div class="section-title" id="checklistSectionTitle">Checklist</div>
+    <div class="section-title" id="checklistSectionTitle">El Protocolo</div>
 
     <!-- Overall horizontal timeline — 9 segments, one per checklist.
          Each segment fills as the matching checklist's items get ticked,
@@ -8067,7 +8692,7 @@
 
 <div class="tab-panel" data-tab="sops">
   <div class="section">
-    <div class="section-title" id="sopsSectionTitle">SOPs</div>
+    <div class="section-title" id="sopsSectionTitle">Recursos</div>
 
     <!-- List view: SOP categories as horizontal rows -->
     <div class="sops-list" id="sopsGrid"></div>
@@ -8088,9 +8713,9 @@
 
 <div class="tab-panel" data-tab="admin">
   <div class="section">
-    <div class="section-title">Admin</div>
+    <div class="section-title">Tracking</div>
     <div class="admin-header">
-      <div class="admin-title">Student Progress</div>
+      <div class="admin-title">Progreso de alumnos</div>
       <div class="admin-meta-row">
         <span class="admin-count" id="adminCount">— students</span>
         <span class="admin-refresh-time" id="adminRefreshTime">never</span>
@@ -8148,6 +8773,9 @@
     </div>
   </div>
 </div><!-- /tab-panel admin -->
+
+  </main><!-- /app-main -->
+</div><!-- /app-shell -->
 
 
 <!-- Paywall overlay — shown when access gate denies a user -->
@@ -17503,9 +18131,24 @@
       }
       students.sort((a, b) => b.completed - a.completed);
 
+      // Pull every assigned task in one query so each student row can
+      // show a count + open its task manager instantly. Degrades to no
+      // tasks if the student_tasks table doesn't exist yet.
+      const tasksByUser = {};
+      try {
+        const { data: taskRows, error: taskErr } = await supabaseClient
+          .from('student_tasks')
+          .select('id, user_id, title, due_date, done, created_at')
+          .order('created_at', { ascending: true });
+        if (taskErr) console.warn('[tracking] tasks load failed:', taskErr.message);
+        for (const t of (taskRows || [])) {
+          (tasksByUser[t.user_id] = tasksByUser[t.user_id] || []).push(t);
+        }
+      } catch (e) { console.warn('[tracking] tasks load error', e); }
+
       countEl.textContent = students.length + ' student' + (students.length === 1 ? '' : 's');
       refreshTimeEl.textContent = 'updated ' + adminRelativeTime(new Date().toISOString());
-      renderAdminTable(students, totals, moduleTotal);
+      renderAdminTable(students, totals, moduleTotal, tasksByUser);
     } catch (e) {
       console.error('[admin] load failed', e);
       body.innerHTML = '<div class="admin-error">Failed to load: ' + (e.message || 'unknown error') +
@@ -17515,7 +18158,8 @@
     }
   }
 
-  function renderAdminTable(students, totals, moduleTotal) {
+  function renderAdminTable(students, totals, moduleTotal, tasksByUser) {
+    tasksByUser = tasksByUser || {};
     const body = document.getElementById('adminBody');
     if (!body) return;
     if (students.length === 0) {
@@ -17603,8 +18247,92 @@
       }
       row.appendChild(chips);
 
+      // ── Per-student task assignment ──
+      const myTasks = (tasksByUser[st.userId] || []).slice();
+      const taskToggle = document.createElement('button');
+      taskToggle.type = 'button';
+      taskToggle.className = 'admin-row-tasks-toggle';
+      taskToggle.innerHTML = '📋 Tareas <span class="admin-task-pill" data-task-count>0</span>';
+      updateTaskPill(taskToggle, myTasks);
+
+      const taskPanel = document.createElement('div');
+      taskPanel.className = 'admin-task-panel';
+      taskPanel.style.display = 'none';
+
+      taskToggle.addEventListener('click', () => {
+        const show = taskPanel.style.display === 'none';
+        taskPanel.style.display = show ? 'block' : 'none';
+        if (show && !taskPanel.dataset.loaded) {
+          taskPanel.dataset.loaded = '1';
+          renderStudentTaskManager(taskPanel, st.userId, taskToggle, myTasks);
+        }
+      });
+
+      row.appendChild(taskToggle);
+      row.appendChild(taskPanel);
+
       body.appendChild(row);
     }
+  }
+
+  // Update the little count pill on a student's "Tareas" toggle.
+  function updateTaskPill(toggleBtn, tasks) {
+    const pill = toggleBtn && toggleBtn.querySelector('[data-task-count]');
+    if (!pill) return;
+    const pending = tasks.filter(t => !t.done).length;
+    pill.textContent = tasks.length ? (pending + '/' + tasks.length) : '0';
+  }
+
+  // Inline task manager an admin uses to assign / remove tasks for one
+  // student. Re-draws itself in place after every mutation.
+  function renderStudentTaskManager(panelEl, userId, toggleBtn, preloaded) {
+    panelEl.innerHTML = '<div class="admin-task-empty">Cargando…</div>';
+    const draw = (tasks) => {
+      const listHtml = tasks.length
+        ? '<div class="admin-task-list">' + tasks.map(t => {
+            const due = formatTaskDue(t.due_date);
+            return '<div class="admin-task-row' + (t.done ? ' is-done' : '') + '" data-task-id="' + t.id + '">'
+              + '<span class="admin-task-row-title">' + escapeHtml(t.title) + '</span>'
+              + (due.text ? '<span class="admin-task-row-due">' + escapeHtml(due.text) + '</span>' : '')
+              + '<button class="admin-task-row-del" type="button" title="Borrar tarea">×</button>'
+              + '</div>';
+          }).join('') + '</div>'
+        : '<div class="admin-task-empty">Sin tareas asignadas todavía.</div>';
+      panelEl.innerHTML = listHtml
+        + '<div class="admin-task-add">'
+        +   '<input type="text" placeholder="Nueva tarea para este alumno…" maxlength="200" />'
+        +   '<input type="date" title="Fecha límite (opcional)" />'
+        +   '<button class="admin-task-add-btn" type="button">+ Añadir</button>'
+        + '</div>';
+      updateTaskPill(toggleBtn, tasks);
+
+      panelEl.querySelectorAll('.admin-task-row-del').forEach(del => {
+        del.addEventListener('click', async () => {
+          const rowEl = del.closest('.admin-task-row');
+          const id = rowEl && rowEl.dataset.taskId;
+          if (!id) return;
+          del.disabled = true;
+          await deleteStudentTask(id);
+          draw(tasks.filter(t => String(t.id) !== String(id)));
+        });
+      });
+
+      const textIn = panelEl.querySelector('.admin-task-add input[type="text"]');
+      const dateIn = panelEl.querySelector('.admin-task-add input[type="date"]');
+      const addBtn = panelEl.querySelector('.admin-task-add-btn');
+      const commit = async () => {
+        const title = (textIn.value || '').trim();
+        if (!title) { textIn.focus(); return; }
+        addBtn.disabled = true;
+        const created = await createStudentTask(userId, title, dateIn.value || null);
+        addBtn.disabled = false;
+        if (created) draw(tasks.concat([created]));
+      };
+      addBtn.addEventListener('click', commit);
+      textIn.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); commit(); } });
+    };
+    if (preloaded) draw(preloaded.slice());
+    else fetchStudentTasks(userId).then(draw);
   }
 
   function _flashAdminBtn(btn, msg) {
@@ -18272,6 +19000,7 @@
   }
 
   function renderDashName() {
+    try { if (typeof updateSidebarUser === 'function') updateSidebarUser(); } catch (e) {}
     const el = document.getElementById('dashName');
     if (!el) return;
     if (document.activeElement === el) return; // don't stomp while editing
@@ -19019,7 +19748,9 @@
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('is-active', b.dataset.tab === name));
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('is-active', p.dataset.tab === name));
     try { localStorage.setItem('active_tab_v1', name); } catch (e) {}
-    if (name === 'calendar') {
+    if (name === 'inicio') {
+      try { renderInicio(); } catch (e) { console.error('[inicio] render failed', e); }
+    } else if (name === 'calendar') {
       requestAnimationFrame(() => scrollCalendarToNow());
     } else if (name === 'portal') {
       renderPortalV2();
@@ -19072,17 +19803,18 @@
     try { renderDashName(); } catch (e) { /* dashName element removed; ignore */ }
     try {
       let saved = localStorage.getItem('active_tab_v1');
-      // Legacy tab names from the Heroes App fork — demote to checklist.
+      // Legacy tab names from the Heroes App fork — demote to Inicio.
       const LEGACY_TABS = ['skilltree', 'skilltree-v2', 'dashboard', 'habits', 'calendar', 'portal', 'bossfight'];
-      if (LEGACY_TABS.indexOf(saved) >= 0) saved = 'checklist';
-      if (saved) setActiveTab(saved);
-      else if (document.querySelector('.tab-panel.is-active')?.dataset.tab === 'calendar') {
-        requestAnimationFrame(() => scrollCalendarToNow());
-      }
+      if (LEGACY_TABS.indexOf(saved) >= 0) saved = 'inicio';
+      setActiveTab(saved || 'inicio');
     } catch (e) {}
 
     // Refresh checklist progress now that Supabase cache is hydrated.
     try { renderChecklistGrid(); } catch (e) {}
+    // Now that the cache + grid totals are ready, (re)render the Inicio
+    // dashboard so its % / steps / module cards reflect real data.
+    try { renderInicio(); } catch (e) {}
+    try { updateSidebarUser(); } catch (e) {}
   }
 
   // ─── Checklist folder grid ────────────────────────────────────────
@@ -19772,6 +20504,209 @@
 
   document.getElementById('checklistBackBtn')?.addEventListener('click', closeChecklistDetail);
   renderChecklistGrid();
+
+  // ─── Inicio (home dashboard) ──────────────────────────────────────
+  // Aggregates the 9 Paso checklists into one protocol-wide progress
+  // figure, renders each checklist as a "module" card, and shows the
+  // tasks an admin has assigned to this student (see student_tasks).
+
+  // Which Paso a checklist belongs to ("Paso 1", …) — used for the
+  // module card subtitle / tag.
+  function checklistPaso(id) {
+    for (const g of CHECKLIST_GROUPS) {
+      if (g.checklists.some(c => c.id === id)) return g.paso;
+    }
+    return '';
+  }
+
+  // Sum every checklist's done/total into one protocol-wide figure.
+  function inicioOverall() {
+    let done = 0, total = 0;
+    for (const c of CHECKLISTS) {
+      const p = getChecklistProgress(c.id);
+      done += p.done; total += p.total;
+    }
+    return { done, total, pct: total > 0 ? Math.round((done / total) * 100) : 0 };
+  }
+
+  function renderInicioModules() {
+    const wrap = document.getElementById('inicioModules');
+    if (!wrap) return;
+    const countEl = document.getElementById('inicioModulesCount');
+    if (countEl) countEl.textContent = CHECKLISTS.length;
+
+    // "Active" module = the first one with content that isn't finished.
+    let activeId = null;
+    for (const c of CHECKLISTS) {
+      const p = getChecklistProgress(c.id);
+      if (p.total > 0 && p.pct < 100) { activeId = c.id; break; }
+    }
+
+    wrap.innerHTML = CHECKLISTS.map(c => {
+      const p = getChecklistProgress(c.id);
+      const paso = checklistPaso(c.id);
+      let tag = paso, tagCls = '';
+      if (p.total > 0 && p.pct === 100) { tag = 'Completo'; tagCls = ' is-done'; }
+      else if (c.id === activeId) { tag = 'Activo'; tagCls = ' is-active'; }
+      const sub = p.total > 0 ? (p.done + '/' + p.total + ' pasos · ' + paso) : 'Próximamente';
+      return ''
+        + '<button class="inicio-module" type="button" data-checklist="' + escapeHtml(c.id) + '">'
+        +   '<div class="inicio-module-top">'
+        +     '<div class="inicio-module-icon" style="background-image:url(\'' + c.id + '-progress.png\')"></div>'
+        +     '<span class="inicio-module-tag' + tagCls + '">' + escapeHtml(tag) + '</span>'
+        +   '</div>'
+        +   '<div>'
+        +     '<div class="inicio-module-name">' + escapeHtml(c.name) + '</div>'
+        +     '<div class="inicio-module-sub">' + escapeHtml(sub) + '</div>'
+        +   '</div>'
+        +   '<div class="inicio-module-bar"><div class="inicio-module-fill" style="width:' + p.pct + '%"></div></div>'
+        + '</button>';
+    }).join('');
+
+    wrap.querySelectorAll('.inicio-module').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = card.dataset.checklist;
+        setActiveTab('checklist');
+        try { openChecklistDetail(id); } catch (e) {}
+      });
+    });
+  }
+
+  function renderInicio() {
+    try { renderDashName(); } catch (e) {}
+    const o = inicioOverall();
+    const pctEl   = document.getElementById('inicioPct');
+    const fillEl  = document.getElementById('inicioProgressFill');
+    const stepsEl = document.getElementById('inicioSteps');
+    if (pctEl)   pctEl.textContent = o.pct;
+    if (fillEl)  fillEl.style.width = o.pct + '%';
+    if (stepsEl) stepsEl.textContent = o.done + ' de ' + o.total + ' pasos completados';
+    renderInicioModules();
+    renderInicioTasks();
+  }
+
+  // Jump from the "Ver todo →" link to the full protocol grid.
+  document.getElementById('inicioSeeAll')?.addEventListener('click', () => setActiveTab('checklist'));
+
+  // ─── Student tasks (assigned by admins in Tracking) ───────────────
+  // Stored in public.student_tasks. Admins create/delete tasks for any
+  // user_id; the student reads their own and toggles `done`. RLS is the
+  // same "any authenticated user" model as the other admin tables —
+  // gating lives in the UI. Degrades silently if the table doesn't
+  // exist yet (run supabase-schema.sql to create it).
+
+  function formatTaskDue(due) {
+    if (!due) return { text: '', overdue: false };
+    const parts = String(due).split('-').map(Number);
+    if (parts.length < 3 || parts.some(isNaN)) return { text: '', overdue: false };
+    const date = new Date(parts[0], parts[1] - 1, parts[2]);
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const diff = Math.round((date - today) / 86400000);
+    const MES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+    let text;
+    if (diff === 0) text = 'Hoy';
+    else if (diff === 1) text = 'Mañana';
+    else if (diff === -1) text = 'Ayer';
+    else text = parts[2] + ' ' + MES[parts[1] - 1];
+    return { text, overdue: diff < 0 };
+  }
+
+  async function fetchStudentTasks(userId) {
+    if (!supabaseClient || !userId) return [];
+    const { data, error } = await supabaseClient
+      .from('student_tasks')
+      .select('id, user_id, title, due_date, done, created_at')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: true });
+    if (error) { console.warn('[tasks] fetch failed', error.message); return []; }
+    return data || [];
+  }
+
+  async function createStudentTask(userId, title, dueDate) {
+    if (!supabaseClient || !userId || !title) return null;
+    const row = {
+      user_id: userId,
+      title: String(title).slice(0, 200),
+      due_date: dueDate || null,
+      done: false,
+      created_by: (typeof _userEmail === 'function' ? _userEmail() : null) || null,
+    };
+    const { data, error } = await supabaseClient.from('student_tasks').insert(row).select().single();
+    if (error) { console.error('[tasks] create failed', error.message); alert('No se pudo crear la tarea: ' + error.message); return null; }
+    return data;
+  }
+
+  async function setStudentTaskDone(id, done) {
+    if (!supabaseClient) return;
+    const { error } = await supabaseClient.from('student_tasks')
+      .update({ done: !!done, updated_at: new Date().toISOString() }).eq('id', id);
+    if (error) console.error('[tasks] update failed', error.message);
+  }
+
+  async function deleteStudentTask(id) {
+    if (!supabaseClient) return;
+    const { error } = await supabaseClient.from('student_tasks').delete().eq('id', id);
+    if (error) console.error('[tasks] delete failed', error.message);
+  }
+
+  // Render the current student's assigned tasks on the Inicio dashboard.
+  async function renderInicioTasks() {
+    const wrap = document.getElementById('inicioTasks');
+    const statusEl = document.getElementById('inicioTasksStatus');
+    if (!wrap) return;
+    const myId = window.Clerk && window.Clerk.user ? window.Clerk.user.id : null;
+    if (!myId || !supabaseClient) {
+      wrap.innerHTML = '<div class="inicio-tasks-empty">No disponible.</div>';
+      if (statusEl) statusEl.textContent = '';
+      return;
+    }
+    const tasks = await fetchStudentTasks(myId);
+    if (!tasks.length) {
+      wrap.innerHTML = '<div class="inicio-tasks-empty">No tienes tareas asignadas.</div>';
+      if (statusEl) statusEl.textContent = '';
+      return;
+    }
+    // Pending first, then done; due-date ascending within each group.
+    tasks.sort((a, b) => {
+      if (!!a.done !== !!b.done) return a.done ? 1 : -1;
+      const da = a.due_date || '9999', db = b.due_date || '9999';
+      return da < db ? -1 : da > db ? 1 : 0;
+    });
+    const pending = tasks.filter(t => !t.done).length;
+    if (statusEl) {
+      if (pending === 0) { statusEl.style.color = 'var(--success)'; statusEl.textContent = 'Todo hecho ✓'; }
+      else { statusEl.style.color = 'var(--text-tertiary)'; statusEl.textContent = pending + ' pendiente' + (pending === 1 ? '' : 's'); }
+    }
+    wrap.innerHTML = tasks.map(t => {
+      const due = formatTaskDue(t.due_date);
+      return ''
+        + '<button class="inicio-task' + (t.done ? ' is-done' : '') + '" type="button" data-task-id="' + t.id + '">'
+        +   '<span class="inicio-task-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>'
+        +   '<span class="inicio-task-body">'
+        +     '<span class="inicio-task-title">' + escapeHtml(t.title) + '</span>'
+        +     (due.text ? '<span class="inicio-task-due' + (due.overdue && !t.done ? ' is-overdue' : '') + '">' + escapeHtml(due.text) + '</span>' : '')
+        +   '</span>'
+        + '</button>';
+    }).join('');
+    wrap.querySelectorAll('.inicio-task').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = btn.dataset.taskId;
+        const nowDone = !btn.classList.contains('is-done');
+        btn.classList.toggle('is-done', nowDone);
+        await setStudentTaskDone(id, nowDone);
+        renderInicioTasks();
+      });
+    });
+  }
+
+  // Keep the sidebar's profile name/email in sync with Clerk + the
+  // editable display name.
+  function updateSidebarUser() {
+    const nameEl = document.getElementById('sidebarUserName');
+    const emailEl = document.getElementById('sidebarUserEmail');
+    if (nameEl && typeof getDisplayName === 'function') nameEl.textContent = getDisplayName();
+    if (emailEl && typeof _userEmail === 'function') emailEl.textContent = _userEmail() || '';
+  }
 
   // ─── SOPs folder grid ─────────────────────────────────────────────
   // Same folder UX as Checklist but no progress bar — replaced by a

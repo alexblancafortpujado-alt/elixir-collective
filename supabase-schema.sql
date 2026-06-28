@@ -152,6 +152,30 @@ create policy "known_users authed full" on public.known_users for all
   using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 
 
+-- ─── 9. student_tasks ─────────────────────────────────────────────────────
+-- Tasks an admin assigns to a student from the Tracking panel. The student
+-- sees them on their Inicio dashboard and can tick them done.
+create table if not exists public.student_tasks (
+  id          bigserial   primary key,
+  user_id     text        not null,        -- Clerk user id of the student
+  title       text        not null,
+  due_date    date,                         -- optional deadline
+  done        boolean     not null default false,
+  created_by  text,                         -- admin email that assigned it
+  created_at  timestamptz not null default now(),
+  updated_at  timestamptz not null default now()
+);
+create index if not exists student_tasks_user_id_idx on public.student_tasks (user_id);
+
+alter table public.student_tasks enable row level security;
+-- Same "any authenticated user" model as the other shared tables: admins
+-- write tasks for any student, students read/toggle their own. Gating of
+-- who can assign lives in the UI (isAdmin()). See SECURITY NOTE below.
+drop policy if exists "student_tasks authed full" on public.student_tasks;
+create policy "student_tasks authed full" on public.student_tasks for all
+  using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
+
+
 -- ─────────────────────────────────────────────────────────────────────────
 -- SECURITY NOTE
 -- ─────────────────────────────────────────────────────────────────────────
