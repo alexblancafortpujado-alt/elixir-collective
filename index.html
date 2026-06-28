@@ -6,21 +6,24 @@
 <title>Elixir Collective Checklist</title>
 <style>
   :root {
-    --bg: #0A0A10;
-    --surface: #1E1E2A;
-    --surface-raised: #2A2A39;
-    --border: rgba(255,255,255,0.18);
-    --border-strong: rgba(255,255,255,0.30);
-    --text-primary: #F4F5F9;
-    --text-secondary: #C7CBD5;
-    --text-tertiary: #9499A6;
-    --accent: #B26BFF;
-    --accent-hover: #C99AFF;
-    --accent-soft: rgba(178,107,255,0.18);
-    --accent-glow: rgba(178,107,255,0.35);
-    --success: #34D399;
-    --warning: #FBBF24;
-    --danger: #F87171;
+    /* Monocromo sobre negro puro — calcado del sistema "ink" de Espresso.
+       Sin acento de color: todo es blanco a distintas opacidades + grises. */
+    --bg: #0a0a0a;            /* ink-950 — fondo base */
+    --surface: #141414;       /* ink-850 — tarjetas */
+    --surface-raised: #1a1a1a;/* ink-800 — elevado / hover */
+    --border: rgba(255,255,255,0.07);
+    --border-strong: rgba(255,255,255,0.14);
+    --text-primary: rgba(255,255,255,0.92);
+    --text-secondary: rgba(255,255,255,0.50);
+    --text-tertiary: rgba(255,255,255,0.38);
+    /* "accent" ahora es blanco — mantiene los nombres para no tocar 1000 reglas */
+    --accent: #ffffff;
+    --accent-hover: #ffffff;
+    --accent-soft: rgba(255,255,255,0.10);
+    --accent-glow: rgba(255,255,255,0.18);
+    --success: #e6e6e6;       /* checks en blanco-hueso, no verde */
+    --warning: rgba(255,255,255,0.6);
+    --danger: #fca5a5;        /* rojo-300 solo para "vencido", como en la referencia */
   }
 
   * { box-sizing: border-box; }
@@ -858,7 +861,7 @@
   .tab-btn.is-active {
     background: var(--accent-soft);
     color: var(--accent-hover);
-    box-shadow: inset 0 0 0 1px rgba(59,130,246,0.25);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.14);
   }
 
   /* Empty-state placeholders for tabs awaiting content */
@@ -894,7 +897,7 @@
     gap: 8px;
     padding: 14px 12px 18px;
     margin: 4px 0 28px;
-    background: linear-gradient(180deg, rgba(168,85,247,0.04) 0%, transparent 100%);
+    background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 100%);
     border: 1px solid var(--border);
     border-radius: 16px;
     overflow-x: auto;
@@ -1240,7 +1243,7 @@
   .checklist-back:hover {
     background: var(--accent-soft);
     color: var(--accent-hover);
-    border-color: rgba(59,130,246,0.25);
+    border-color: rgba(255,255,255,0.14);
   }
   .checklist-detail-header {
     display: flex;
@@ -7999,9 +8002,10 @@
   }
 
   /* ═══════════════════════════════════════════════════════════════════
-     APP SHELL — left sidebar + main content. Replaces the old centered
-     top-tab layout. The sidebar holds the brand, the section nav
-     (Inicio / El Protocolo / Recursos / Tracking) and the user profile.
+     APP SHELL — calcado del sistema "ink" monocromo de Espresso.
+     Sidebar fijo a la izquierda (marca · Menú · Tu nivel · usuario) +
+     contenido principal centrado. Sin color: blanco a distintas
+     opacidades sobre negro puro.
      ═══════════════════════════════════════════════════════════════════ */
   .app-shell {
     display: flex;
@@ -8010,239 +8014,366 @@
     width: 100%;
   }
 
+  /* ─── Sidebar ──────────────────────────────────────────────────────── */
   .sidebar {
     position: sticky;
     top: 0;
     align-self: flex-start;
     height: 100vh;
-    flex: 0 0 250px;
-    width: 250px;
+    flex: 0 0 256px;
+    width: 256px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    padding: 22px 14px 18px;
-    border-right: 1px solid var(--border);
-    background:
-      linear-gradient(180deg, rgba(178,107,255,0.05) 0%, transparent 38%),
-      rgba(255,255,255,0.018);
+    padding: 16px;
+    border-right: 1px solid rgba(255,255,255,0.06);
+    background: #0e0e0e;
   }
 
   .sidebar-brand {
     display: flex;
     align-items: center;
-    gap: 11px;
-    padding: 6px 8px 14px;
+    gap: 12px;
+    padding: 4px 4px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    margin-bottom: 20px;
   }
   .sidebar-brand-logo {
-    width: 38px;
-    height: 38px;
-    flex: 0 0 38px;
-    border-radius: 11px;
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    border-radius: 12px;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 19px;
-    background: linear-gradient(150deg, var(--accent), #7C3AED);
-    box-shadow: 0 4px 16px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.25);
+    font-size: 20px;
+    border: 1px solid rgba(255,255,255,0.10);
+    background: #0e0e0e;
   }
-  .sidebar-brand-text { min-width: 0; }
+  .sidebar-brand-text { min-width: 0; line-height: 1.25; }
   .sidebar-brand-name {
-    font-size: 14.5px;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    color: var(--text-primary);
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
   .sidebar-brand-sub {
-    font-size: 11.5px;
-    color: var(--text-tertiary);
+    font-size: 12px;
+    color: rgba(255,255,255,0.40);
     margin-top: 1px;
   }
 
-  .sidebar-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    flex: 1 1 auto;
-    min-height: 0;
-  }
+  .sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
   .sidebar-nav-label {
-    font-size: 10.5px;
-    font-weight: 700;
-    letter-spacing: 0.16em;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--text-tertiary);
-    padding: 8px 12px 6px;
+    color: rgba(255,255,255,0.25);
+    padding: 0 12px 8px;
   }
   /* .tab-btn class kept on each button so the existing click-wiring and
      setActiveTab() toggling keep working — only the look changes here. */
   .side-btn {
     display: flex;
     align-items: center;
-    gap: 11px;
+    gap: 12px;
     width: 100%;
-    padding: 9px 12px;
+    padding: 10px 12px;
     border: none;
     background: transparent;
-    color: var(--text-secondary);
-    font-size: 13.5px;
-    font-weight: 500;
-    letter-spacing: -0.01em;
+    color: rgba(255,255,255,0.50);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0;
     text-transform: none;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
     text-align: left;
     transition: color 0.18s ease, background 0.18s ease;
     font-family: inherit;
   }
-  .side-btn svg { width: 18px; height: 18px; flex: 0 0 18px; opacity: 0.85; }
-  .side-btn:hover { color: var(--text-primary); background: rgba(255,255,255,0.04); }
+  .side-btn svg { width: 18px; height: 18px; flex: 0 0 18px; color: rgba(255,255,255,0.40); transition: color 0.18s ease; }
+  .side-btn:hover { color: rgba(255,255,255,0.80); background: rgba(255,255,255,0.04); }
+  .side-btn:hover svg { color: rgba(255,255,255,0.70); }
   .side-btn.is-active {
-    color: var(--text-primary);
+    color: #fff;
     background: rgba(255,255,255,0.07);
-    box-shadow: inset 0 0 0 1px var(--border);
+    box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.05);
   }
-  .side-btn.is-active svg { opacity: 1; color: var(--accent-hover); }
+  .side-btn.is-active svg { color: #fff; }
 
   /* Tracking (admin) nav button — hidden until revealed for admins.
      Needs the .side-btn.tab-btn-admin compound selector so it beats the
-     plain .side-btn { display:flex } rule defined later in this block. */
+     plain .side-btn rule defined later in this block. */
   .side-btn.tab-btn-admin { display: none; }
   .side-btn.tab-btn-admin.is-revealed {
     display: flex;
     background: transparent;
     border: none;
-    color: var(--text-secondary);
+    color: rgba(255,255,255,0.50);
   }
   .side-btn.tab-btn-admin.is-revealed:hover {
     background: rgba(255,255,255,0.04);
-    color: var(--text-primary);
+    color: rgba(255,255,255,0.80);
   }
   .side-btn.tab-btn-admin.is-revealed.is-active {
     background: rgba(255,255,255,0.07);
-    color: var(--text-primary);
-    box-shadow: inset 0 0 0 1px var(--border);
+    color: #fff;
+    box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.05);
   }
 
+  /* Footer stack: level card + user slot, pinned to the bottom. */
+  .sidebar-foot-stack {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 24px;
+  }
+
+  /* "Tu nivel" card */
+  .level-card {
+    border: 1px solid rgba(255,255,255,0.06);
+    background: #141414;
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .level-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .level-card-eyebrow {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+  }
+  .level-card-pts {
+    border-radius: 999px;
+    background: rgba(255,255,255,0.06);
+    padding: 1px 8px;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.70);
+    font-variant-numeric: tabular-nums;
+  }
+  .level-card-title {
+    margin-top: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .level-card-bar {
+    margin-top: 12px;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    overflow: hidden;
+  }
+  .level-card-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.85);
+    transition: width 0.7s cubic-bezier(0.16,1,0.3,1);
+  }
+  .level-card-meta {
+    margin-top: 8px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.40);
+  }
+
+  /* User slot */
   .sidebar-foot {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 12px 8px 4px;
-    margin-top: 6px;
-    border-top: 1px solid var(--border);
+    gap: 12px;
+    padding: 10px 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: #141414;
+    border-radius: 12px;
   }
-  .sidebar-user-meta { min-width: 0; flex: 1 1 auto; }
+  .sidebar-user-meta { min-width: 0; flex: 1 1 auto; line-height: 1.25; }
   .sidebar-user-name {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-primary);
+    font-size: 14px;
+    color: #fff;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
   .sidebar-user-email {
-    font-size: 11px;
-    color: var(--text-tertiary);
+    font-size: 12px;
+    color: rgba(255,255,255,0.40);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
+  /* ─── Main content ─────────────────────────────────────────────────── */
   .app-main {
     flex: 1 1 auto;
     min-width: 0;
-    padding: 40px clamp(20px, 4vw, 56px) 96px;
+    background: radial-gradient(1100px 560px at 50% -12%, rgba(255,255,255,0.045), transparent 62%);
   }
-  .app-main .tab-panel { max-width: 1200px; }
+  .app-main .tab-panel {
+    max-width: 1152px;
+    margin: 0 auto;
+    padding: 56px clamp(20px, 5vw, 40px);
+  }
+
+  /* Stagger fade-up, calcado de Espresso */
+  @keyframes ec-fade-up {
+    0%   { opacity: 0; transform: translateY(8px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  .ec-fade-up { animation: ec-fade-up 0.5s cubic-bezier(0.16,1,0.3,1) both; }
 
   /* ─── Inicio (home dashboard) ─────────────────────────────────────── */
-  .inicio-hero { margin-bottom: 26px; }
+  .inicio { display: flex; flex-direction: column; gap: 36px; }
+
+  .inicio-hero-head { }
   .inicio-eyebrow {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
+    gap: 8px;
     font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.16em;
+    font-weight: 500;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--text-tertiary);
-    margin-bottom: 12px;
+    color: rgba(255,255,255,0.35);
   }
   .inicio-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 8px var(--accent-glow);
+    width: 4px; height: 4px; border-radius: 50%;
+    background: rgba(255,255,255,0.40);
   }
   .inicio-greeting {
-    font-size: 40px;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    margin: 0 0 8px;
-    color: var(--text-primary);
+    font-size: 34px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 10px 0 0;
+    color: #fff;
   }
   .inicio-sub {
-    font-size: 14.5px;
-    color: var(--text-secondary);
-    margin: 0;
+    font-size: 14px;
+    color: rgba(255,255,255,0.45);
+    margin: 8px 0 0;
   }
 
+  /* Bento superior: héroe (2/3) + tareas (1/3) */
   .inicio-cards {
     display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 18px;
-    margin-bottom: 40px;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
   }
+
   .inicio-card {
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 24px 26px;
-    background:
-      linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+    border-radius: 24px;
+    background: linear-gradient(180deg, #1c1c1c 0%, #141414 100%);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255,255,255,0.045),
+      0 1px 2px 0 rgba(0,0,0,0.4),
+      0 16px 48px -32px rgba(0,0,0,0.95);
   }
   .inicio-card-eyebrow {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.16em;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--text-tertiary);
+    color: rgba(255,255,255,0.35);
   }
-  .inicio-card-progress { position: relative; overflow: hidden; min-height: 200px; display: flex; flex-direction: column; }
+
+  /* Héroe: número gigante */
+  .inicio-card-progress {
+    position: relative;
+    overflow: hidden;
+    padding: 32px;
+    background: linear-gradient(165deg, #232323 0%, #161616 60%);
+  }
+  .inicio-card-progress::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(600px 300px at 18% 0%, rgba(255,255,255,0.05), transparent 70%);
+  }
+  .inicio-hero-cog {
+    position: absolute;
+    right: 24px;
+    top: 24px;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.05);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.35);
+  }
+  .inicio-hero-cog svg { width: 16px; height: 16px; }
   .inicio-pct {
     display: flex;
-    align-items: flex-start;
-    line-height: 1;
-    margin: 18px 0 6px;
-    font-weight: 700;
+    align-items: flex-end;
+    gap: 6px;
+    margin-top: 12px;
+  }
+  .inicio-pct > span:first-child {
+    font-size: 88px;
+    font-weight: 600;
+    line-height: 0.9;
     letter-spacing: -0.04em;
-    color: var(--text-primary);
+    color: #fff;
   }
-  .inicio-pct > span:first-child { font-size: 86px; }
-  .inicio-pct-sign { font-size: 30px; color: var(--text-tertiary); margin-top: 8px; margin-left: 4px; }
-  .inicio-progress-meta {
-    font-size: 13px;
-    color: var(--text-secondary);
-    margin-top: auto;
-    margin-bottom: 14px;
+  .inicio-pct-sign {
+    font-size: 30px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.30);
+    margin-bottom: 12px;
   }
+  .inicio-hero-meta {
+    position: relative;
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+  }
+  .inicio-badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.06);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+    padding: 4px 11px;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.75);
+  }
+  .inicio-progress-meta { font-size: 14px; color: rgba(255,255,255,0.45); }
   .inicio-progress-bar {
-    height: 6px;
-    border-radius: 99px;
+    position: relative;
+    margin-top: 36px;
+    height: 4px;
+    border-radius: 999px;
     background: rgba(255,255,255,0.07);
-    overflow: hidden;
   }
   .inicio-progress-fill {
     height: 100%;
     width: 0%;
-    border-radius: 99px;
-    background: linear-gradient(90deg, var(--accent), var(--accent-hover));
-    box-shadow: 0 0 12px var(--accent-glow);
-    transition: width 0.5s cubic-bezier(0.22,1,0.36,1);
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: 0 0 6px 1px rgba(255,255,255,0.12), 0 0 18px 5px rgba(255,255,255,0.04);
+    transition: width 0.8s cubic-bezier(0.16,1,0.3,1), box-shadow 3s cubic-bezier(0.4,0,0.2,1);
+  }
+  .inicio-card-progress:hover .inicio-progress-fill {
+    box-shadow: 0 0 12px 2px rgba(255,255,255,0.32), 0 0 34px 10px rgba(255,255,255,0.14);
   }
 
-  .inicio-card-tasks { display: flex; flex-direction: column; }
+  /* Tareas */
+  .inicio-card-tasks { display: flex; flex-direction: column; padding: 24px; }
   .inicio-card-head {
     display: flex;
     align-items: center;
@@ -8250,20 +8381,29 @@
     margin-bottom: 16px;
   }
   .inicio-tasks-status {
-    font-size: 11.5px;
-    font-weight: 600;
-    color: var(--success);
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.06);
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.65);
   }
-  .inicio-tasks { display: flex; flex-direction: column; gap: 4px; flex: 1 1 auto; }
+  .inicio-tasks {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1 1 auto;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-right: -4px;
+    padding-right: 4px;
+  }
   .inicio-task {
     display: flex;
     align-items: flex-start;
     gap: 12px;
-    padding: 10px 6px;
-    border-radius: 10px;
+    padding: 8px 6px;
+    border-radius: 8px;
     cursor: pointer;
     transition: background 0.15s ease;
     text-align: left;
@@ -8273,150 +8413,216 @@
     font-family: inherit;
     width: 100%;
   }
-  .inicio-task:hover { background: rgba(255,255,255,0.03); }
+  .inicio-task:hover { background: rgba(255,255,255,0.02); }
   .inicio-task-check {
     flex: 0 0 20px;
     width: 20px; height: 20px;
     border-radius: 50%;
-    border: 1.5px solid var(--border-strong);
+    border: 1px solid rgba(255,255,255,0.20);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 1px;
+    margin-top: 2px;
     transition: background 0.15s ease, border-color 0.15s ease;
   }
-  .inicio-task-check svg { width: 12px; height: 12px; opacity: 0; color: #0A0A10; }
+  .inicio-task-check svg { width: 12px; height: 12px; opacity: 0; color: #0a0a0a; }
+  .inicio-task:hover .inicio-task-check { border-color: rgba(255,255,255,0.45); }
   .inicio-task.is-done .inicio-task-check {
-    background: var(--success);
-    border-color: var(--success);
+    background: #fff;
+    border-color: transparent;
   }
   .inicio-task.is-done .inicio-task-check svg { opacity: 1; }
   .inicio-task-body { min-width: 0; flex: 1 1 auto; }
-  .inicio-task-title { font-size: 14px; color: var(--text-primary); }
+  .inicio-task-title { font-size: 14px; line-height: 1.35; color: rgba(255,255,255,0.90); }
   .inicio-task.is-done .inicio-task-title {
     text-decoration: line-through;
-    color: var(--text-tertiary);
+    color: rgba(255,255,255,0.35);
   }
   .inicio-task-due {
-    font-size: 11.5px;
-    color: var(--text-tertiary);
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
     margin-top: 2px;
   }
-  .inicio-task-due.is-overdue { color: var(--danger); }
+  .inicio-task-due.is-overdue { color: rgba(252,165,165,0.90); }
   .inicio-tasks-empty {
     font-size: 13px;
-    color: var(--text-tertiary);
-    padding: 24px 6px;
+    color: rgba(255,255,255,0.40);
+    padding: 28px 6px;
     text-align: center;
   }
 
+  /* Módulos */
   .inicio-modules-head {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
     gap: 14px;
   }
   .inicio-modules-title {
-    font-size: 21px;
-    font-weight: 700;
-    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
     margin: 0;
-    color: var(--text-primary);
+    color: #fff;
   }
-  .inicio-modules-title span { color: var(--text-tertiary); font-weight: 600; }
-  .inicio-modules-sub { font-size: 13px; color: var(--text-tertiary); margin: 4px 0 0; }
+  .inicio-modules-title span { font-size: 16px; font-weight: 400; color: rgba(255,255,255,0.30); }
+  .inicio-modules-sub { font-size: 14px; color: rgba(255,255,255,0.40); margin: 2px 0 0; }
   .inicio-see-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
     border: none;
     background: transparent;
-    color: var(--text-secondary);
-    font-size: 13px;
-    font-weight: 600;
+    color: rgba(255,255,255,0.55);
+    font-size: 14px;
+    font-weight: 400;
     cursor: pointer;
     font-family: inherit;
-    padding: 6px 4px;
     white-space: nowrap;
     transition: color 0.15s ease;
   }
-  .inicio-see-all:hover { color: var(--text-primary); }
+  .inicio-see-all:hover { color: #fff; }
 
   .inicio-modules {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px 16px;
   }
-  .inicio-module {
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 18px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.008));
-    cursor: pointer;
+
+  /* ─── Folder card (módulo) — calcado de Espresso ───────────────────── */
+  .folder {
+    --folder-bg: #191919;
+    display: block;
+    width: 100%;
     text-align: left;
+    border: none;
+    background: transparent;
+    cursor: pointer;
     font-family: inherit;
     color: inherit;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    transition: transform 0.3s ease;
   }
-  .inicio-module:hover {
-    transform: translateY(-3px);
-    border-color: var(--border-strong);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
-  }
-  .inicio-module-top {
+  .folder:hover { transform: translateY(-4px); --folder-bg: #202020; }
+  .folder-tab-row { display: flex; }
+  .folder-tab {
+    position: relative;
+    height: 28px;
+    width: 44%;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 0 14px;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    background: var(--folder-bg);
+    transition: background 0.3s ease;
   }
-  .inicio-module-icon {
-    width: 46px; height: 46px;
+  .folder-tab::after {
+    content: '';
+    position: absolute;
+    right: -16px;
+    bottom: 0;
+    width: 16px;
+    height: 16px;
+    background: var(--folder-bg);
+    transition: background 0.3s ease;
+    -webkit-mask: radial-gradient(circle 16px at 16px 0, transparent 97%, #000 100%);
+    mask: radial-gradient(circle 16px at 16px 0, transparent 97%, #000 100%);
+  }
+  .folder-tab svg { width: 14px; height: 14px; color: rgba(255,255,255,0.30); }
+  .folder-tab-tag {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.40);
+  }
+  .folder-body {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 190px;
+    overflow: hidden;
+    padding: 20px;
+    border-radius: 24px;
+    border-top-left-radius: 0;
+    background: var(--folder-bg);
+    transition: background 0.3s ease;
+    box-shadow:
+      inset 0 1px 0 0 rgba(255,255,255,0.045),
+      0 1px 2px 0 rgba(0,0,0,0.4),
+      0 16px 48px -32px rgba(0,0,0,0.95);
+  }
+  .folder.is-active .folder-body { box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12); }
+  .folder-sheen {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(130% 85% at 12% 0%, rgba(255,255,255,0.06), transparent 52%);
+  }
+  .folder-icon-wrap { position: relative; display: inline-grid; place-items: center; }
+  .folder-icon-halo {
+    position: absolute;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+    filter: blur(16px);
+  }
+  .folder-icon {
+    position: relative;
+    width: 44px; height: 44px;
     border-radius: 12px;
     background-size: cover;
     background-position: center;
-    background-color: var(--surface-raised);
-    box-shadow: inset 0 0 0 1px var(--border);
+    background-color: #1a1a1a;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+    transition: transform 0.3s ease;
   }
-  .inicio-module-tag {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-tertiary);
-    padding: 4px 9px;
-    border-radius: 99px;
-    border: 1px solid var(--border);
+  .folder:hover .folder-icon { transform: scale(1.08); }
+  .folder-icon.is-locked { opacity: 0.3; }
+  .folder-foot { position: relative; margin-top: auto; padding-top: 28px; }
+  .folder-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    margin-bottom: 8px;
+    background: rgba(255,255,255,0.45);
   }
-  .inicio-module-tag.is-active { color: var(--accent-hover); border-color: var(--accent-soft); background: var(--accent-soft); }
-  .inicio-module-tag.is-done { color: var(--success); border-color: rgba(52,211,153,0.3); }
-  .inicio-module-name {
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    color: var(--text-primary);
-  }
-  .inicio-module-sub { font-size: 12.5px; color: var(--text-tertiary); margin-top: 2px; }
-  .inicio-module-bar {
-    height: 5px;
-    border-radius: 99px;
-    background: rgba(255,255,255,0.07);
-    overflow: hidden;
+  .folder-name { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; color: #fff; }
+  .folder-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.45);
     margin-top: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
-  .inicio-module-fill {
+  .folder-meta { font-size: 12px; color: rgba(255,255,255,0.30); margin-top: 8px; }
+  .folder-bar {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 3px;
+    background: rgba(255,255,255,0.05);
+  }
+  .folder-fill {
     height: 100%;
-    border-radius: 99px;
-    background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+    background: rgba(255,255,255,0.40);
+    transition: width 0.7s cubic-bezier(0.16,1,0.3,1);
   }
 
   /* ─── Tracking (admin) — per-student task assignment ───────────────── */
   .admin-row-tasks-toggle {
     margin-top: 12px;
-    border: 1px solid var(--border);
+    border: 1px solid rgba(255,255,255,0.07);
     background: rgba(255,255,255,0.02);
-    color: var(--text-secondary);
+    color: rgba(255,255,255,0.55);
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 500;
     font-family: inherit;
     padding: 7px 13px;
     border-radius: 9px;
@@ -8426,21 +8632,21 @@
     gap: 7px;
     transition: color 0.15s ease, border-color 0.15s ease;
   }
-  .admin-row-tasks-toggle:hover { color: var(--text-primary); border-color: var(--border-strong); }
+  .admin-row-tasks-toggle:hover { color: #fff; border-color: rgba(255,255,255,0.14); }
   .admin-row-tasks-toggle .admin-task-pill {
     font-size: 10.5px;
-    background: var(--accent-soft);
-    color: var(--accent-hover);
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.75);
     padding: 1px 7px;
-    border-radius: 99px;
+    border-radius: 999px;
     font-variant-numeric: tabular-nums;
   }
   .admin-task-panel {
     margin-top: 12px;
     padding: 14px;
-    border: 1px solid var(--border);
+    border: 1px solid rgba(255,255,255,0.07);
     border-radius: 12px;
-    background: rgba(0,0,0,0.18);
+    background: rgba(0,0,0,0.25);
   }
   .admin-task-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
   .admin-task-row {
@@ -8451,18 +8657,18 @@
     border-radius: 9px;
     background: rgba(255,255,255,0.025);
   }
-  .admin-task-row.is-done .admin-task-row-title { text-decoration: line-through; color: var(--text-tertiary); }
-  .admin-task-row-title { flex: 1 1 auto; font-size: 13px; color: var(--text-primary); min-width: 0; }
+  .admin-task-row.is-done .admin-task-row-title { text-decoration: line-through; color: rgba(255,255,255,0.38); }
+  .admin-task-row-title { flex: 1 1 auto; font-size: 13px; color: #fff; min-width: 0; }
   .admin-task-row-due {
     font-size: 11px;
-    color: var(--text-tertiary);
+    color: rgba(255,255,255,0.38);
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
   }
   .admin-task-row-del {
     border: none;
     background: transparent;
-    color: var(--text-tertiary);
+    color: rgba(255,255,255,0.38);
     cursor: pointer;
     font-size: 15px;
     line-height: 1;
@@ -8470,21 +8676,17 @@
     border-radius: 6px;
     transition: color 0.15s ease, background 0.15s ease;
   }
-  .admin-task-row-del:hover { color: var(--danger); background: rgba(248,113,113,0.12); }
-  .admin-task-empty { font-size: 12.5px; color: var(--text-tertiary); padding: 6px 2px 12px; }
-  .admin-task-add {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
+  .admin-task-row-del:hover { color: #fca5a5; background: rgba(252,165,165,0.12); }
+  .admin-task-empty { font-size: 12.5px; color: rgba(255,255,255,0.38); padding: 6px 2px 12px; }
+  .admin-task-add { display: flex; gap: 8px; flex-wrap: wrap; }
   .admin-task-add input[type="text"] {
     flex: 1 1 180px;
     min-width: 140px;
     padding: 9px 12px;
     border-radius: 9px;
-    border: 1px solid var(--border);
+    border: 1px solid rgba(255,255,255,0.07);
     background: rgba(255,255,255,0.03);
-    color: var(--text-primary);
+    color: #fff;
     font-size: 13px;
     font-family: inherit;
     outline: none;
@@ -8492,35 +8694,37 @@
   .admin-task-add input[type="date"] {
     padding: 8px 10px;
     border-radius: 9px;
-    border: 1px solid var(--border);
+    border: 1px solid rgba(255,255,255,0.07);
     background: rgba(255,255,255,0.03);
-    color: var(--text-secondary);
+    color: rgba(255,255,255,0.55);
     font-size: 12.5px;
     font-family: inherit;
     color-scheme: dark;
     outline: none;
   }
-  .admin-task-add input:focus { border-color: var(--border-strong); }
+  .admin-task-add input:focus { border-color: rgba(255,255,255,0.20); }
   .admin-task-add-btn {
     padding: 9px 16px;
     border-radius: 9px;
     border: none;
-    background: var(--accent);
-    color: #0A0A10;
+    background: #fff;
+    color: #0a0a0a;
     font-size: 12.5px;
-    font-weight: 700;
+    font-weight: 600;
     font-family: inherit;
     cursor: pointer;
-    transition: background 0.15s ease;
+    transition: opacity 0.15s ease;
   }
-  .admin-task-add-btn:hover { background: var(--accent-hover); }
+  .admin-task-add-btn:hover { opacity: 0.85; }
   .admin-task-add-btn:disabled { opacity: 0.5; cursor: default; }
 
   /* ─── Responsive: collapse the sidebar into a top bar ──────────────── */
-  @media (max-width: 880px) {
+  @media (max-width: 1000px) {
     .app-shell { flex-direction: column; }
     .sidebar {
-      position: static;
+      position: sticky;
+      top: 0;
+      z-index: 30;
       height: auto;
       width: auto;
       flex: none;
@@ -8528,11 +8732,13 @@
       flex-wrap: wrap;
       align-items: center;
       gap: 8px 4px;
-      padding: 12px 14px;
+      padding: 10px 14px;
       border-right: none;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      background: rgba(14,14,14,0.92);
+      backdrop-filter: blur(8px);
     }
-    .sidebar-brand { padding: 4px 6px; flex: 0 0 auto; }
+    .sidebar-brand { padding: 4px 6px; margin: 0; border-bottom: none; flex: 0 0 auto; }
     .sidebar-nav {
       flex-direction: row;
       flex: 1 1 100%;
@@ -8543,18 +8749,18 @@
     }
     .sidebar-nav-label { display: none; }
     .side-btn { width: auto; white-space: nowrap; padding: 8px 12px; }
-    .sidebar-foot {
-      margin: 0 0 0 auto;
-      padding: 0;
-      border-top: none;
-      order: 2;
-      flex: 0 0 auto;
-    }
+    .sidebar-foot-stack { margin: 0 0 0 auto; padding: 0; order: 2; flex: 0 0 auto; }
+    .level-card { display: none; }
+    .sidebar-foot { border: none; background: transparent; padding: 0; }
     .sidebar-user-meta { display: none; }
-    .app-main { padding: 24px 18px 72px; }
-    .inicio-greeting { font-size: 30px; }
+    .app-main .tab-panel { padding: 28px 18px 72px; }
     .inicio-cards { grid-template-columns: 1fr; }
+    .inicio-greeting { font-size: 28px; }
     .inicio-pct > span:first-child { font-size: 64px; }
+    .inicio-modules { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 620px) {
+    .inicio-modules { grid-template-columns: 1fr; }
   }
 </style>
 <script
@@ -8608,11 +8814,23 @@
       </button>
     </nav>
 
-    <div class="sidebar-foot">
-      <div id="clerkUserButton"></div>
-      <div class="sidebar-user-meta">
-        <div class="sidebar-user-name" id="sidebarUserName">—</div>
-        <div class="sidebar-user-email" id="sidebarUserEmail"></div>
+    <div class="sidebar-foot-stack">
+      <div class="level-card">
+        <div class="level-card-head">
+          <span class="level-card-eyebrow">Tu nivel</span>
+          <span class="level-card-pts" id="levelCardPts">0 pts</span>
+        </div>
+        <div class="level-card-title" id="levelCardTitle">Explorador</div>
+        <div class="level-card-bar"><div class="level-card-fill" id="levelCardFill"></div></div>
+        <div class="level-card-meta" id="levelCardMeta">0/0 pasos · 0/9 módulos</div>
+      </div>
+
+      <div class="sidebar-foot">
+        <div id="clerkUserButton"></div>
+        <div class="sidebar-user-meta">
+          <div class="sidebar-user-name" id="sidebarUserName">—</div>
+          <div class="sidebar-user-email" id="sidebarUserEmail"></div>
+        </div>
       </div>
     </div>
   </aside>
@@ -8621,21 +8839,27 @@
 
 <div class="tab-panel is-active" data-tab="inicio">
   <div class="inicio">
-    <div class="inicio-hero">
+    <div class="inicio-hero ec-fade-up">
       <div class="inicio-eyebrow"><span class="inicio-dot"></span> Tu progreso</div>
       <h1 class="inicio-greeting">Hola, <span class="dash-name" id="dashName" title="Click para editar tu nombre" tabindex="0">amigo</span></h1>
-      <p class="inicio-sub">El camino para construir tu marca, paso a paso.</p>
+      <p class="inicio-sub">El camino hacia una marca personal magnética.</p>
     </div>
 
     <div class="inicio-cards">
-      <div class="inicio-card inicio-card-progress">
+      <div class="inicio-card inicio-card-progress ec-fade-up">
+        <span class="inicio-hero-cog" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+        </span>
         <div class="inicio-card-eyebrow">Progreso del protocolo</div>
         <div class="inicio-pct"><span id="inicioPct">0</span><span class="inicio-pct-sign">%</span></div>
-        <div class="inicio-progress-meta" id="inicioSteps">0 de 0 pasos completados</div>
+        <div class="inicio-hero-meta">
+          <span class="inicio-badge" id="inicioLevelBadge">Nivel · Explorador</span>
+          <span class="inicio-progress-meta" id="inicioSteps">0 de 0 pasos completados</span>
+        </div>
         <div class="inicio-progress-bar"><div class="inicio-progress-fill" id="inicioProgressFill"></div></div>
       </div>
 
-      <div class="inicio-card inicio-card-tasks">
+      <div class="inicio-card inicio-card-tasks ec-fade-up" style="animation-delay:60ms">
         <div class="inicio-card-head">
           <div class="inicio-card-eyebrow">Tus tareas</div>
           <span class="inicio-tasks-status" id="inicioTasksStatus"></span>
@@ -8646,14 +8870,18 @@
       </div>
     </div>
 
-    <div class="inicio-modules-head">
-      <div>
-        <h2 class="inicio-modules-title">Tus módulos <span id="inicioModulesCount"></span></h2>
-        <p class="inicio-modules-sub">El protocolo, módulo a módulo</p>
+    <div>
+      <div class="inicio-modules-head">
+        <div>
+          <h2 class="inicio-modules-title">Tus módulos <span id="inicioModulesCount"></span></h2>
+          <p class="inicio-modules-sub">El protocolo, módulo a módulo</p>
+        </div>
+        <button class="inicio-see-all" type="button" id="inicioSeeAll">Ver todo
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
       </div>
-      <button class="inicio-see-all" type="button" id="inicioSeeAll">Ver todo →</button>
+      <div class="inicio-modules" id="inicioModules"></div>
     </div>
-    <div class="inicio-modules" id="inicioModules"></div>
   </div>
 </div><!-- /tab-panel inicio -->
 
@@ -20053,7 +20281,7 @@
   // missing dep degrades to silently no celebration rather than crashing.
   function fireCompletionConfetti() {
     if (typeof window.confetti !== 'function') return;
-    const colors = ['#A855F7', '#C084FC', '#E9D5FF', '#FFFFFF', '#7C3AED'];
+    const colors = ['#FFFFFF', '#E6E6E6', '#BFBFBF', '#8A8A8A', '#FFFFFF'];
     window.confetti({ particleCount: 80, angle: 60,  spread: 70, startVelocity: 55, origin: { x: 0.05, y: 0.75 }, colors });
     window.confetti({ particleCount: 80, angle: 120, spread: 70, startVelocity: 55, origin: { x: 0.95, y: 0.75 }, colors });
     setTimeout(() => {
@@ -20069,7 +20297,7 @@
   // column ("Prenda fabricada"). Green-leaning palette to read as "shipped".
   function fireKanbanFinishConfetti() {
     if (typeof window.confetti !== 'function') return;
-    const colors = ['#34D399', '#10B981', '#A855F7', '#FFFFFF'];
+    const colors = ['#FFFFFF', '#D4D4D4', '#9A9A9A', '#FFFFFF'];
     window.confetti({ particleCount: 110, spread: 95, startVelocity: 45, scalar: 0.95, origin: { y: 0.55 }, colors });
     if (navigator.vibrate) { try { navigator.vibrate([14, 36, 22]); } catch (e) {} }
   }
@@ -20529,6 +20757,23 @@
     return { done, total, pct: total > 0 ? Math.round((done / total) * 100) : 0 };
   }
 
+  // ─── Niveles & puntos (calcado del sistema de gamificación de Espresso) ──
+  const LEVEL_TITLES = [
+    'Explorador', 'Aprendiz', 'Practicante', 'Estratega',
+    'Especialista', 'Referente', 'Maestro de Marca',
+  ];
+  const POINTS_PER_STEP = 50;
+  function levelTitle(modulesComplete) {
+    return LEVEL_TITLES[Math.min(modulesComplete, LEVEL_TITLES.length - 1)];
+  }
+  // Nº de checklists (módulos) terminados al 100%.
+  function modulesCompleteCount() {
+    return CHECKLISTS.filter(c => {
+      const p = getChecklistProgress(c.id);
+      return p.total > 0 && p.pct === 100;
+    }).length;
+  }
+
   function renderInicioModules() {
     const wrap = document.getElementById('inicioModules');
     if (!wrap) return;
@@ -20542,28 +20787,37 @@
       if (p.total > 0 && p.pct < 100) { activeId = c.id; break; }
     }
 
-    wrap.innerHTML = CHECKLISTS.map(c => {
+    const COG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>';
+
+    wrap.innerHTML = CHECKLISTS.map((c, i) => {
       const p = getChecklistProgress(c.id);
       const paso = checklistPaso(c.id);
-      let tag = paso, tagCls = '';
-      if (p.total > 0 && p.pct === 100) { tag = 'Completo'; tagCls = ' is-done'; }
-      else if (c.id === activeId) { tag = 'Activo'; tagCls = ' is-active'; }
-      const sub = p.total > 0 ? (p.done + '/' + p.total + ' pasos · ' + paso) : 'Próximamente';
+      const isActive = c.id === activeId;
+      const tag = isActive ? 'Activo' : '';
+      const meta = p.total > 0 ? (p.done + '/' + p.total + ' pasos · ' + paso) : 'Próximamente';
+      const sub = checklistSubtitle(c.id);
       return ''
-        + '<button class="inicio-module" type="button" data-checklist="' + escapeHtml(c.id) + '">'
-        +   '<div class="inicio-module-top">'
-        +     '<div class="inicio-module-icon" style="background-image:url(\'' + c.id + '-progress.png\')"></div>'
-        +     '<span class="inicio-module-tag' + tagCls + '">' + escapeHtml(tag) + '</span>'
+        + '<button class="folder ec-fade-up' + (isActive ? ' is-active' : '') + '" type="button" data-checklist="' + escapeHtml(c.id) + '" style="animation-delay:' + (i * 50) + 'ms">'
+        +   '<div class="folder-tab-row"><div class="folder-tab">' + COG
+        +     (tag ? '<span class="folder-tab-tag">' + tag + '</span>' : '')
+        +   '</div></div>'
+        +   '<div class="folder-body">'
+        +     '<span class="folder-sheen"></span>'
+        +     '<span class="folder-icon-wrap"><span class="folder-icon-halo"></span>'
+        +       '<span class="folder-icon" style="background-image:url(\'' + c.id + '-progress.png\')"></span>'
+        +     '</span>'
+        +     '<div class="folder-foot">'
+        +       '<span class="folder-dot"></span>'
+        +       '<div class="folder-name">' + escapeHtml(c.name) + '</div>'
+        +       (sub ? '<div class="folder-sub">' + escapeHtml(sub) + '</div>' : '')
+        +       '<div class="folder-meta">' + escapeHtml(meta) + '</div>'
+        +     '</div>'
+        +     '<div class="folder-bar"><div class="folder-fill" style="width:' + p.pct + '%"></div></div>'
         +   '</div>'
-        +   '<div>'
-        +     '<div class="inicio-module-name">' + escapeHtml(c.name) + '</div>'
-        +     '<div class="inicio-module-sub">' + escapeHtml(sub) + '</div>'
-        +   '</div>'
-        +   '<div class="inicio-module-bar"><div class="inicio-module-fill" style="width:' + p.pct + '%"></div></div>'
         + '</button>';
     }).join('');
 
-    wrap.querySelectorAll('.inicio-module').forEach(card => {
+    wrap.querySelectorAll('.folder').forEach(card => {
       card.addEventListener('click', () => {
         const id = card.dataset.checklist;
         setActiveTab('checklist');
@@ -20572,17 +20826,43 @@
     });
   }
 
+  // Short descriptor under a module name = the Paso group's subtitle.
+  function checklistSubtitle(id) {
+    for (const g of CHECKLIST_GROUPS) {
+      if (g.checklists.some(c => c.id === id)) return g.subtitle || '';
+    }
+    return '';
+  }
+
   function renderInicio() {
     try { renderDashName(); } catch (e) {}
     const o = inicioOverall();
+    const modulesDone = modulesCompleteCount();
     const pctEl   = document.getElementById('inicioPct');
     const fillEl  = document.getElementById('inicioProgressFill');
     const stepsEl = document.getElementById('inicioSteps');
+    const badgeEl = document.getElementById('inicioLevelBadge');
     if (pctEl)   pctEl.textContent = o.pct;
     if (fillEl)  fillEl.style.width = o.pct + '%';
     if (stepsEl) stepsEl.textContent = o.done + ' de ' + o.total + ' pasos completados';
+    if (badgeEl) badgeEl.textContent = 'Nivel · ' + levelTitle(modulesDone);
+    updateSidebarLevel(o, modulesDone);
     renderInicioModules();
     renderInicioTasks();
+  }
+
+  // Refresh the "Tu nivel" card in the sidebar.
+  function updateSidebarLevel(o, modulesDone) {
+    o = o || inicioOverall();
+    if (typeof modulesDone !== 'number') modulesDone = modulesCompleteCount();
+    const pts   = document.getElementById('levelCardPts');
+    const title = document.getElementById('levelCardTitle');
+    const fill  = document.getElementById('levelCardFill');
+    const meta  = document.getElementById('levelCardMeta');
+    if (pts)   pts.textContent = (o.done * POINTS_PER_STEP) + ' pts';
+    if (title) title.textContent = levelTitle(modulesDone);
+    if (fill)  fill.style.width = o.pct + '%';
+    if (meta)  meta.textContent = o.done + '/' + o.total + ' pasos · ' + modulesDone + '/' + CHECKLISTS.length + ' módulos';
   }
 
   // Jump from the "Ver todo →" link to the full protocol grid.
