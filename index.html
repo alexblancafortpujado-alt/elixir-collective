@@ -9022,12 +9022,45 @@
     border: 1px solid rgba(255,255,255,0.06);
     border-radius: 16px;
     background: linear-gradient(180deg, #1c1c1c 0%, #141414 100%);
-    padding: 18px;
+    padding: 20px;
     box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.045), 0 16px 48px -32px rgba(0,0,0,0.95);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
-  .track-kpi-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.35); }
-  .track-kpi-value { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; color: #fff; margin-top: 8px; }
+  .track-kpi:hover {
+    transform: translateY(-2px);
+    box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.07), 0 28px 60px -28px rgba(0,0,0,0.95);
+  }
+  .track-kpi-head { display: flex; align-items: center; gap: 10px; }
+  .track-kpi-icon {
+    display: grid;
+    place-items: center;
+    width: 32px; height: 32px;
+    flex: 0 0 32px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: #1a1a1a;
+    color: rgba(255,255,255,0.55);
+  }
+  .track-kpi-icon svg { width: 16px; height: 16px; }
+  .track-kpi-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.40); }
+  .track-kpi-value { font-size: 30px; font-weight: 600; letter-spacing: -0.02em; color: #fff; margin-top: 16px; }
   .track-kpi-hint { font-size: 12px; color: rgba(255,255,255,0.40); margin-top: 4px; }
+
+  /* Detalle: 2 columnas (progreso por módulo + actividad reciente) */
+  .track-grid2 {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 24px;
+    margin-bottom: 28px;
+  }
+  .track-grid2 .track-panel { margin-bottom: 0; }
+  .track-activity { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 16px; }
+  .track-act-item { display: flex; align-items: flex-start; gap: 12px; }
+  .track-act-dot { margin-top: 7px; width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.40); flex: 0 0 6px; }
+  .track-act-body { min-width: 0; }
+  .track-act-label { font-size: 14px; color: rgba(255,255,255,0.85); }
+  .track-act-time { font-size: 12px; color: rgba(255,255,255,0.40); margin-top: 2px; }
+  .track-act-empty { font-size: 14px; color: rgba(255,255,255,0.45); }
 
   .track-panel {
     border: 1px solid rgba(255,255,255,0.06);
@@ -9050,6 +9083,7 @@
   @media (max-width: 1000px) {
     .res-grid { grid-template-columns: repeat(2, 1fr); }
     .track-kpis { grid-template-columns: repeat(2, 1fr); }
+    .track-grid2 { grid-template-columns: 1fr; }
     .track-card-prog, .track-card-time { display: none; }
   }
   @media (max-width: 620px) {
@@ -18650,9 +18684,10 @@
       const byUser = new Map();
       for (const row of (stateRes.data || [])) {
         const checklistId = row.key.replace('checklist_done.', '');
-        if (!byUser.has(row.user_id)) byUser.set(row.user_id, { maps: {}, latestUpdate: null });
+        if (!byUser.has(row.user_id)) byUser.set(row.user_id, { maps: {}, latestUpdate: null, updatedBy: {} });
         const u = byUser.get(row.user_id);
         u.maps[checklistId] = row.value || {};
+        u.updatedBy[checklistId] = row.updated_at;
         if (!u.latestUpdate || row.updated_at > u.latestUpdate) u.latestUpdate = row.updated_at;
       }
 
@@ -18672,6 +18707,7 @@
           completed,
           percentage: moduleTotal > 0 ? Math.round((completed / moduleTotal) * 100) : 0,
           perChecklist,
+          perChecklistUpdated: u.updatedBy,
           updatedAt: u.latestUpdate,
           isMe: userId === myId,
         });
@@ -18693,8 +18729,8 @@
         }
       } catch (e) { console.warn('[tracking] tasks load error', e); }
 
-      countEl.textContent = students.length + ' student' + (students.length === 1 ? '' : 's');
-      refreshTimeEl.textContent = 'updated ' + adminRelativeTime(new Date().toISOString());
+      countEl.textContent = students.length + ' alumno' + (students.length === 1 ? '' : 's');
+      refreshTimeEl.textContent = 'actualizado ' + adminRelativeTime(new Date().toISOString());
       renderAdminTable(students, totals, moduleTotal, tasksByUser);
     } catch (e) {
       console.error('[admin] load failed', e);
@@ -18762,10 +18798,21 @@
     });
   }
 
-  function _trackKpi(label, value, hint) {
+  // Minimal lucide-style icons for the KPI cards (calcado de StatCard).
+  const KPI_ICONS = {
+    gauge: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>',
+    check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>',
+    layers: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5-9 5-9-5 9-5z"/><path d="m3 12 9 5 9-5"/><path d="m3 17 9 5 9-5"/></svg>',
+    clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+  };
+
+  function _trackKpi(icon, label, value, hint) {
     return ''
       + '<div class="track-kpi">'
-      +   '<div class="track-kpi-label">' + escapeHtml(label) + '</div>'
+      +   '<div class="track-kpi-head">'
+      +     '<span class="track-kpi-icon">' + (KPI_ICONS[icon] || '') + '</span>'
+      +     '<span class="track-kpi-label">' + escapeHtml(label) + '</span>'
+      +   '</div>'
       +   '<div class="track-kpi-value">' + escapeHtml(String(value)) + '</div>'
       +   (hint ? '<div class="track-kpi-hint">' + escapeHtml(hint) + '</div>' : '')
       + '</div>';
@@ -18797,6 +18844,25 @@
         + '</div>';
     }).join('');
 
+    // Actividad reciente — derivada de cuándo se tocó cada checklist por
+    // última vez (Elixir no registra eventos granulares como Espresso).
+    const recent = Object.keys(st.perChecklistUpdated || {})
+      .map(id => ({ id, at: st.perChecklistUpdated[id] }))
+      .filter(x => x.at)
+      .sort((a, b) => (a.at < b.at ? 1 : -1))
+      .slice(0, 6)
+      .map(x => {
+        const c = CHECKLISTS.find(cc => cc.id === x.id);
+        return { label: 'Avanzó en ' + (c ? c.name : x.id), at: x.at };
+      });
+    const activityHtml = recent.length
+      ? '<ul class="track-activity">' + recent.map(a =>
+          '<li class="track-act-item"><span class="track-act-dot"></span>'
+          + '<div class="track-act-body"><div class="track-act-label">' + escapeHtml(a.label) + '</div>'
+          + '<div class="track-act-time">' + escapeHtml(adminRelativeTime(a.at)) + '</div></div></li>'
+        ).join('') + '</ul>'
+      : '<p class="track-act-empty">Aún no hay actividad.</p>';
+
     detail.innerHTML = ''
       + '<button class="track-back" type="button" id="trackBackBtn">' + ICON_BACK + ' Volver a alumnos</button>'
       + '<div class="track-detail-head">'
@@ -18805,12 +18871,15 @@
       +     '<div class="track-detail-sub">' + escapeHtml(adminShortId(st.userId)) + '</div></div>'
       + '</div>'
       + '<div class="track-kpis">'
-      +   _trackKpi('Progreso', st.percentage + '%', st.completed + '/' + moduleTotal + ' pasos')
-      +   _trackKpi('Pasos hechos', st.completed, 'de ' + moduleTotal)
-      +   _trackKpi('Módulos completos', modulesDone, 'de ' + CHECKLISTS.length)
-      +   _trackKpi('Última actividad', adminRelativeTime(st.updatedAt), '')
+      +   _trackKpi('gauge', 'Progreso', st.percentage + '%', st.completed + '/' + moduleTotal + ' pasos')
+      +   _trackKpi('check', 'Pasos hechos', st.completed, 'de ' + moduleTotal)
+      +   _trackKpi('layers', 'Módulos completos', modulesDone, 'de ' + CHECKLISTS.length)
+      +   _trackKpi('clock', 'Última actividad', adminRelativeTime(st.updatedAt), '')
       + '</div>'
-      + '<div class="track-panel"><h2 class="track-panel-title">Progreso por módulo</h2>' + bars + '</div>'
+      + '<div class="track-grid2">'
+      +   '<div class="track-panel"><h2 class="track-panel-title">Progreso por módulo</h2>' + bars + '</div>'
+      +   '<div class="track-panel"><h2 class="track-panel-title">Actividad reciente</h2>' + activityHtml + '</div>'
+      + '</div>'
       + '<div class="track-panel"><h2 class="track-panel-title">Deberes</h2>'
       +   '<p style="font-size:13px;color:rgba(255,255,255,0.45);margin:-10px 0 16px">Ponle tareas con fecha. Aparecen en su panel de Inicio.</p>'
       +   '<div id="trackTaskHost"></div>'
