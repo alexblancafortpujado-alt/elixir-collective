@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 0.2 — Investigación de mercado y validación de nicho</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 0 · Fundamentos y Estrategia</p>
+    <h1 class="rv">Investigación y validación</h1>
+    <p class="meta rv">SOP 0.2 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Comprueba que hay mercado antes de producir</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que <strong>compruebes que hay un mercado real antes de fabricar</strong>. En la Fase 0.1 definiste tu concepto: qué quieres decir. Aquí verificas que <span class="hl">hay suficiente gente que quiere oírlo</span>, que puedes encontrarla, y que pagará el precio que necesitas para vivir de esto.
+    </p>
+    <p>Esto importa más en moda que en casi cualquier otro negocio, y la razón es una palabra: <strong>MOQ</strong> (cantidad mínima de pedido). Una fábrica no te hace 3 sudaderas; te hace 100 o 300. El error en moda no es barato: es un almacén lleno de prenda que nadie quiere y varios miles de euros congelados. La investigación es el seguro que evita ese escenario.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 7 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que compruebes que hay un mercado real antes de fabricar. En la Fase 0.1 definiste qué quieres decir; aquí verificas que hay suficiente gente que quiere oírlo, que puedes encontrarla, y que pagará el precio que necesitas.</p>
+      <p>El resultado concreto es un documento que contiene: tu nicho definido con precisión, la prueba de que la tribu existe y dónde se junta, el mapa de competencia con el hueco que vas a ocupar, el lenguaje literal de tu cliente, y —lo más importante— <span class="gold">evidencia de demanda real</span> (gente que ha puesto su email, su reserva o su dinero antes de que exista el producto).</p>
+      <p class="pull">Si te saltas esto: produces basándote en tu intuición y en el «a mis amigos les encanta», fabricas 200 unidades, y descubres que el «me lo compraría» no se convierte en compra. La diferencia entre una marca que arranca y un almacén de stock muerto casi siempre está en si se hizo este paso.</p>
+
+      <h3><span class="hn">1.2</span>Principios no negociables</h3>
+      <ol>
+        <li><b>Valida con dinero o compromiso real, no con opiniones.</b> «Me encanta, te lo compraría» no es validación: es cortesía. Un email dejado o una reserva pagada sí lo es.</li>
+        <li><b>Un nicho no es una estética.</b> Es la intersección de identidad + estética + valores + rango de precio. «Streetwear» no es un nicho; «ropa técnica para el que corre por ciudad y odia parecer deportista» sí.</li>
+        <li><b>No busques un mercado vacío; busca uno con demanda y un hueco.</b> Un espacio totalmente vacío suele estarlo porque nadie lo quiere. Quieres demanda probada mal atendida.</li>
+        <li><b>La tribu tiene que ser localizable.</b> Si no sabes dónde se junta física o digitalmente, no podrás venderle por mucho que exista.</li>
+        <li><b>Investiga para encontrar el hueco, no para copiar al líder.</b> Copiar al que va primero te condena a ser una versión peor de algo que ya existe.</li>
+        <li><b>Mejor un nicho pequeño y ardiente que uno grande y tibio.</b> 1.000 personas obsesionadas construyen una marca; 100.000 indiferentes no.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De la intuición a la demanda probada</h2>
+      <p>Siete pasos que te llevan de «creo que esto podría funcionar» a «tengo pruebas de que funciona». Hazlos en orden.</p>
+
+      <h3><span class="hn">2.1</span>Definir con precisión el nicho a validar</h3>
+      <p>Antes de investigar nada, afila qué vas a validar exactamente. La mayoría define su nicho tan amplio que es imposible validarlo ni ganarlo. Un nicho de moda real se compone de cuatro capas juntas:</p>
+      <ol>
+        <li><b>Identidad:</b> quién es esta persona (no su edad — quién ES). El corredor urbano, el que sale de fiesta hasta las 6, el que medita y entrena, el creativo que trabaja desde cafeterías.</li>
+        <li><b>Estética:</b> el código visual que le representa. Minimalista, y2k, workwear, deportivo-técnico, gótico soft.</li>
+        <li><b>Valores:</b> qué le importa. Sostenibilidad, producción local, exclusividad, artesanía, precio justo, comunidad.</li>
+        <li><b>Rango de precio:</b> dónde juega. Accesible, medio, premium, lujo. Esto cambia todo lo demás.</li>
+      </ol>
+      <p>Escribe tu nicho como una frase que junte las cuatro capas. Ejemplo: <em>«Ropa técnica minimalista para el corredor urbano de 20-35 que valora el diseño discreto y está dispuesto a pagar precio medio-alto por prendas que no parezcan deportivas.»</em> Eso sí se puede investigar y validar. «Ropa guay para gente joven» no.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul><li>Tu nicho definido en una frase que integre identidad + estética + valores + precio.</li></ul>
+
+      <h3><span class="hn">2.2</span>Mapear la demanda: ¿existe la tribu y crece?</h3>
+      <p>Ahora compruebas que esa gente existe, es suficiente, y no está desapareciendo. Buscas tres cosas: <strong>presencia, tamaño y dirección</strong> (crece o muere).</p>
+      <ul>
+        <li><b>Cuentas y comunidades:</b> encuentra 5-10 cuentas de Instagram/TikTok, subreddits, Discords o foros donde tu tribu ya se junta. Si existen y están activos, la tribu existe. Si no encuentras ninguno, alerta roja.</li>
+        <li><b>Hashtags y volumen:</b> mira cuánta gente usa los hashtags de tu estética y si crece. Comprueba en TikTok si el sonido/estética se mueve.</li>
+        <li><b>Google Trends:</b> busca tu categoría y estética. ¿La curva sube, se mantiene o baja en los últimos 2-3 años?</li>
+        <li><b>Escenas físicas:</b> ¿hay lugares reales donde tu tribu se reúne? (skateparks, gimnasios, raves, barrios, eventos). El mundo físico valida el digital.</li>
+      </ul>
+      <p class="pull">La distinción clave: separa una <strong>tendencia durable</strong> (crece sostenidamente, tiene raíz cultural) de una <strong>micro-moda</strong> (pico rápido que ya baja). Fundar una marca sobre una micro-moda es construir sobre arena: para cuando produzcas y lances, ya pasó.</p>
+
+      <h3><span class="hn">2.3</span>Estudiar el campo de batalla: competencia y hueco</h3>
+      <p>Este paso no es para copiar. Es para encontrar el <strong>hueco (white space)</strong>: lo que la tribu quiere y nadie le está dando bien. Monta una tabla con 5-10 competidores directos e indirectos y, para cada uno, anota:</p>
+      <ol>
+        <li><b>Concepto y posicionamiento:</b> qué venden y qué representan.</li>
+        <li><b>Rango de precio:</b> cuánto cobran por las piezas clave.</li>
+        <li><b>Qué hacen muy bien:</b> su fortaleza real.</li>
+        <li><b>Qué hacen mal o no hacen:</b> aquí está tu oportunidad. Lee sus comentarios y reseñas buscando quejas repetidas.</li>
+        <li><b>Cómo se comunican:</b> tono, tipo de contenido, qué les funciona.</li>
+      </ol>
+      <p>Después responde la pregunta que importa: <strong>¿qué quiere esta tribu que ninguna de estas marcas le está dando?</strong> Ese vacío entre «lo que quieren» y «lo que reciben» es tu hueco.</p>
+      <p class="pull">Señal de demanda potente: <strong>agotados y reventa</strong>. Si a un competidor se le agotan las tallas constantemente, o sus prendas se revenden más caras en Vinted que su precio original, hay demanda insatisfecha real. Eso es oro.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Tabla de 5-10 competidores completada.</li>
+        <li>El hueco definido en una frase: «La tribu quiere X y ninguna marca se lo da bien.»</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Escuchar la voz del cliente</h3>
+      <p>Aquí recoges el <strong>lenguaje literal</strong> de tu cliente: las palabras exactas que usa para describir lo que desea y lo que odia. Este material vale oro porque después lo usarás tal cual en tu web, tus anuncios y tus descripciones — y venderá mucho más que cualquier frase que te inventes tú.</p>
+      <ul>
+        <li><b>Comentarios en los drops de la competencia:</b> qué piden, qué critican, qué preguntan («¿lo sacáis en negro?», «¿por qué tan caro?», «ojalá tuviera capucha»).</li>
+        <li><b>Reseñas de productos parecidos:</b> las de 3 estrellas son las más valiosas — dicen exactamente qué falló.</li>
+        <li><b>Reddit y foros:</b> hilos donde tu tribu discute qué comprar, qué odia de las marcas actuales, qué busca y no encuentra.</li>
+        <li><b>Reventa:</b> qué prendas concretas busca la gente y no consigue.</li>
+      </ul>
+      <p>Copia frases textuales en tu doc, sin reformular. Buscas patrones: cuando una frase aparece cinco veces con distintas palabras, has encontrado un nervio real del mercado.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Una colección de 15-20 citas literales de clientes reales (deseos y quejas).</li>
+        <li>Los 3-5 patrones que más se repiten, subrayados.</li>
+      </ul>
+
+      <h3><span class="hn">2.5</span>Validar el precio y el margen</h3>
+      <p>Puedes tener la tribu, el hueco y el mundo perfecto, y aun así hundirte si tu cliente no paga lo que necesitas cobrar. Haz el cálculo al revés, desde el precio de venta:</p>
+      <ol>
+        <li><b>Precio de venta al público</b> que tu tribu acepta pagar (lo sabes por la competencia y por lo que se revende).</li>
+        <li><b>Coste de producto</b> (tela + confección + etiquetas + packaging por unidad). Estimado por ahora, se afina en la fase de costeo.</li>
+        <li><b>Regla de referencia:</b> en moda, el precio de venta suele ser <strong>2,5x a 4x el coste de producción</strong> para cubrir marketing, devoluciones, plataforma e impuestos y aún ganar. Si no llegas ni a 2x, el modelo no se sostiene.</li>
+      </ol>
+      <p>La pregunta de validación: <strong>¿el precio que tu tribu paga te deja margen sano sobre el coste que vas a tener?</strong> Si no, tienes tres salidas: subir percepción de valor (marca, calidad, exclusividad), bajar coste (proveedor, corte, materiales) o cambiar a un nicho que pague más.</p>
+      <p class="pull">Aviso: no valides el precio preguntando «¿cuánto pagarías?». La gente miente o no lo sabe. Valídalo observando qué paga <em>ya</em> por prendas comparables de la competencia.</p>
+
+      <h3><span class="hn">2.6</span>Testear la demanda con compromiso real</h3>
+      <p>Este es el paso que casi nadie hace y el que de verdad valida. Todo lo anterior es investigación; esto es <strong>prueba</strong>. El objetivo es que gente real dé un paso que cuesta algo —su email, su reserva, su dinero— antes de que exista el producto. Métodos, de menos a más contundente:</p>
+      <ol>
+        <li><b>Landing + captura de email (waitlist):</b> una página simple con tu concepto, un par de mockups o fotos de muestra y un campo de email. Mándale tráfico (orgánico o 50-150 € de ads a tu tribu). Es la validación mínima.</li>
+        <li><b>Pre-orden / reserva con señal:</b> pides una pequeña reserva o compra anticipada. Que alguien pague por adelantado algo que aún no existe es la señal de demanda más fuerte que hay.</li>
+        <li><b>Made-to-order primer drop:</b> produces solo lo que se vende por adelantado. Cero stock muerto. Así arrancan muchas marcas fuertes hoy.</li>
+        <li><b>Seeding de muestras:</b> haces unas pocas muestras y las pones sobre 3-5 micro-referentes de tu tribu. Observas la reacción real.</li>
+      </ol>
+      <p class="pull">Regla crítica: <strong>valida con desconocidos, no con tu círculo.</strong> Tus amigos y familia dan falsos positivos por cariño. El tráfico frío de tu tribu real es el único juez honesto.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Un test de demanda lanzado (landing, pre-orden o seeding).</li>
+        <li>Un número real recogido: X emails / X reservas / X ventas anticipadas de gente ajena a tu círculo.</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Leer los resultados y decidir</h3>
+      <p>La investigación no sirve de nada si no tomas una decisión con ella. Este último paso convierte los datos en una de tres decisiones: <strong>avanzar, pivotar o parar.</strong></p>
+      <ul>
+        <li><b>Señales verdes (avanzar):</b> la tribu existe y crece, hay hueco claro, el lenguaje del cliente confirma un deseo repetido, el precio deja margen, y el test de demanda dio compromiso real por encima de lo que esperabas.</li>
+        <li><b>Señales amarillas (pivotar):</b> hay tribu y hueco, pero el test fue flojo, o el precio no cuadra, o el ángulo no conecta. No mates la idea: ajusta el nicho, el precio, el producto estrella o el mensaje, y vuelve a testear lo que falló.</li>
+        <li><b>Señales rojas (parar o replantear):</b> no encuentras dónde vive la tribu, nadie se agota ni se revende, el lenguaje del cliente no muestra deseo real, y el test fue casi nulo con tráfico frío. Mejor descubrirlo ahora que con 200 unidades en el almacén.</li>
+      </ul>
+      <p class="pull">El sesgo de confirmación es el enemigo: es fácil interpretar datos tibios como buenos porque quieres que la idea funcione. Pregúntate: «¿avanzaría con estos números si fueran de otra persona?»</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Un veredicto escrito y fechado: avanzar / pivotar / parar, con la evidencia que lo respalda.</li>
+        <li>Si es pivotar: qué se ajusta exactamente y qué se vuelve a testear.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des la validación por cerrada hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre la definición y el mercado</p>
+      <ul class="check">
+        <li>Tengo mi nicho definido en una frase con identidad + estética + valores + precio.</li>
+        <li>Tengo 5-10 lugares concretos donde vive mi tribu y evidencia de que existe y crece.</li>
+        <li>He distinguido si es demanda durable o una micro-moda a punto de morir.</li>
+        <li>Tengo una tabla de 5-10 competidores con su posicionamiento, precio y debilidades.</li>
+        <li>Tengo el hueco definido en una frase: qué quiere la tribu que nadie le da bien.</li>
+      </ul>
+
+      <p class="mini">Sobre el cliente y el precio</p>
+      <ul class="check">
+        <li>He recogido 15-20 citas literales de clientes reales (deseos y quejas).</li>
+        <li>He identificado los 3-5 patrones de deseo/queja que más se repiten.</li>
+        <li>Sé el rango de precio que mi tribu paga ya por prendas comparables.</li>
+        <li>He confirmado que ese precio deja margen sano (mínimo ~2,5x el coste estimado).</li>
+      </ul>
+
+      <p class="mini">Sobre la validación real</p>
+      <ul class="check">
+        <li>He lanzado un test de demanda real (landing, pre-orden o seeding).</li>
+        <li>He recogido compromiso real (emails, reservas o ventas) de gente ajena a mi círculo.</li>
+        <li>He tomado una decisión clara y fechada: avanzar, pivotar o parar.</li>
+        <li>Si pivoté, sé exactamente qué ajusto y qué vuelvo a testear.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 0.2 · Investigación de mercado y validación de nicho · v1.0 · Fase 0</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){
+      current += (target - current) * 0.09;
+      if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; }
+      window.scrollTo(0, current); requestAnimationFrame(loop);
+    }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 0.5 — Naming: cómo elegir el nombre de la marca</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 0 · Fundamentos y Estrategia</p>
+    <h1 class="rv">Naming</h1>
+    <p class="meta rv">SOP 0.5 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Cómo elegir el nombre de la marca</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que elijas <strong>el nombre de tu marca con criterio y no por corazonada de una tarde</strong>. El nombre es la palabra que vas a repetir un millón de veces, la que va cosida en cada prenda, la que la gente teclea para buscarte. Es <span class="hl">la decisión más difícil de revertir de toda la Fase 0</span>: el concepto lo puedes afinar, el nombre casi no.
+    </p>
+    <p>Quítate un mito de encima: <strong>el nombre perfecto no existe, y casi ningún nombre «significa» gran cosa el día uno</strong>. Nike era una diosa griega que a nadie le decía nada; hoy significa lo que significa porque la marca lo llenó de sentido durante años. No buscas un nombre que lo explique todo, buscas un buen recipiente vacío que puedas llenar de significado.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 7 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Elegir el nombre de tu marca con criterio y no por corazonada. El resultado concreto es: un nombre elegido que pasa los filtros estratégicos, con el dominio y los handles disponibles, sin conflicto de marca registrada evidente, testeado con gente real, y asegurado (dominio comprado y handles reservados el mismo día que decides).</p>
+      <p class="pull">Si te saltas esto: te enamoras de un nombre, imprimes etiquetas, montas el Instagram… y descubres que el .com está pillado, que hay otra marca de ropa igual en otro país, o peor, que está registrado. Rehacer el naming con la marca ya lanzada cuesta dinero, tiempo y todo el reconocimiento que habías construido.</p>
+
+      <h3><span class="hn">1.2</span>Principios no negociables</h3>
+      <ol>
+        <li><b>Disponible antes que perfecto.</b> Un nombre genial que no puedes registrar ni usar en dominio y redes no sirve. La disponibilidad manda.</li>
+        <li><b>Se pronuncia y se escribe sin fricción.</b> Si hay que deletrearlo, pierdes recomendaciones boca a boca, que es como más crece una marca de ropa.</li>
+        <li><b>El significado se construye, no se busca.</b> No necesitas un nombre que lo explique todo; necesitas uno que puedas llenar de sentido con el tiempo.</li>
+        <li><b>En moda, el nombre también es diseño.</b> Tiene que quedar bien impreso, cosido y como logo. Un nombre que no funciona visualmente es un problema estético permanente.</li>
+        <li><b>Decide con criterios, asegura el mismo día.</b> En cuanto elijas, compra dominio y reserva handles inmediatamente. Los nombres buenos se los lleva otro si esperas.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De la hoja en blanco a un nombre asegurado</h2>
+      <p>Siete pasos que te llevan de cero candidatos a un nombre elegido y protegido. La lógica es un embudo: primero abres mucho (generas), luego cierras con filtros duros (disponibilidad y estrategia).</p>
+
+      <h3><span class="hn">2.1</span>Definir qué tiene que hacer tu nombre</h3>
+      <p>Antes de generar nada, decide qué trabajo quieres que haga el nombre. Aterriza tres decisiones:</p>
+      <ol>
+        <li><b>¿Qué debe evocar?</b> Vuelve a tu concepto (0.1). El nombre puede apuntar al mundo, al enemigo, a la sensación, al arquetipo o a un valor. Escribe 5-10 palabras semilla que capturen la esencia de la marca: son el combustible de la generación.</li>
+        <li><b>¿Qué tono estético?</b> ¿Crudo o refinado? ¿Local o internacional? ¿Corto y contundente o largo y evocador? El nombre tiene que sonar como se ve la marca.</li>
+        <li><b>¿Qué margen de crecimiento necesitas?</b> ¿Vas a vender solo un tipo de prenda o quieres poder ampliar a categorías, líneas o un mundo más grande que la ropa? Cuanto más quieras crecer, menos descriptivo debe ser el nombre.</li>
+      </ol>
+      <p>La pregunta de fondo: <strong>¿quieres un nombre que describa, que evoque o que sea un lienzo en blanco?</strong> No hay respuesta correcta universal, pero sí una correcta <em>para ti</em>, y sale de tu concepto y tu ambición.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul><li>Tus palabras semilla, tu decisión de tono estético y de margen de crecimiento del nombre.</li></ul>
+
+      <h3><span class="hn">2.2</span>Conocer los tipos de nombre (tu paleta de opciones)</h3>
+      <p>No generes a ciegas. Conocer las familias de nombres multiplica tus ideas y te ayuda a elegir el tipo que encaja con tu estrategia. Las principales, con su cara y su cruz:</p>
+      <ol>
+        <li><b>Nombre del fundador.</b> Da caché de «casa de autor» y es único por definición, pero te ata a tu identidad personal y es más difícil de vender o despersonalizar después.</li>
+        <li><b>Descriptivo</b> (dice lo que vendes). Claro de entrada, pero genérico, difícil de registrar y te encierra en una categoría. En moda suele ser el más débil.</li>
+        <li><b>Evocador / sugerente</b> (sugiere una sensación sin describir). El punto dulce para muchas marcas de ropa: dice algo sin encerrarte.</li>
+        <li><b>Abstracto / inventado</b> (palabra nueva o deformada). Totalmente ownable y fácil de registrar, pero cuesta más cargarlo de significado y hay que educar al mercado.</li>
+        <li><b>Metáfora / símbolo</b> (un objeto, animal, lugar o concepto que representa la idea). Muy potente en moda porque da imagen visual y territorio de marca.</li>
+        <li><b>Palabra extranjera o culta</b> (otro idioma, latín, etc.). Aporta exotismo o elegancia, pero cuidado con la pronunciación y con significados no deseados.</li>
+        <li><b>Acrónimo o sigla.</b> Práctico si el nombre largo tiene sentido, pero frío y difícil de recordar si no hay historia detrás.</li>
+      </ol>
+      <p class="pull">Regla útil en moda: los nombres <strong>evocadores, metafóricos o abstractos</strong> suelen aguantar mejor el paso del tiempo y las ampliaciones de catálogo que los descriptivos. Pero el mejor tipo es el que encaja con tu concepto y tu tono, no el que esté de moda.</p>
+
+      <h3><span class="hn">2.3</span>Generar en abundancia (fase divergente)</h3>
+      <p>Ahora abres el grifo. El error número uno del naming es intentar encontrar «el bueno» a la primera; el bueno casi siempre aparece en la posición 60, no en la 3. Este paso es de cantidad, no de calidad: <strong>no juzgues mientras generas</strong>. Técnicas (usa varias):</p>
+      <ul>
+        <li><b>Del concepto:</b> parte de tus palabras semilla y ramifica sinónimos, opuestos y palabras asociadas.</li>
+        <li><b>Metáforas del mundo:</b> objetos, lugares, animales, mitología, épocas o elementos del universo de tu marca (0.1).</li>
+        <li><b>Del lenguaje del avatar:</b> expresiones, jerga o palabras que usa tu tribu (0.3).</li>
+        <li><b>Otros idiomas:</b> la misma idea semilla en latín, italiano, francés, japonés… muchas veces suena mejor fuera de tu idioma.</li>
+        <li><b>Deformaciones:</b> junta dos palabras, quita letras, cambia terminaciones, inventa a partir de una raíz real.</li>
+        <li><b>Raíces y sufijos:</b> juega con prefijos/sufijos que aporten tono (técnico, antiguo, futurista).</li>
+      </ul>
+      <p>Meta cuantitativa: <strong>genera mínimo 30-100 candidatos</strong> antes de empezar a filtrar. Anótalos todos, incluso los malos: un nombre «malo» a menudo dispara la idea del bueno. No abras aún ninguna pestaña de dominios; eso mata la creatividad. Primero llena, luego filtras.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul><li>Una lista de 30-100 candidatos, sin filtrar, sin juzgar.</li></ul>
+
+      <h3><span class="hn">2.4</span>Primer filtro estratégico y estético</h3>
+      <p>Ahora empiezas a cerrar el embudo, pero <strong>todavía sin tocar disponibilidad</strong>. Primero te quedas solo con los que son buenos nombres <em>en sí mismos</em>. Pasa toda tu lista por estos filtros y quédate con los 10-15 mejores:</p>
+      <ol>
+        <li><b>Pronunciable a la primera:</b> cualquiera lo dice bien sin dudar. Si tú mismo dudas cómo se lee, fuera.</li>
+        <li><b>Escribible de oído:</b> alguien lo oye y lo teclea bien. Clave para que te encuentren y te recomienden.</li>
+        <li><b>Memorable:</b> se pega. Corto suele ayudar; el ritmo y el sonido también.</li>
+        <li><b>Distinto:</b> no se confunde con marcas que ya existen en tu espacio.</li>
+        <li><b>Coherente con la estética:</b> suena y se ve como el mundo de tu marca. Dilo en voz alta e imagínalo cosido en una etiqueta.</li>
+        <li><b>Sin lecturas negativas:</b> no significa algo raro, ridículo o feo en otro idioma. <strong>Comprueba cada finalista en un traductor</strong> — este paso ha salvado a muchas marcas de un ridículo internacional.</li>
+      </ol>
+      <p class="pull">El «test de la etiqueta», propio de moda: imagina el nombre impreso en el cuello de una prenda y dicho por alguien al recomendarte. Si en cualquiera de las dos cosas chirría, bájalo de la lista aunque te guste sobre el papel.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul><li>Una lista corta de 10-15 finalistas que superan los filtros estratégicos y estéticos.</li></ul>
+
+      <h3><span class="hn">2.5</span>El filtro que mata: disponibilidad real</h3>
+      <p>Aquí es donde mueren la mayoría de nombres favoritos, y es mejor que mueran <strong>ahora</strong> y no después de imprimir etiquetas. Coge tus 10-15 finalistas y somételos a las cuatro comprobaciones:</p>
+      <ol>
+        <li><b>Marca registrada (lo más serio):</b> busca el nombre en el registro de marcas de tu territorio para tu clase de producto (la clase de ropa es la 25). Si existe una marca registrada igual o casi igual en ropa, es un riesgo legal real: descártalo o consulta a un profesional. <strong>No es opcional.</strong></li>
+        <li><b>Otras marcas de ropa existentes:</b> búscalo en Google, Instagram y las plataformas de reventa. Aunque no esté registrado, si ya hay una marca de ropa usándolo, vas a confundir a la gente y pelear por el posicionamiento en búsquedas.</li>
+        <li><b>Dominio:</b> mira si el <strong>.com</strong> está libre. Es el ideal. Si no, valora variantes limpias (marca + una palabra corta, o una extensión moderna coherente). Huye de guiones, números o faltas forzadas: se ven amateur.</li>
+        <li><b>Handles de redes:</b> comprueba que puedes tener un <strong>handle coherente en todas las plataformas</strong> clave. No hace falta que sea idéntico, pero sí reconocible y sin versiones ridículas.</li>
+      </ol>
+      <p class="pull">Regla de oro: <strong>prioriza el nombre limpio en las cuatro por encima del que «te gusta más» pero está pillado.</strong> Un favorito no disponible no es un favorito, es una fuente de problemas. Mejor un segundo favorito que puedes poseer entero.</p>
+
+      <h3><span class="hn">2.6</span>Testear los finalistas con gente real</h3>
+      <p>Antes de decidir, saca el nombre de tu cabeza y ponlo en oídos ajenos. Tú ya estás sesgado: llevas días con estas palabras y no las oyes como las oye alguien nuevo. Cómo testear bien:</p>
+      <ol>
+        <li><b>El test de voz:</b> di el nombre en voz alta a 5-10 personas y pídeles que lo escriban. Si lo escriben mal, tienes un problema de claridad.</li>
+        <li><b>El test de recuerdo:</b> menciónalo, habla de otra cosa 10 minutos, y pregúntales luego si lo recuerdan. Un nombre que no se recuerda no sirve.</li>
+        <li><b>El test de asociación:</b> pregúntales qué les sugiere el nombre, qué tipo de marca imaginan. No tiene que clavar el significado, pero no debe evocar lo contrario.</li>
+      </ol>
+      <p class="pull">Ojo con el sesgo: no preguntes «¿te gusta?», porque la gente dice que sí por educación. Pregunta cosas concretas y observables (¿lo escribiste bien?, ¿lo recuerdas?, ¿qué te sugiere?). Los datos valen más que las opiniones amables.</p>
+
+      <h3><span class="hn">2.7</span>Decidir y asegurar el nombre el mismo día</h3>
+      <p>Ya tienes la información. Ahora falta lo que muchos posponen y les cuesta caro: <strong>decidir y proteger de inmediato</strong>. Un nombre disponible hoy puede estar pillado la semana que viene. Secuencia de cierre, sin pausas:</p>
+      <ol>
+        <li><b>Decide</b> con la cabeza, no solo con el corazón: cruza estética + estrategia + disponibilidad + resultados del test. Si un nombre gana en disponibilidad y test aunque no sea tu favorito emocional, suele ser la elección correcta; el cariño llega después, con el uso.</li>
+        <li><b>Compra el dominio</b> en cuanto decidas. Es barato y es lo primero que se lo lleva otro.</li>
+        <li><b>Reserva los handles</b> en todas las plataformas relevantes el mismo día, aunque aún no vayas a publicar. Reservar es gratis y cierra la puerta.</li>
+        <li><b>Inicia la protección de marca:</b> plantéate registrar la marca en la clase 25 (ropa) en tu territorio. Hazlo antes de invertir fuerte en producir y comunicar. Registrar tarde, cuando ya eres conocido, es cuando aparecen los problemas caros.</li>
+      </ol>
+      <p class="pull">A partir de aquí, <strong>deja de dudar</strong>. El nombre se vuelve bueno cuando lo usas con consistencia y lo llenas de significado, no cuando encuentras el perfecto. La marca hace al nombre, no al revés.</p>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des el naming por cerrado hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre la preparación y generación</p>
+      <ul class="check">
+        <li>Tengo mis palabras semilla, mi tono estético y mi margen de crecimiento definidos.</li>
+        <li>He elegido los 2-3 tipos de nombre que encajan con mi estrategia.</li>
+        <li>He generado 30-100 candidatos sin juzgar antes de filtrar.</li>
+      </ul>
+
+      <p class="mini">Sobre los filtros de calidad</p>
+      <ul class="check">
+        <li>Mis finalistas son pronunciables a la primera y se escriben de oído.</li>
+        <li>Son memorables, distintos y coherentes con la estética de la marca.</li>
+        <li>Tienen recorrido y no me encierran en un solo producto o moda.</li>
+      </ul>
+
+      <p class="mini">Sobre la disponibilidad</p>
+      <ul class="check">
+        <li>He comprobado que no hay otra marca de ropa ya usando el nombre.</li>
+        <li>El .com (o una variante limpia y aceptable) está disponible.</li>
+        <li>Hay handle coherente disponible en todas las plataformas clave.</li>
+      </ul>
+
+      <p class="mini">Sobre el test y el cierre</p>
+      <ul class="check">
+        <li>He testeado los finalistas con 5-10 personas (voz, recuerdo, asociación, estética).</li>
+        <li>He comprado el dominio y reservado los handles el mismo día de decidir.</li>
+        <li>He iniciado o planificado el registro de la marca antes de invertir fuerte en producción.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 0.5 · Naming: cómo elegir el nombre de la marca · v1.0 · Fase 0</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

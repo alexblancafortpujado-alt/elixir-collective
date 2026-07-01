@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 0.3 — Construcción del avatar / cliente ideal</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 0 · Fundamentos y Estrategia</p>
+    <h1 class="rv">El avatar</h1>
+    <p class="meta rv">SOP 0.3 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; La persona exacta para la que diseñas</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que dejes de diseñar y comunicar para «todo el mundo» y empieces a hacerlo <strong>para una sola persona concreta, a la que conoces mejor que ella misma</strong>. Ese avatar es <span class="hl">la encarnación viva del nicho</span> que validaste en la Fase 0.2: le pones nombre, cara, cabeza y armario.
+    </p>
+    <p>La diferencia entre un «target» y un avatar es la diferencia entre disparar a una nube y disparar a una diana. La paradoja que mueve este SOP: <strong>cuanto más específica es la persona, a más gente le llega</strong>, porque la especificidad se siente como verdad y la verdad conecta.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 7 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que dejes de diseñar para «todo el mundo» y empieces a hacerlo para una sola persona concreta. Ese avatar es la encarnación viva del nicho que validaste en la Fase 0.2: le pones nombre, cara, cabeza y armario.</p>
+      <p>El resultado concreto es un documento vivo de avatar que contiene: quién es como identidad (no como dato demográfico), su mundo interior (deseos, miedos, creencias, tensión), su relación real con la ropa, su viaje de compra completo, su lenguaje literal y sus referentes culturales. Ese documento se convierte en el <span class="gold">filtro humano</span> de cada decisión de la marca.</p>
+      <p class="pull">Si te saltas esto: diseñas prendas que te gustan a ti pero no resuelven la tensión de nadie, haces fotos que no representan a quien compra, escribes copy genérico y tratas objeciones que no existen. El avatar es lo que hace que un desconocido sienta «esta marca me entiende» — y ese sentimiento es lo que vende ropa.</p>
+
+      <h3><span class="hn">1.2</span>Principios no negociables</h3>
+      <ol>
+        <li><b>Un avatar es una persona, no un segmento.</b> Si tu avatar es un rango de edades y unos intereses, no tienes avatar. Tiene que tener nombre, cara y contradicciones.</li>
+        <li><b>Constrúyelo con datos reales, no con deseos.</b> El avatar no es el cliente que a ti te gustaría tener; es el que la investigación demuestra que existe y compra.</li>
+        <li><b>La identidad manda sobre la demografía.</b> Dos personas de 19 y 40 años pueden ser el mismo avatar si comparten la misma tensión y los mismos códigos.</li>
+        <li><b>En moda, la clave es la tensión de identidad.</b> La gente compra ropa para cerrar la distancia entre quién es y quién quiere parecer. Sin esa tensión, no hay compra.</li>
+        <li><b>Escribe en su lenguaje, no en el tuyo.</b> El avatar te da las palabras. Úsalas literales.</li>
+        <li><b>Un avatar vale por cómo lo usas, no por lo bonito que quedó.</b> Si no filtra decisiones reales, es un documento muerto.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De un segmento a una persona que respira</h2>
+      <p>Siete pasos que convierten el nicho abstracto de la Fase 0.2 en un ser humano concreto que puedes tener en la cabeza al diseñar. Hazlos en orden.</p>
+
+      <h3><span class="hn">2.1</span>Del target al avatar: encarnar a una sola persona</h3>
+      <p>El primer movimiento es mental: pasar de pensar en «mi público» (una masa) a pensar en «mi cliente» (una persona). De todo el nicho que validaste, <strong>elige a una sola persona</strong> —real o compuesta a partir de varias reales— que represente el corazón de tu tribu. No el cliente más raro ni el más extremo: el más representativo, el que si lo ganas, ganas a los que se le parecen.</p>
+      <p>El promedio no existe. Nadie es la media de tu tribu. Si diseñas para una persona nítida, todos los que se parecen a ella se sienten vistos, y los que no, se autoexcluyen (que es exactamente lo que quieres).</p>
+      <p class="pull">Regla de la especificidad: cada detalle concreto que añades no reduce tu mercado, lo <strong>intensifica</strong>. «Le gusta correr» es tibio. «Corre a las 6am por el paseo marítimo con auriculares y odia los grupos de running» es una persona real con la que alguien se identifica de golpe.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La decisión tomada: una sola persona representativa como avatar central.</li>
+        <li>La razón por la que es el corazón de la tribu y no un caso extremo.</li>
+      </ul>
+
+      <h3><span class="hn">2.2</span>El retrato base: identidad encarnada</h3>
+      <p>Ahora le das cuerpo. No datos demográficos por rellenar casillas, sino los rasgos que <strong>explican sus decisiones de compra y de estilo</strong>. La demografía solo entra si cambia cómo compra o cómo se viste. Define, en formato de ficha:</p>
+      <ol>
+        <li><b>Nombre y foto mental:</b> ponle nombre y ten clara su cara. Esto es lo que lo hace real en tu cabeza.</li>
+        <li><b>Identidad central:</b> quién ES en una frase. No «estudiante de 22», sino «el chico que quiere vestir streetwear pero no sabe dónde comprar sin gastarse mucho en prendas».</li>
+        <li><b>Momento vital:</b> en qué punto está (transición, estancamiento, ascenso, reinvención). La ropa suele comprarse en los momentos de cambio de identidad.</li>
+        <li><b>Contexto de vida:</b> dónde vive, cómo es su día, con quién se relaciona, a qué se dedica — <strong>solo lo que afecte a su estilo o su bolsillo</strong>.</li>
+        <li><b>Sus contradicciones:</b> aquí está la humanidad. Quiere destacar pero teme el ridículo. Odia el consumismo pero desea el producto. Las contradicciones hacen creíble al avatar y revelan tensiones que puedes tocar.</li>
+      </ol>
+      <p>Cuidado con el error más común: rellenar un montón de datos irrelevantes. Si un dato no cambia lo que diseñas, cómo lo fotografías o cómo se lo vendes, sóbralo.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul><li>La ficha base del avatar: nombre, identidad central, momento vital, contexto relevante y contradicciones.</li></ul>
+
+      <h3><span class="hn">2.3</span>El mundo interior: deseos, miedos, creencias y tensión</h3>
+      <p>Este es el núcleo psicológico y el que más vende. Aquí entras en la cabeza del avatar para entender <strong>por qué compra ropa en realidad</strong>, que casi nunca es «porque necesita ropa». Define cada capa:</p>
+      <ol>
+        <li><b>Deseo profundo:</b> qué quiere de verdad, por debajo de la prenda. Rara vez es «una sudadera». Suele ser pertenecer, ser respetado, sentirse capaz, atraer, destacar, o al revés, camuflarse con los suyos.</li>
+        <li><b>Deseo superficial:</b> lo que dice que quiere, «una chaqueta con corte ancho». Le vendes por el superficial, pero conectas por el profundo.</li>
+        <li><b>Miedos:</b> parecer que se esfuerza demasiado, que le juzguen, equivocarse de talla, pagar de más y arrepentirse, vestir «como todos», que la prenda le quede mal.</li>
+        <li><b>Creencias:</b> qué cree sobre sí mismo, sobre la moda y sobre el dinero («no soy de los que llaman la atención», «la ropa cara es tirar el dinero», «yo no sé combinar»). Estas creencias abren o cierran la compra.</li>
+        <li><b>La tensión de identidad (el motor central):</b> la distancia entre <strong>quién es hoy</strong> y <strong>quién quiere ser/parecer</strong>. Escríbelo como fórmula: «[avatar] se ve hoy como ___, pero quiere que le vean como ___, y no sabe cómo cruzar esa distancia.»</li>
+      </ol>
+      <p>Esa tensión es literalmente el motor de compra en moda. Tu ropa es el puente. Toda tu marca existe para ayudar al avatar a cruzar del «hoy» al «quiero ser». Si la tienes clara, sabes qué diseñar y qué prometer.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul><li>Los deseos (profundo y superficial), miedos y creencias del avatar, y su tensión de identidad escrita como fórmula.</li></ul>
+
+      <h3><span class="hn">2.4</span>Su relación real con la ropa y el estilo</h3>
+      <p>Aquí bajas de la psicología general a lo específico de tu negocio: <strong>cómo se relaciona esta persona con la ropa día a día</strong>. Esto es lo que un avatar de marca de moda tiene y uno genérico no. Define:</p>
+      <ol>
+        <li><b>Qué lleva puesto ahora:</b> su armario actual, sus marcas de referencia, su uniforme real de cada día. Necesitas saber contra qué compites en su armario.</li>
+        <li><b>Qué le frustra de lo que tiene:</b> no encuentra su talla, todo le parece igual, la calidad no dura, no representa quién quiere ser, se siente disfrazado. Aquí está tu oportunidad.</li>
+        <li><b>Qué quiere proyectar y aún no consigue:</b> la imagen que busca dar y que su ropa actual no le da. Esta brecha es donde entra tu marca.</li>
+        <li><b>Su nivel y confianza con el estilo:</b> ¿experto que sabe lo que quiere, o inseguro que necesita que le guíes? Cambia cómo le comunicas y cuánta orientación necesita (guías de tallas, cómo combinar, lookbooks).</li>
+        <li><b>Su relación con el precio:</b> qué considera caro, qué considera «lo vale», y en qué prendas sí suelta dinero sin pestañear.</li>
+      </ol>
+      <p class="mini out">Entregable de este paso</p>
+      <ul><li>Qué quiere proyectar, para quién se viste, y su nivel de confianza con el estilo.</li></ul>
+
+      <h3><span class="hn">2.5</span>El viaje de compra: descubrimiento, confianza, objeciones y gatillos</h3>
+      <p>Ahora mapeas <strong>cómo tu avatar pasa de no conocerte a comprarte</strong>. Cada etapa te dice qué necesita de ti para avanzar. Recorre las cuatro etapas:</p>
+      <ol>
+        <li><b>Descubrimiento — ¿cómo te encuentra?</b> Reels, TikTok, recomendación de un amigo, un referente que la lleva, Pinterest, reventa. Esto te dice dónde tienes que estar y con qué formato.</li>
+        <li><b>Confianza — ¿qué le hace fiarse de una marca pequeña?</b> Reseñas, ver la prenda en gente real, contenido de detrás, transparencia de materiales, comunidad activa, un fundador con cara.</li>
+        <li><b>Objeciones — ¿qué le frena justo antes de pagar?</b> «¿me quedará bien?», «¿la talla será mi talla?», «¿vale ese precio?», «¿y si me arrepiento y devolver es un lío?». Lista las suyas y, al lado, <strong>cómo tu marca las desactiva</strong> (guía de tallas, fotos en cuerpos reales, devolución fácil, prueba social).</li>
+        <li><b>Gatillos de compra — ¿qué le hace decidirse?</b> Escasez real (drop limitado), verlo en alguien que admira, un momento vital, sentir que pertenece a algo comprándolo, o que la prenda resuelve su tensión de identidad de forma evidente.</li>
+      </ol>
+      <p class="pull">Las objeciones que importan son <strong>las suyas reales</strong>, sacadas de la investigación, no las que tú supones. Muchas marcas responden objeciones que nadie tiene e ignoran la que de verdad frena (casi siempre, la talla y el «me quedará bien»).</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El viaje de compra mapeado en sus cuatro etapas.</li>
+        <li>La lista de objeciones reales con su antídoto de marca al lado.</li>
+      </ul>
+
+      <h3><span class="hn">2.6</span>Lenguaje, referentes y códigos culturales</h3>
+      <p>Un avatar no está completo hasta que sabes <strong>cómo habla y qué consume</strong>. Esto te da la voz de tu marca y las señales de pertenencia que harán que te reconozca como «de los suyos». Define:</p>
+      <ol>
+        <li><b>Su lenguaje literal:</b> las palabras y expresiones que usa de verdad (rescátalas de las citas de la Fase 0.2). Escribirás tu copy en este idioma, no en «idioma marca».</li>
+        <li><b>Sus referentes:</b> a quién sigue, admira o quiere parecerse. Creadores, artistas, atletas, marcas de otros sectores, escenas. Ponerte cerca de sus referentes te da credibilidad prestada.</li>
+        <li><b>Qué consume:</b> qué ve, escucha, lee, dónde pasa el rato online y offline. Esto te dice dónde aparecer y con qué estética.</li>
+        <li><b>Los códigos de pertenencia:</b> los detalles que solo los de dentro captan — una referencia, un guiño estético, una palabra, un símbolo. Cuando tu marca los usa, el avatar siente «esto es de los míos» antes de razonar por qué.</li>
+      </ol>
+      <p>El uso práctico: cuando escribas una descripción de producto, un anuncio o un email, léelo y pregúntate «¿[avatar] hablaría así o sonaría a marca?». Si suena a marca, reescríbelo en su voz.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El banco de lenguaje literal del avatar (palabras y expresiones reales).</li>
+        <li>Sus referentes, su dieta de consumo y sus códigos de pertenencia.</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Dar vida al avatar y ponerlo a trabajar</h3>
+      <p>El último paso convierte la ficha en una persona viva y, sobre todo, en una <strong>herramienta de uso diario</strong>. Un avatar que no se usa es un documento bonito y muerto. Dos entregables finales:</p>
+      <ol>
+        <li><b>«Un día en la vida de tu avatar»:</b> escribe media página narrando un día normal suyo. Qué se pone y por qué, qué mira en el móvil, con quién habla, qué le frustra, en qué momento del día podría toparse con tu marca y qué sentiría entonces. Este ejercicio integra todo lo anterior y hace que el avatar respire.</li>
+        <li><b>El avatar como filtro operativo:</b> ninguna decisión de producto, foto, texto o campaña se aprueba sin pasar por «¿esto es de [nombre]?». Si la respuesta es no, se corta o se reformula. Ese hábito transforma el avatar de teoría en ventaja real.</li>
+      </ol>
+      <p class="pull">El avatar es un <strong>documento vivo</strong>. A medida que vendas, hables con clientes reales y leas más comentarios, vuelve a esta ficha y actualízala. El avatar del año que viene será más afilado que el de hoy — señal de que la marca está madurando.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>«Un día en la vida» del avatar escrito (media página).</li>
+        <li>La regla de uso definida: cómo el avatar filtra las decisiones del equipo.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des el avatar por cerrado hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre la persona</p>
+      <ul class="check">
+        <li>He elegido a una sola persona representativa como avatar central, y sé por qué es el corazón de la tribu.</li>
+        <li>Tiene nombre, cara, identidad central, momento vital y contradicciones creíbles.</li>
+        <li>Está construido sobre datos reales de la investigación, no sobre el cliente que me gustaría tener.</li>
+      </ul>
+
+      <p class="mini">Sobre la psicología</p>
+      <ul class="check">
+        <li>Tengo su deseo profundo y su deseo superficial diferenciados.</li>
+        <li>Tengo sus miedos y creencias sobre sí mismo, la moda y el dinero.</li>
+        <li>Tengo su tensión de identidad escrita como «se ve como X, quiere que le vean como Y».</li>
+      </ul>
+
+      <p class="mini">Sobre la ropa</p>
+      <ul class="check">
+        <li>Sé qué lleva ahora, qué le frustra de ello y qué quiere proyectar que aún no consigue.</li>
+        <li>Sé para quién se viste y cuál es su nivel de confianza con el estilo.</li>
+        <li>Sé qué considera caro y en qué prendas suelta dinero sin dudar.</li>
+      </ul>
+
+      <p class="mini">Sobre la compra</p>
+      <ul class="check">
+        <li>Tengo mapeado su viaje: descubrimiento, confianza, objeciones y gatillos.</li>
+        <li>Tengo sus objeciones reales listadas con el antídoto de marca al lado de cada una.</li>
+      </ul>
+
+      <p class="mini">Sobre el lenguaje y el uso</p>
+      <ul class="check">
+        <li>Tengo su lenguaje literal, sus referentes, su consumo y sus códigos de pertenencia.</li>
+        <li>He escrito «un día en la vida» del avatar.</li>
+        <li>He definido la regla de uso: cada decisión pasa por «¿esto es de [nombre]?».</li>
+        <li>El avatar está en un documento vivo que actualizaré con datos reales de clientes.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 0.3 · Construcción del avatar / cliente ideal · v1.0 · Fase 0</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

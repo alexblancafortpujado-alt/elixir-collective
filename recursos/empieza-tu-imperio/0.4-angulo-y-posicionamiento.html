@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 0.4 — Ángulo diferencial y posicionamiento</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 0 · Fundamentos y Estrategia</p>
+    <h1 class="rv">Ángulo y posicionamiento</h1>
+    <p class="meta rv">SOP 0.4 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Un espacio propio en la mente del cliente</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que tu marca <strong>ocupe un lugar claro y propio en la cabeza del cliente</strong>, distinto al de cualquier otra marca que le compita por el mismo dinero. No trata de qué eres por dentro (eso es el concepto), sino de <span class="hl">cómo te percibe alguien que además ve otras 50 marcas</span>.
+    </p>
+    <p>Tres cosas que la gente mezcla y no son lo mismo: el <strong>concepto</strong> es quién eres; el <strong>posicionamiento</strong> es el sitio que ocupas frente a los demás; el <strong>ángulo diferencial</strong> es cómo consigues que te den ese sitio.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 4 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Que tu marca ocupe un lugar claro y propio en la cabeza del cliente, distinto al de cualquier marca que le compita por el mismo dinero. Conviene separar tres cosas:</p>
+      <ul>
+        <li><b>Concepto (Fase 0.1):</b> tu verdad, tu mundo, tu porqué. Existiría aunque no hubiera competencia.</li>
+        <li><b>Posicionamiento:</b> el asiento que ocupas en una sala llena de marcas. Solo existe <em>porque</em> hay competencia. Es relativo y vive en la mente del cliente, no en tu web.</li>
+        <li><b>Ángulo diferencial:</b> la punta de lanza. La UNA cosa con la que lideras para ganar ese asiento y no otro.</li>
+      </ul>
+      <p>Dicho corto: el concepto es <strong>quién eres</strong>; el posicionamiento es <strong>el sitio que ocupas frente a los demás</strong>; el ángulo es <strong>cómo consigues que te den ese sitio</strong>.</p>
+      <p class="pull">Si te saltas esto: puedes tener un concepto precioso y aun así ser invisible, porque un concepto que no se traduce en una diferencia nítida se percibe como «una marca de ropa maja más». La marca que ocupa un espacio claro en la mente gana aunque su producto no sea el mejor; la que no lo ocupa pierde aunque el suyo lo sea.</p>
+
+      <h3><span class="hn">1.2</span>Principios no negociables</h3>
+      <ol>
+        <li><b>El posicionamiento vive en la mente del cliente, no en tu web.</b> No es lo que tú dices que eres; es lo que él recuerda que eres. Tu trabajo es facilitarle ese recuerdo.</li>
+        <li><b>Posicionar es renunciar.</b> Ocupar un espacio significa dejar otros libres. Si intentas ser todo para todos, no ocupas ninguno.</li>
+        <li><b>Distinto vence a mejor.</b> «Mejor» es una discusión que ganas o pierdes; «distinto» es un territorio que posees. Contra una marca grande, sé su opuesto, no su versión barata.</li>
+        <li><b>Un solo ángulo, no cinco.</b> La mente solo retiene una idea por marca. Lidera con una y deja el resto de fortalezas como apoyo.</li>
+        <li><b>En moda, la estética ES posicionamiento.</b> Tu identidad visual comunica tu lugar antes de que nadie lea una palabra. Palabra y estética tienen que decir lo mismo.</li>
+        <li><b>El mejor ángulo es el que no se puede copiar.</b> Un descuento se copia en un día; una verdad, una comunidad o una estética con ADN, no.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De «una marca más» a un espacio propio</h2>
+      <p>Cuatro pasos que te llevan de competir por defecto a ocupar un territorio elegido. Hazlos en orden.</p>
+
+      <h3><span class="hn">2.1</span>Entender qué es posicionar (y qué no)</h3>
+      <p>Antes de posicionar nada, interioriza cómo funciona de verdad, porque casi todo el mundo lo entiende al revés. Tres verdades que lo cambian todo:</p>
+      <ol>
+        <li><b>El posicionamiento es perceptual, no factual.</b> No importa lo que tu marca <em>es</em>; importa lo que el cliente <em>cree</em> que es. Tu trabajo no es solo ser bueno: es controlar la percepción.</li>
+        <li><b>Es relativo, no absoluto.</b> No te posicionas en el vacío, te posicionas <em>contra alternativas</em>. «Ropa de calidad» no posiciona nada; «la calidad de una marca de lujo al precio de una accesible» sí, porque se define contra dos referencias que el cliente ya tiene en la cabeza.</li>
+        <li><b>La mente es un espacio limitado y saturado.</b> Tu cliente ya tiene casillas mentales llenas de marcas. Para entrar, tienes que ocupar una idea simple que aún esté libre o mal defendida.</li>
+      </ol>
+      <p>La regla base: la mente solo guarda <strong>una idea por marca</strong>. Nike = superación. Patagonia = planeta. Las marcas fuertes poseen una palabra. Tu meta es descubrir cuál puede ser la tuya.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul><li>Escrito con tus palabras: qué idea simple podría llegar a ocupar tu marca en la mente del cliente.</li></ul>
+
+      <h3><span class="hn">2.2</span>Mapear el campo perceptual: contra quién te posicionas</h3>
+      <p>No puedes posicionarte sin saber qué hay ya ocupando la mente de tu cliente. Identifica tres tipos de alternativa que ya viven en la cabeza de tu avatar:</p>
+      <ol>
+        <li><b>Competidores directos:</b> marcas que hacen casi lo mismo que tú para casi la misma gente. Con estos te confunden si no te diferencias.</li>
+        <li><b>Competidores indirectos:</b> marcas de otro estilo o categoría que compiten por el mismo dinero y la misma ocasión. (Tu avatar puede dudar entre tu sudadera y unas zapatillas de otra marca.)</li>
+        <li><b>El sustituto por defecto:</b> lo que tu cliente hace o compra si no te elige. A menudo es «seguir comprando en las marcas grandes de siempre» o «no comprar nada». Este es tu verdadero rival silencioso.</li>
+      </ol>
+      <p class="pull">La clave: no te posiciones donde ya hay un dueño fuerte. Si una marca ya <em>es</em> «la sostenible» de tu espacio y lo tiene bien cogido, pelear por esa palabra es suicida. Busca la idea vecina que aún no tiene dueño.</p>
+
+      <h3><span class="hn">2.3</span>Encontrar tu ángulo diferencial</h3>
+      <p>Ahora buscas tu punta de lanza: la UNA dimensión en la que serás claramente distinto. Primero, elige <strong>sobre qué dimensión</strong> te diferencias (una principal, no varias):</p>
+      <ul>
+        <li><b>Estética / punto de vista visual:</b> un lenguaje visual reconocible que nadie más tiene.</li>
+        <li><b>Material y calidad:</b> un estándar concreto y demostrable (gramajes, tejidos, construcción).</li>
+        <li><b>Función / técnico:</b> la prenda resuelve un problema real que otras ignoran.</li>
+        <li><b>Valores / ética:</b> producción local, sostenibilidad real, transparencia radical.</li>
+        <li><b>Origen y fundador:</b> una historia y una cara que la marca grande no puede replicar.</li>
+        <li><b>Comunidad / tribu:</b> no vendes ropa, das acceso a un movimiento. Casi imposible de copiar.</li>
+        <li><b>Modelo de exclusividad:</b> drops limitados, series numeradas, escasez real como parte del valor.</li>
+        <li><b>Precio / relación valor-precio:</b> el más frágil; solo úsalo si es estructural y defendible, no como descuento.</li>
+      </ul>
+      <p>Después, pasa tu candidato por los <strong>filtros</strong>:</p>
+      <ol>
+        <li><b>Relevante:</b> ¿le importa a tu avatar? Ser el único en algo que a nadie le interesa no es un ángulo, es una curiosidad.</li>
+        <li><b>Distinto:</b> ¿ninguna competidora lo reclama ya con fuerza? Si tres marcas dicen lo mismo, no diferencia.</li>
+        <li><b>Defendible:</b> ¿es difícil de copiar? Cuanto más anclado esté en tu verdad, tu comunidad o tu estética, más aguanta.</li>
+      </ol>
+      <p class="pull">El ángulo ideal es el que dice mucho y excluye claramente. Si tu ángulo podría estar en la web de cualquier competidor sin que se notara, no es un ángulo: es un lugar común.</p>
+
+      <h3><span class="hn">2.4</span>Bajarlo a tierra y vivirlo con coherencia</h3>
+      <p>Un posicionamiento solo es real cuando se <strong>repite igual en cada punto de contacto</strong>. Aplícalo a cada punto donde el cliente te encuentra, y comprueba que todos dicen lo mismo:</p>
+      <ul>
+        <li><b>Estética visual</b> (feed, fotos, web): comunica tu posición antes que las palabras. Si tu ángulo es «discreto y premium» pero tu feed es colorido y llamativo, tu posicionamiento se rompe.</li>
+        <li><b>Tono y copy:</b> las palabras suenan a tu territorio, no a marca genérica.</li>
+        <li><b>Producto y precio:</b> la prenda y su precio confirman la posición. Un precio bajo contradice un posicionamiento premium; uno alto contradice uno accesible.</li>
+        <li><b>Packaging y experiencia:</b> el detalle físico ratifica o traiciona la promesa. La experiencia al comprar/recibir debe cumplirla o superarla.</li>
+        <li><b>Contenido y comunidad:</b> de qué hablas y con quién te rodeas refuerza dónde estás.</li>
+      </ul>
+      <p class="pull">La disciplina final: la <strong>consistencia en el tiempo</strong>. El posicionamiento se construye por acumulación y repetición, no por una campaña. Cambiar de posición cada temporada borra lo avanzado. Elige tu espacio y defiéndelo con paciencia: el posicionamiento es un juego largo.</p>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des el posicionamiento por cerrado hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre la comprensión y el campo</p>
+      <ul class="check">
+        <li>Tengo claro qué idea simple quiero que ocupe mi marca en la mente del cliente.</li>
+      </ul>
+
+      <p class="mini">Sobre el ángulo</p>
+      <ul class="check">
+        <li>Tengo mi ángulo diferencial en una frase, sobre una sola dimensión.</li>
+        <li>Mi ángulo pasa los tres filtros: relevante, distinto y defendible.</li>
+      </ul>
+
+      <p class="mini">Sobre la defensa y la vida de la marca</p>
+      <ul class="check">
+        <li>He definido la palabra o idea única que quiero poseer en la mente de mi tribu.</li>
+        <li>He comprobado que mi diferencia es difícil de copiar (anclada en algo incopiable).</li>
+        <li>He alineado todos los puntos de contacto (estética, tono, producto, precio, packaging, comunidad).</li>
+      </ul>
+    </section>
+
+    <footer>SOP 0.4 · Ángulo diferencial y posicionamiento · v1.0 · Fase 0</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

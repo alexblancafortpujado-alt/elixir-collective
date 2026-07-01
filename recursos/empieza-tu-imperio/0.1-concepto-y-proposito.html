@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP — Definición de concepto y propósito v1.0</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  /* ===== layout ===== */
+  .page{
+    max-width:1160px;margin:0 auto;padding:0 56px;
+    display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;
+  }
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  /* ===== table of contents ===== */
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc-sub{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);font-weight:500;margin:24px 0 8px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  /* ===== masthead type ===== */
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  /* ===== section type ===== */
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+  .kicker{font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:44px 0 14px;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  p.body{color:var(--ink);}
+
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+  .mini.why{color:var(--faint);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  .pull cite{display:block;font-style:normal;font-size:12.5px;letter-spacing:.04em;color:var(--muted);margin-top:12px;}
+
+  .q{font-style:italic;color:var(--ink);border-left:1px solid var(--accent);padding-left:20px;margin:14px 0;font-size:16px;line-height:1.6;}
+
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  .blk{margin:42px 0;}
+  .blk h3{margin:0 0 4px;display:flex;align-items:baseline;gap:14px;}
+  .blk h3 .num{font-size:16px;font-weight:500;color:var(--accent);letter-spacing:.04em;}
+  .blk p{margin:10px 0 0;font-size:16.5px;color:var(--ink-dim);line-height:1.72;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+
+  /* ===== responsive ===== */
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){
+    .page{padding:0 18px;}
+    .masthead{padding-top:72px;}
+    body{font-size:16px;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ===================== MASTHEAD ===================== -->
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 0 · Fundamentos y Estrategia</p>
+    <h1 class="rv">Concepto y propósito</h1>
+    <p class="meta rv">Versión 1.0 &nbsp;<span>·</span>&nbsp; La gran idea que sostiene tu marca de ropa</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que definas <strong>qué es tu marca antes de fabricar una sola prenda</strong>. No trata de logos, ni de telas, ni de Instagram. Trata de <span class="hl">la idea que hay debajo de todo eso</span> y que hace que exista una razón para que tu marca esté en el mundo.
+    </p>
+    <p>Casi todo el mundo se salta esta fase. Abren una tienda, ponen unas camisetas bonitas, y se preguntan por qué nadie las compra a un precio digno. La respuesta casi siempre es la misma: tienen un producto, pero <strong>no tienen una marca</strong>. Este documento resuelve exactamente eso.</p>
+    <p>El resultado concreto es un documento de una página que contiene: tu <span class="gold">Gran Idea</span> en una frase, el mundo que crea tu marca, el enemigo contra el que va, la identidad que le regala a quien la lleva puesta, y el propósito que la sostiene. Ese documento se convierte en el filtro con el que tomarás cada decisión futura: qué diseñar, qué NO diseñar, cómo hablar, a quién vender y a quién dejar fuera.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <!-- ===================== TABLE OF CONTENTS ===================== -->
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 8 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <!-- ===================== BODY ===================== -->
+  <main class="wrap">
+
+    <!-- ===================== BLOQUE 1 ===================== -->
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que definas <strong>qué es tu marca antes de fabricar una sola prenda</strong>. No trata de logos, ni de telas, ni de Instagram. Trata de la idea que hay debajo de todo eso y que hace que exista una razón para que tu marca esté en el mundo.</p>
+      <p>El resultado concreto de seguirlo es un documento de una página que contiene: tu Gran Idea en una frase, el mundo que crea tu marca, el enemigo contra el que va, la identidad que le regala a quien la lleva puesta, y el propósito que la sostiene. Ese documento se convierte en el filtro con el que tomarás cada decisión futura.</p>
+      <p class="pull">Lo que pasa si te saltas esto: compites por precio, copias a otras marcas sin saber por qué a ellas les funciona, tu contenido no conecta, no puedes cobrar caro, y no construyes comunidad porque nadie se identifica con algo que no tiene punto de vista. <strong>Una marca sin concepto no es una marca: es un intermediario de tela con un nombre encima.</strong></p>
+
+      <h3><span class="hn">1.2</span>Insumos necesarios</h3>
+      <p>No necesitas dinero ni software caro para esta fase. Necesitas materia prima interna y tiempo de calidad. Reúne esto antes de empezar:</p>
+      <ul>
+        <li>Un documento en blanco (Notion o Google Docs) que será tu <b>doc de excavación</b>. Aquí vive todo el trabajo en bruto.</li>
+        <li>Un <b>tablero de referencias visuales</b> (Pinterest, Figma o Instagram). No para copiar, sino para detectar qué mundos te atraen y por qué.</li>
+        <li><b>Honestidad brutal.</b> La mayoría de conceptos flojos vienen de intentar sonar bien en vez de decir la verdad.</li>
+        <li><b>3-5 marcas de referencia</b> que admires (dentro o fuera de la moda) para estudiar cómo articulan su concepto, no para imitar su estética.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Principios no negociables</h3>
+      <p>Estos principios gobiernan cada decisión de este SOP. Si en algún momento dudas, vuelve aquí.</p>
+      <ol>
+        <li><b>El concepto se descubre, no se inventa.</b> Si no conecta con algo verdadero, no sobrevive al primer mes difícil.</li>
+        <li><b>En moda no vendes ropa: vendes identidad.</b> La gente se pone tu prenda para decir algo sobre quién es.</li>
+        <li><b>Una marca sin enemigo no tiene punto de vista.</b> Definir contra qué estás es tan importante como definir qué eres.</li>
+        <li><b>Si le vale a todo el mundo, no le importa a nadie.</b> La amplitud mata. La especificidad crea fans reales y fieles.</li>
+        <li><b>El concepto es un filtro de decisiones,</b> no una frase en la sección «sobre nosotros». Si no cambia lo que haces, no sirve.</li>
+        <li><b>Profundidad antes que estética.</b> Una estética sin concepto es imitación con fecha de caducidad.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <!-- ===================== BLOQUE 2 ===================== -->
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De la nada a la Gran Idea</h2>
+      <p>Ocho pasos que te llevan del vacío a un concepto articulado y utilizable. Hazlos en orden. Cada uno alimenta al siguiente, y saltarte uno se nota en el resultado final.</p>
+
+      <h3><span class="hn">2.1</span>Separar producto, marca y mundo</h3>
+      <p>Antes de crear nada, tienes que entender qué estás creando en realidad. Hay tres niveles y la mayoría se queda en el primero.</p>
+      <ul>
+        <li><b>Producto:</b> la prenda física. Una sudadera negra de algodón orgánico y corte oversize. Cualquiera puede fabricar esto. No te diferencia.</li>
+        <li><b>Marca:</b> el significado que envuelve al producto. El nombre, la actitud, lo que representa llevarla. Aquí empieza el valor.</li>
+        <li><b>Mundo:</b> el universo completo que la marca crea y en el que el cliente quiere entrar. Referencias, valores, estética, forma de vivir, tribu. Aquí está el dinero de verdad y la comunidad.</li>
+      </ul>
+      <p>La prueba mental: si mañana copian tu producto exacto (y en moda lo van a copiar), ¿qué te queda? Si la respuesta es «nada», solo estás vendiendo producto. Si la respuesta es «todo lo demás» —el mundo, el significado, la gente— tienes una marca. Este SOP construye ese «todo lo demás».</p>
+      <p class="pull">Dos marcas venden la misma camiseta blanca de algodón. Una la vende como «camiseta básica blanca». La otra, como «la camiseta blanca de corte perfecto para los que quieren ir básicos pero destacando». El producto es idéntico. <strong>El precio que puede cobrar cada una, no.</strong> La diferencia entera está en el concepto.</p>
+
+      <h3><span class="hn">2.2</span>Excavar la verdad de origen</h3>
+      <p>Los conceptos que aguantan años no se inventan en una pizarra: se excavan de la vida real del fundador. Este paso saca a la superficie la materia prima verdadera. Sé honesto aquí o el resto será decoración.</p>
+      <p>Responde por escrito, sin filtrar. Escribe más de lo que crees necesario; el oro suele estar en la tercera o cuarta frase, no en la primera.</p>
+      <ol>
+        <li>¿Qué te obsesiona o te fascina hasta el punto de que hablarías de ello durante horas sin cobrar?</li>
+        <li>¿Qué te da rabia del mundo (de la moda, de tu entorno, de cómo vive la gente) hasta el punto de querer hacer algo al respecto?</li>
+        <li>¿Qué viviste, sufriste o superaste que otros están viviendo ahora mismo y podrías ayudarles a atravesar?</li>
+        <li>¿Qué tipo de persona eras antes y en qué te has convertido? Esa transformación suele ser la promesa de la marca.</li>
+        <li>Si tu marca desapareciera mañana, ¿qué se perdería en el mundo que nadie más está ofreciendo?</li>
+      </ol>
+      <p>La regla: tu marca de ropa es un vehículo para una idea que ya llevas dentro. La ropa es el idioma; la idea es lo que dices. Si intentas fundar una marca sobre una idea que no es tuya (porque «vende» o porque funciona a otro), la vas a odiar en seis meses y se va a notar en el producto.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Las 5 respuestas escritas sin autocensura.</li>
+        <li>Una o dos frases subrayadas: las que, al releerlas, sientes que <em>son verdad</em>. Esas son tu semilla.</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Definir el enemigo y la tensión</h3>
+      <p>Ninguna marca fuerte le gusta a todo el mundo, y esa es exactamente su fuerza. Un punto de vista necesita un oponente. Este paso define contra qué está tu marca, porque eso es lo que hace que la gente correcta se sienta comprendida y la incorrecta se aparte sola.</p>
+      <p>El enemigo casi nunca es otra empresa. Suele ser una actitud, una forma de vivir, una estética dominante o una mentira cultural:</p>
+      <ul>
+        <li>Una <b>actitud:</b> la mediocridad conformista, el «esto ya está bien así», la vida en piloto automático.</li>
+        <li>Una <b>estética dominante:</b> el fast fashion sin alma, el minimalismo frío y sin identidad, el logo gritón que compra estatus prestado.</li>
+        <li>Una <b>forma de vivir:</b> encajar por miedo, perseguir la validación externa, vestir como todos para no destacar.</li>
+        <li>Una <b>mentira cultural:</b> que la ropa es solo tela, que el estilo es superficial, que vestir bien es presumir.</li>
+      </ul>
+      <p>La tensión es el choque entre ese enemigo y lo que tu marca defiende. La tensión genera emoción, y la emoción es lo que hace que alguien compre y, sobre todo, que hable de ti. Fórmula útil: <strong>«El mundo dice X. Nosotros creemos Y.»</strong> Cuanto más nítido sea ese contraste, más magnética es la marca.</p>
+      <p class="pull">Cuidado con el enemigo falso o cobarde («estamos contra la mala calidad»). Eso no lo dice nadie, así que no posiciona nada. El enemigo tiene que ser algo que mucha gente todavía defiende, para que elegir tu bando signifique algo.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Tu enemigo definido en una frase concreta y valiente.</li>
+        <li>La tensión escrita en formato «El mundo dice X. Nosotros creemos Y.»</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Construir el mundo de la marca</h3>
+      <p>Ahora traduces la idea en un universo con textura. El mundo es lo que hace que una marca se sienta como un lugar al que quieres pertenecer, no como una tienda. Se construye con capas concretas. Define cada una en tu doc:</p>
+      <ol>
+        <li><b>Referencias culturales:</b> qué épocas, subculturas, movimientos, música, cine o disciplinas alimentan tu estética. Ej: el skate de los 90, el estoicismo, el cine antiguo, un deporte…</li>
+        <li><b>Valores estéticos:</b> qué principios visuales gobiernan todo. Ej: menos pero mejor; contraste extremo; artesanal frente a industrial…</li>
+        <li><b>Vocabulario y tono:</b> qué palabras usa la marca y cuáles jamás diría. El idioma construye mundo tanto como la imagen.</li>
+        <li><b>Atmósfera y sensación:</b> si tu marca fuera un lugar físico, ¿cómo se sentiría entrar? ¿Qué temperatura, qué luz, qué energía?</li>
+        <li><b>Los códigos:</b> los detalles reconocibles que se repiten y que solo los de dentro captan (un color, un símbolo, una frase, un elemento).</li>
+      </ol>
+      <p><strong>Ejercicio del arquetipo:</strong> completa la frase «Si mi marca fuera una persona, sería ___». Descríbela: cómo viste, cómo habla, qué le importa, qué desprecia, a dónde va el finde, qué escucha. Esta persona es tu brújula. Cuando dudes si algo «es de la marca», pregúntate si esa persona lo haría.</p>
+      <p class="pull">Regla de oro del mundo: la coherencia crea credibilidad. Un mundo con 10 referencias inconexas no es un mundo, es un caos. Mejor un universo pequeño y nítido que uno grande y difuso. <strong>Recorta hasta que todo lo que quede pertenezca al mismo lugar.</strong></p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Las 5 capas del mundo definidas por escrito.</li>
+        <li>El arquetipo de marca («si fuera una persona…») descrito en un párrafo.</li>
+      </ul>
+
+      <h3><span class="hn">2.5</span>Definir la identidad que transfieres</h3>
+      <p>Este es el paso que más gente ignora y el que más vende. En moda, el cliente no compra la prenda: compra en quién se convierte al ponérsela. Tu trabajo es definir esa transformación con precisión.</p>
+      <p>Toda prenda es una declaración. Cuando alguien elige tu marca por encima de otra, está eligiendo la versión de sí mismo que tu marca le permite ser. Define esto respondiendo:</p>
+      <ol>
+        <li>¿Quién es la persona ANTES de descubrir tu marca? (su estado actual, su frustración, cómo se siente vistiendo lo que viste ahora)</li>
+        <li>¿En quién se convierte DESPUÉS de adoptarla? (su nueva identidad, cómo se percibe, cómo lo perciben los demás)</li>
+        <li>¿A qué tribu entra? Comprar tu marca es un acto de pertenencia. ¿Con quién se está alineando?</li>
+        <li>¿Qué está diciendo al mundo sin hablar cuando lleva tu prenda puesta?</li>
+      </ol>
+      <p>La distinción clave: no describes datos demográficos («hombres de 20 a 30 años»). Describes una <strong>identidad</strong> («el que ha decidido dejar de ser espectador de su propia vida»). La edad no crea pertenencia; la identidad compartida sí. Dos personas de edades opuestas pueden ser la misma tribu si comparten la misma actitud.</p>
+      <p class="pull">Prueba de fuego: alguien debería poder mirar tu marca y pensar «esto es para mí» o «esto no es para mí» en dos segundos, y en ambos casos tener razón. Si todo el mundo piensa «bueno, podría ser para mí», no has definido ninguna identidad.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La transformación de identidad escrita (antes → después).</li>
+        <li>El nombre de la tribu y qué declara quien lleva la marca puesta.</li>
+      </ul>
+
+      <h3><span class="hn">2.6</span>Articular el propósito</h3>
+      <p>El propósito es el «por qué» que está por debajo del producto y del dinero. No es lo que vendes ni cómo lo vendes: es la razón por la que la marca merece existir. Es lo que la sostiene cuando las ventas de un drop van mal y tienes ganas de rendirte.</p>
+      <p>Para llegar al propósito real, usa la técnica de bajar niveles. Empieza por lo obvio y pregunta «¿y por qué eso importa?» hasta que llegues a algo que ya no se puede reducir más:</p>
+      <ul>
+        <li>Vendo ropa de calidad. → ¿Y por qué importa?</li>
+        <li>Para que la gente vista mejor. → ¿Y por qué importa?</li>
+        <li>Para que se sientan más seguros de sí mismos. → ¿Y por qué importa?</li>
+        <li>Porque creo que quien se viste como quien quiere ser, actúa como quien quiere ser. → <b>Aquí hay propósito.</b></li>
+      </ul>
+      <p>El propósito real casi nunca menciona la ropa. La ropa es el medio, no el fin. Un buen propósito habla de una transformación humana que la marca provoca en el mundo usando la ropa como herramienta.</p>
+      <p class="pull">Dos trampas. La primera: el propósito genérico de folleto («inspirar a las personas a ser su mejor versión») — no significa nada porque no excluye nada. La segunda: confundir propósito con objetivo («facturar un millón») — eso es una meta tuya, no una razón para que exista la marca en la vida de otros. <strong>El propósito tiene que poder importarle a alguien que no eres tú.</strong></p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Tu propósito articulado en 1-2 frases, sin mencionar la palabra «ropa» si es posible.</li>
+        <li>La cadena de «¿por qué importa?» que te llevó hasta él, para no perderlo.</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Comprimir en la Gran Idea</h3>
+      <p>Ahora coges todo lo anterior —la verdad de origen, el enemigo, el mundo, la identidad, el propósito— y lo destilas en una sola frase que lo contenga todo. Esa frase es tu Gran Idea, y va a ser el motor de la marca.</p>
+      <p>Una Gran Idea potente cumple tres condiciones: es <strong>corta</strong> (se recuerda), es <strong>específica</strong> (excluye cosas) y es <strong>emocional</strong> (mueve algo). Si es larga, vaga o fría, sigue destilando.</p>
+      <p class="mini">Estructuras que ayudan a formularla</p>
+      <ul>
+        <li>Ropa para [tribu específica] que [transformación / creencia].</li>
+        <li>La marca del que [actitud o decisión vital].</li>
+        <li>[Categoría de producto] para gente que cree que [punto de vista].</li>
+        <li>Vestimos a los que están [en tal proceso o transición].</li>
+      </ul>
+      <p>Después de la frase, escribe un <strong>manifiesto corto</strong> de 5-8 líneas que la desarrolle. El manifiesto es la Gran Idea con emoción y ritmo: es lo que leerá tu comunidad y lo que hará que alguien sienta «esto me representa». Escríbelo como si hablaras a la persona que ya es de los tuyos, no como si intentaras convencer a un extraño.</p>
+      <p class="pull">No busques la frase perfecta a la primera. Escribe 10 versiones malas rápido, y de ahí saldrá la buena. <strong>La Gran Idea se pule con iteraciones, no aparece de golpe.</strong></p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Tu Gran Idea en una sola frase (corta, específica, emocional).</li>
+        <li>El manifiesto de marca de 5-8 líneas que la desarrolla.</li>
+      </ul>
+
+      <h3><span class="hn">2.8</span>Test de coherencia y densidad</h3>
+      <p>El último paso valida que lo que has construido es real y utilizable, no una ilusión que se cae al primer roce. Somete tu concepto a estas cuatro pruebas. Si falla una, vuelve al paso correspondiente y afina.</p>
+      <ol>
+        <li><b>Prueba de repetición:</b> cuéntale tu marca a 3 personas distintas en una frase. Si la repiten a un tercero sin deformarla, tu concepto tiene densidad. Si cada uno entiende algo distinto, aún es difuso.</li>
+        <li><b>Prueba de exclusión:</b> enumera 5 tipos de prenda, 5 tipos de cliente y 5 mensajes que tu marca JAMÁS haría o diría. Si te cuesta, tu concepto todavía lo abarca todo, y abarcarlo todo es no ser nada.</li>
+        <li><b>Prueba de filtro:</b> coge 3 decisiones reales de diseño o contenido y resuélvelas usando solo tu concepto. Si te da la respuesta con claridad, funciona como herramienta. Si no, es decoración.</li>
+        <li><b>Prueba de verdad:</b> relee tu concepto y pregúntate si es verdad para ti, o solo suena bien. Un concepto que no es verdad se abandona en la primera dificultad. Uno que es verdad se defiende durante años.</li>
+      </ol>
+      <p>Cuando las cuatro pruebas pasen, mueve todo lo relevante a un único documento limpio de una página: la Gran Idea, el enemigo/tensión, el mundo resumido, la identidad, el propósito y el manifiesto. Ese documento es la Fase 0 completada, y es el cimiento sobre el que se construyen todas las fases siguientes (identidad visual, diseño, colección, comunidad y lanzamiento).</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Las 4 pruebas superadas y anotadas.</li>
+        <li>El documento maestro de concepto en una sola página, listo para alimentar el resto de la marca.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <!-- ===================== BLOQUE 3 ===================== -->
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des la Fase 0 por cerrada hasta que puedas marcar todo lo siguiente. Este es el checklist maestro que reúne los entregables de todos los pasos.</p>
+
+      <p class="mini">Sobre la profundidad del trabajo</p>
+      <ul class="check">
+        <li>He separado con claridad producto, marca y mundo, y trabajo en la capa de mundo.</li>
+        <li>He excavado mi verdad de origen y he identificado la semilla real que sostiene la marca.</li>
+        <li>He definido un enemigo valiente y una tensión clara en formato «el mundo dice X, nosotros creemos Y».</li>
+        <li>He construido un mundo coherente con referencias, valores estéticos, tono, atmósfera y códigos.</li>
+        <li>He definido el arquetipo de la marca como si fuera una persona.</li>
+      </ul>
+
+      <p class="mini">Sobre el resultado</p>
+      <ul class="check">
+        <li>He definido la transformación de identidad que vive quien adopta la marca (antes → después).</li>
+        <li>He nombrado la tribu y sé qué declara quien lleva la prenda puesta.</li>
+        <li>He articulado un propósito real que le puede importar a alguien que no soy yo.</li>
+        <li>Tengo mi Gran Idea en una sola frase: corta, específica y emocional.</li>
+        <li>Tengo un manifiesto de 5-8 líneas que desarrolla la Gran Idea con emoción.</li>
+      </ul>
+
+      <p class="mini">Sobre la usabilidad</p>
+      <ul class="check">
+        <li>Tres personas distintas repiten mi concepto sin deformarlo (prueba de repetición).</li>
+        <li>Mi concepto excluye prendas, clientes y mensajes concretos (prueba de exclusión).</li>
+        <li>Puedo resolver decisiones reales de diseño y contenido usando solo el concepto (prueba de filtro).</li>
+        <li>Mi concepto es verdad para mí, no solo suena bien (prueba de verdad).</li>
+        <li>Todo está recogido en un documento maestro de una página, listo para las siguientes fases.</li>
+      </ul>
+    </section>
+
+    <footer>SOP · Definición de concepto y propósito v1.0 · Fase 0 · Fundamentos y Estrategia</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+
+  /* ===== smooth (inertial) scroll + anchor navigation ===== */
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){
+      current += (target - current) * 0.09;
+      if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; }
+      window.scrollTo(0, current);
+      requestAnimationFrame(loop);
+    }
+    function scrollToY(y){
+      target = Math.max(0, Math.min(y, maxScroll()));
+      if (reduce){ window.scrollTo(0, target); current = target; return; }
+      if (!running){ running = true; requestAnimationFrame(loop); }
+    }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){
+        if (e.ctrlKey) return;
+        e.preventDefault();
+        var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1);
+        target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll()));
+        if (!running){ running = true; requestAnimationFrame(loop); }
+      }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+
+    /* index clicks */
+    document.querySelectorAll('.toc a').forEach(function(a){
+      a.addEventListener('click', function(e){
+        var el = document.querySelector(a.getAttribute('href'));
+        if (!el) return;
+        e.preventDefault();
+        var y = el.getBoundingClientRect().top + window.scrollY - 32;
+        scrollToY(y);
+        history.replaceState(null, '', a.getAttribute('href'));
+      });
+    });
+  })();
+
+  /* ===== scroll-spy: highlight active section in the index ===== */
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting){
+          Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); });
+          if (links[en.target.id]) links[en.target.id].classList.add('active');
+        }
+      });
+    }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

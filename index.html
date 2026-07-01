@@ -21385,26 +21385,28 @@
   // Same folder UX as Checklist but no progress bar — replaced by a
   // count of SOPs inside each category. Click a folder to see the
   // individual SOPs (all rendered as Notion-style link rows).
-  const SOPS = [
-    { id: 'estrategia',        name: 'SOPs de estrategia' },
-    { id: 'ideacion',          name: 'SOPs de ideación' },
-    { id: 'packaging',         name: 'SOPs de packaging' },
-    { id: 'scripting',         name: 'SOPs de scripting' },
-    { id: 'feedback',          name: 'SOPs de feedback' },
-    { id: 'gestion-de-equipo', name: 'SOPs de gestión de equipo' },
-    { id: 'ejemplos',          name: 'SOPs de ejemplos', badge: 'Ejemplos' },
-  ];
+  // One resource folder per module (same ids/names as the checklist
+  // modules). Each folder holds that module's SOPs and documents.
+  const SOPS = CHECKLISTS.map(c => ({ id: c.id, name: c.name }));
 
-  // Per-category SOP list. Each item: { title, url }. Empty for now until
-  // the client provides the actual SOP documents.
+  // Per-module SOP list. Each item: { title, url }. Folders fill up as the
+  // client provides the actual documents for each module.
   const SOP_CONTENT = {
-    'estrategia':        [],
-    'ideacion':          [],
-    'packaging':         [],
-    'scripting':         [],
-    'feedback':          [],
-    'gestion-de-equipo': [],
-    'ejemplos':          [],
+    'onboarding':         [],
+    'empieza-tu-imperio': [
+      { title: 'SOP 0.1 · Concepto y propósito',        url: 'recursos/empieza-tu-imperio/0.1-concepto-y-proposito.html' },
+      { title: 'SOP 0.2 · Investigación y validación',  url: 'recursos/empieza-tu-imperio/0.2-investigacion-y-validacion.html' },
+      { title: 'SOP 0.3 · Avatar / cliente ideal',      url: 'recursos/empieza-tu-imperio/0.3-avatar-cliente-ideal.html' },
+      { title: 'SOP 0.4 · Ángulo y posicionamiento',    url: 'recursos/empieza-tu-imperio/0.4-angulo-y-posicionamiento.html' },
+      { title: 'SOP 0.5 · Naming',                      url: 'recursos/empieza-tu-imperio/0.5-naming.html' },
+    ],
+    'disena-tus-prendas': [],
+    'comunidad':          [],
+    'contenido-outlier':  [],
+    'eleva-tu-branding':  [],
+    'web':                [],
+    'lanzamiento':        [],
+    'shipping':           [],
   };
 
   // Espresso-style document icon for resource cards.
