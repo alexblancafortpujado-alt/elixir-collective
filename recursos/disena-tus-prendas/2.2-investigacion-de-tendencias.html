@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 2.2 — Investigación de tendencias (trend research)</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 2 · Diseño y Proceso Creativo</p>
+    <h1 class="rv">Tendencias con criterio</h1>
+    <p class="meta rv">SOP 2.2 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Leer el mercado sin volverte un clon de la moda</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que investigues tendencias <strong>con criterio</strong>: para saber hacia dónde se mueve el mercado, tu categoría y tu tribu, y usar esa información para tomar mejores decisiones, <span class="hl">sin perder tu identidad persiguiendo cada moda</span>.
+    </p>
+    <p>La tensión que define todo el SOP: <strong>investigar tendencias no es lo mismo que seguirlas.</strong> Perseguirlas te convierte en una versión tardía y peor de lo que ya hicieron otros; investigarlas te hace más inteligente. La regla madre: <strong>tu identidad manda, la tendencia informa.</strong></p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 6 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que investigues tendencias con criterio: para saber hacia dónde se mueve el mercado, tu categoría y tu tribu, y usar esa información para tomar mejores decisiones, sin perder tu identidad persiguiendo cada moda.</p>
+      <p>Aquí está la tensión que define todo el SOP, y que hay que entender antes de nada: <strong>investigar tendencias no es lo mismo que seguirlas.</strong> Son dos cosas opuestas:</p>
+      <ul>
+        <li><b>Perseguir tendencias (lo que hace el clon):</b> ver qué está pegando, copiarlo y sacarlo. Resultado: eres una versión tardía y peor de lo que ya hicieron otros, sin identidad, siempre reaccionando, y muerto cuando la moda pasa.</li>
+        <li><b>Investigar tendencias (lo que hace la marca con criterio):</b> entender las corrientes del mercado como <em>información de contexto</em>, y decidir conscientemente cuáles filtrar a través de tu identidad, cuáles ignorar, y a cuáles incluso oponerte. La tendencia informa tus decisiones, no las dicta.</li>
+      </ul>
+      <p>La regla madre de este SOP: <strong>tu identidad manda, la tendencia informa.</strong> Si tienes que elegir entre ser fiel a tu marca o subirte a una tendencia, gana la marca siempre. Las marcas fuertes se reconocen precisamente porque no cambian de piel cada temporada persiguiendo lo que está de moda. El trend research existe para hacerte más inteligente, no para hacerte un seguidor.</p>
+      <p>Y una distinción útil que casi nadie hace: no todas las «tendencias» pesan igual. Hay <strong>macro-tendencias</strong> (grandes corrientes culturales que duran años y de verdad importan) y <strong>micro-tendencias</strong> (modas pasajeras que estallan y mueren en meses). Confundirlas es fatal: construir una colección sobre una micro-tendencia es fabricar stock que estará muerto antes de venderse.</p>
+      <p>El resultado concreto es un sistema para investigar tendencias por niveles (cultural, de industria, de tu nicho), un criterio para distinguir lo durable de lo pasajero, y un método para <span class="gold">filtrar lo relevante a través de tu identidad</span> y descartar el resto, traducido en decisiones concretas para tus colecciones.</p>
+      <p class="pull">Lo que pasa si te saltas esto, en los dos extremos: si ignoras las tendencias por completo, te desconectas del mercado y tu marca se vuelve irrelevante o anticuada. Si las persigues ciegamente, pierdes identidad, produces sobre modas que caducan, y te vuelves un clon indistinguible. Este SOP te sitúa en el punto correcto: informado pero fiel a ti.</p>
+
+      <h3><span class="hn">1.2</span>Indicadores de éxito</h3>
+      <ul>
+        <li>Sabes distinguir una <b>macro-tendencia durable</b> de una <b>micro-moda pasajera</b>, y no construyes colecciones sobre las segundas.</li>
+        <li>Usas las tendencias como <b>información filtrada por tu identidad</b>, no como órdenes que copiar.</li>
+        <li>Puedes decidir conscientemente ante una tendencia: <b>adoptarla a tu manera, ignorarla, u oponerte a ella</b> con un porqué.</li>
+        <li>Estás <b>conectado al mercado y a tu tribu</b> (entiendes qué quieren ahora) sin ser un clon de lo que está de moda.</li>
+        <li>Tu investigación mira <b>más allá de otras marcas de ropa</b>: lee cultura, comportamiento y contexto, no solo pasarelas.</li>
+        <li>Cuando una tendencia entra en tu colección, entra <b>traducida a tu mundo</b>, no pegada tal cual.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Principios no negociables</h3>
+      <ol>
+        <li><b>Tu identidad manda, la tendencia informa.</b> Ante el conflicto, gana la marca. Siempre.</li>
+        <li><b>Investigar no es perseguir.</b> El objetivo es entender el contexto y decidir, no copiar lo que pega.</li>
+        <li><b>Distingue macro de micro.</b> Construye sobre corrientes durables; trata las micro-modas como oportunidades puntuales y rápidas, nunca como cimientos.</li>
+        <li><b>Lee cultura, no solo ropa.</b> Las tendencias reales nacen en el comportamiento, la tecnología, la economía y la cultura — antes de llegar a la pasarela.</li>
+        <li><b>Filtrar es la habilidad clave.</b> El valor no está en detectar tendencias (eso lo hace cualquiera), sino en decidir cuáles son para ti y traducirlas a tu mundo.</li>
+        <li><b>Oponerse también es una jugada.</b> A veces la decisión más fuerte es ir en contra de una tendencia. Ser el anti-tendencia posiciona.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De observar el mercado a decidir con criterio</h2>
+      <p>Seis pasos que te llevan de mirar tendencias a tomar decisiones filtradas por tu identidad. El orden importa: primero entiendes cómo funcionan las tendencias, luego investigas por niveles, y al final filtras y decides.</p>
+
+      <h3><span class="hn">2.1</span>Entender cómo funcionan las tendencias (antes de buscar ninguna)</h3>
+      <p>Antes de investigar nada, entiende la mecánica de las tendencias, o las interpretarás mal. Dos ideas cambian todo tu criterio.</p>
+      <p><strong>Primero, los niveles de una tendencia.</strong> Una tendencia no aparece en la ropa de la nada — desciende por capas:</p>
+      <ol>
+        <li><b>Cultura y sociedad:</b> cambios en cómo vive, piensa o siente la gente (tras un evento social, económico, tecnológico). Aquí nacen las corrientes reales.</li>
+        <li><b>Estética general:</b> esos cambios culturales se traducen en gustos visuales (colores, atmósferas, actitudes).</li>
+        <li><b>Industria de la moda:</b> las pasarelas y las grandes marcas convierten esa estética en propuestas de producto.</li>
+        <li><b>Calle y consumo:</b> finalmente llega a lo que la gente compra y lleva.</li>
+      </ol>
+      <p>Entender esto te da ventaja: si solo miras el nivel 4 (lo que ya se lleva), llegas tarde. Si aprendes a leer el nivel 1 (la cultura), ves venir las cosas.</p>
+      <p><strong>Segundo, el ciclo de vida.</strong> Toda tendencia nace, crece, llega a su pico y muere. La pregunta clave ante cualquier tendencia es <em>¿en qué punto del ciclo está?</em></p>
+      <ul>
+        <li><b>Emergente:</b> pocos la ven aún. Máxima oportunidad, máximo riesgo.</li>
+        <li><b>En crecimiento:</b> ganando fuerza. Buen momento para entrar con criterio.</li>
+        <li><b>Pico / mainstream:</b> todos la hacen. Entrar aquí es llegar tarde y competir saturado.</li>
+        <li><b>Declive:</b> muriendo. Producir sobre esto es fabricar stock muerto.</li>
+      </ul>
+      <p>Y la distinción que más dinero salva: <strong>macro-tendencia</strong> (corriente cultural profunda, dura años — ej. un cambio real en cómo la gente entiende la comodidad o el estatus) vs <strong>micro-tendencia</strong> (una moda concreta que estalla en redes y muere en una temporada). Construyes tu marca sobre macro; coqueteas con micro solo si puedes ser rápido y sin comprometer identidad.</p>
+
+      <h3><span class="hn">2.2</span>Investigar por niveles (de la cultura al nicho)</h3>
+      <p>Ahora investigas de verdad, y lo haces por <strong>capas</strong>, de lo amplio a lo concreto. Investigar solo mirando otras marcas de ropa es el error del principiante: llegas tarde y copias. Los que ven venir las cosas leen las capas de arriba. Investiga en tres niveles:</p>
+      <ol>
+        <li><b>Nivel cultural (lo amplio):</b> ¿qué está cambiando en cómo vive y siente la gente? Cambios sociales, económicos, tecnológicos, de valores. Fuentes: medios culturales, ensayo, observación social, qué preocupa y qué desea la gente ahora. Aquí detectas las macro-tendencias antes de que sean moda.</li>
+        <li><b>Nivel industria/estética (lo intermedio):</b> ¿hacia dónde va el gusto visual y la moda en general? Fuentes: pasarelas y colecciones de referencia, publicaciones de moda, informes de tendencias (agencias de forecasting como referencia, ferias de tejidos que van por delante de la temporada), paletas y siluetas emergentes.</li>
+        <li><b>Nivel nicho/tribu (lo concreto y más importante para ti):</b> ¿qué se mueve en TU espacio y en TU tribu específicamente? Esto es lo que más te importa, porque es donde compra tu cliente. Fuentes: los referentes de tu avatar, qué llevan y piden, las plataformas de reventa (qué se agota y se revende caro = demanda real), los comentarios y peticiones en tu comunidad y en la de tus competidores, qué funciona en el contenido de tu nicho.</li>
+      </ol>
+      <p class="pull">Una señal que aparece en el nivel cultural y empieza a verse en tu nicho es una tendencia con fundamento. Una que solo aparece en la calle, ya saturada, es un tren que ya pasó.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Una investigación por los tres niveles (cultural, industria, nicho) con las señales detectadas en cada uno.</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Clasificar lo detectado: macro vs micro, ciclo y relevancia</h3>
+      <p>Has recogido señales; ahora las <strong>clasificas</strong> para saber cuáles importan. No todas las tendencias que detectes merecen tu atención, y tratarlas por igual es el error. Para cada tendencia detectada, evalúa:</p>
+      <ol>
+        <li><b>¿Macro o micro?</b> ¿Es una corriente cultural profunda (durable, años) o una moda pasajera (meses)? Esto determina si puede ser cimiento o solo un guiño puntual.</li>
+        <li><b>¿En qué punto del ciclo está?</b> ¿Emergente, creciendo, en pico saturado, o muriendo? Esto determina si vale la pena y con qué urgencia.</li>
+        <li><b>¿Es relevante para TU marca y tu tribu?</b> Una tendencia enorme en otro segmento puede ser irrelevante para ti. Solo importan las que tocan a tu avatar.</li>
+      </ol>
+      <p>Con esas tres respuestas, clasifica cada tendencia en una de estas cajas:</p>
+      <ul>
+        <li><b>Corriente de fondo</b> (macro + relevante): a tener muy en cuenta para la dirección de la marca.</li>
+        <li><b>Oportunidad puntual</b> (micro + relevante + emergente/creciendo): posible guiño rápido, sin comprometer la marca.</li>
+        <li><b>Ruido</b> (irrelevante para ti, o ya saturada/muriendo): se descarta. Descartar es tan valioso como detectar.</li>
+      </ul>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Las tendencias detectadas clasificadas (corriente de fondo / oportunidad puntual / ruido), cada una con su nivel, ciclo y relevancia.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Filtrar a través de tu identidad (el paso que define tu marca)</h3>
+      <p>Este es el corazón del SOP y lo que separa una marca con criterio de un clon. Ahora coges las tendencias relevantes y las pasas <strong>por el filtro de tu identidad</strong> (concepto, posicionamiento, avatar). La pregunta no es «¿está de moda esto?» sino «<strong>¿esto es de mi marca?</strong>». Ante cada tendencia relevante, decide conscientemente entre tres opciones — las tres son válidas:</p>
+      <ol>
+        <li><b>Adoptar (a tu manera):</b> la tendencia encaja con tu mundo, y la incorporas <em>traducida a tu identidad</em>, no copiada tal cual. Coges la esencia de la tendencia y la ejecutas con tus códigos, tu paleta, tu punto de vista. Así te subes a la corriente sin perderte.</li>
+        <li><b>Ignorar:</b> la tendencia no es de tu marca, aunque esté pegando. Dejarla pasar es una decisión legítima y a menudo la correcta. No todo lo que está de moda es para ti.</li>
+        <li><b>Oponerte:</b> a veces la jugada más fuerte es ir <em>en contra</em> de la tendencia dominante. Si todos van hacia lo llamativo, ser deliberadamente sobrio te posiciona. El anti-tendencia, bien hecho, es una identidad poderosa.</li>
+      </ol>
+      <p class="pull">La regla de oro del filtrado: una tendencia solo entra en tu marca si puede pasar por tu identidad sin romperla. Si para adoptar una tendencia tienes que traicionar quién eres, no la adoptes. La tendencia se adapta a tu marca, nunca al revés.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Para cada tendencia relevante, una decisión consciente (adoptar traducida / ignorar / oponerse) con su porqué ligado a tu identidad.</li>
+      </ul>
+
+      <h3><span class="hn">2.5</span>Traducir las decisiones a tu mundo</h3>
+      <p>Para las tendencias que decidiste <strong>adoptar</strong>, este paso asegura que entren <strong>traducidas</strong>, no pegadas. Adoptar una tendencia sin traducirla es copiar; traducirla es lo que la hace tuya. Cómo traducir una tendencia a tu identidad:</p>
+      <ol>
+        <li><b>Extrae la esencia, no la forma.</b> ¿Qué hay <em>debajo</em> de la tendencia — qué deseo o necesidad refleja? Adopta esa esencia, no la ejecución literal que ya hicieron otros. (Ej.: si la tendencia es un cierto color, quizá lo que importa es la sensación que transmite, y tú la logras con tu propia paleta.)</li>
+        <li><b>Pásala por tus códigos.</b> Ejecuta la tendencia con tu dirección de arte, tu paleta, tus siluetas, tu punto de vista. El resultado debe seguir siendo inconfundiblemente tuyo — alguien debería reconocer tu marca aunque haya una tendencia dentro.</li>
+        <li><b>Intégrala, no la pegues.</b> La tendencia debe sentirse parte natural de tu colección y tu mundo, no un parche puesto para «estar al día». Si se nota que la metiste para seguir la moda, la pegaste mal.</li>
+      </ol>
+      <p class="pull">La prueba: si quitas el «logo» mental y la tendencia sigue pareciendo de tu marca, la tradujiste bien. Si parece de cualquier marca que sigue esa moda, la copiaste.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Las tendencias adoptadas traducidas a tu mundo (esencia extraída + pasada por tus códigos + integrada), listas para alimentar tus colecciones.</li>
+      </ul>
+
+      <h3><span class="hn">2.6</span>Sistematizar el trend research como hábito</h3>
+      <p>Como la captura de inspiración (SOP 2.1), el trend research no es un evento único: es un <strong>hábito continuo</strong>. El mercado se mueve constantemente, y una foto fija de las tendencias caduca rápido. Este paso lo convierte en sistema. Monta el hábito:</p>
+      <ol>
+        <li><b>Observación continua + revisión periódica.</b> Mantén el ojo abierto todo el tiempo (igual que capturas inspiración), y haz una revisión estructurada por niveles cada cierto tiempo (por ejemplo, al inicio de cada ciclo de colección) para actualizar tu lectura del mercado.</li>
+        <li><b>Documenta con criterio.</b> Lleva un registro simple de las tendencias que detectas, con su clasificación (macro/micro, ciclo, relevancia) y tu decisión (adoptar/ignorar/oponerse). Esto te da memoria: ves qué tendencias acertaste, cuáles pasaron, y afinas tu criterio con el tiempo.</li>
+        <li><b>Crúzalo con tu banco de captura.</b> El trend research (mirar hacia fuera, el mercado) y la captura de inspiración (mirar hacia dentro, tu mundo) se alimentan mutuamente. Las mejores colecciones equilibran las dos: relevantes para el mercado <em>y</em> fieles a tu identidad.</li>
+      </ol>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El trend research montado como hábito (observación continua + revisión por ciclo), documentado, y cruzado con tu sistema de captura.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des el trend research por cerrado hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre el criterio de base</p>
+      <ul class="check">
+        <li>Entiendo los niveles de una tendencia (cultura → estética → industria → calle) y sé que leer arriba da ventaja.</li>
+        <li>Sé identificar en qué punto del ciclo está una tendencia (emergente, creciendo, pico, declive).</li>
+        <li>Distingo macro-tendencias (durables, cimiento) de micro-tendencias (pasajeras, solo guiño).</li>
+      </ul>
+
+      <p class="mini">Sobre la investigación</p>
+      <ul class="check">
+        <li>Investigo por los tres niveles: cultural, industria/estética y nicho/tribu.</li>
+        <li>No me limito a mirar otras marcas de ropa; leo cultura y comportamiento.</li>
+        <li>Uso señales de demanda real de mi tribu (reventa, peticiones, qué se agota).</li>
+      </ul>
+
+      <p class="mini">Sobre la clasificación y el filtro</p>
+      <ul class="check">
+        <li>Clasifico cada tendencia (corriente de fondo / oportunidad puntual / ruido).</li>
+        <li>Ante cada tendencia relevante decido conscientemente: adoptar, ignorar u oponerme, con un porqué.</li>
+        <li>Mi identidad manda: no adopto ninguna tendencia que rompa quién soy.</li>
+      </ul>
+
+      <p class="mini">Sobre la traducción y el hábito</p>
+      <ul class="check">
+        <li>Las tendencias que adopto las traduzco a mi mundo (esencia + mis códigos + integradas), no las pego.</li>
+        <li>Si quito el logo mental, una tendencia adoptada sigue pareciendo de mi marca.</li>
+        <li>Tengo el trend research como hábito continuo, documentado y cruzado con mi banco de captura.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 2.2 · Investigación de tendencias (trend research) · v1.0 · Fase 2</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 10.2 — Atención al cliente y postventa</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 10 · Ventas y Comercial</p>
+    <h1 class="rv">Atención al cliente</h1>
+    <p class="meta rv">SOP 10.2 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Cada interacción, incluso el problema, como razón para volver</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que tu <strong>atención al cliente y postventa</strong> no sean una carga reactiva que apagas cuando salta, sino <span class="hl">una palanca de fidelización</span> que convierte compradores en clientes que repiten y defienden la marca. En moda, donde el cliente no puede tocar el producto antes de comprar y las devoluciones son altas, cómo atiendes a la gente define en gran medida si vuelve o se va para siempre.
+    </p>
+    <p>La idea que lo ordena todo: <strong>la atención al cliente es un momento de marca, especialmente cuando hay un problema.</strong> Casi todas las marcas son geniales cuando todo va bien; las que fidelizan de verdad también lo son cuando algo va mal. Un problema bien resuelto puede fidelizar más que una compra sin incidencias, porque le demuestra al cliente que puede confiar en ti.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 8 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que la atención al cliente y la postventa de tu marca no sean una carga reactiva que apagas cuando salta, sino una palanca de fidelización que convierte compradores en clientes que repiten y defienden la marca. En moda, donde el cliente no toca el producto antes de comprar y las devoluciones son altas, cómo atiendes a la gente (antes, durante y después de la compra) define si vuelve o se va para siempre.</p>
+      <p>La idea que ordena todo: <strong>la atención al cliente es un momento de marca, especialmente cuando hay un problema.</strong> La mayoría de las marcas son geniales cuando todo va bien; las que fidelizan de verdad también lo son cuando algo va mal. Un pedido que llega tarde, una talla equivocada, una duda antes de comprar son momentos de fricción, y cómo los gestionas es donde tu marca demuestra quién es. La atención no es «resolver quejas», es demostrar tu marca en los momentos que más importan.</p>
+      <p>Dos ideas más lo sostienen. Primero, <strong>retener y fidelizar es más barato y rentable que captar clientes nuevos constantemente</strong>: una marca que solo capta está en una cinta de correr cara; una que fideliza construye una base recurrente que además la defiende y trae a más gente. Segundo, la atención abarca <span class="gold">todo el ciclo, no solo el «después»</span>: empieza antes de la compra (resolver dudas que desbloquean la venta), sigue durante (la experiencia de compra y envío) y culmina después (cuidar, resolver, fidelizar). El resultado es el criterio y el sistema para atender de forma que fidelice, convirtiendo cada interacción, sobre todo los problemas, en confianza.</p>
+      <p class="pull">Lo que pasa si no lo tienes: tratas la atención como una carga reactiva que gestionas a desgana, y los problemas mal resueltos se convierten en clientes perdidos y malas reseñas. No fidelizas, así que dependes de captar constantemente gente nueva. Sin buena atención, tu marca gana clientes de una vez pero no construye la base leal que la hace sostenible.</p>
+
+      <h3><span class="hn">1.2</span>Indicadores de éxito</h3>
+      <ul>
+        <li>Tu atención al cliente <b>fideliza</b>: convierte compradores en clientes que repiten.</li>
+        <li>Resuelves los <b>problemas de forma que fidelizan</b>, no que ahuyentan: un problema bien resuelto genera confianza.</li>
+        <li>El cliente vive cada interacción como un <b>momento de marca</b> positivo, incluso cuando hay fricción.</li>
+        <li>Tienes una <b>base de clientes recurrentes</b> que compran una y otra vez, no solo clientes de una vez.</li>
+        <li>Tus clientes <b>defienden la marca</b> y la recomiendan por cómo los tratas.</li>
+        <li>Tu atención es <b>rápida, humana y coherente</b> con tu marca.</li>
+        <li>Tienes la atención <b>sistematizada</b> para que sea consistente y escalable, no un caos reactivo.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Insumos necesarios</h3>
+      <ul>
+        <li>Tus <b>SOPs de devoluciones, fulfillment y flujos de email</b> (Fases 5-6): la atención se apoya y coordina con ellos.</li>
+        <li>Tu <b>tono de voz de marca</b> (Fase 0/1): la atención al cliente habla con la voz de la marca.</li>
+        <li>Tu <b>información de producto, envíos, tallas y políticas</b> (varias fases): la base de conocimiento para resolver dudas.</li>
+        <li>Los <b>canales de atención:</b> por dónde te contactan los clientes (email, DMs, WhatsApp, chat de la tienda). Definir dónde atiendes.</li>
+        <li>Tus <b>datos de problemas frecuentes</b> (de devoluciones, de consultas): para anticipar y resolver mejor.</li>
+        <li><b>Tiempo y presencia</b> (o un sistema/persona para atender): la atención requiere respuesta real, sobre todo al principio.</li>
+        <li>Tu <b>política de resolución</b> (qué puedes ofrecer ante problemas): claridad sobre cómo resolver para poder hacerlo rápido.</li>
+      </ul>
+
+      <h3><span class="hn">1.4</span>Principios no negociables</h3>
+      <ol>
+        <li><b>La atención es un momento de marca.</b> Cada interacción, sobre todo los problemas, demuestra quién es tu marca. Trátala como marca, no como carga.</li>
+        <li><b>Un problema bien resuelto fideliza.</b> La forma en que resuelves un problema puede generar más lealtad que una compra perfecta. Convierte los problemas en confianza.</li>
+        <li><b>Fidelizar es más rentable que captar.</b> Retener a un cliente cuesta menos y rinde más que captar uno nuevo. Prioriza la fidelización.</li>
+        <li><b>Rápido, humano y con buena actitud.</b> La velocidad, el trato humano y la buena actitud son lo que convierte una atención en fidelización.</li>
+        <li><b>Trata bien al cliente incluso cuando se equivoca o se queja.</b> El recelo y las trabas dañan; la generosidad razonable y el respeto fidelizan.</li>
+        <li><b>Anticipa y previene.</b> La mejor atención resuelve el problema antes de que ocurra (buena info, buena experiencia). Previene además de resolver.</li>
+        <li><b>Sistematiza para ser consistente.</b> La atención debe ser consistente y escalable, no depender del humor del día. Sistematízala.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De una carga reactiva a una máquina de fidelización</h2>
+      <p>Ocho pasos: entender la atención como fidelización, montar los canales, atender antes de la compra, cuidar durante la compra, resolver los problemas como momentos de marca, cuidar la postventa, convertir clientes en defensores, y sistematizar.</p>
+
+      <h3><span class="hn">2.1</span>Entender la atención al cliente como fidelización</h3>
+      <p>Antes de montar nada, cambia el marco: <strong>la atención al cliente no es resolver quejas, es fidelizar.</strong> Grabar esto transforma cómo abordas cada interacción, de «apagar un fuego» a «construir una relación». Este cambio de mentalidad es la base de todo el SOP.</p>
+      <p>Lo que hay que entender:</p>
+      <ol>
+        <li><b>Cada interacción es una oportunidad de fidelizar:</b> cada vez que un cliente te contacta (una duda, un problema, una consulta) es una oportunidad de demostrar tu marca y ganar lealtad, o de perderla. No es una molestia que gestionar, es un momento de construir la relación.</li>
+        <li><b>Los problemas son el mayor momento de fidelización:</b> contraintuitivamente, un problema bien resuelto fideliza más que una experiencia sin problemas, porque le demuestra al cliente que puede confiar en ti cuando algo va mal.</li>
+        <li><b>La fidelización es rentabilidad:</b> retener clientes es más barato y rentable que captar nuevos constantemente. La atención, al fidelizar, impacta directamente en la rentabilidad. No es un coste, es una inversión en retención.</li>
+        <li><b>La atención construye (o destruye) reputación:</b> cómo tratas a los clientes se difunde (reseñas, boca a boca, redes). Una buena atención construye una reputación que atrae; una mala, la destruye. La atención es marketing, para bien o para mal.</li>
+      </ol>
+      <p class="pull">La atención al cliente es una máquina de fidelización, no un centro de quejas. Cada interacción (sobre todo los problemas) es una oportunidad de fidelizar, y ese cambio de mentalidad la convierte en un activo de tu marca.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Interiorizado el marco de la atención al cliente como fidelización: cada interacción es oportunidad, los problemas fidelizan, fidelizar es rentable, la atención es reputación.</li>
+      </ul>
+
+      <h3><span class="hn">2.2</span>Montar los canales y la base de la atención</h3>
+      <p>Antes de atender bien, monta <strong>dónde y cómo atiendes.</strong> Este paso define los canales y la base para responder de forma rápida y consistente. Una atención sin infraestructura es lenta y caótica; una bien montada es ágil.</p>
+      <p>Cómo montar la base:</p>
+      <ol>
+        <li><b>Define tus canales de atención:</b> por dónde pueden contactarte (email, DMs, WhatsApp, chat de la tienda). Elige canales que puedas atender bien, mejor pocos bien que muchos mal, y comunica claramente cómo contactarte.</li>
+        <li><b>Haz la atención accesible y visible:</b> que sea fácil encontrar cómo contactar (en la tienda, en las fichas, en los emails). Una marca accesible genera confianza; una donde no se sabe cómo contactar, desconfianza. La accesibilidad es en sí misma un elemento de confianza.</li>
+        <li><b>Crea una base de conocimiento:</b> las respuestas a las dudas y problemas frecuentes (tallas, envíos, devoluciones, políticas), reunidas para responder rápido y consistente. Una FAQ para el cliente y una referencia interna para ti.</li>
+        <li><b>Define tu política de resolución:</b> qué puedes ofrecer ante los problemas típicos (un cambio, un reembolso, un reenvío, un descuento). Tenerlo claro de antemano te permite resolver rápido, sin dudar caso por caso.</li>
+      </ol>
+      <p class="pull">Una atención rápida y consistente necesita una base montada. Canales accesibles, una base de conocimiento y una política de resolución clara son lo que convierte las buenas intenciones en atención ágil y fiable.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La base de la atención montada: canales definidos y accesibles, base de conocimiento/FAQ y política de resolución clara.</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Atender antes de la compra (resolver para vender)</h3>
+      <p>La atención al cliente empieza <strong>antes de la compra</strong>: resolver las dudas que frenan la venta. Además de ayudar al cliente, desbloquea ventas que de otro modo se perderían. En moda, muchas ventas dependen de resolver una duda a tiempo.</p>
+      <p>Cómo atender antes de la compra:</p>
+      <ol>
+        <li><b>Resuelve las dudas que desbloquean la venta:</b> antes de comprar, el cliente tiene dudas (sobre todo de talla y fit, la número uno en moda, pero también de material, envío, disponibilidad). Resolverlas rápido y bien convierte un «no estoy seguro» en una compra.</li>
+        <li><b>Responde rápido a las consultas pre-compra:</b> una duda sin responder (o tarde) es una venta perdida: el cliente se enfría o compra en otro sitio. La velocidad impacta directamente en las ventas.</li>
+        <li><b>Ayuda de verdad, no solo vendas:</b> un cliente que pregunta por una talla quiere acertar. Ayudarle de verdad (aunque signifique recomendarle otra talla o decirle que quizá no es para él) genera confianza y reduce devoluciones.</li>
+        <li><b>Anticipa las dudas frecuentes:</b> las dudas frecuentes (tallas, envíos) se anticipan con buena información en la tienda (guía de tallas, FAQ, fichas claras), desbloqueando ventas sin que el cliente tenga que preguntar. Prevenir la duda es aún mejor que resolverla.</li>
+      </ol>
+      <p class="pull">La atención pre-compra resuelve dudas y desbloquea ventas. Una duda bien atendida (sobre todo de talla) se convierte en una venta; ignorada, en una venta perdida.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Un sistema de atención pre-compra (resolver dudas rápido, sobre todo de talla, ayudando de verdad, anticipando las frecuentes con buena info) que desbloquea ventas.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Cuidar la experiencia durante la compra y el envío</h3>
+      <p>La atención sigue <strong>durante la compra y el envío</strong>: la experiencia desde que el cliente compra hasta que recibe. Es donde la ansiedad del cliente es alta (ya pagó, espera su pedido) y donde una buena comunicación fideliza. Se coordina con el fulfillment y los flujos de email.</p>
+      <p>Cómo cuidar durante la compra:</p>
+      <ol>
+        <li><b>Comunica en cada paso:</b> confirmación de pedido, confirmación de envío con tracking (Fases 5-6). El cliente que sabe qué pasa con su pedido está tranquilo; el que no sabe nada, ansioso y propenso a contactar preocupado. La comunicación proactiva previene la ansiedad y los tickets.</li>
+        <li><b>Gestiona bien los problemas de envío:</b> los retrasos, las pérdidas y los problemas de entrega son frecuentes y ansiógenos. Gestionarlos con rapidez, información y buena actitud convierte un problema (que no siempre es culpa tuya) en una demostración de que cuidas al cliente.</li>
+        <li><b>Está disponible durante la espera:</b> el periodo entre la compra y la recepción es cuando el cliente puede tener dudas o preocupaciones. Estar disponible y responder rápido mantiene la confianza y la tranquilidad.</li>
+        <li><b>Cuida que la experiencia de recepción sea buena:</b> la recepción del pedido (el fulfillment, el unboxing, Fase 5) es parte de la atención, es el momento físico de tu marca. Una recepción cuidada (pedido correcto, bien empaquetado, a tiempo) es la mejor atención: la que evita el problema.</li>
+      </ol>
+      <p class="pull">Cuidar la fase compra-recepción con comunicación previene la ansiedad y fideliza. Es de las cosas más baratas y efectivas para fidelizar que existen.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El cuidado de la fase compra-recepción (comunicación en cada paso, buena gestión de problemas de envío, disponibilidad, experiencia de recepción cuidada), coordinado con fulfillment y flujos de email.</li>
+      </ul>
+
+      <h3><span class="hn">2.5</span>Resolver los problemas como momentos de marca</h3>
+      <p>Este es el paso central: <strong>resolver los problemas de forma que fidelicen.</strong> Los problemas (tallas equivocadas, defectos, retrasos, insatisfacción) son inevitables, y cómo los resuelves es donde más se juega tu marca. Un problema bien resuelto es la mayor oportunidad de fidelización que existe.</p>
+      <p>Cómo resolver problemas fidelizando:</p>
+      <ol>
+        <li><b>Responde rápido y con buena actitud:</b> ante un problema, la velocidad y el tono lo son casi todo. Una respuesta rápida, empática y con ganas de ayudar calma al cliente molesto; una lenta o a la defensiva echa más leña al fuego.</li>
+        <li><b>No pongas trabas ni hagas sentir mal al cliente:</b> el recelo, las trabas y hacer sentir al cliente como un sospechoso dañan la relación. Tratar el problema como algo legítimo que quieres resolver (aunque el cliente se haya equivocado) es lo que fideliza. La generosidad razonable se recuerda.</li>
+        <li><b>Resuelve de verdad, no a medias:</b> resuelve de forma que el cliente quede satisfecho, un cambio, un reembolso, un reenvío, lo que corresponda (tu política de resolución). Una resolución regateada deja al cliente insatisfecho; una generosa y clara lo fideliza.</li>
+        <li><b>Convierte el problema en confianza:</b> el objetivo no es «cerrar el ticket», es que el cliente salga confiando más en tu marca que antes. Cuando vive un problema y ve que lo resuelves bien, aprende que puede confiar en ti, y eso fideliza más que si nunca hubiera habido problema.</li>
+      </ol>
+      <p class="pull">Un problema bien resuelto es la mayor oportunidad de fidelización. Las marcas que fidelizan de verdad no son las que no tienen problemas, son las que los resuelven de forma que el cliente sale confiando más.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Un enfoque de resolución de problemas que fideliza: rápido, con buena actitud, sin trabas, resolución real, convirtiendo el problema en confianza.</li>
+      </ul>
+
+      <h3><span class="hn">2.6</span>Cuidar la postventa para fidelizar</h3>
+      <p>La <strong>postventa activa</strong> (cuidar al cliente después de que compró y recibió) es donde se construye la recompra y la lealtad. Este paso trata de la fidelización proactiva: no esperar a que haya un problema, sino cuidar activamente al cliente para que vuelva. Se apoya en los flujos de email de postventa (Fase 6).</p>
+      <p>Cómo cuidar la postventa:</p>
+      <ol>
+        <li><b>Cuida al cliente después de la compra:</b> un mensaje de agradecimiento, asegurarte de que quedó contento, estar disponible para cualquier cosa. Demuestra que la relación no termina cuando pagó.</li>
+        <li><b>Convierte la primera compra en recurrencia:</b> el cliente que compró una vez es el más propenso a volver, si lo cuidas. Invítalo a volver (novedades, productos relacionados, razones para la siguiente compra) y hazlo sentir parte de la marca. Ahí está la rentabilidad.</li>
+        <li><b>Pide y usa el feedback:</b> preguntar cómo fue su experiencia (y las reseñas) le demuestra que te importa (fideliza) y te da información para mejorar. Doble valor.</li>
+        <li><b>Fideliza con marca y comunidad, no solo con ofertas:</b> hacer al cliente parte del mundo y la comunidad de tu marca fideliza más profundamente que un descuento. Un cliente que se siente parte de algo vuelve por pertenencia, no solo por precio.</li>
+      </ol>
+      <p class="pull">La postventa activa convierte compradores en clientes recurrentes. Cuidar tras la compra y fidelizar con marca y comunidad (no solo ofertas) es donde se construye la base leal que hace la marca sostenible.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Un sistema de postventa activa (cuidar tras la compra, convertir en recurrencia, pedir y usar feedback, fidelizar con marca y comunidad) que construye clientes recurrentes.</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Convertir clientes en defensores de la marca</h3>
+      <p>El nivel más alto de la fidelización: <strong>convertir a tus mejores clientes en defensores</strong> que recomiendan y traen a más gente. La atención al cliente, bien hecha, no solo retiene: convierte a los clientes en un motor de crecimiento. Se conecta con la construcción de comunidad.</p>
+      <p>Cómo convertir clientes en defensores:</p>
+      <ol>
+        <li><b>Un cliente bien tratado se convierte en defensor:</b> cuando alguien vive una gran experiencia (buena atención, problemas bien resueltos, cuidado postventa), habla bien de tu marca de forma natural, la recomienda, deja buenas reseñas, trae a gente. La buena atención genera defensores sin que los pidas.</li>
+        <li><b>Facilita y aprovecha la recomendación:</b> el boca a boca de un cliente satisfecho es el marketing más potente y barato (viene con confianza). Facilita que tus clientes contentos recomienden y compartan, y reconóceles cuando lo hacen. Un cliente defensor vale más que cualquier anuncio.</li>
+        <li><b>Cuida especialmente a tus mejores clientes:</b> tus clientes más leales y recurrentes merecen un cuidado especial (reconocimiento, ventajas, hacerlos sentir VIP). Cuidarlos los convierte en tus mayores defensores y en una base recurrente valiosísima.</li>
+        <li><b>La atención como generadora de reputación:</b> cada cliente bien atendido construye tu reputación (reseñas, boca a boca), que atrae a más clientes. La buena atención capta gente nueva a través de la satisfacción de la existente. Retención y captación se retroalimentan.</li>
+      </ol>
+      <p class="pull">La buena atención convierte clientes en defensores, y los defensores en crecimiento. Un cliente bien tratado habla bien de tu marca, la recomienda y trae a gente: tu mejor canal de captación.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Un enfoque para convertir clientes en defensores: buena experiencia que genera recomendación, facilitar el boca a boca, cuidar a los mejores clientes, la atención como generadora de reputación.</li>
+      </ul>
+
+      <h3><span class="hn">2.8</span>Sistematizar la atención al cliente</h3>
+      <p>El último paso convierte todo en un <strong>sistema consistente y escalable</strong>, para que la buena atención no dependa del humor del día ni se rompa cuando crece el volumen. Este paso sistematiza y prepara la atención para delegar y escalar.</p>
+      <p>Cómo sistematizar:</p>
+      <ol>
+        <li><b>Documenta tus procesos de atención:</b> cómo se responde a las dudas frecuentes, cómo se resuelven los problemas típicos, con qué tono, con qué política. Un proceso documentado asegura consistencia y permite delegar sin perder calidad.</li>
+        <li><b>Crea plantillas y respuestas base (con toque humano):</b> tener respuestas base para las consultas frecuentes acelera y asegura consistencia. Pero personalízalas: una plantilla fría se nota y no fideliza; una base bien hecha y con toque humano es rápida y cálida a la vez.</li>
+        <li><b>Mantén el tono de marca y el toque humano al escalar:</b> el reto al delegar es no perder el tono ni la calidez. Documenta tu tono y tus principios de atención para que quien atienda mantenga la esencia. La atención puede escalar sin volverse fría.</li>
+        <li><b>Usa los datos para mejorar y prevenir:</b> los patrones de consultas y problemas te dicen qué mejorar en origen (una talla que genera muchas dudas, un problema recurrente). Prevenir los problemas en la fuente reduce la carga y mejora la experiencia. La mejor atención es la que hace innecesaria la atención.</li>
+      </ol>
+      <p class="pull">Sistematiza la atención para que sea consistente, escalable y siga siendo humana. Un sistema bien hecho mantiene la calidad y la calidez mientras la marca crece.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La atención al cliente sistematizada: procesos documentados, plantillas con toque humano, tono de marca preservado, datos usados para prevenir. Consistente, escalable y humana.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des tu atención al cliente por cerrada hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre el marco y la base</p>
+      <ul class="check">
+        <li>Entiendo la atención al cliente como fidelización, no como centro de quejas.</li>
+        <li>Tengo los canales de atención definidos, accesibles y visibles.</li>
+        <li>Tengo una base de conocimiento/FAQ y una política de resolución clara.</li>
+      </ul>
+
+      <p class="mini">Sobre la atención en el ciclo</p>
+      <ul class="check">
+        <li>Atiendo antes de la compra, resolviendo dudas (sobre todo de talla) que desbloquean ventas.</li>
+        <li>Cuido la fase compra-recepción con comunicación en cada paso y buena gestión de problemas de envío.</li>
+        <li>Resuelvo los problemas como momentos de marca: rápido, con buena actitud, sin trabas, de verdad.</li>
+        <li>Convierto los problemas en confianza.</li>
+      </ul>
+
+      <p class="mini">Sobre la fidelización</p>
+      <ul class="check">
+        <li>Cuido la postventa activamente para convertir compradores en recurrentes.</li>
+        <li>Pido y uso el feedback, y fidelizo con marca y comunidad, no solo con ofertas.</li>
+        <li>Convierto a mis mejores clientes en defensores y facilito la recomendación.</li>
+        <li>Cuido especialmente a mis clientes más leales.</li>
+      </ul>
+
+      <p class="mini">Sobre el sistema</p>
+      <ul class="check">
+        <li>Tengo los procesos de atención documentados para ser consistentes y delegables.</li>
+        <li>Uso plantillas con toque humano, sin deshumanizar.</li>
+        <li>Preservo el tono de marca y la calidez al escalar.</li>
+        <li>Uso los datos de atención para prevenir problemas en origen.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 10.2 · Atención al cliente y postventa · v1.0 · Fase 10</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

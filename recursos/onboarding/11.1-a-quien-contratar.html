@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 11.1 — Cuándo y a quién contratar (roles clave de una marca de ropa)</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 11 · Equipo, Delegación y Sistemas</p>
+    <h1 class="rv">A quién contratar</h1>
+    <p class="meta rv">SOP 11.1 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Dejar de ser el cuello de botella de tu propia marca</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que tomes bien una de las decisiones más difíciles del crecimiento de una marca: <strong>cuándo contratar, a quién y para qué.</strong> Al principio el fundador lo hace todo, y eso está bien, es como se empieza. Pero llega un punto en que hacerlo todo tú deja de ser una virtud y se convierte en <span class="hl">el techo de la marca</span>.
+    </p>
+    <p>El equilibrio es entre dos errores opuestos, y los dos son caros: <strong>contratar demasiado pronto</strong> te come un coste fijo que aún no puedes permitirte y puede ahogar económicamente a una marca joven; <strong>contratar demasiado tarde</strong> te convierte en el cuello de botella que frena el crecimiento, te quema y estanca la marca en tu capacidad individual.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 8 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que tomes bien una de las decisiones más difíciles del crecimiento de una marca: cuándo contratar, a quién y para qué. Al principio, el fundador lo hace todo (diseña, produce, vende, atiende, crea contenido), y eso está bien. Pero llega un punto en que hacerlo todo tú deja de ser una virtud y se convierte en el techo de la marca: eres el cuello de botella, y la marca no puede crecer más allá de lo que tú solo puedes hacer.</p>
+      <p>La idea que lo ordena todo: <strong>contratar es un equilibrio entre dos errores opuestos, y los dos son caros.</strong></p>
+      <ul>
+        <li><b>Contratar demasiado pronto:</b> traes gente (y su coste) antes de que la marca lo sostenga o de que el rol lo justifique. Te comes un coste fijo que aún no puedes permitirte, y a veces contratas para algo que aún no está claro. Puede ahogar económicamente a una marca joven.</li>
+        <li><b>Contratar demasiado tarde:</b> te aferras a hacerlo todo tú mucho después de que deberías haber soltado, y te conviertes en el cuello de botella que frena el crecimiento. Te quemas, la calidad baja porque no llegas a todo, y la marca se estanca en tu capacidad individual.</li>
+      </ul>
+      <p>El arte está en navegar entre ambos: no contratar antes de que la marca lo sostenga y el rol lo justifique, pero no aferrarte a hacerlo todo hasta ahogarte. La segunda idea ordena qué soltar primero: <strong>suelta primero lo que menos valor aporta que hagas tú y lo que peor se te da, y quédate con lo que solo tú puedes o debes hacer.</strong> Hay cosas que solo tú puedes hacer (la visión, la dirección creativa, las decisiones clave de la marca) y cosas que cualquiera puede hacer igual o mejor que tú. Delegas lo segundo para concentrarte en lo primero.</p>
+      <p>La tercera idea: <strong>hay una gran diferencia entre contratar empleados y trabajar con freelancers o servicios, y al principio casi siempre conviene lo segundo.</strong> Hay un espectro: freelancers, colaboradores por proyecto, servicios externos, agencias y empleados. Lo flexible tiene menos riesgo y menos coste fijo mientras la marca es joven. El resultado es <span class="gold">el criterio para decidir cuándo contratar, qué soltar primero y a quién traer para qué</span>, de forma que dejes de ser el cuello de botella de tu marca sin contratar antes de tiempo ni ahogarte por hacerlo tarde.</p>
+      <p class="pull">Lo que pasa si lo haces mal: contratas demasiado pronto y el coste fijo ahoga a tu marca joven, o demasiado tarde y te conviertes en el cuello de botella que frena el crecimiento y te quema. Sueltas lo que no debías y retienes lo que sí deberías delegar. O ahogas la marca con costes prematuros, o la estancas en tu capacidad individual, y ambos errores son caros.</p>
+
+      <h3><span class="hn">1.2</span>Indicadores de éxito</h3>
+      <ul>
+        <li>Sueltas primero <b>lo que menos valor aporta que hagas tú</b> y te quedas con lo que solo tú puedes hacer.</li>
+        <li>Dejas de ser el <b>cuello de botella</b> de tu marca en las áreas que no requieren tu valor único.</li>
+        <li>Eliges el <b>tipo de relación adecuado</b> (freelancer, servicio, empleado) para cada necesidad.</li>
+        <li>Cada contratación <b>libera tu tiempo</b> para lo que de verdad hace crecer la marca.</li>
+        <li>Contratas para <b>roles que el negocio justifica y sostiene</b>, no por impulso o por moda.</li>
+        <li>Tu marca puede <b>crecer más allá de tu capacidad individual</b> sin ahogarse económicamente.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Elementos necesarios</h3>
+      <ul>
+        <li>Una <b>visión clara de todo lo que hace tu marca</b> (diseño, producción, tienda, contenido, ventas, operaciones, atención): para saber qué se puede delegar.</li>
+        <li>Claridad sobre <b>qué solo puedes hacer tú</b> (tu visión, tu dirección creativa, las decisiones de marca) frente a qué puede hacer otro.</li>
+        <li>Tu <b>situación económica</b> (lo que la marca sostiene): para saber qué puedes permitirte y cuándo.</li>
+        <li>Tus <b>SOPs y sistemas</b> (todas las fases): lo que está sistematizado es más fácil de delegar. La delegación se apoya en los procesos documentados.</li>
+        <li>Conocimiento de los <b>roles clave de una marca de ropa</b> y cómo se suelen cubrir.</li>
+        <li>Claridad sobre las <b>señales de que un rol lo justifica</b>, que este SOP te ayuda a reconocer.</li>
+      </ul>
+
+      <h3><span class="hn">1.4</span>Principios no negociables</h3>
+      <ol>
+        <li><b>Contratar es un equilibrio: ni pronto ni tarde.</b> Ni antes de que la marca lo sostenga (ahoga), ni tan tarde que te conviertas en cuello de botella (estanca). Navega entre ambos.</li>
+        <li><b>Suelta lo que menos valor aporta que hagas tú.</b> Delega lo que otro puede hacer igual o mejor; quédate con lo que solo tú puedes o debes hacer.</li>
+        <li><b>Contrata para liberarte para lo que importa.</b> El objetivo es liberar tu tiempo para lo que de verdad hace crecer la marca, no solo «quitarte trabajo».</li>
+        <li><b>Flexible antes que fijo, al principio.</b> Freelancers y servicios antes que empleados fijos, mientras puedas. Menos riesgo y coste fijo.</li>
+        <li><b>Contrata lo que el negocio sostiene y justifica.</b> Un rol se contrata cuando el negocio lo sostiene económicamente y lo justifica por carga o necesidad, no por impulso.</li>
+        <li><b>Sistematiza antes de delegar.</b> Lo que está documentado (SOPs) es delegable; lo que está solo en tu cabeza, no.</li>
+        <li><b>Delegar es soltar de verdad, no microgestionar.</b> Contratar sin soltar el control no libera tu tiempo. Delegar bien implica confiar y soltar.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De hacerlo todo tú a un equipo que hace crecer la marca</h2>
+      <p>Ocho pasos: reconocer que eres el cuello de botella, mapear qué soltar y qué retener, entender el orden de delegación, conocer los roles clave, reconocer las señales de contratar, elegir el tipo de relación, contratar y delegar bien, y sistematizar la delegación.</p>
+
+      <h3><span class="hn">2.1</span>Reconocer cuándo eres el cuello de botella</h3>
+      <p>El primer paso es reconocer <strong>cuándo hacerlo todo tú ha dejado de ser una virtud y se ha convertido en el techo de tu marca.</strong> Al principio, el fundador todoterreno es lo correcto; en cierto punto, es el freno. Reconocer ese punto es lo que dispara la decisión de contratar.</p>
+      <p>Las señales de que eres el cuello de botella:</p>
+      <ol>
+        <li><b>No llegas a todo y la calidad baja:</b> cuando tienes tanto que hacer que no llegas, o que las cosas salen peor porque estás desbordado, eres el cuello de botella. La marca está limitada por tu capacidad individual, y esa capacidad está saturada.</li>
+        <li><b>Las cosas se retrasan porque dependen de ti:</b> cuando el crecimiento o las operaciones se frenan porque todo pasa por ti y no das abasto, eres el freno. Tareas que esperan a que tú tengas tiempo son crecimiento que no ocurre.</li>
+        <li><b>Pasas tu tiempo en cosas que no requieren tu valor único:</b> cuando gastas la mayor parte de tu tiempo en tareas operativas que cualquiera podría hacer, en lugar de en lo que solo tú puedes hacer, estás desperdiciando tu valor. Tu tiempo en tareas delegables es tiempo robado a lo que de verdad hace crecer la marca.</li>
+        <li><b>Te estás quemando:</b> hacerlo todo tú, más allá de cierto punto, quema. El agotamiento del fundador que no delega es una señal clara de que has pasado el punto de contratar.</li>
+      </ol>
+      <p class="pull">Reconoce cuándo hacerlo todo tú pasó de virtud a freno. El fundador todoterreno es correcto al principio, pero en cierto punto limita la marca a su capacidad individual, retrasa el crecimiento, desperdicia su valor único en tareas delegables y se quema.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El reconocimiento de si (y en qué áreas) eres el cuello de botella de tu marca, por las señales de saturación, retrasos, tiempo mal invertido y agotamiento.</li>
+      </ul>
+
+      <h3><span class="hn">2.2</span>Mapear qué soltar y qué retener</h3>
+      <p>Antes de contratar, mapea <strong>qué tareas puedes soltar y qué debes retener.</strong> No todo se delega igual: hay cosas que solo tú puedes hacer y cosas que otro puede hacer igual o mejor. Este mapa es la base para decidir qué delegar primero.</p>
+      <p>Cómo mapear:</p>
+      <ol>
+        <li><b>Lista todo lo que haces:</b> todas las áreas y tareas de tu marca (diseño, producción, contenido, ventas, atención, operaciones, finanzas). Ver todo lo que haces te muestra la magnitud y qué hay para potencialmente delegar.</li>
+        <li><b>Separa lo que solo tú puedes o debes hacer:</b> tu visión, tu dirección creativa, las decisiones clave de la marca, lo que define tu marca y requiere que seas tú. Esto es lo que retienes: tu valor único e indelegable. Delegarlo sería perder el alma de la marca.</li>
+        <li><b>Identifica lo que otro puede hacer igual o mejor:</b> las tareas operativas, la ejecución, lo técnico especializado (que otro hace mejor que tú), lo repetitivo. Esto es lo que puedes y debes soltar: no requiere tu valor único y te quita tiempo de lo que sí.</li>
+        <li><b>Reconoce lo que se te da mal o no disfrutas:</b> las tareas que haces peor que un especialista o que odias hacer son candidatas prioritarias. Delegarlas mejora la calidad (un especialista lo hace mejor) y tu vida (dejas de hacer lo que odias).</li>
+      </ol>
+      <p class="pull">Mapea lo que solo tú puedes hacer (retener) frente a lo que otro puede hacer (soltar). Retienes lo que te hace irremplazable; sueltas lo que te quita tiempo sin requerir que seas tú.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Un mapa de tus tareas separadas en lo que solo tú puedes o debes hacer (retener) y lo que otro puede hacer igual o mejor (soltar), priorizando lo que se te da mal o no disfrutas.</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Entender el orden de delegación</h3>
+      <p>Con el mapa hecho, entiende <strong>en qué orden delegar.</strong> No se delega todo a la vez ni al azar: hay un orden lógico que maximiza el beneficio de cada contratación.</p>
+      <p>El orden lógico de delegación:</p>
+      <ol>
+        <li><b>Primero, lo que más tiempo te quita aportando menos valor:</b> las tareas operativas y repetitivas que consumen mucho de tu tiempo sin requerir tu valor único. Delegarlas libera mucho tiempo con poco riesgo: es el mayor retorno inicial.</li>
+        <li><b>Luego, lo especializado que otro hace mejor:</b> las tareas que un especialista hace mejor que tú (lo técnico, lo creativo especializado). Delegarlas mejora la calidad además de liberar tu tiempo. Aquí no solo ganas tiempo, ganas calidad.</li>
+        <li><b>Lo que crece con la marca:</b> a medida que la marca crece, áreas enteras (producción, atención, contenido) generan tanta carga que necesitan a alguien dedicado. Delegas estas cuando el volumen las convierte en un trabajo a tiempo completo.</li>
+        <li><b>Retén lo tuyo hasta el final (o siempre):</b> tu valor único (visión, dirección de marca, decisiones clave) es lo último que delegas, y algunas cosas quizás nunca. Al crecer puedes traer gente que te ayude incluso en estas áreas, pero la dirección última sigue siendo tuya.</li>
+      </ol>
+      <p class="pull">Delega en orden: primero lo que más tiempo te quita aportando menos valor, y retén tu valor único hasta el final. Un orden lógico hace que cada contratación aporte el máximo.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El orden de delegación de tu marca definido: primero lo operativo que más tiempo quita, luego lo especializado, después las áreas que crecen, reteniendo tu valor único.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Conocer los roles clave de una marca de ropa</h3>
+      <p>Este paso te da el <strong>mapa de los roles clave de una marca de ropa</strong>: qué funciones existen y se suelen cubrir a medida que una marca crece. Conocerlos te ayuda a identificar qué necesitas y cuándo. Son funciones, no necesariamente personas: una persona puede cubrir varias, o un freelancer una parte.</p>
+      <p>Las áreas y roles clave:</p>
+      <ol>
+        <li><b>Diseño y producto:</b> el diseño de las prendas, el desarrollo de producto, los tech packs. Al principio lo hace el fundador (si es su fuerza); puede necesitar apoyo de diseño o desarrollo de producto al crecer.</li>
+        <li><b>Producción y operaciones:</b> la gestión de la producción, los proveedores, el inventario, el fulfillment. Genera mucha carga operativa al crecer y suele necesitar alguien dedicado.</li>
+        <li><b>Contenido y creatividad:</b> la creación de contenido, la fotografía, la edición, la dirección de arte. Suele ser de lo primero que se apoya con freelancers o un equipo de contenido, porque es intensivo y constante (conecta con Fase 7).</li>
+        <li><b>Marketing y ventas:</b> la estrategia de marketing, los lanzamientos, la publicidad, el email. Puede empezar en el fundador y necesitar apoyo especializado (ads, email) al crecer.</li>
+        <li><b>Atención al cliente:</b> la gestión de las consultas, problemas y postventa. Crece con las ventas y suele necesitar alguien dedicado cuando el volumen sube.</li>
+        <li><b>Finanzas y administración:</b> la contabilidad, la gestión financiera, lo legal, lo administrativo. Suele apoyarse con servicios externos (una gestoría, un contable) desde bastante pronto (conecta con Fase 12).</li>
+      </ol>
+      <p class="pull">Conoce las áreas y roles clave de una marca de ropa para saber qué necesitas y cuándo, sin descubrir sobre la marcha que te falta cubrir un área clave.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Conocido el mapa de áreas y roles clave de una marca de ropa (diseño/producto, producción/operaciones, contenido, marketing/ventas, atención, finanzas/administración) y cómo se suelen cubrir.</li>
+      </ul>
+
+      <h3><span class="hn">2.5</span>Reconocer las señales de que un rol lo justifica</h3>
+      <p>Saber qué roles existen no basta; hay que saber <strong>cuándo contratar cada uno.</strong> Este paso da las señales de que un rol concreto está justificado, para no contratar antes de tiempo ni demasiado tarde.</p>
+      <p>Las señales de que un rol lo justifica:</p>
+      <ol>
+        <li><b>La carga de esa área es demasiada para ti:</b> cuando un área genera tanto trabajo que ya no llegas o que te consume desproporcionadamente, necesita a alguien. Un área que se ha vuelto un trabajo a tiempo completo justifica una dedicación.</li>
+        <li><b>Esa área frena el crecimiento por depender de ti:</b> cuando las cosas se retrasan ahí porque solo tú lo haces y no das abasto, contratar para ella desbloquea el crecimiento. El coste de no contratar (el crecimiento frenado) supera al de contratar.</li>
+        <li><b>El negocio sostiene el coste:</b> el rol se justifica cuando la marca puede sostener económicamente ese coste. Contratar algo que el negocio no sostiene, por muy necesario que parezca, puede ahogar la marca.</li>
+        <li><b>El retorno del rol supera su coste:</b> un rol se justifica cuando lo que aporta (tiempo liberado para crecer, calidad, capacidad) vale más que su coste.</li>
+      </ol>
+      <p class="pull">Contrata un rol cuando la carga lo exige, frena el crecimiento, el negocio lo sostiene y su retorno supera su coste. Estas señales juntas marcan el timing correcto: ni antes, ni demasiado tarde.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El criterio para reconocer cuándo un rol lo justifica (la carga lo exige, frena el crecimiento, el negocio lo sostiene, el retorno supera el coste) aplicado a tus áreas.</li>
+      </ul>
+
+      <h3><span class="hn">2.6</span>Elegir el tipo de relación (freelancer, servicio, empleado)</h3>
+      <p>Contratar no significa siempre «empleado fijo». Hay un <strong>espectro de formas de traer ayuda</strong>, y elegir la adecuada para cada necesidad es clave, sobre todo al principio, donde lo flexible suele ganar.</p>
+      <p>El espectro de relaciones:</p>
+      <ol>
+        <li><b>Freelancer o colaborador por proyecto:</b> alguien que hace un trabajo concreto, sin compromiso fijo. Es flexible, sin coste fijo, ideal para necesidades puntuales o variables (un fotógrafo, un editor, un diseñador para un proyecto). Al principio suele ser la mejor opción por su flexibilidad y bajo riesgo.</li>
+        <li><b>Servicio externo o agencia:</b> una empresa que cubre una función (una gestoría para las finanzas, una agencia para los ads, un 3PL para el fulfillment). Externalizas una función entera sin contratar, con la experiencia de un especialista. Ideal para funciones que no son tu core o que requieren especialización.</li>
+        <li><b>Empleado (a tiempo parcial o completo):</b> alguien fijo en tu equipo. Aporta dedicación, compromiso e integración en la marca, a cambio de coste fijo y compromiso. Se justifica cuando una función genera carga constante y a tiempo completo, y el negocio lo sostiene. Es el paso de mayor compromiso.</li>
+      </ol>
+      <p>Cómo elegir:</p>
+      <ul>
+        <li><b>Empieza flexible:</b> al principio, prioriza freelancers y servicios sobre empleados fijos. Menos riesgo, menos coste fijo, más flexibilidad mientras la marca es joven e incierta.</li>
+        <li><b>Contrata fijo cuando la carga es constante y el negocio lo sostiene:</b> cuando una función genera trabajo constante a tiempo completo y la marca puede sostener el coste fijo, un empleado tiene sentido.</li>
+        <li><b>Externaliza lo que no es tu core:</b> las funciones especializadas que no son el corazón de tu marca (finanzas, logística) a menudo es mejor externalizarlas a un servicio que contratarlas.</li>
+      </ul>
+      <p class="pull">Elige el tipo de relación según la necesidad, y empieza flexible. Elegir bien el tipo de relación es tan importante como elegir a quién.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El tipo de relación elegido para cada necesidad (freelancer, servicio o empleado), priorizando lo flexible al principio y reservando el empleado fijo para carga constante que el negocio sostiene.</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Contratar y delegar bien (soltar de verdad)</h3>
+      <p>Traer a alguien es solo la mitad; la otra mitad es <strong>delegar de verdad.</strong> Contratar sin soltar el control no libera tu tiempo, solo añade coste.</p>
+      <p>Cómo contratar y delegar bien:</p>
+      <ol>
+        <li><b>Contrata a la persona adecuada para el rol:</b> busca a quien encaje con la función (la habilidad) y con tu marca (los valores, el mundo). Sobre todo en una marca de moda con identidad fuerte, quien traes tiene que entender y respetar el mundo de la marca, no solo tener la habilidad técnica.</li>
+        <li><b>Da contexto y expectativas claras:</b> para hacer bien un trabajo, alguien necesita entender qué se espera, cómo y con qué estándar. Delegar sin contexto claro lleva a resultados que no encajan y a que acabes rehaciéndolo.</li>
+        <li><b>Suelta de verdad, no microgestiones:</b> el error del fundador es «delegar» pero seguir controlando cada detalle, lo que no libera su tiempo ni deja trabajar a la persona. Delegar bien es dar el marco y el estándar, y luego confiar y soltar.</li>
+        <li><b>Confía pero verifica el resultado, no el proceso:</b> delega el cómo (confía en que la persona ejecute a su manera) y verifica el qué (que el resultado cumpla el estándar). Ese es el equilibrio de una delegación sana: mantiene la calidad sin ahogar ni volver a atarte tú.</li>
+      </ol>
+      <p class="pull">Contrata a la persona adecuada y delega de verdad, soltando el control. Si contratas a alguien y sigues haciéndolo tú a través de ellos, no has delegado: has añadido coste.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Un enfoque de contratación y delegación (contratar a quien encaje con rol y marca, dar contexto y estándar claros, soltar de verdad, verificar resultado no proceso) que libera tu tiempo de verdad.</li>
+      </ul>
+
+      <h3><span class="hn">2.8</span>Sistematizar la delegación con procesos</h3>
+      <p>El último paso hace la delegación <strong>sostenible y escalable</strong>: apoyarla en sistemas y procesos (tus SOPs) para que delegar sea fácil, consistente y no dependa de explicar todo cada vez. Aquí es donde toda la biblioteca de SOPs que has construido da su fruto.</p>
+      <p>Cómo sistematizar la delegación:</p>
+      <ol>
+        <li><b>Apóyate en tus SOPs para delegar:</b> lo que está documentado es delegable, porque la persona tiene una guía clara de cómo se hace. Lo que está solo en tu cabeza, no. Los SOPs son la infraestructura de la delegación.</li>
+        <li><b>Documenta lo que aún no esté sistematizado:</b> si vas a delegar algo que aún no tiene proceso, documéntalo primero. Un proceso escrito convierte «algo que solo tú sabes hacer» en «algo que otro puede ejecutar».</li>
+        <li><b>Delegar con sistemas asegura consistencia:</b> cuando delegas con un SOP, el resultado es consistente según el estándar documentado, aunque lo haga otra persona. Sin sistemas, cada persona hace las cosas a su manera y la marca pierde consistencia.</li>
+        <li><b>Los sistemas hacen la marca escalable e independiente de ti:</b> una marca con procesos documentados puede crecer, delegar y funcionar sin depender de que el fundador haga o explique todo. Es el objetivo final de esta fase.</li>
+      </ol>
+      <p class="pull">Sistematiza la delegación con procesos para que sea fácil, consistente y escalable. Toda la biblioteca de SOPs que has construido es la infraestructura que hace tu marca delegable. Aquí es donde ese trabajo da su fruto.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La delegación sistematizada con procesos: apoyada en los SOPs, documentando lo que falte, asegurando consistencia y haciendo la marca escalable e independiente del fundador.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des tu estrategia de equipo por cerrada hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre el reconocimiento y el mapa</p>
+      <ul class="check">
+        <li>Reconozco si (y en qué áreas) soy el cuello de botella de mi marca.</li>
+        <li>He mapeado qué solo puedo o debo hacer yo (retener) frente a qué puede hacer otro (soltar).</li>
+        <li>Priorizo soltar lo que se me da mal o no disfruto.</li>
+      </ul>
+
+      <p class="mini">Sobre el orden y los roles</p>
+      <ul class="check">
+        <li>Tengo claro el orden de delegación (primero lo operativo que más tiempo quita, reteniendo mi valor único).</li>
+        <li>Conozco las áreas y roles clave de una marca de ropa (diseño/producto, producción/operaciones, contenido, marketing/ventas, atención, finanzas).</li>
+        <li>Sé reconocer las señales de que un rol lo justifica (carga, frena el crecimiento, el negocio lo sostiene, retorno supera coste).</li>
+      </ul>
+
+      <p class="mini">Sobre el tipo de relación y la delegación</p>
+      <ul class="check">
+        <li>Elijo el tipo de relación adecuado (freelancer, servicio, empleado), empezando flexible.</li>
+        <li>Externalizo lo que no es mi core (finanzas, logística) a servicios.</li>
+        <li>Contrato a quien encaje con el rol y con mi marca.</li>
+        <li>Delego de verdad: doy contexto y estándar, suelto el control, verifico el resultado no el proceso.</li>
+      </ul>
+
+      <p class="mini">Sobre la sistematización</p>
+      <ul class="check">
+        <li>Me apoyo en mis SOPs para delegar de forma consistente.</li>
+        <li>Documento lo que aún no esté sistematizado antes de delegar.</li>
+        <li>Entiendo que mis sistemas son lo que hacen la marca escalable e independiente de mí.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 11.1 · Cuándo y a quién contratar (roles clave de una marca de ropa) · v1.0 · Fase 11</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

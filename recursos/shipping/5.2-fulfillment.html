@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 5.2 — Proceso de preparación de pedidos (fulfillment)</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 5 · Operaciones, Inventario y Fulfillment</p>
+    <h1 class="rv">Fulfillment</h1>
+    <p class="meta rv">SOP 5.2 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; La última milla que decide si el cliente vuelve</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que tengas un <strong>proceso claro y repetible de preparar y enviar pedidos</strong> —el <em>fulfillment</em>— desde que entra una compra hasta que el paquete sale hacia el cliente. Es una de las partes que más define si un cliente vuelve, porque es <span class="hl">el único momento en que tu marca toca físicamente a la persona</span>.
+    </p>
+    <p>El fulfillment es la última milla, y es donde una marca puede <strong>arruinar todo lo bueno que hizo antes.</strong> Puedes tener el mejor producto, la mejor campaña y la mejor web, pero si el pedido llega tarde, con la talla equivocada o roto, esa es la experiencia que el cliente recuerda.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 8 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que tengas un proceso claro y repetible de preparar y enviar pedidos: desde que entra una compra hasta que el paquete sale hacia el cliente. Al revés que un pedido tardío o equivocado, uno que llega rápido, correcto y con un packaging cuidado convierte una compra en un <span class="gold">momento de marca</span> — el «unboxing» que la gente fotografía y comparte.</p>
+      <p>Hay dos objetivos que equilibrar, y que a veces tiran en direcciones opuestas:</p>
+      <ul>
+        <li><b>Eficiencia:</b> preparar pedidos rápido, sin errores, sin que te coma la vida. Un proceso lento o caótico no escala y te ahoga en cuanto llegan las ventas.</li>
+        <li><b>Experiencia:</b> que abrir el paquete sea un momento de marca, coherente con todo lo que construiste. El packaging y el detalle importan (se cruza con el SOP de packaging y unboxing).</li>
+      </ul>
+      <p>Un buen proceso consigue las dos cosas a la vez. Y de fondo hay una decisión estratégica: ¿lo haces tú (in-house) o lo externalizas (3PL)? El resultado concreto: un proceso paso a paso de la compra al envío, rápido y sin errores, con la experiencia de unboxing integrada, con control de la calidad de cada envío, y con criterio para saber cuándo externalizarlo.</p>
+      <p class="pull">Si no lo sistematizas: cada pedido es un lío improvisado, cometes errores de talla o dirección que generan devoluciones, los envíos se retrasan, el proceso te consume el tiempo que deberías dedicar a crecer, y recibir el paquete es frío o descuidado. El fulfillment caótico es lo que hace que una marca «no escale» y que los clientes no repitan pese a tener buen producto.</p>
+
+      <h3><span class="hn">1.2</span>Insumos necesarios</h3>
+      <ul>
+        <li><b>El stock organizado y el inventario sincronizado</b> (SOPs anteriores de Fase 5): no puedes preparar pedidos rápido si no encuentras el producto ni sabes qué tienes.</li>
+        <li><b>El sistema de packaging y unboxing definido</b> (SOP de packaging): los materiales y el ritual de empaquetado que aplicarás en cada pedido.</li>
+        <li><b>Una plataforma de gestión de pedidos:</b> normalmente tu tienda (Shopify y similares gestionan los pedidos entrantes, su estado y las etiquetas de envío).</li>
+        <li><b>Un transportista / servicio de mensajería</b> contratado, con sus tarifas y su forma de generar etiquetas de envío.</li>
+        <li><b>Los materiales de envío</b> a mano y organizados: cajas/sobres, packaging de marca, relleno, etiquetas, extras (tarjetas, stickers).</li>
+        <li><b>Un espacio de trabajo (packing station)</b> organizado donde preparar los pedidos con todo a mano.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Principios no negociables</h3>
+      <ol>
+        <li><b>El fulfillment es el último punto de contacto.</b> Es donde tu marca toca al cliente. Trátalo con el cuidado de una experiencia de marca, no como una tarea logística.</li>
+        <li><b>Rápido Y sin errores Y con experiencia.</b> No elijas entre eficiencia y cuidado: sistematiza para conseguir las tres.</li>
+        <li><b>El error se previene con proceso, no con atención.</b> Confiar en «fijarte bien» falla cuando hay volumen. Un proceso con verificación es lo que evita mandar la talla equivocada.</li>
+        <li><b>Un proceso repetible que cualquiera pueda seguir.</b> El fulfillment tiene que poder delegarse. Si solo tú sabes hacerlo, no escala.</li>
+        <li><b>Verifica antes de cerrar el paquete.</b> Comprobar el pedido contra lo comprado, antes de sellar, es lo que evita el error caro.</li>
+        <li><b>Comunica al cliente.</b> Confirmación y seguimiento. El silencio genera ansiedad y tickets de soporte; la comunicación genera confianza.</li>
+        <li><b>Sabe cuándo delegar.</b> Preparar pedidos a mano no escala infinitamente. Reconoce cuándo externalizar para no ahogarte.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De una compra a un paquete enviado sin errores</h2>
+      <p>Ocho pasos: montar la estación y los materiales, recibir y procesar el pedido, hacer el picking, verificar, empaquetar con experiencia, generar el envío, comunicar al cliente, y decidir sistematización o externalización.</p>
+
+      <h3><span class="hn">2.1</span>Montar la estación de empaquetado y los materiales</h3>
+      <p>Antes de preparar un solo pedido, monta un <strong>espacio de trabajo (packing station) organizado</strong> con todo a mano. La eficiencia del fulfillment empieza por no perder tiempo buscando cosas: un espacio caótico convierte cada pedido en una odisea; uno ordenado, en una rutina de minutos.</p>
+      <ol>
+        <li><b>Una zona de trabajo dedicada</b> con superficie despejada, cerca del stock para minimizar desplazamientos.</li>
+        <li><b>Todos los materiales de envío ordenados y a mano:</b> cajas/sobres en sus tamaños, packaging de marca, relleno/protección, etiquetas, cinta, y los extras (tarjetas, stickers, muestras). Cada cosa en su sitio, repuesta.</li>
+        <li><b>Las herramientas:</b> impresora de etiquetas (o acceso a imprimirlas), tijeras, báscula si pesas los envíos, y el dispositivo desde el que gestionas los pedidos.</li>
+        <li><b>Stock de materiales controlado:</b> ten siempre suficiente packaging. Quedarte sin cajas en plena tanda de pedidos te para el negocio. Trata los materiales de envío como un inventario más que reponer.</li>
+      </ol>
+      <p class="pull">Todo a mano, todo repuesto, todo en su sitio. El tiempo que ahorras por pedido se multiplica por cientos de pedidos.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La estación de empaquetado montada y organizada, con todos los materiales a mano, ordenados y con stock suficiente.</li>
+      </ul>
+
+      <h3><span class="hn">2.2</span>Recibir y procesar el pedido entrante</h3>
+      <p>El proceso arranca cuando entra una compra. El primer paso es <strong>procesar el pedido</strong> correctamente en tu sistema antes de tocar nada físico.</p>
+      <ol>
+        <li><b>El pedido entra en tu plataforma</b> (Shopify y similares registran cada compra con su estado). Tienes una lista clara de pedidos pendientes de preparar.</li>
+        <li><b>Verifica los datos del pedido:</b> qué producto(s), qué talla(s), qué color(es), cantidad y la dirección de envío. Un vistazo de comprobación aquí previene errores aguas abajo.</li>
+        <li><b>Confirma el stock:</b> que efectivamente tienes lo pedido. Si tu inventario está bien sincronizado ya está garantizado, pero es el momento de detectar cualquier problema antes de prometer un envío que no puedes cumplir.</li>
+        <li><b>Ordena los pedidos por prioridad:</b> un criterio (por antigüedad, por tipo de envío) evita que unos se queden atrás. El que compró primero, sale primero, salvo envíos urgentes.</li>
+      </ol>
+      <p>La regla: procesa antes de picar. Tener claro qué lleva cada pedido y en qué orden los preparas evita el caos de ir pedido a pedido sin sistema. Trabaja de la lista, no de la memoria.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Los pedidos entrantes procesados y verificados (producto, talla, color, dirección, stock), ordenados por prioridad de preparación.</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Hacer el picking (recoger el producto)</h3>
+      <p>El <em>picking</em> es ir a por los productos del pedido al stock. Aquí es donde la organización de tu almacén (SOP anterior) se paga: un stock ordenado hace el picking rápido y sin errores; uno caótico lo hace lento y propenso a coger la talla equivocada.</p>
+      <ol>
+        <li><b>Trabaja con la lista de picking:</b> ten delante exactamente qué SKUs (prenda-talla-color) lleva el pedido, y ve a por ellos. No de memoria, de la lista, comprobando el SKU.</li>
+        <li><b>Coge por SKU exacto, no «a ojo»:</b> el error más común del fulfillment de moda es coger la talla o el color equivocado (una M en vez de una L, un gris en vez de un negro). Verifica el SKU/etiqueta de la prenda al cogerla, no te fíes de la vista.</li>
+        <li><b>Aprovecha la organización del almacén:</b> si tu stock está organizado (por SKU, por tipo, con ubicaciones claras), el picking es cuestión de segundos. Si no lo está, este es el cuello de botella: arregla el almacén.</li>
+        <li><b>Para varios pedidos, pica con método:</b> cuando preparas varios a la vez, un método ordenado (pedido a pedido, o por lotes) evita mezclar productos entre pedidos, otro error clásico.</li>
+      </ol>
+      <p class="pull">Coge por SKU verificado, no por impresión visual. La mayoría de errores de fulfillment nacen aquí, al coger la variante equivocada. Un segundo de verificación al picar evita una devolución y un cliente molesto.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Los productos del pedido recogidos, verificados por SKU exacto contra la lista de picking.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Verificar el pedido antes de empaquetar</h3>
+      <p>El paso que más errores previene y que mucha gente se salta por prisa: <strong>verificar el pedido completo contra lo comprado, antes de empaquetarlo.</strong> Es la última oportunidad de cazar un error antes de que salga hacia el cliente.</p>
+      <ol>
+        <li><b>Producto correcto:</b> ¿son las prendas exactas del pedido?</li>
+        <li><b>Talla y color correctos:</b> el punto más crítico en moda. Comprueba que cada prenda es la talla y el color pedidos. Este es EL error que genera devoluciones.</li>
+        <li><b>Cantidad correcta:</b> ¿están todas las unidades del pedido? (Fácil olvidar una en pedidos de varias piezas.)</li>
+        <li><b>Estado del producto:</b> que la prenda esté perfecta, sin defectos, manchas ni hilos sueltos. No mandes una prenda con una tara; revísala al empaquetar.</li>
+      </ol>
+      <p class="pull">Verifica antes de cerrar el paquete, siempre. Una vez sellado y enviado, un error cuesta una devolución, un reenvío, un cliente molesto y el coste doble de envío. Verificado antes, cuesta cero: es la inversión de tiempo más rentable del proceso.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El pedido verificado (producto, talla, color, cantidad, estado) contra la compra, antes de empaquetar.</li>
+      </ul>
+
+      <h3><span class="hn">2.5</span>Empaquetar con experiencia de marca</h3>
+      <p>Ahora empaquetas, y aquí es donde el fulfillment deja de ser logística y se convierte en <strong>experiencia de marca</strong>. El momento del unboxing es una oportunidad que muchas marcas desperdician con una caja triste. Este paso lo aprovecha (se apoya en tu SOP de packaging y unboxing).</p>
+      <ol>
+        <li><b>Aplica tu ritual de packaging de marca:</b> dobla la prenda con cuidado, envuélvela en tu papel/material de marca, colócala en tu caja/sobre. Cómo está presentada la prenda dentro comunica cuidado y calidad.</li>
+        <li><b>Añade los detalles de experiencia:</b> la tarjeta de agradecimiento, el sticker, la muestra, el mensaje — lo que hayas definido en tu sistema de unboxing. Esos detalles pequeños convierten recibir un pedido en un momento memorable.</li>
+        <li><b>Protege el producto:</b> el packaging bonito no sirve si la prenda llega arrugada o dañada. Asegura que va protegida para el transporte.</li>
+        <li><b>Mantén la coherencia con la marca:</b> el packaging es un punto de contacto más, tiene que sonar al mismo mundo que tu web, tu producto y tu identidad. Un packaging incoherente rompe la experiencia.</li>
+      </ol>
+      <p class="pull">El equilibrio clave: experiencia sin sacrificar eficiencia. Un unboxing espectacular que tarda 20 minutos por pedido no escala; uno cuidado y sistematizado que tarda 2-3 minutos, sí. Diseña un ritual que sea bonito y rápido a la vez.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El pedido empaquetado con el ritual de marca (presentación, detalles de experiencia, protección), de forma cuidada y eficiente a la vez.</li>
+      </ul>
+
+      <h3><span class="hn">2.6</span>Generar el envío y la etiqueta</h3>
+      <p>Con el paquete listo, generas el <strong>envío</strong>: la etiqueta con la dirección y el servicio de transporte. Este paso conecta tu pedido con el transportista que lo llevará al cliente.</p>
+      <ol>
+        <li><b>Genera la etiqueta de envío</b> desde tu plataforma (Shopify y similares permiten generar etiquetas de tus transportistas integrados) o desde el sistema de tu mensajería. La etiqueta lleva la dirección del cliente (verificada) y el servicio elegido.</li>
+        <li><b>Elige el servicio de envío adecuado:</b> según lo que prometiste al cliente (estándar, exprés) y el destino. Ten claras tus opciones y tarifas.</li>
+        <li><b>Verifica la dirección una última vez:</b> un error de dirección significa un paquete perdido o devuelto. Comprueba que la etiqueta lleva la dirección correcta del pedido.</li>
+        <li><b>Pega la etiqueta y prepara la recogida/entrega:</b> el paquete queda listo para que el transportista lo recoja o para llevarlo al punto de envío.</li>
+      </ol>
+      <p>La regla: la dirección correcta y el servicio correcto. Un fallo aquí desperdicia todo el trabajo anterior. Verifica antes de que el paquete salga de tus manos.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La etiqueta de envío generada con la dirección verificada y el servicio adecuado, el paquete listo para recogida/entrega.</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Comunicar y hacer seguimiento con el cliente</h3>
+      <p>El fulfillment no termina cuando el paquete sale — termina cuando el cliente lo recibe. <strong>La comunicación durante el envío</strong> es parte de la experiencia y evita ansiedad y tickets de soporte.</p>
+      <ol>
+        <li><b>Confirmación de pedido:</b> cuando compra, el cliente recibe confirmación (normalmente automática desde la tienda). Sabe que su pedido se está procesando.</li>
+        <li><b>Confirmación de envío con tracking:</b> cuando el pedido sale, envía la notificación con el número de seguimiento para que el cliente pueda seguir su paquete. Esto reduce muchísimo la ansiedad del «¿dónde está mi pedido?» y los mensajes que genera.</li>
+        <li><b>Gestiona los problemas de entrega:</b> si un paquete se retrasa, se pierde o vuelve, ten claro cómo responder. Una buena gestión de un problema de envío puede convertir una mala experiencia en confianza.</li>
+        <li><b>Prepara la postventa:</b> el fulfillment enlaza con la atención al cliente y las devoluciones (sus propios SOPs). Un cliente que recibe bien su pedido y sabe cómo contactar si algo va mal es un cliente que confía.</li>
+      </ol>
+      <p class="pull">El cliente nunca debe quedarse a oscuras. El silencio entre la compra y la entrega genera ansiedad y desconfianza; la comunicación (confirmación + tracking) genera tranquilidad y profesionalidad. Es barato de hacer y muy valioso.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El sistema de comunicación al cliente activo (confirmación de pedido, confirmación de envío con tracking) y un plan para gestionar problemas de entrega.</li>
+      </ul>
+
+      <h3><span class="hn">2.8</span>Sistematizar y decidir cuándo externalizar (3PL)</h3>
+      <p>El último paso convierte el fulfillment en un <strong>sistema documentado</strong> y establece cuándo dar el salto de hacerlo tú a externalizarlo. Es lo que permite que el fulfillment escale sin ahogarte.</p>
+      <ol>
+        <li><b>Documenta el proceso como un SOP repetible:</b> escríbelo paso a paso (procesar → picking → verificar → empaquetar → enviar → comunicar) para que cualquier persona pueda ejecutarlo igual que tú. Un fulfillment documentado es lo que te permite delegarlo cuando el volumen crece, liberándote para trabajar en la marca en vez de en las cajas. Si solo tú sabes preparar pedidos, eres el cuello de botella.</li>
+        <li><b>Reconoce cuándo externalizar a un 3PL (operador logístico):</b> llega un punto en que preparar pedidos a mano deja de tener sentido — te consume demasiado tiempo, no escala, o los picos (un drop, una campaña) te desbordan. Un 3PL almacena tu stock y prepara y envía tus pedidos por ti. Señales de que toca planteárselo: el fulfillment te come el tiempo que necesitas para crecer, el volumen supera lo que gestionas a mano, o los envíos se retrasan por saturación. El trade-off: el 3PL te libera tiempo y escala mejor, pero cuesta dinero y <em>pierdes control sobre la experiencia de unboxing</em> — por eso muchas marcas de moda mantienen el fulfillment in-house mientras el packaging es central para su marca, y externalizan cuando el volumen lo exige.</li>
+      </ol>
+      <p>La regla: primero sistematiza (para poder delegar), luego externaliza cuando el volumen lo justifique. No externalices por pereza antes de tiempo (pierdes control de la experiencia), pero no te ahogues haciéndolo a mano cuando ya no escala.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El proceso de fulfillment documentado como SOP repetible y delegable, y los criterios definidos para decidir cuándo externalizar a un 3PL.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des el fulfillment por cerrado hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre la preparación</p>
+      <ul class="check">
+        <li>Tengo una estación de empaquetado organizada con todos los materiales a mano y repuestos.</li>
+        <li>Proceso los pedidos entrantes verificando producto, talla, color, dirección y stock.</li>
+        <li>Ordeno los pedidos por prioridad y trabajo de la lista, no de memoria.</li>
+      </ul>
+
+      <p class="mini">Sobre el picking y la verificación</p>
+      <ul class="check">
+        <li>Hago picking cogiendo por SKU verificado, no «a ojo».</li>
+        <li>Aprovecho la organización del almacén para picar rápido y sin errores.</li>
+        <li>Verifico cada pedido (producto, talla, color, cantidad, estado) antes de empaquetar.</li>
+      </ul>
+
+      <p class="mini">Sobre el empaquetado y el envío</p>
+      <ul class="check">
+        <li>Aplico mi ritual de packaging de marca (presentación, detalles de experiencia, protección).</li>
+        <li>El ritual es cuidado y a la vez eficiente y repetible.</li>
+        <li>Genero la etiqueta con la dirección verificada y el servicio adecuado.</li>
+      </ul>
+
+      <p class="mini">Sobre la comunicación y el sistema</p>
+      <ul class="check">
+        <li>El cliente recibe confirmación de pedido y de envío con tracking.</li>
+        <li>Tengo un plan para gestionar problemas de entrega.</li>
+        <li>El proceso está documentado como SOP repetible y delegable.</li>
+        <li>Tengo claros los criterios para decidir cuándo externalizar a un 3PL.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 5.2 · Proceso de preparación de pedidos (fulfillment) · v1.0 · Fase 5</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

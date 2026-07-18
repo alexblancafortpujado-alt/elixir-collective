@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 3.3 — Gestión de la relación con proveedores a largo plazo</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 3 · Materiales, Telas y Sourcing</p>
+    <h1 class="rv">Relación con proveedores</h1>
+    <p class="meta rv">SOP 3.3 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Convertir proveedores en aliados</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que <strong>cuides y hagas crecer las relaciones con tus proveedores</strong> una vez que ya los has elegido. El SOP de sourcing trataba de encontrarlos y seleccionarlos; este trata de lo que viene después y dura años: <span class="hl">mantener la relación</span> para que se conviertan en una ventaja competitiva, no en una fuente constante de problemas.
+    </p>
+    <p>La idea que casi nadie entiende hasta que lo sufre: <strong>en moda, tus proveedores son parte de tu equipo, aunque no estén en tu nómina.</strong> Tu calidad, tus plazos, tu margen y tu capacidad de crecer dependen directamente de ellos.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 5 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que cuides y hagas crecer las relaciones con tus proveedores una vez que ya los has elegido. El SOP de sourcing trataba de <em>encontrar y seleccionar</em>; este trata de lo que viene después y dura años: <strong>mantener la relación</strong> para que esos proveedores se conviertan en una ventaja competitiva de tu marca, no en una fuente constante de problemas.</p>
+      <p>La idea que casi nadie entiende hasta que lo sufre: en moda, tus proveedores son <span class="gold">parte de tu equipo</span>, aunque no estén en tu nómina. La calidad de tu producto, tu capacidad de cumplir plazos, tu margen y tu capacidad de crecer dependen directamente de ellos. Una marca no es solo su diseño y su marketing: es también la fábrica que la cose bien y a tiempo, y el proveedor de tela que mantiene la calidad lote a lote. Tratar esas relaciones como transacciones frías —«compro, pago, adiós»— es dejar sobre la mesa la mayor palanca operativa que tienes.</p>
+      <p>El principio central: la relación es un activo que se construye o se destruye con cada interacción. Los proveedores tienen capacidad, atención y prioridad limitadas, y las reparten según con quién quieren trabajar. A las marcas que consideran buenos socios les dan mejores precios, prioridad en temporada alta, más flexibilidad con los MOQ, aviso temprano de problemas y ayuda para resolver imprevistos. Las que tratan mal —que pagan tarde, comunican fatal o regatean sin respeto— van al final de la cola justo cuando más necesitan que respondan.</p>
+      <p class="pull">Esta diferencia de trato no se compra con dinero, se gana con la relación.</p>
+
+      <h3><span class="hn">1.2</span>Principios no negociables</h3>
+      <ol>
+        <li><b>Los proveedores son parte de tu equipo.</b> Tu calidad, tus plazos y tu margen dependen de ellos. Trátalos con la importancia que tienen.</li>
+        <li><b>Paga bien y a tiempo.</b> Es la base de todo. El cliente que paga puntual es el que recibe prioridad, mejor precio y flexibilidad. Pagar tarde destruye la relación más rápido que nada.</li>
+        <li><b>Comunica claro, pronto y con respeto.</b> La mayoría de problemas con proveedores son problemas de comunicación. Un buen flujo previene la mayoría de conflictos.</li>
+        <li><b>Busca el acuerdo sostenible, no exprimir.</b> Apretar al proveedor hasta el límite gana un céntimo hoy y pierde un aliado mañana. La relación vale más que la última negociación.</li>
+        <li><b>Los problemas se resuelven como socios, no como enemigos.</b> Cuando algo falla, el objetivo es solucionarlo juntos y que no se repita, no ganar la discusión.</li>
+        <li><b>Evalúa con constancia.</b> Una relación no vigilada se degrada. Revisa periódicamente que cada proveedor sigue cumpliendo.</li>
+        <li><b>Diversifica sin traicionar.</b> Ten alternativas para no depender de uno solo.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De tener proveedores a tener aliados</h2>
+      <p>Cinco pasos que cubren el ciclo de vida de la relación: cómo comunicarte, cómo pagar, cómo dar feedback de calidad, cómo resolver conflictos y cómo protegerte sin dejar de crecer juntos.</p>
+
+      <h3><span class="hn">2.1</span>Establecer un sistema de comunicación claro</h3>
+      <p>La base de toda buena relación con proveedores es la <strong>comunicación</strong>, y la mayoría de los problemas nacen de una comunicación pobre. Este primer paso monta el flujo para que la relación funcione sobre rieles. Establece:</p>
+      <ol>
+        <li><b>Un canal y un interlocutor claros:</b> ten definido quién es tu contacto en cada proveedor y por qué canal os comunicáis. Y que del lado tuyo sepan con quién hablan. La claridad de interlocución evita el caos de mensajes perdidos.</li>
+        <li><b>Comunicación clara y específica en cada pedido:</b> especificaciones exactas (tus tech packs, tus briefs), cantidades, plazos y expectativas por escrito. Nunca asumas que el proveedor «sabe lo que quieres»: lo que no está claro se interpreta, y se interpreta mal.</li>
+        <li><b>Confirmaciones por escrito:</b> los acuerdos importantes (precio, plazo, cantidad, especificación) siempre por escrito, aunque los habléis por teléfono. No es desconfianza, es profesionalidad, y protege a ambas partes de malentendidos.</li>
+        <li><b>Comunicación proactiva:</b> avisa con antelación de tus necesidades (un pedido grande que viene, una temporada alta), no en el último momento. Un proveedor avisado te sirve mejor que uno sorprendido.</li>
+      </ol>
+      <p>La regla: claridad y antelación previenen el 80% de los conflictos. Una relación con comunicación fluida y por escrito rara vez llega a los problemas graves.</p>
+
+      <h3><span class="hn">2.2</span>Ser un cliente que el proveedor quiere tener</h3>
+      <p>Este es el paso que más determina cómo te trata un proveedor, y el más simple de entender: <strong>paga bien, paga a tiempo y sé profesional.</strong> El cliente fiable recibe el mejor trato. Los pilares de ser un buen cliente:</p>
+      <ol>
+        <li><b>Paga puntual, siempre.</b> Cumplir los plazos de pago acordados es lo que más rápido construye confianza. A quien le paga a tiempo, el proveedor le da prioridad, mejor precio y flexibilidad; a quien le paga tarde, lo pone al final de la cola. Si alguna vez no puedes pagar a tiempo, <strong>avísalo antes</strong> con honestidad — un aviso se gestiona, un impago silencioso rompe la relación.</li>
+        <li><b>Cumple tu parte de los acuerdos.</b> No solo el pago: confirma pedidos cuando dices, da la información a tiempo, no cambies las condiciones a mitad sin avisar. La fiabilidad es de ida y vuelta.</li>
+        <li><b>Sé profesional y respetuoso en el trato.</b> Los proveedores son personas y negocios que eligen con quién trabajar a gusto. El respeto y la profesionalidad se devuelven con mejor servicio.</li>
+        <li><b>Demuestra que eres un cliente a largo plazo.</b> Un proveedor invierte más en quien ve como relación recurrente que en una compra única. Comunica y demuestra que quieres construir a largo plazo.</li>
+      </ol>
+      <p class="pull">Tu fiabilidad como cliente compra la fiabilidad del proveedor. No puedes exigir prioridad y flexibilidad si tú no cumples tu parte. La relación es recíproca.</p>
+
+      <h3><span class="hn">2.3</span>Gestionar la calidad con feedback continuo</h3>
+      <p>Una relación sana con el proveedor incluye <strong>vigilar y comunicar la calidad de forma continua</strong>, para que se mantenga constante y no se degrade lentamente sin que nadie diga nada. Esto se hace <em>con</em> el proveedor, no <em>contra</em> él. Cómo gestionarla:</p>
+      <ol>
+        <li><b>Controla cada pedido contra la muestra aprobada.</b> Cuando llega tela o producto, compáralo con lo que acordaste (la muestra/swatch aprobado, las especificaciones). Que un lote sea consistente con lo pactado no es automático: hay que verificarlo.</li>
+        <li><b>Da feedback específico y constructivo, no vago.</b> Si algo no cumple, comunícalo de forma concreta («el gramaje de este lote es menor que el de la muestra aprobada», «este color se desvía del Pantone acordado»), no con reproches genéricos. El feedback preciso permite corregir.</li>
+        <li><b>Convierte los problemas de calidad en mejoras del proceso.</b> Cuando algo falla, el objetivo no es solo rechazar el lote, es acordar <em>cómo evitar que se repita</em>. Eso es gestión de relación, no solo control de calidad.</li>
+      </ol>
+
+      <h3><span class="hn">2.4</span>Resolver conflictos como socios</h3>
+      <p>En toda relación larga con proveedores <strong>habrá problemas</strong>: un retraso, un lote defectuoso, un malentendido, un error. Lo que define la relación no es que haya problemas, sino <strong>cómo se resuelven</strong>. Este paso es el que salva (o hunde) relaciones valiosas. Cómo resolver un conflicto sin romperla:</p>
+      <ol>
+        <li><b>Aborda el problema, no a la persona.</b> El objetivo es resolver el asunto y evitar que se repita, no ganar una discusión ni buscar un culpable. Un tono de «resolvamos esto juntos» mantiene al proveedor de tu lado; uno de acusación lo pone a la defensiva.</li>
+        <li><b>Comunica el problema pronto y con hechos.</b> No dejes que se enquiste ni acumules quejas para soltarlas de golpe. Plantéalo cuando ocurre, con datos concretos (qué se acordó vs qué llegó).</li>
+        <li><b>Busca una solución justa para ambos.</b> Un buen proveedor querrá arreglar un error genuino (rehacer, compensar, ajustar). Dale la oportunidad de resolverlo antes de asumir mala fe: la mayoría de los problemas son errores, no malicia.</li>
+        <li><b>Aprende del conflicto.</b> Todo problema resuelto bien deja la relación <em>más fuerte</em> y con un proceso mejorado, si sacáis la lección (una especificación más clara, un control extra, un plazo más realista).</li>
+        <li><b>Sabe cuándo es un patrón, no un incidente.</b> Un error puntual se perdona y se resuelve. Un proveedor que falla repetidamente en lo mismo pese al feedback es una señal distinta — ahí la gestión pasa a plantearse si esta relación es sostenible (paso 2.5).</li>
+      </ol>
+      <p class="pull">Cómo gestionas un problema define la relación más que cualquier pedido perfecto. Un conflicto bien resuelto construye confianza; uno mal gestionado destruye años de relación.</p>
+
+      <h3><span class="hn">2.5</span>Proteger la marca: diversificación y gestión de riesgo</h3>
+      <p>El último paso equilibra la lealtad con la <strong>protección de tu negocio</strong>. Cultivar relaciones fuertes es esencial, pero depender ciegamente de un solo proveedor es un riesgo que puede parar toda tu marca. Este paso gestiona ese riesgo sin traicionar la confianza construida. Cómo protegerte sin dañar la relación:</p>
+      <ol>
+        <li><b>Mantén alternativas vivas para lo crítico.</b> Para tus telas, avíos o confección esenciales, ten identificado (y a ser posible probado) un proveedor alternativo. No necesitas repartir todos los pedidos, pero sí tener un plan B listo por si el principal falla, sube precios de golpe, cierra o no puede en temporada alta.</li>
+        <li><b>Diversifica con transparencia, no a escondidas.</b> Trabajar con más de un proveedor es una práctica normal de gestión de riesgo y no tiene por qué dañar la relación con tu principal si se hace con profesionalidad. Lo que daña la confianza es el engaño, no la diversificación sensata.</li>
+        <li><b>Ten un plan ante la pérdida de un proveedor.</b> Piensa por adelantado: si mañana pierdo a mi proveedor clave, ¿qué hago? Tener la respuesta antes de necesitarla convierte una crisis en un contratiempo gestionable.</li>
+        <li><b>Mantén tu librería de proveedores actualizada</b> como mapa de riesgo: quién es crítico, quién tiene alternativa, dónde estás expuesto. Es la herramienta que te permite ver tus dependencias peligrosas antes de que se conviertan en problemas.</li>
+      </ol>
+      <p class="pull">Cultiva la lealtad, pero nunca al precio de un único punto de fallo. Las mejores marcas tienen relaciones profundas con sus proveedores clave <em>y</em> la protección de no depender de ninguno en exclusiva para lo crítico. Las dos cosas a la vez.</p>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des por consolidada la relación con tus proveedores hasta poder sostener todo esto.</p>
+
+      <p class="mini">Sobre la comunicación</p>
+      <ul class="check">
+        <li>Tengo un canal y un interlocutor claros con cada proveedor.</li>
+        <li>Comunico cada pedido con especificaciones, cantidades, plazos y expectativas por escrito.</li>
+        <li>Confirmo los acuerdos importantes por escrito, aunque los hable por teléfono.</li>
+        <li>Aviso de mis necesidades con antelación, no en el último momento.</li>
+      </ul>
+
+      <p class="mini">Sobre ser un buen cliente</p>
+      <ul class="check">
+        <li>Pago puntual siempre, y si no puedo, aviso antes con honestidad.</li>
+        <li>Cumplo mi parte de los acuerdos, no solo el pago.</li>
+        <li>Trato al proveedor con profesionalidad y respeto.</li>
+        <li>Demuestro que soy un cliente de relación a largo plazo.</li>
+      </ul>
+
+      <p class="mini">Sobre la calidad y los conflictos</p>
+      <ul class="check">
+        <li>Controlo cada pedido contra la muestra aprobada y las especificaciones.</li>
+        <li>Doy feedback específico y constructivo, no reproches vagos.</li>
+        <li>Convierto los problemas de calidad en mejoras del proceso.</li>
+        <li>Ante un conflicto, abordo el problema y no a la persona, pronto y con hechos.</li>
+        <li>Distingo un incidente puntual de un patrón repetido.</li>
+      </ul>
+
+      <p class="mini">Sobre el riesgo y la dependencia</p>
+      <ul class="check">
+        <li>Mantengo una alternativa viva (un proveedor B) para lo crítico.</li>
+        <li>Diversifico con transparencia, no a escondidas.</li>
+        <li>Tengo un plan por si pierdo a un proveedor clave.</li>
+        <li>Mantengo mi librería de proveedores actualizada como mapa de riesgo.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 3.3 · Gestión de la relación con proveedores a largo plazo · v1.0 · Fase 3</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

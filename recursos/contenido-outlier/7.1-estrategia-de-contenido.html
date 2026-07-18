@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 7.1 — Estrategia de contenido y pilares de marca</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 7 · Contenido, RRSS y Dirección de Arte</p>
+    <h1 class="rv">Estrategia de contenido</h1>
+    <p class="meta rv">SOP 7.1 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Qué publicar y por qué, sin improvisar posts sueltos</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que tengas una <strong>estrategia clara de qué contenido publicar y por qué</strong>, en vez de improvisar posts sueltos cada vez que toca publicar. El contenido es <span class="hl">el motor de atención de tu marca</span>: lo que atrae a gente nueva, construye tu comunidad y lleva tráfico a tu tienda.
+    </p>
+    <p>La idea que lo cambia todo: <strong>en moda, el contenido no es el marketing DE la marca, el contenido ES la marca.</strong> La gente descubre, sigue, desea y compra a través del contenido. No haces ropa y luego la promocionas; el contenido <em>es</em> la forma en que tu marca existe y se relaciona con su gente.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 7 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que tengas una estrategia clara de qué contenido publicar y por qué, en vez de improvisar posts sueltos cada vez que toca. El contenido es el motor de atención de tu marca: es lo que atrae a gente nueva, construye tu comunidad y lleva tráfico a tu tienda. Sin una estrategia detrás, publicas por publicar, no conectas con nadie, y el contenido no te devuelve ni seguidores ni ventas.</p>
+      <p>La idea que hay que entender primero: en moda, el contenido no es marketing DE la marca, el contenido <strong>ES</strong> la marca. La gente descubre, sigue, desea y compra a través del contenido. El feed, los reels, las historias: ahí vive tu marca para la mayoría de tu audiencia. Por eso el contenido no es una tarea secundaria, sino algo central.</p>
+      <p>La herramienta clave son los <strong>pilares de contenido</strong>: 3-5 temas recurrentes sobre los que tu marca crea contenido siempre. En vez de preguntarte «¿qué publico hoy?» desde cero, cada pieza pertenece a un pilar; así das <span class="gold">variedad con coherencia</span> y nunca te quedas en blanco. El resultado es una base estratégica —pilares, equilibrio entre vender y aportar, criterio de qué crear— sobre la que se montan el calendario, los reels y las campañas.</p>
+      <p class="pull">Lo que pasa si no lo tienes: improvisas posts sin dirección, publicas solo producto y cansas a tu audiencia, tu contenido no conecta ni construye comunidad, y no atrae gente nueva ni lleva a la tienda. Sin estrategia de contenido, el motor de atención de tu marca no arranca, y sin atención, nada de lo demás recibe tráfico.</p>
+
+      <h3><span class="hn">1.2</span>Elementos necesarios</h3>
+      <ul>
+        <li><b>Tu concepto, mundo y enemigo:</b> el contenido cuenta la historia de tu mundo. Los pilares nacen de aquí.</li>
+        <li><b>Tu avatar:</b> a quién le hablas, qué le interesa, qué consume, su lenguaje. El contenido debe conectar con esta persona.</li>
+        <li><b>Tu dirección de arte y moodboard maestro:</b> cómo se ve tu contenido. Los pilares definen el <em>qué</em>; la dirección de arte, el <em>cómo se ve</em>.</li>
+        <li><b>Tu posicionamiento y tono de voz:</b> el ángulo y la voz con que hablas.</li>
+        <li><b>Dónde vive tu tribu:</b> las redes que usa y los formatos que consume, del avatar y la investigación.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Principios no negociables</h3>
+      <ol>
+        <li><b>El contenido ES la marca, no su publicidad.</b> En moda, la gente vive tu marca a través del contenido. Trátalo como central, no secundario.</li>
+        <li><b>Pilares, no improvisación.</b> Define 3-5 temas recurrentes. El contenido nace de un sistema, no de «¿qué publico hoy?» cada vez.</li>
+        <li><b>Equilibra vender y aportar.</b> Solo producto cansa y no construye comunidad. Mezcla vender con entretener, educar y conectar.</li>
+        <li><b>Alineado con marca y avatar.</b> Cada pieza suena a tu mundo y le habla a tu tribu. Lo que no es ni lo uno ni lo otro, sobra.</li>
+        <li><b>Coherente con la dirección de arte.</b> El contenido se ve como tu marca. Los pilares son el qué; el cómo se ve ya está definido.</li>
+        <li><b>Atraer, no solo hablar a los tuyos.</b> El contenido debe traer gente nueva, no solo entretener a quien ya te sigue.</li>
+        <li><b>Sistema sostenible.</b> El contenido es una maratón, no un sprint. La estrategia debe ser mantenible, no agotadora.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De improvisar posts a un sistema con pilares</h2>
+      <p>Siete pasos que te llevan de improvisar posts sueltos a un sistema con pilares: entender el rol del contenido, definir el propósito de cada pieza, construir los pilares, equilibrar los tipos, conectar con marca y avatar, adaptar a formatos y plataformas, y sistematizar.</p>
+
+      <h3><span class="hn">2.1</span>Entender el rol del contenido en una marca de moda</h3>
+      <p>Antes de definir nada, interioriza <strong>para qué sirve el contenido</strong> en tu marca, porque de eso depende toda la estrategia. El contenido de una marca de moda no tiene un solo trabajo, tiene varios, y una buena estrategia los cubre todos.</p>
+      <p>Los trabajos del contenido:</p>
+      <ol>
+        <li><b>Atraer (alcance):</b> traer gente nueva que aún no te conoce, llegar más allá de tus seguidores actuales y hacer crecer tu audiencia.</li>
+        <li><b>Conectar (comunidad):</b> construir relación con quien ya te sigue, hacerle sentir parte de tu mundo y tu tribu. Es lo que convierte seguidores en comunidad.</li>
+        <li><b>Deseo (producto):</b> generar deseo por tus prendas, mostrarlas, hacer que la gente las quiera. Es lo que lleva a la venta.</li>
+        <li><b>Marca (mundo):</b> construir y reforzar tu identidad, tu mundo, tu punto de vista. Es lo que hace que la gente se identifique con lo que representas, no solo que compre.</li>
+      </ol>
+      <p>La clave: una buena estrategia cubre los cuatro trabajos, no solo uno. El error de publicar solo producto es que solo intenta el trabajo del deseo e ignora los otros, y sin atraer, conectar y construir marca, ni siquiera el deseo funciona bien. Los pilares son la herramienta para asegurar que tu contenido hace los cuatro trabajos.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Entendidos los cuatro trabajos del contenido (atraer, conectar, deseo, marca) y claro que tu estrategia debe cubrirlos todos.</li>
+      </ul>
+
+      <h3><span class="hn">2.2</span>Definir el propósito estratégico de tu contenido</h3>
+      <p>Antes de los pilares, define <strong>qué quieres que tu contenido consiga</strong> para tu marca. Esto orienta qué pilares elegir. Un contenido sin propósito estratégico es contenido bonito que no mueve el negocio.</p>
+      <p>Define:</p>
+      <ol>
+        <li><b>Tu objetivo principal con el contenido:</b> ¿crecer en alcance, construir comunidad o vender? Normalmente son varios, pero suele haber una prioridad según tu etapa (una marca nueva prioriza atraer; una con audiencia, convertir y fidelizar).</li>
+        <li><b>A quién le hablas:</b> tu avatar. Todo tu contenido le habla a esta persona: sus intereses, su lenguaje, lo que le entretiene y le importa. El contenido que le habla a todo el mundo no conecta con nadie.</li>
+        <li><b>Qué papel juega en tu funnel:</b> cómo lleva el contenido de «no me conoce» a «me sigue» a «me compra». Distintos contenidos hacen distintos trabajos en ese camino (atraer arriba, convertir abajo).</li>
+      </ol>
+      <p>La regla: <strong>el contenido sirve a un objetivo, no es arte por el arte.</strong> Definir qué quieres que consiga y a quién le hablas es lo que hace que tus pilares y tus posts trabajen para tu marca, en vez de ser bonitos pero inútiles.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El propósito estratégico de tu contenido definido (objetivo principal, a quién le hablas, papel en el funnel).</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Construir los pilares de contenido (el corazón del SOP)</h3>
+      <p>Ahora construyes tus <strong>pilares de contenido</strong>: los 3-5 temas recurrentes sobre los que tu marca crea contenido siempre. Este es el corazón de la estrategia, lo que convierte el «no sé qué publicar» en un sistema con dirección.</p>
+      <p>Cómo construir los pilares:</p>
+      <ol>
+        <li><b>Derívalos de tu marca y tu avatar:</b> los pilares nacen del cruce entre lo que tu marca representa (concepto, mundo, experticia) y lo que a tu avatar le interesa (sus intereses, problemas, lo que le entretiene). Un buen pilar es un tema que <em>tu marca tiene derecho a tratar</em> y <em>a tu tribu le importa</em>.</li>
+        <li><b>Define 3-5, no más:</b> pocos pilares, bien definidos. Demasiados dispersan; muy pocos aburren. Ejemplos ilustrativos en moda: producto (prendas, drops, cómo combinar), mundo/lifestyle (la estética y el mundo cultural), detrás de la marca (proceso, fundador, historia), educación/valor (enseñar algo de tu nicho), y comunidad/UGC (contenido de clientes).</li>
+        <li><b>Que entre todos cubran los cuatro trabajos:</b> asegúrate de que atraer, conectar, deseo y marca están cubiertos. Si todos tus pilares son «producto», solo cubres deseo y queda desequilibrado.</li>
+        <li><b>Los pilares te dan de dónde tirar siempre:</b> con ellos, «¿qué publico?» se convierte en «¿de qué pilar toca hoy?», mucho más fácil y sostenible. Nunca partes de cero.</li>
+      </ol>
+      <p class="pull">Los pilares convierten el contenido en un sistema: dan variedad con coherencia, aseguran que cubres los cuatro trabajos, y hacen que nunca te quedes en blanco.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Tus 3-5 pilares de contenido definidos, derivados de tu marca y tu avatar, cubriendo entre todos los cuatro trabajos del contenido.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Equilibrar los tipos de contenido (vender vs aportar)</h3>
+      <p>Con los pilares definidos, asegura el <strong>equilibrio</strong> entre contenido que vende y contenido que aporta valor. Este es el paso que evita el error número uno: publicar solo producto y cansar a la audiencia.</p>
+      <p>Cómo equilibrar:</p>
+      <ol>
+        <li><b>No todo puede ser «compra esto»:</b> el contenido puramente comercial cansa, satura y no construye comunidad. Una audiencia bombardeada solo con producto deja de prestar atención o se va. El contenido de venta es necesario, pero no puede ser todo.</li>
+        <li><b>Mezcla contenido que aporta valor:</b> entretener, educar, inspirar, conectar. Es lo que atrae, construye comunidad y hace que tu marca sea algo más que una tienda, y, paradójicamente, es lo que hace que la venta funcione mejor, porque hay una relación construida.</li>
+        <li><b>Encuentra tu proporción:</b> decide qué parte de tu contenido es venta directa y qué parte es valor/comunidad. Muchas marcas usan una mayoría de valor/entretenimiento/marca y una minoría de venta, porque lo que aporta es lo que trae y retiene a la gente. La proporción exacta depende de tu marca y etapa.</li>
+        <li><b>Los pilares aseguran el equilibrio:</b> si están bien repartidos (no todos de producto), el equilibrio sale solo. Por eso pilares y equilibrio van juntos.</li>
+      </ol>
+      <p class="pull">Aporta valor para ganarte el derecho a vender. A una audiencia a la que solo le vendes, se cansa; a una que entretienes, educas y haces sentir parte de algo, se queda, crece y compra.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El equilibrio de tu contenido definido (proporción venta vs valor/comunidad), asegurado por unos pilares bien repartidos.</li>
+      </ul>
+
+      <h3><span class="hn">2.5</span>Alinear con la marca, el avatar y la dirección de arte</h3>
+      <p>Todo tu contenido tiene que <strong>sonar y verse como tu marca, y hablarle a tu avatar.</strong> Este paso asegura la coherencia: que tu contenido no sea genérico, sino inconfundiblemente tuyo y dirigido a tu tribu.</p>
+      <p>Asegura tres alineaciones:</p>
+      <ol>
+        <li><b>Con tu marca y tu mundo:</b> el contenido cuenta la historia de tu mundo, refleja tu concepto, tu punto de vista, tu enemigo. Cada pieza refuerza quién eres. Un contenido que no transmite tu mundo es una oportunidad de marca desperdiciada.</li>
+        <li><b>Con tu avatar:</b> le habla a tu persona concreta, a sus intereses, su lenguaje, lo que le entretiene y le importa, escrito en su idioma. El contenido que le habla a «todos» no conecta con tu tribu.</li>
+        <li><b>Con tu dirección de arte:</b> el contenido aplica los códigos visuales de tu moodboard maestro (la luz, el color, la actitud, la composición). Los pilares definen <em>qué</em> publicas; la dirección de arte, <em>cómo se ve</em>.</li>
+      </ol>
+      <p class="pull">Tu contenido debe ser reconociblemente tuyo: alguien debería saber que un post es de tu marca por cómo se ve y cómo suena, aunque no vea el nombre. Es el «test del logo tapado» aplicado al contenido.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Tu contenido alineado con tu marca (cuenta tu mundo), tu avatar (le habla a tu tribu en su idioma) y tu dirección de arte (se ve como tu marca).</li>
+      </ul>
+
+      <h3><span class="hn">2.6</span>Adaptar a formatos y plataformas</h3>
+      <p>El mismo contenido estratégico se ejecuta distinto según <strong>el formato y la plataforma.</strong> Este paso adapta tu estrategia a dónde vive tu audiencia y a cómo funciona cada formato, sin perder los pilares. <em>(La producción concreta de reels va en su propio SOP; aquí decides el marco.)</em></p>
+      <p>Decide:</p>
+      <ol>
+        <li><b>Dónde está tu audiencia:</b> en qué plataformas vive tu avatar (Instagram, TikTok u otras). Prioriza donde está tu tribu, no donde está todo el mundo. Mejor dominar una plataforma donde está tu gente que estar mediocre en cinco.</li>
+        <li><b>Qué formatos priorizar:</b> el video corto domina el alcance en moda hoy y es lo que más atrae gente nueva. Las fotos y carruseles construyen el feed y el mundo. Las historias conectan con la comunidad del día a día. Decide qué peso das a cada uno según tus objetivos.</li>
+        <li><b>Adapta los pilares a los formatos:</b> cada pilar se puede ejecutar en varios formatos. «Detrás de la marca» puede ser un reel de proceso, un carrusel o una historia. Los pilares son el qué; los formatos, el cómo se entrega.</li>
+        <li><b>Respeta la lógica de cada plataforma:</b> lo que funciona en TikTok no es idéntico a lo de Instagram. Adapta el contenido a cómo consume la gente en cada sitio, manteniendo tu esencia de marca.</li>
+      </ol>
+      <p>La regla: <strong>misma estrategia, ejecución adaptada.</strong> Tus pilares y tu mundo son constantes; cómo los entregas se adapta a dónde está tu audiencia y a cómo funciona cada formato. Prioriza donde vive tu tribu y el formato que mejor sirve a tu objetivo.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Decididas las plataformas prioritarias (donde vive tu tribu), los formatos a priorizar según tus objetivos, y cómo se ejecutan tus pilares en cada formato.</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Sistematizar la estrategia de contenido</h3>
+      <p>El último paso convierte la estrategia en un <strong>sistema sostenible</strong>, para que crear contenido sea consistente y mantenible, no un esfuerzo agotador que se abandona. El contenido es una maratón, y el sistema es lo que permite no rendirse.</p>
+      <p>Sistematiza:</p>
+      <ol>
+        <li><b>Documenta tu estrategia:</b> pilares, equilibrio, propósito, plataformas y formatos, en un documento de referencia. Es la base que guía todo el contenido y permite delegarlo (a un CM, a tu equipo) sin perder la esencia.</li>
+        <li><b>Conecta con el calendario:</b> la estrategia de pilares alimenta el calendario editorial: qué pilar y qué formato toca cada día o semana. Los pilares hacen la planificación fácil; distribuyes pilares en el tiempo en vez de improvisar.</li>
+        <li><b>Hazlo sostenible:</b> define un ritmo de publicación que puedas mantener de verdad. La consistencia en el tiempo bate a la intensidad puntual, y el algoritmo y la audiencia premian la constancia.</li>
+        <li><b>Mejora con datos:</b> con el tiempo, los datos te dicen qué pilares y contenidos funcionan mejor. Dobla en lo que funciona, ajusta lo que no. La estrategia de contenido es viva.</li>
+      </ol>
+      <p class="pull">La estrategia de contenido es un sistema que se mantiene y se mejora, no un plan que se hace una vez.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La estrategia documentada, conectada al calendario, con un ritmo sostenible y un enfoque de mejora con datos.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des tu estrategia de contenido por cerrada hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre el rol y el propósito</p>
+      <ul class="check">
+        <li>Entiendo que el contenido ES mi marca, no su publicidad, y cubre cuatro trabajos (atraer, conectar, deseo, marca).</li>
+        <li>Tengo definido el propósito estratégico de mi contenido (objetivo, a quién le hablo, papel en el funnel).</li>
+      </ul>
+
+      <p class="mini">Sobre los pilares y el equilibrio</p>
+      <ul class="check">
+        <li>Tengo 3-5 pilares de contenido derivados de mi marca y mi avatar.</li>
+        <li>Entre mis pilares se cubren los cuatro trabajos del contenido.</li>
+        <li>Ante «¿qué publico?», mis pilares me dan siempre de dónde tirar.</li>
+        <li>Equilibro contenido de venta con contenido de valor/comunidad, no solo producto.</li>
+      </ul>
+
+      <p class="mini">Sobre la alineación</p>
+      <ul class="check">
+        <li>Mi contenido cuenta el mundo de mi marca y refuerza mi identidad.</li>
+        <li>Le habla a mi avatar en su lenguaje y sobre lo que le importa.</li>
+        <li>Se ve como mi marca (respeta mi dirección de arte).</li>
+        <li>Es reconociblemente mío (pasa el «test del logo tapado»).</li>
+      </ul>
+
+      <p class="mini">Sobre formatos y sistema</p>
+      <ul class="check">
+        <li>Priorizo las plataformas donde vive mi tribu y los formatos que sirven a mis objetivos.</li>
+        <li>Sé ejecutar mis pilares en distintos formatos.</li>
+        <li>Tengo la estrategia documentada y conectada al calendario editorial.</li>
+        <li>Tengo un ritmo de publicación sostenible y mejoro con datos.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 7.1 · Estrategia de contenido y pilares de marca · v1.0 · Fase 7</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

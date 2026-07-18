@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 7.2 — Producción de contenido para Instagram / TikTok (reels)</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 7 · Contenido, RRSS y Dirección de Arte</p>
+    <h1 class="rv">Producción de reels</h1>
+    <p class="meta rv">SOP 7.2 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Video corto consistente, por sistema y no por inspiración</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que produzcas <strong>video corto de forma consistente y sistemática</strong>, no cuando te llega la inspiración. El video corto es hoy el formato que más gente nueva atrae a una marca de moda, pero también <span class="hl">lo que más agota y más marcas abandonan</span>, porque intentan producirlo por inspiración en vez de por sistema.
+    </p>
+    <p>La idea que ordena todo: <strong>el alcance se gana con consistencia, no con perfección.</strong> Un reel perfecto que publicas una vez al mes no construye nada; reels buenos publicados seguido, sí. Esto no va de hacer «el reel viral perfecto», va de montar un sistema que puedas mantener semana tras semana sin quemarte.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 8 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que produzcas video corto (reels, TikToks) de forma consistente y sistemática, no cuando te llega la inspiración. El video corto es hoy el formato que más gente nueva atrae a una marca de moda: es lo que el algoritmo empuja, lo que llega más allá de tus seguidores, y lo que hace crecer una marca desde cero. Pero también es lo que más agota y lo que más marcas abandonan, porque intentan producirlo por inspiración en vez de por sistema.</p>
+      <p>La idea que ordena todo: el video corto es el motor de alcance de tu marca, y el alcance se gana con consistencia, no con perfección. Un reel perfecto que publicas una vez al mes no construye nada; reels buenos publicados de forma consistente sí. Por eso este SOP no va de hacer «el reel viral perfecto», va de montar un <span class="gold">sistema sostenible de producción</span> que puedas mantener semana tras semana, sin quemarte.</p>
+      <p>Segunda idea, liberadora para moda: <strong>no necesitas producción cara para hacer buen video corto.</strong> El que funciona a menudo se hace con un móvil, buena luz y una buena idea; la plataforma premia lo auténtico y lo nativo por encima de lo súper producido. Tu limitación no es el equipo, es tener un sistema de ideas y una ejecución consistente.</p>
+      <p class="pull">Lo que pasa si no lo sistematizas: produces errático (mucho una semana, nada tres), te quemas intentando que cada reel sea perfecto, no sabes qué grabar y no publicas, o abandonas el video corto por agotador justo cuando es lo que más te haría crecer.</p>
+
+      <h3><span class="hn">1.2</span>Elementos necesarios</h3>
+      <ul>
+        <li><b>Tu estrategia de contenido y pilares:</b> los formatos de reel salen de tus pilares. Sin pilares, no sabes qué grabar.</li>
+        <li><b>Tu dirección de arte y tono de marca:</b> el video corto se ve y suena como tu marca, aunque sea nativo y rápido.</li>
+        <li><b>Tu avatar:</b> a quién le hablas, qué le engancha, qué consume. El contenido conecta con esta persona.</li>
+        <li><b>Equipo mínimo:</b> un móvil moderno con buena cámara, buena luz (natural o un aro/foco básico), y quizás un trípode. No necesitas más para empezar.</li>
+        <li><b>Una herramienta de edición de video:</b> las apps nativas de las plataformas o apps de edición de móvil ya bastan para empezar.</li>
+        <li><b>Producto</b> (tus prendas) y, según el formato, tú mismo, un modelo, o solo las prendas frente a cámara.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Principios no negociables</h3>
+      <ol>
+        <li><b>Consistencia sobre perfección.</b> El alcance se gana publicando seguido, no con un reel perfecto de vez en cuando. Publica consistente, mejora sobre la marcha.</li>
+        <li><b>Sistema, no inspiración.</b> Produce por formatos repetibles y por lotes, no cuando «te llega la idea». El sistema es lo que hace el contenido sostenible.</li>
+        <li><b>El gancho lo es todo.</b> Los primeros segundos deciden si alguien se queda o pasa. Trabaja el gancho por encima de todo lo demás.</li>
+        <li><b>Nativo y auténtico gana a súper producido.</b> La plataforma premia lo que parece nativo, no un anuncio. No necesitas producción cara.</li>
+        <li><b>Los formatos salen de los pilares.</b> Cada reel pertenece a un pilar de tu estrategia. Así das variedad con coherencia y nunca te quedas en blanco.</li>
+        <li><b>Coherente con tu marca.</b> Aunque sea rápido y nativo, el video corto se ve y suena como tu mundo.</li>
+        <li><b>Publica y aprende con datos.</b> No sabrás qué funciona hasta publicar. Publica, mira los datos, dobla en lo que engancha.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De no saber qué grabar a un sistema sostenible</h2>
+      <p>Ocho pasos: entender qué hace funcionar un reel, convertir los pilares en formatos, generar ideas, dominar el gancho, montar la producción por lotes, grabar con criterio, editar, y sistematizar con datos.</p>
+
+      <h3><span class="hn">2.1</span>Entender qué hace funcionar un reel</h3>
+      <p>Antes de producir nada, entiende <strong>qué hace que un video corto funcione</strong>, porque grabar sin entender esto es grabar a ciegas. Un reel que engancha tiene una estructura, no es solo «un video bonito».</p>
+      <p>Los elementos que hacen funcionar un reel:</p>
+      <ol>
+        <li><b>El gancho (los primeros segundos):</b> lo más importante. En los primeros 1-3 segundos, el espectador decide si se queda o pasa de largo. Si el inicio no engancha, no importa lo bueno que sea el resto, nadie lo verá.</li>
+        <li><b>El ritmo (retención):</b> el video tiene que mantener la atención de principio a fin. Cortes ágiles, que pase algo, sin momentos muertos. La retención es lo que el algoritmo mide para decidir a cuánta gente más se lo muestra.</li>
+        <li><b>El valor o el disfrute:</b> el video tiene que dar algo, entretener, enseñar, emocionar, hacer desear. Un reel que no aporta ni entretiene no se ve ni se comparte.</li>
+        <li><b>La llamada a la acción o el remate:</b> cómo cierra, qué quieres que haga el espectador (seguir, comprar, comentar), o un final que haga que valga la pena haberlo visto.</li>
+      </ol>
+      <p>La clave que cambia la mentalidad: el alcance depende de la retención, y la retención depende del gancho y el ritmo. El algoritmo muestra tu reel a más gente si la que ya lo ve se queda hasta el final. Por eso el gancho y el ritmo determinan si un reel llega lejos, más que la calidad de producción.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Entendidos los elementos que hacen funcionar un reel (gancho, ritmo, valor, remate) y que el alcance depende de la retención.</li>
+      </ul>
+
+      <h3><span class="hn">2.2</span>Convertir tus pilares en formatos de reel repetibles</h3>
+      <p>Aquí está la clave de la sostenibilidad: <strong>convertir tus pilares de contenido en formatos de reel concretos y repetibles.</strong> Un formato es una «plantilla» de reel que puedes repetir una y otra vez con distinto contenido. Los formatos son lo que hace que nunca te quedes sin saber qué grabar.</p>
+      <p>Cómo hacerlo:</p>
+      <ol>
+        <li><b>Toma cada pilar y define formatos de reel para él:</b> cada pilar se puede ejecutar en varios formatos repetibles. Ejemplos ilustrativos: pilar producto («así queda esta prenda puesta», «cómo combinar esta pieza», «detalles de cerca», «GRWM con nuestra ropa»); pilar detrás de la marca («cómo se hace esta prenda», «un día montando el drop», «el proceso de diseño»); pilar mundo/lifestyle (reels de la estética y la vida que representa la marca); pilar educación («cómo elegir tu talla», «qué mirar en la calidad de una prenda»).</li>
+        <li><b>Un formato se repite con contenido distinto:</b> el valor de un formato es que lo montas una vez y lo repites. «Cómo combinar esta pieza» lo puedes hacer con cada prenda nueva, indefinidamente. Esto elimina el «no sé qué grabar».</li>
+        <li><b>Ten un banco de formatos:</b> define tus formatos repetibles (unos cuantos por pilar) y tenlos listos. Cuando toque producir, eliges formatos del banco en vez de inventar desde cero.</li>
+      </ol>
+      <p class="pull">Los formatos repetibles son lo que mata el «no sé qué grabar»: en vez de buscar una idea nueva cada vez, tienes formatos probados que repites con contenido fresco.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Tus pilares convertidos en un banco de formatos de reel repetibles (varios por pilar), listos para producir.</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Generar y capturar ideas de forma continua</h3>
+      <p>Aunque tengas formatos, necesitas un <strong>flujo de ideas</strong> para llenarlos, y ese flujo se captura de forma continua, no se busca de golpe cuando toca grabar. Este es el banco de inspiración aplicado al video corto.</p>
+      <p>Cómo generar y capturar ideas:</p>
+      <ol>
+        <li><b>Captura ideas en el momento, continuamente:</b> cuando veas un reel que te inspira, un formato que funciona, una idea que encaja con tu marca, guárdala al momento en un banco de ideas. Las mejores ideas llegan mientras consumes contenido, no cuando te sientas a «pensar qué grabar».</li>
+        <li><b>Estudia lo que funciona en tu nicho (sin copiar):</b> mira qué formatos y qué reels funcionan en marcas de tu espacio y en tu tribu. No para copiar, sino para entender qué engancha a tu audiencia y adaptarlo a tu mundo.</li>
+        <li><b>Usa tendencias de audio y formato con criterio:</b> las plataformas premian los audios y formatos de tendencia. Súbete a los que encajen con tu marca (filtrados por tu identidad), sin perder tu esencia por seguir una moda.</li>
+        <li><b>Conecta con tus formatos:</b> cada idea capturada se asigna a un formato de tu banco. Así el banco de ideas y el de formatos trabajan juntos: el formato es la estructura, la idea es el contenido concreto.</li>
+      </ol>
+      <p>La regla: <strong>captura ideas siempre, produce por lotes.</strong> Un banco de ideas lleno es lo que hace que llegues al momento de producir con material, no con una pantalla en blanco.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Un banco de ideas de reel que se nutre de forma continua, conectado a tu banco de formatos.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Dominar el gancho (lo más importante)</h3>
+      <p>El <strong>gancho</strong> (los primeros segundos) es lo que más determina si un reel funciona, así que merece su propio paso. Un gancho débil condena al mejor contenido a no verse; uno fuerte hace que la gente se quede. Dominar el gancho es la habilidad de más impacto en video corto.</p>
+      <p>Cómo hacer ganchos que funcionan:</p>
+      <ol>
+        <li><b>Engancha en los primeros 1-3 segundos:</b> el espectador decide en un instante si sigue o desliza. Tu reel tiene que capturar la atención de inmediato, desde el primer frame y la primera frase. No hay tiempo para una intro lenta.</li>
+        <li><b>Tipos de gancho que funcionan:</b> una afirmación intrigante o polémica, una pregunta que toca a tu audiencia, un resultado o transformación que se ve al instante, algo visualmente sorprendente, una promesa de valor («cómo conseguir X»). El gancho promete algo que hace que valga la pena quedarse.</li>
+        <li><b>Gancho visual Y verbal:</b> en los primeros segundos, tanto lo que se ve como lo que se dice (o el texto en pantalla) deben enganchar. Un buen gancho combina una imagen que llama la atención y una frase que da curiosidad.</li>
+        <li><b>Habla a tu avatar:</b> el mejor gancho toca directamente a tu tribu, algo que le interesa, le duele o le intriga. Un gancho genérico engancha a nadie; uno que le habla a tu persona concreta, la para en seco.</li>
+      </ol>
+      <p class="pull">Trabaja el gancho más que ninguna otra parte del reel. Un contenido mediocre con un gran gancho supera a un contenido genial con un gancho flojo, porque el segundo nadie lo llega a ver.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El criterio para crear ganchos fuertes (primeros 1-3 segundos, visual y verbal, dirigido al avatar) aplicado a cada reel.</li>
+      </ul>
+
+      <h3><span class="hn">2.5</span>Montar la producción por lotes (batching)</h3>
+      <p>Aquí está el secreto de la sostenibilidad: <strong>producir por lotes (batching)</strong> en vez de reel a reel. Grabar de golpe muchos reels en una sesión es mucho más eficiente que grabar uno cada día, y es lo que hace el ritmo mantenible sin quemarte.</p>
+      <p>Cómo montar el batching:</p>
+      <ol>
+        <li><b>Planifica un lote de contenido:</b> antes de grabar, decide qué reels vas a hacer en la sesión, eligiendo formatos e ideas de tus bancos. Llegas a grabar con un plan de varios reels, no a improvisar uno.</li>
+        <li><b>Graba muchos de una vez:</b> en una sola sesión, con el mismo setup (luz, cámara, ropa puesta), graba el material de varios reels. Aprovechas el montaje una vez para producir mucho, ahorrando el tiempo de montar y desmontar cada vez.</li>
+        <li><b>Prepara todo antes de grabar:</b> las prendas listas, la luz montada, el guion o la idea de cada reel clara, el espacio preparado. La preparación hace la sesión fluida y productiva.</li>
+        <li><b>Separa grabar de editar y publicar:</b> graba en lote, edita en lote, y publica de forma distribuida en el tiempo. Con una sesión de grabación tienes contenido para muchos días.</li>
+      </ol>
+      <p class="pull">Una sesión de grabación, muchos reels, muchos días de contenido. El batching es la diferencia entre un ritmo sostenible y el agotamiento que hace abandonar el formato.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Un sistema de producción por lotes (planificar el lote, grabar mucho de una vez, preparar antes, separar fases) que hace el ritmo sostenible.</li>
+      </ul>
+
+      <h3><span class="hn">2.6</span>Grabar con criterio (calidad suficiente, no perfección)</h3>
+      <p>Al grabar, el objetivo es <strong>calidad suficiente y auténtica, no perfección de estudio.</strong> El video corto premia lo nativo y lo auténtico, así que grabar bien es más cuestión de criterio que de equipo caro. Este paso da ese criterio.</p>
+      <p>Cómo grabar con criterio:</p>
+      <ol>
+        <li><b>Buena luz por encima de todo:</b> como en la foto de producto, la luz es lo que más distingue un video que se ve bien de uno que se ve barato. Luz natural o un foco básico. Buena luz con móvil supera a mala luz con cámara cara.</li>
+        <li><b>Móvil es suficiente:</b> no necesitas cámara profesional. Un móvil actual graba con calidad de sobra para reels. Tu limitación es la idea y el gancho, no el equipo.</li>
+        <li><b>Estabilidad y encuadre:</b> un trípode o una superficie estable evita el temblor que se ve amateur. Un encuadre pensado (vertical, la acción centrada) hace el video más limpio.</li>
+        <li><b>Audio claro si hablas:</b> si tu reel lleva voz, que se oiga bien (graba en sitio sin ruido, o usa un micro básico). El audio malo hace que la gente pase.</li>
+        <li><b>Auténtico, no rígido:</b> el video corto premia lo natural y espontáneo por encima de lo perfecto y ensayado. La imperfección natural a menudo funciona mejor que la perfección fría.</li>
+      </ol>
+      <p class="pull">Calidad suficiente y auténtica bate a perfección de estudio. La perfección es enemiga de la consistencia.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El material grabado con calidad suficiente y auténtica (buena luz, móvil estable, audio claro), sin caer en el perfeccionismo.</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Editar para retención y marca</h3>
+      <p>La <strong>edición</strong> es donde el material grabado se convierte en un reel que engancha. En video corto, la edición sirve sobre todo a la retención (mantener la atención) y a que se vea como tu marca. Este paso define una edición eficiente y consistente.</p>
+      <p>Qué hacer al editar:</p>
+      <ol>
+        <li><b>Edita para el ritmo y la retención:</b> cortes ágiles, quita los momentos muertos, mantén el video en movimiento para que nadie se aburra y deslice. El ritmo de la edición es lo que mantiene a la gente hasta el final.</li>
+        <li><b>Refuerza el gancho:</b> asegúrate de que el inicio engancha, con texto en pantalla que capte la atención desde el primer segundo si hace falta. La edición puede reforzar el gancho que grabaste.</li>
+        <li><b>Texto en pantalla y subtítulos:</b> mucha gente ve sin sonido. El texto en pantalla hace el reel comprensible en silencio y refuerza el mensaje. Es casi obligatorio en video corto.</li>
+        <li><b>Aplica tu marca sin sobreproducir:</b> tu tono, tu estilo visual, coherente con tu dirección de arte, pero sin que la edición se sienta sobrecargada o de anuncio. La marca se nota en el estilo, el ritmo y el tono, no en efectos recargados.</li>
+        <li><b>Edita en lote y con plantillas:</b> ten un estilo de edición consistente (casi una plantilla) que apliques a todos tus reels. Esto acelera la edición y da consistencia de marca.</li>
+      </ol>
+      <p>La regla: <strong>la edición sirve a la retención y a la marca, no al lucimiento.</strong> Cortes ágiles para que la gente se quede, texto en pantalla para el que ve sin sonido, y tu estilo de marca aplicado de forma consistente, sin perderte en efectos.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Los reels editados para retención (ritmo, gancho reforzado, texto en pantalla) y coherentes con tu marca, con un estilo de edición consistente y eficiente.</li>
+      </ul>
+
+      <h3><span class="hn">2.8</span>Publicar, sistematizar y mejorar con datos</h3>
+      <p>El último paso convierte todo en un <strong>sistema vivo que mejora con datos.</strong> El video corto es un juego de iteración: publicas, ves qué funciona, y doblas en ello. Este paso cierra el ciclo y lo hace sostenible.</p>
+      <p>Cierra:</p>
+      <ol>
+        <li><b>Publica de forma consistente:</b> con tu contenido producido en lote, publica con un ritmo constante y sostenible. La consistencia es lo que construye alcance con el tiempo, más que cualquier reel individual.</li>
+        <li><b>Mira los datos que importan:</b> la retención (¿cuánta gente ve el reel entero?), el alcance (¿a cuánta gente nueva llega?), y el engagement (¿comentan, comparten, guardan?). Estos datos te dicen qué formatos y qué ganchos funcionan.</li>
+        <li><b>Dobla en lo que funciona:</b> cuando un formato o un tipo de gancho funciona (mucha retención, mucho alcance), haz más de eso. Tus propios datos son la mejor guía de qué producir más.</li>
+        <li><b>Sistematiza todo el flujo:</b> documenta tu sistema (banco de formatos, banco de ideas, proceso de batching, estilo de edición, ritmo de publicación) para que sea repetible y delegable, sin perder la esencia cuando crezcas.</li>
+      </ol>
+      <p class="pull">Publica, mide, dobla en lo que funciona, repite. La consistencia te mantiene en el juego; los datos te hacen ganar.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Un sistema de publicación consistente, las métricas clave en seguimiento (retención, alcance, engagement), el hábito de doblar en lo que funciona, y todo el flujo documentado para ser sostenible y delegable.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des tu sistema de video corto por cerrado hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre entender el formato</p>
+      <ul class="check">
+        <li>Entiendo qué hace funcionar un reel (gancho, ritmo, valor, remate).</li>
+        <li>Entiendo que el alcance depende de la retención, y la retención del gancho y el ritmo.</li>
+      </ul>
+
+      <p class="mini">Sobre el sistema de ideas</p>
+      <ul class="check">
+        <li>He convertido mis pilares en un banco de formatos de reel repetibles.</li>
+        <li>Tengo un banco de ideas que nutro de forma continua, conectado a los formatos.</li>
+        <li>Nunca me quedo sin saber qué grabar porque tiro de formatos e ideas.</li>
+      </ul>
+
+      <p class="mini">Sobre el gancho y la producción</p>
+      <ul class="check">
+        <li>Trabajo el gancho (primeros 1-3 segundos, visual y verbal, dirigido al avatar) más que nada.</li>
+        <li>Produzco por lotes (batching): planifico, grabo mucho de una vez, separo fases.</li>
+        <li>Grabo con calidad suficiente y auténtica (buena luz, móvil estable, audio claro), sin perfeccionismo.</li>
+      </ul>
+
+      <p class="mini">Sobre edición y sistema</p>
+      <ul class="check">
+        <li>Edito para la retención (ritmo, gancho reforzado, texto en pantalla para ver sin sonido).</li>
+        <li>Aplico mi marca de forma consistente sin sobreproducir.</li>
+        <li>Publico con un ritmo consistente y sostenible.</li>
+        <li>Miro los datos (retención, alcance, engagement) y doblo en lo que funciona.</li>
+        <li>Tengo todo el flujo documentado para ser sostenible y delegable.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 7.2 · Producción de contenido para Instagram / TikTok (reels) · v1.0 · Fase 7</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

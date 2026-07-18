@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 3.1 — Guía de tejidos y materiales</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 3 · Materiales, Telas y Sourcing</p>
+    <h1 class="rv">Tejidos y materiales</h1>
+    <p class="meta rv">SOP 3.1 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; La tela correcta para cada prenda</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que <strong>entiendas las telas lo suficiente para elegir la correcta para cada prenda</strong> y hablar con proveedores sin que te la cuelen. La tela es, literalmente, <span class="hl">el 70% de lo que el cliente siente cuando toca tu ropa</span>: puedes tener el mejor diseño y la mejor campaña, pero si la tela es mala, la prenda se siente barata y no hay marca que lo salve.
+    </p>
+    <p>La idea que ordena todo: <strong>no existe la «mejor tela», existe la tela correcta para cada prenda.</strong> Elegir tela no es buscar la más cara ni la más premium — es hacer coincidir las propiedades del tejido (peso, caída, tacto, uso, precio) con lo que la prenda necesita ser.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 7 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que entiendas las telas lo suficiente como para elegir la correcta para cada prenda y hablar con proveedores sin que te la cuelen. La tela es el 70% de lo que el cliente siente cuando toca tu ropa: puedes tener el mejor diseño, el mejor patrón y la mejor campaña, pero si la tela es mala, la prenda se siente barata y no hay marca que lo salve. El material es donde vive la percepción de calidad.</p>
+      <p>La idea que ordena todo: no existe la «mejor tela», existe <span class="gold">la tela correcta para cada prenda</span>. Una tela ligera y fluida es perfecta para una camisa de verano y pésima para una sudadera de invierno. Elegir tela no es buscar la «más cara» o la «más premium»: es hacer coincidir las propiedades del tejido con lo que la prenda necesita ser — su peso, su caída, su tacto, su uso, su precio.</p>
+      <p>Tres variables definen cualquier tela y hay que dominarlas:</p>
+      <ul>
+        <li><b>Composición:</b> de qué fibras está hecha (algodón, poliéster, lana, mezclas…). Define el tacto, el comportamiento y en gran parte el coste y la sensación.</li>
+        <li><b>Gramaje:</b> cuánto pesa el tejido por metro cuadrado (los famosos «gramos», g/m² o GSM). Define si la prenda es ligera o pesada, fina o consistente. Es lo que más comunica calidad percibida en camisetas y sudaderas.</li>
+        <li><b>Construcción:</b> cómo está hecho el tejido — de calada (<em>woven</em>, como una camisa) o de punto (<em>knit</em>, como una camiseta). Define cómo se comporta, si estira y cómo cae.</li>
+      </ul>
+      <p>El resultado concreto: el criterio para elegir tela por prenda (qué composición, qué gramaje, qué construcción), un vocabulario para negociar con proveedores, y una guía de referencia de las familias de tejido más usadas con sus usos típicos, para que cada prenda tenga la tela que su función pide.</p>
+      <p class="pull">Lo que pasa si te saltas esto: eliges tela por precio, la prenda llega con una caída rara, un tacto barato o un peso que no pega con el diseño, o pides «algodón» sin especificar y te llega uno fino y triste cuando querías uno denso y premium. La tela mal elegida es de los errores más difíciles de disimular: se toca, se ve y se nota al instante.</p>
+
+      <h3><span class="hn">1.2</span>Elementos necesarios</h3>
+      <ul>
+        <li><b>El diseño y tech pack de cada prenda (SOPs de Fase 2):</b> qué prenda es, qué caída y peso quieres, qué construcción. La tela sirve al diseño.</li>
+        <li><b>El posicionamiento (0.4):</b> define el nivel de tela que tu marca necesita y que su precio puede pagar. Premium pide gramajes y composiciones distintas que accesible.</li>
+        <li><b>Muestras físicas de tela (swatches)</b> y prendas de referencia que te gusten: la mejor forma de aprender tejidos es tocar. Consigue muestrarios y desmonta mentalmente prendas que admiras.</li>
+        <li>Acceso a <b>proveedores de tela</b> para pedir muestras, composiciones y gramajes reales (se cruza con el SOP de sourcing).</li>
+        <li>Este documento como <b>guía de consulta</b>: vuelve a él cada vez que elijas tela para una prenda nueva.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Principios no negociables</h3>
+      <ol>
+        <li><b>No hay mejor tela, hay tela correcta.</b> Cada prenda pide propiedades distintas. La elección es una coincidencia entre tejido y función, no una búsqueda de «lo premium».</li>
+        <li><b>La tela es el 70% de la percepción de calidad.</b> Ahorrar en tela para bajar coste suele salir carísimo en percepción de marca.</li>
+        <li><b>Composición + gramaje + construcción.</b> Toda especificación de tela necesita las tres. Pedir solo «algodón» es no especificar nada.</li>
+        <li><b>Toca antes de decidir.</b> La tela se elige con las manos, no en una pantalla ni en una ficha. Siempre muestra física.</li>
+        <li><b>El gramaje comunica.</b> En muchas prendas (camisetas, sudaderas), el peso del tejido es lo que separa lo barato de lo premium a la vista y al tacto.</li>
+        <li><b>Las mezclas existen por una razón.</b> Combinar fibras compensa las debilidades de cada una. No desprecies una mezcla por no ser «100% natural».</li>
+        <li><b>Valida en producción.</b> El comportamiento real (encogimiento, aguante al lavado, color) se confirma con muestra, no con la teoría.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De no saber de telas a elegir la correcta para cada prenda</h2>
+      <p>Siete pasos: primero dominas las tres variables (composición, gramaje, construcción), luego recorres las familias de tejido y las fibras, y al final aplicas todo para elegir la tela de una prenda concreta y validarla.</p>
+
+      <h3><span class="hn">2.1</span>Dominar las tres variables de cualquier tela</h3>
+      <p>Antes de ver telas concretas, aprende el marco que describe <strong>cualquier</strong> tejido. Con estas tres variables puedes hablar de cualquier tela del mundo.</p>
+      <ol>
+        <li><b>Composición (de qué está hecha).</b> Las fibras que la componen, en porcentajes. Determina el tacto, cómo se comporta (transpira, arruga, encoge, aguanta), la sensación y buena parte del coste. Puede ser una fibra pura (100% algodón) o una mezcla (80% algodón, 20% poliéster).</li>
+        <li><b>Gramaje (cuánto pesa).</b> El peso del tejido por metro cuadrado, en g/m² (o GSM): una medida objetiva de su densidad. Como referencia orientativa, ligero para telas finas y fluidas (camisas de verano, camisetas ligeras); medio para el rango más versátil (camisetas de buena calidad, entretiempo); pesado para telas densas (sudaderas gruesas, invierno, denim). Es la variable que más gente ignora y más comunica: una camiseta de gramaje alto se siente premium; una de gramaje bajo, barata — aunque ambas sean algodón. Pregunta siempre «¿qué gramaje?».</li>
+        <li><b>Construcción (cómo está hecha).</b> Las dos grandes familias. El <em>tejido de punto (knit)</em>, hecho con mallas entrelazadas, estira y es cómodo y elástico — camisetas, sudaderas, polos, ropa deportiva (el jersey, el french terry y la felpa son punto). El <em>tejido de calada (woven)</em>, con hilos cruzados en ángulo recto, no estira por sí solo (salvo que lleve elastano) y es más estructurado — camisas, pantalones, chaquetas, denim. Saber si necesitas punto o calada es la primera bifurcación al elegir tela.</li>
+      </ol>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Las tres variables entendidas y anotadas (composición, gramaje, construcción) y qué comunica cada una.</li>
+      </ul>
+
+      <h3><span class="hn">2.2</span>Conocer las fibras principales</h3>
+      <p>Ahora profundizas en la <strong>composición</strong>: qué fibras existen y qué aporta cada una. Conocer las fibras es lo que te permite entender por qué una tela se comporta como se comporta.</p>
+      <p><strong>Fibras naturales.</strong></p>
+      <ul>
+        <li><b>Algodón:</b> la fibra reina del casual. Suave, transpirable, cómodo, versátil. Base de camisetas, sudaderas, denim. Contras: arruga y puede encoger. Hay calidades muy distintas — la longitud de la fibra importa (fibras largas = más suave y duradero).</li>
+        <li><b>Lana:</b> cálida, aislante, con caída noble. Para abrigo y punto de invierno. Contras: coste, cuidado delicado, puede picar según el tipo.</li>
+        <li><b>Lino:</b> fresco, transpirable, con textura y caída características. Rey del verano. Contras: arruga muchísimo (aunque para muchos eso es su encanto).</li>
+        <li><b>Seda:</b> lujo, brillo, fluidez. Prendas premium y delicadas. Contras: cara y delicada.</li>
+      </ul>
+      <p><strong>Fibras sintéticas y artificiales.</strong></p>
+      <ul>
+        <li><b>Poliéster:</b> resistente, no arruga, seca rápido, mantiene el color, barato. Muy usado en mezclas y ropa técnica. Contras: transpira menos, sensación menos noble en solitario, es plástico (impacto ambiental).</li>
+        <li><b>Elastano (Lycra/Spandex):</b> la fibra que da elasticidad. Se añade en pequeño porcentaje (2-5%) a otras telas para que estiren y recuperen la forma. Clave en prendas ajustadas y cómodas.</li>
+        <li><b>Viscosa/rayón, modal, lyocell/Tencel:</b> fibras artificiales derivadas de celulosa. Dan suavidad, caída fluida y tacto sedoso. Tencel/Lyocell además tiene mejor perfil sostenible. Muy usadas para lograr fluidez o suavidad premium.</li>
+      </ul>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Las fibras principales entendidas, con qué aporta y qué limita cada una.</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Entender las mezclas</h3>
+      <p>Muchas telas no son una fibra pura, sino una <strong>mezcla</strong> — y no siempre por abaratar, sino porque combinar fibras <strong>compensa debilidades</strong>. Entender esto evita el prejuicio de que «100% natural = siempre mejor». Por qué se mezclan las fibras:</p>
+      <ol>
+        <li><b>Combinar lo mejor de cada una.</b> Algodón + poliéster une la comodidad y transpirabilidad del algodón con la resistencia, el no-arrugado y la estabilidad del poliéster. Muchas camisetas resistentes son mezclas por esto.</li>
+        <li><b>Añadir elasticidad.</b> Un pequeño porcentaje de elastano (95% algodón, 5% elastano) convierte una tela rígida en una cómoda que estira y recupera. Clave en prendas ajustadas.</li>
+        <li><b>Mejorar caída o tacto.</b> Añadir viscosa o modal a un algodón le da más fluidez y suavidad.</li>
+        <li><b>Gestionar coste sin sacrificar función.</b> Una mezcla bien pensada puede dar una prenda excelente a mejor precio que la fibra pura premium.</li>
+      </ol>
+      <p>La lección: una mezcla inteligente puede ser superior a una fibra pura para una prenda concreta. No juzgues una tela por «es sintética» o «no es 100% algodón» — júzgala por si hace bien el trabajo que la prenda necesita. Dicho esto, para el posicionamiento premium y el discurso de sostenibilidad, las fibras naturales o las artificiales de origen responsable (Tencel) suelen comunicar mejor: es una decisión de marca además de técnica.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Entendido por qué y cuándo una mezcla puede ser mejor que una fibra pura.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Recorrer las familias de tejido más usadas</h3>
+      <p>Esta es la sección de <strong>referencia</strong> a la que volverás cada vez que elijas tela: las familias de tejido más comunes en moda casual y streetwear, con su uso típico. (Rangos de gramaje orientativos — confírmalos siempre con tu proveedor y muestra.)</p>
+      <p><strong>Tejidos de punto (estiran — camisetas, sudaderas).</strong></p>
+      <ul>
+        <li><b>Jersey (single jersey):</b> el punto básico de las camisetas. Ligero a medio, suave y versátil. El gramaje decide todo: bajo = camiseta fina; alto = camiseta premium con cuerpo.</li>
+        <li><b>French terry:</b> punto con bucles por dentro, liso por fuera. Peso medio. La tela típica de sudaderas de entretiempo y básicos cómodos. Muy usada en streetwear.</li>
+        <li><b>Felpa / fleece (brushed):</b> french terry con el interior cepillado y afelpado. Más cálido y pesado. La sudadera de invierno clásica.</li>
+        <li><b>Piqué:</b> punto con textura en relieve. El tejido típico del polo.</li>
+        <li><b>Rib (canalé):</b> punto elástico con canales. Puños, cuellos y bajos, y prendas ajustadas.</li>
+        <li><b>Interlock:</b> punto más denso y estable, liso por ambas caras. Camisetas con más cuerpo.</li>
+      </ul>
+      <p><strong>Tejidos de calada (no estiran — camisas, pantalones, exterior).</strong></p>
+      <ul>
+        <li><b>Popelín:</b> calada fina y lisa. La camisa clásica.</li>
+        <li><b>Oxford:</b> calada con textura, algo más gruesa. Camisas más casual.</li>
+        <li><b>Denim (vaquero):</b> calada resistente en sarga (twill). Vaqueros y chaquetas. El gramaje aquí es clave (ligero para verano, pesado y rígido para denim crudo).</li>
+        <li><b>Sarga / twill:</b> calada con diagonal visible. Pantalones (chinos), workwear, sobrecamisas.</li>
+        <li><b>Lona / canvas:</b> calada gruesa y resistente. Prendas de trabajo, exterior robusto, tote bags.</li>
+        <li><b>Gabardina:</b> twill compacto e impermeabilizable. Trench y gabardinas.</li>
+      </ul>
+      <p>Cómo usar esta sección: al diseñar una prenda, identifica primero si es <strong>punto o calada</strong> (¿estira o no?), luego busca la familia que encaja con su función, y después decide el gramaje según el peso que quieras.</p>
+
+      <h3><span class="hn">2.5</span>Elegir la tela correcta para una prenda concreta</h3>
+      <p>Ahora aplicas todo para <strong>elegir la tela de una prenda real</strong>. Este es el proceso de decisión que repites por cada prenda de la colección. Sigue este orden:</p>
+      <ol>
+        <li><b>¿Punto o calada?</b> ¿La prenda necesita estirar y ser cómoda (punto) o ser estructurada (calada)? Primera bifurcación.</li>
+        <li><b>¿Qué peso o gramaje?</b> ¿Cómo quieres que se sienta: ligera, media, consistente? Piensa en el uso (verano/invierno, interior/abrigo) y en la percepción (más gramaje suele leerse como más premium).</li>
+        <li><b>¿Qué composición?</b> ¿Qué fibras dan el tacto, comportamiento y coste que quieres? ¿Necesita elasticidad (elastano)? ¿Priorizas naturalidad, resistencia, caída, sostenibilidad?</li>
+        <li><b>¿Qué caída y tacto?</b> Más allá de los números: cómo debe caer y sentirse. Esto solo se decide <strong>tocando</strong> muestras.</li>
+        <li><b>¿Cuadra con el coste y el posicionamiento?</b> La tela debe permitir tu margen y ser coherente con tu marca. Una tela premium en una prenda de precio accesible no cuadra, y viceversa.</li>
+      </ol>
+      <p class="pull">La regla de decisión: haz coincidir las propiedades de la tela con lo que la prenda necesita ser. Escribe, para cada prenda, la especificación resultante — construcción + gramaje + composición. Eso es lo que llevará el tech pack y lo que pedirás al proveedor.</p>
+
+      <h3><span class="hn">2.6</span>Validar la tela con muestra física</h3>
+      <p>Ninguna elección de tela está cerrada hasta que la <strong>tocas y la pruebas</strong>. La ficha técnica de un proveedor te dice la teoría; la muestra física te dice la verdad. Este paso evita sorpresas caras en producción. Qué validar con la muestra:</p>
+      <ol>
+        <li><b>Tacto y mano.</b> ¿Se siente como esperabas, premium o barata? El tacto no se juzga en pantalla.</li>
+        <li><b>Caída y comportamiento.</b> ¿Cae como quieres? ¿Estira lo justo? ¿Tiene el cuerpo adecuado?</li>
+        <li><b>Comportamiento al lavado (crítico).</b> Pide o haz una prueba de lavado: ¿encoge?, ¿destiñe?, ¿hace bolitas (<em>pilling</em>)?, ¿se deforma? Una tela que encoge o pila arruina la prenda tras el primer lavado; mejor descubrirlo en la muestra.</li>
+        <li><b>Color real sobre la tela.</b> El mismo color se ve distinto en tejidos distintos. Valídalo (conecta con los lab dips del SOP de color).</li>
+        <li><b>Coherencia entre lotes.</b> Si vas a producir en volumen, confirma que la tela es consistente lote a lote.</li>
+      </ol>
+      <p class="pull">La regla de oro, la misma de todo lo físico en moda: la muestra manda sobre la teoría. Una tela perfecta sobre el papel que encoge, pila o se siente barata al tocarla no sirve. Valida siempre antes de comprometerte a producir en volumen.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La tela validada con muestra física (tacto, caída, comportamiento al lavado, color, consistencia) antes de comprometerla a producción.</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Documentar tu librería de telas</h3>
+      <p>El último paso convierte lo aprendido en un <strong>activo reutilizable</strong>: tu propia librería de telas. Así no empiezas de cero en cada colección y construyes conocimiento propio de marca. Monta tu librería con:</p>
+      <ol>
+        <li><b>Las telas que usas y validas,</b> cada una con su ficha: composición, gramaje, construcción, proveedor, coste, para qué prenda la usaste, y notas de comportamiento (encoge, pila, cae así).</li>
+        <li><b>Muestras físicas archivadas (swatches)</b> etiquetadas, para volver a tocarlas y compararlas.</li>
+        <li><b>Tus telas «firma».</b> Con el tiempo, una marca desarrolla telas de referencia que la definen («nuestra felpa de 400g», «nuestro algodón de camiseta»). Poseer telas consistentes es parte de la identidad y la calidad reconocible de la marca.</li>
+      </ol>
+      <p>Esta librería es oro: acelera decisiones futuras, mantiene la consistencia de calidad entre colecciones, y es conocimiento que se queda en la marca. Es también lo que te permite delegar el sourcing con criterio más adelante.</p>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des tu criterio de telas por cerrado hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre el conocimiento base</p>
+      <ul class="check">
+        <li>Entiendo las tres variables de cualquier tela: composición, gramaje y construcción.</li>
+        <li>Sé distinguir tejido de punto (estira) de tejido de calada (no estira) y cuándo usar cada uno.</li>
+        <li>Sé leer un gramaje y estimar si una prenda se sentirá ligera, media o consistente.</li>
+        <li>Conozco las fibras principales (naturales y sintéticas) y qué aporta cada una.</li>
+        <li>Entiendo por qué y cuándo una mezcla puede ser mejor que una fibra pura.</li>
+      </ul>
+
+      <p class="mini">Sobre las familias y la elección</p>
+      <ul class="check">
+        <li>Me he familiarizado con las familias de tejido y sus usos típicos.</li>
+        <li>Para cada prenda, decido en orden: punto/calada → gramaje → composición → caída → coste.</li>
+        <li>Hago coincidir las propiedades de la tela con lo que la prenda necesita ser.</li>
+        <li>La tela elegida cuadra con mi coste y mi posicionamiento.</li>
+      </ul>
+
+      <p class="mini">Sobre la validación y el archivo</p>
+      <ul class="check">
+        <li>Toco muestra física antes de decidir cualquier tela.</li>
+        <li>Valido el comportamiento al lavado (encogimiento, pilling, desteñido, deformación).</li>
+        <li>Valido el color real sobre la tela concreta.</li>
+        <li>He iniciado mi librería de telas con fichas, swatches archivados y mis telas firma.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 3.1 · Guía de tejidos y materiales · v1.0 · Fase 3</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

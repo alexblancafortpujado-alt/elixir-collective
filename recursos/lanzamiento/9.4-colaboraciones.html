@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 9.4 — Colaboraciones y colabs de marca</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 9 · Lanzamiento, Drops y Marketing</p>
+    <h1 class="rv">Colaboraciones</h1>
+    <p class="meta rv">SOP 9.4 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Sumar audiencias y credibilidad con colabs con encaje</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que uses las <strong>colaboraciones</strong> —con otras marcas, con creadores, con artistas— como una palanca de crecimiento: una forma de acceder a audiencias nuevas, ganar credibilidad prestada y crear momentos de deseo, <span class="hl">sumando fuerzas con otros en vez de crecer siempre en solitario</span>.
+    </p>
+    <p>La idea central: <strong>una colaboración es un intercambio de audiencias y de credibilidad, un uno más uno que suma más que dos.</strong> Es un atajo a la confianza: en vez de ganarte a una audiencia nueva desde cero, entras avalado por alguien en quien ya confían.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 8 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que uses las colaboraciones (con otras marcas, con creadores, con artistas) como una palanca de crecimiento: una forma de acceder a audiencias nuevas, ganar credibilidad prestada y crear momentos de deseo, sumando fuerzas con otros en vez de intentar crecer siempre en solitario. Las colabs son una de las mecánicas más potentes de la moda moderna, y bien hechas pueden hacer por una marca en un momento lo que meses de trabajo en solitario.</p>
+      <p>La idea central: una colaboración es un intercambio de audiencias y de credibilidad, un uno más uno que suma más que dos. Cada parte aporta su audiencia y su credibilidad, y ambas se benefician del acceso a la del otro. Tu marca llega a gente nueva con la credibilidad prestada de que ese colaborador «te avala» al asociarse contigo. Es un <span class="gold">atajo a la confianza</span>: en vez de ganarte a una audiencia nueva desde cero, entras avalado por alguien en quien ya confían.</p>
+      <p>Hay tres tipos principales, cada uno con su lógica: <strong>marca x marca</strong> (dos marcas crean producto conjunto o una colección cápsula, algo que ninguna haría sola), <strong>con creador o influencer</strong> (aporta el acceso a su audiencia y su influencia), y <strong>con artista o diseñador</strong> (aporta su universo creativo y su comunidad, creando producto con su sello). Pero lo que separa las colabs que funcionan de las que no: <strong>una buena colaboración necesita encaje real, no solo sumar audiencias.</strong> Una colab con encaje —mundos, valores, estéticas y audiencias que tienen sentido juntos— se siente natural y potente; una sin encaje se siente forzada, no convence a ninguna audiencia, y puede incluso dañar. Y la colab suele ser un evento: se materializa en un producto limitado que se lanza como un drop, así que colab y drop se potencian.</p>
+      <p class="pull">Lo que pasa si no las usas o las haces mal: creces siempre en solitario, sin aprovechar la palanca de acceder a audiencias nuevas con credibilidad prestada. O colaboras sin criterio, con cualquiera que tenga seguidores, y las colabs se sienten forzadas, no convencen y hasta dañan tu marca. O estructuras mal la colab y una parte sale perdiendo, quemando la relación.</p>
+
+      <h3><span class="hn">1.2</span>Indicadores de éxito</h3>
+      <ul>
+        <li>Usas las colaboraciones para <b>acceder a audiencias nuevas</b> con la credibilidad prestada del colaborador.</li>
+        <li>Eliges colaboradores con <b>encaje real</b> (mundos, valores, estéticas y audiencias que pegan), no solo por su audiencia.</li>
+        <li>Tus colabs se sienten <b>auténticas y deseables</b>, no forzadas.</li>
+        <li>Estructuras las colabs para que <b>ambas partes ganen</b>, cuidando la relación.</li>
+        <li>Aprovechas la colab como un <b>evento de deseo</b>, conectada con la mecánica del drop.</li>
+        <li>La colab <b>suma a tu marca</b> (audiencia, credibilidad, deseo), en vez de restarle o diluirla.</li>
+        <li>Construyes <b>relaciones</b> que pueden repetirse, no colabs de una vez que queman.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Elementos necesarios</h3>
+      <ul>
+        <li><b>Tu marca sólida:</b> concepto, mundo, estética y valores claros. Necesitas saber quién eres para saber con quién encajas.</li>
+        <li><b>Tu avatar y tu audiencia:</b> a quién quieres llegar, para elegir colaboradores cuya audiencia encaje.</li>
+        <li><b>Tu comunidad y tu credibilidad actual:</b> lo que tú aportas a la colab (tu audiencia, tu mundo).</li>
+        <li><b>Claridad sobre tu objetivo con la colab:</b> ¿acceder a audiencia nueva? ¿ganar credibilidad? ¿crear un momento de deseo? El objetivo orienta a quién elegir.</li>
+        <li><b>Tu capacidad de producción:</b> si la colab implica producto conjunto, necesitas poder producirlo.</li>
+        <li><b>Tu playbook de lanzamiento:</b> la colab a menudo se lanza como un drop.</li>
+        <li><b>Claridad sobre los términos</b> que puedes ofrecer y necesitas (reparto, roles, derechos) para estructurar el acuerdo.</li>
+      </ul>
+
+      <h3><span class="hn">1.4</span>Principios no negociables</h3>
+      <ol>
+        <li><b>La colab es intercambio de audiencias y credibilidad.</b> Su valor es acceder a la audiencia del otro con su aval. Elígela y estructúrala con eso en mente.</li>
+        <li><b>El encaje real es innegociable.</b> Colabora por encaje (mundos, valores, estéticas, audiencias que pegan), no solo por audiencia. Una colab sin encaje resta.</li>
+        <li><b>Ambas partes deben ganar.</b> Una colab es una relación. Si una parte sale perdiendo, quema la relación y la reputación.</li>
+        <li><b>Autenticidad sobre oportunismo.</b> Una colab que se siente forzada u oportunista no convence. Debe sentirse natural y coherente con ambas marcas.</li>
+        <li><b>La colab es un evento.</b> Aprovecha su potencial de momento de deseo, conéctala con la mecánica del drop.</li>
+        <li><b>Aporta valor a la audiencia del colaborador.</b> No es solo «vender a su gente». La colab debe dar algo genuino a ambas audiencias.</li>
+        <li><b>Cuida la relación a largo plazo.</b> Las mejores colabs se repiten y construyen alianzas. No quemes una relación por un beneficio puntual.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De crecer en solitario a sumar fuerzas</h2>
+      <p>Ocho pasos: entender el valor de la colab, definir el objetivo, elegir colaboradores con encaje, diseñar la colab, estructurar el acuerdo, crear el producto y el momento, lanzar y amplificar, y cuidar la relación.</p>
+
+      <h3><span class="hn">2.1</span>Entender el valor real de una colaboración</h3>
+      <p>Antes de buscar colaboradores, entiende <strong>qué te da de verdad una colaboración</strong>, porque su valor va más allá de «sumar seguidores». Grabar esto te permite elegir y estructurar colabs con criterio.</p>
+      <p>El valor real de una colab:</p>
+      <ol>
+        <li><b>Acceso a una audiencia nueva:</b> el beneficio más obvio, llegas a la audiencia del colaborador, gente que probablemente no te conocía. Para una marca que quiere crecer, acceder a una audiencia nueva y relevante es oro.</li>
+        <li><b>Credibilidad prestada:</b> cuando alguien con credibilidad se asocia contigo, parte de esa credibilidad se te transfiere. Su audiencia te ve avalado por alguien en quien confían. Es un atajo a la confianza que en solitario tardarías mucho en construir.</li>
+        <li><b>Un momento de deseo:</b> una colab crea algo especial y único (dos mundos combinados) que genera deseo y expectación por sí mismo. La novedad y la exclusividad son un motor de deseo, y por eso funciona tan bien como drop.</li>
+        <li><b>Frescura y notoriedad:</b> una colab renueva el interés en tu marca, genera conversación, te pone en el radar. Es un evento que atrae atención más allá de tu audiencia habitual.</li>
+        <li><b>Acceso a capacidades o mundos nuevos:</b> colaborar con un artista, un diseñador o una marca de otro mundo te aporta una estética, una capacidad o un universo que no tenías, enriqueciendo tu marca.</li>
+      </ol>
+      <p>La regla: <strong>una colab te da audiencia nueva, credibilidad prestada y un momento de deseo, todo a la vez.</strong> Entender este valor completo te permite usar las colabs como la palanca de crecimiento que son.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Entendido el valor real de una colaboración (audiencia nueva, credibilidad prestada, momento de deseo, frescura, capacidades nuevas).</li>
+      </ul>
+
+      <h3><span class="hn">2.2</span>Definir el objetivo y qué aportas tú</h3>
+      <p>Antes de buscar con quién colaborar, define <strong>qué quieres conseguir con la colab y qué aportas tú.</strong> Una colab sin objetivo claro es difícil de estructurar y evaluar; y saber qué aportas es clave para atraer a buenos colaboradores.</p>
+      <p>Define:</p>
+      <ol>
+        <li><b>Tu objetivo con la colab:</b> ¿acceder a una audiencia nueva concreta? ¿ganar credibilidad en cierto círculo? ¿crear un momento de deseo y notoriedad? ¿enriquecer tu marca con un mundo nuevo? El objetivo orienta a quién buscar: una colab para audiencia nueva busca un colaborador con la audiencia que quieres; una para credibilidad busca a alguien respetado en tu espacio.</li>
+        <li><b>Qué aportas tú a la colab:</b> una colaboración es un intercambio, así que tienes que saber qué pones sobre la mesa: tu audiencia, tu comunidad, tu estética, tu credibilidad, tu capacidad de producción, tu mundo. Saber tu valor te permite buscar colaboradores para los que seas atractivo y estructurar un intercambio justo.</li>
+        <li><b>El equilibrio de valor:</b> las mejores colabs son entre partes que se aportan valor mutuamente. Si buscas colaborar con alguien mucho más grande, necesitas ofrecer algo que le interese (una estética única, un producto, acceso a un nicho); si es alguien de tu tamaño, el intercambio de audiencias es más directo.</li>
+      </ol>
+      <p>La regla: <strong>define qué quieres y qué aportas antes de buscar con quién.</strong> Colaborar sin saber qué quieres ni qué aportas lleva a colabs desenfocadas o desequilibradas.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Tu objetivo con la colab definido y claridad sobre qué aportas tú (tu valor en el intercambio).</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Elegir colaboradores con encaje real</h3>
+      <p>Este es el paso que más determina el éxito de una colab: <strong>elegir al colaborador correcto por encaje real, no solo por su audiencia.</strong> Una colab con encaje se siente natural y potente; una sin encaje, forzada e ineficaz.</p>
+      <p>Los criterios de encaje:</p>
+      <ol>
+        <li><b>Encaje de audiencia:</b> la audiencia del colaborador debe ser relevante para ti (gente a la que quieres llegar, cercana a tu avatar). Colaborar con alguien de audiencia enorme pero irrelevante para tu marca no sirve. Calidad de encaje sobre tamaño de audiencia.</li>
+        <li><b>Encaje de mundo y valores:</b> los mundos, los valores y lo que representan ambas partes deben ser compatibles. La gente nota cuando dos marcas «tienen sentido juntas» y cuando no.</li>
+        <li><b>Encaje de estética:</b> en moda, lo visual importa. Las estéticas de ambas partes deben poder combinarse en algo coherente y deseable. Dos estéticas que no combinan producen una colab visualmente incoherente.</li>
+        <li><b>Encaje de nivel y credibilidad:</b> el colaborador debe aportar credibilidad en el espacio que te interesa. Su reputación se transfiere a tu marca, así que colabora con quien te aporte la credibilidad correcta, y evita a quien pueda dañarla.</li>
+        <li><b>Complementariedad, no solo similitud:</b> las mejores colabs a veces combinan cosas complementarias (dos mundos que se enriquecen), no solo iguales. El encaje no es que seáis idénticos, es que juntos creáis algo que tiene sentido y suma.</li>
+      </ol>
+      <p class="pull">Elige por encaje real, no por tamaño de audiencia. Una colab con encaje suma; una elegida solo por seguidores se siente forzada y puede restar.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El colaborador elegido por encaje real (de audiencia, mundo, valores, estética y credibilidad), no solo por tamaño de audiencia.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Diseñar la colaboración (el qué y el concepto)</h3>
+      <p>Con el colaborador correcto, diseñas <strong>qué vais a hacer juntos</strong>: el concepto de la colab. Una buena colab tiene una idea clara que combina ambos mundos en algo deseable.</p>
+      <p>Cómo diseñar la colab:</p>
+      <ol>
+        <li><b>Define el formato de la colab:</b> ¿producto conjunto? ¿una colección cápsula? ¿una pieza especial? ¿el creador lleva y muestra tu producto? ¿algo cocreado? El formato depende del tipo de colab y de los objetivos de ambos.</li>
+        <li><b>Crea un concepto que combine ambos mundos:</b> la mejor colab no es «su logo en tu producto», es una idea que fusiona genuinamente los dos mundos en algo nuevo y deseable, algo que ninguna de las dos partes haría sola y que tiene sentido por combinar precisamente a estas dos. Busca la idea donde vuestros mundos se encuentran.</li>
+        <li><b>Asegura que aporta a ambas audiencias:</b> la colab debe dar algo genuino a las dos audiencias, no solo «venderle a la gente del otro». Cuando las dos audiencias ganan algo deseable, la colab funciona.</li>
+        <li><b>Mantén la coherencia con ambas marcas:</b> debe sentirse coherente con ambas a la vez, reconocible como fruto de las dos. Ni absorber una a la otra, ni ser algo ajeno a ambas, sino el encuentro auténtico de los dos mundos.</li>
+      </ol>
+      <p class="pull">Una buena colab no es poner dos logos juntos, es crear una idea donde los dos mundos se encuentran y producen algo nuevo. El concepto es lo que convierte una colab de un truco de marketing en un momento genuino de deseo.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El concepto de la colab diseñado (formato, idea que fusiona ambos mundos, valor para ambas audiencias, coherencia con ambas marcas).</li>
+      </ul>
+
+      <h3><span class="hn">2.5</span>Estructurar el acuerdo (que ambas partes ganen)</h3>
+      <p>Una colab es una <strong>relación comercial</strong>, y estructurarla bien es lo que asegura que ambas partes ganen y la relación no se queme. Este paso trata de los términos y el acuerdo: la parte menos glamurosa pero clave para que la colab sea un éxito y no un conflicto.</p>
+      <p>Cómo estructurar el acuerdo:</p>
+      <ol>
+        <li><b>Define los roles y responsabilidades:</b> quién hace qué, quién produce, quién diseña, quién vende, quién comunica, quién gestiona qué. Roles claros evitan malentendidos y conflictos durante la ejecución.</li>
+        <li><b>Acuerda el reparto económico:</b> cómo se reparten los costes, los ingresos, los márgenes. Un reparto justo y claro (según lo que aporta cada parte) es la base de una colab sana. Los conflictos económicos son los que más queman las colabs: acuérdalo con claridad desde el principio.</li>
+        <li><b>Clarifica los derechos:</b> de la propiedad intelectual, del uso de las marcas, del producto creado, del contenido. Especialmente en colabs con producto o creativas, dejar claro quién posee y puede usar qué evita problemas después.</li>
+        <li><b>Ponlo por escrito:</b> aunque haya buena relación y confianza, un acuerdo por escrito (términos, roles, reparto y derechos) protege a ambas partes. Para colabs importantes, con producto o dinero significativo, conviene apoyo legal. <em>(No es asesoría legal, es buena práctica de negocio.)</em></li>
+        <li><b>Asegura el equilibrio del beneficio:</b> repasa que el acuerdo hace que ambas partes ganen de verdad. Una colab donde una parte sale claramente perdiendo quema la relación y la reputación.</li>
+      </ol>
+      <p class="pull">Estructura la colab para que ambas partes ganen, y ponlo por escrito. Los términos poco claros o un reparto injusto queman las colabs y la reputación; un acuerdo justo y claro es la base de una colaboración repetible.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El acuerdo de la colab estructurado (roles, reparto económico, derechos, por escrito) de forma que ambas partes ganen, con apoyo legal si la colab lo justifica.</li>
+      </ul>
+
+      <h3><span class="hn">2.6</span>Crear el producto y el momento de la colab</h3>
+      <p>Con el acuerdo cerrado, <strong>ejecutáis la colab</strong>: creáis el producto o el momento. Este paso aplica todo lo que ya sabes de crear producto, ahora en modo colaborativo, cuidando que el resultado esté a la altura del concepto.</p>
+      <p>Cómo crear la colab:</p>
+      <ol>
+        <li><b>Cocrea el producto respetando ambos mundos:</b> si la colab es producto, créalo aplicando tu proceso (diseño, muestreo, producción), pero en colaboración, integrando la visión y el sello del colaborador. El resultado debe reflejar auténticamente a ambas partes.</li>
+        <li><b>Mantén la calidad a la altura del momento:</b> una colab genera expectación, y el producto debe estar a la altura. Un producto de colab decepcionante quema el momento y ambas reputaciones. Cuida especialmente la calidad: es un producto con doble escrutinio.</li>
+        <li><b>Crea los activos del momento juntos:</b> el contenido, las fotos, la narrativa de la colab. Ambas partes aportan a construir el momento, y los activos deben combinar los dos mundos también en lo visual y narrativo.</li>
+        <li><b>Trata la colab como el evento especial que es:</b> el producto y los activos deben sentirse especiales, dignos del momento único que representa la unión de dos mundos. No es un producto más, es un evento.</li>
+      </ol>
+      <p>La regla: <strong>crea un producto y un momento a la altura del concepto y de ambas marcas.</strong> El resultado debe sentirse como el evento especial que es, digno de las dos marcas que lo crean.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El producto y los activos de la colab creados (cocreados respetando ambos mundos, con calidad a la altura, activos del momento construidos juntos), a la altura del concepto y de ambas marcas.</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Lanzar y amplificar la colab (el doble motor)</h3>
+      <p>La colab se <strong>lanza aprovechando la fuerza combinada de ambas partes</strong>, típicamente como un drop. Aquí está una gran ventaja de la colab: se amplifica desde dos audiencias y dos maquinarias de marketing a la vez.</p>
+      <p>Cómo lanzar y amplificar:</p>
+      <ol>
+        <li><b>Lánzala como un evento/drop:</b> la colab funciona perfectamente con la mecánica del drop: es limitada, especial, un momento de deseo. Aplica tu playbook de lanzamiento (hype, waitlist, el día, el después).</li>
+        <li><b>Amplifica desde ambas audiencias (el doble motor):</b> ambas partes la comunican a sus audiencias, y cada audiencia descubre a la otra parte. Esta amplificación desde dos frentes es lo que hace que una colab alcance mucho más que un lanzamiento en solitario. Coordina la comunicación de ambos para maximizar el impacto.</li>
+        <li><b>Cada parte aporta credibilidad a la audiencia del otro:</b> cuando comunicas la colab a tu audiencia, avalas al colaborador ante tu gente, y viceversa. Ese aval cruzado transfiere credibilidad en ambas direcciones.</li>
+        <li><b>Coordina el lanzamiento entre ambos:</b> como cualquier lanzamiento, la colab requiere coordinación, pero ahora entre dos partes. Coordinad la fecha, la comunicación y los roles del día, para que las dos maquinarias apunten al mismo momento y se amplifiquen mutuamente.</li>
+      </ol>
+      <p class="pull">La colab se amplifica desde dos audiencias a la vez: ese es su doble motor. La amplificación desde dos frentes, con credibilidad cruzada, es la gran ventaja de la colaboración.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La colab lanzada y amplificada (como un drop, desde ambas audiencias, con credibilidad cruzada, coordinada entre las dos partes) aprovechando el doble motor.</li>
+      </ul>
+
+      <h3><span class="hn">2.8</span>Aprovechar los resultados y cuidar la relación</h3>
+      <p>El último paso capitaliza los resultados de la colab y, sobre todo, <strong>cuida la relación</strong> para el futuro. Las mejores colabs no son eventos aislados, son el inicio de relaciones que se repiten y de una reputación de buen colaborador.</p>
+      <p>Cómo cerrar bien:</p>
+      <ol>
+        <li><b>Convierte la audiencia nueva en tuya:</b> la colab te trajo audiencia nueva. Aprovecha ese momento para convertir a esa gente en seguidores y comunidad tuya, no solo en una venta puntual. El valor a largo plazo de la colab es la audiencia que retienes, no solo lo que vendes en el drop.</li>
+        <li><b>Analiza los resultados:</b> qué funcionó, cuánto creciste, cuánto vendiste, qué audiencia ganaste, cómo respondió cada parte. Los aprendizajes te dicen si la colab cumplió el objetivo y qué hacer mejor en la próxima.</li>
+        <li><b>Cuida la relación con el colaborador:</b> una colab bien hecha, donde ambas partes ganaron y quedaron contentas, abre la puerta a repetir y a futuras alianzas. Cumple lo acordado, sé buen socio.</li>
+        <li><b>Construye tu reputación como colaborador:</b> cada colab bien hecha construye tu reputación como buen socio, lo que hace que otros quieran colaborar contigo. Tu reputación como colaborador es un activo.</li>
+      </ol>
+      <p class="pull">La colab es el inicio de una relación, no un evento aislado. Las marcas que mejor usan las colabs las tratan como alianzas, no como transacciones.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Los resultados de la colab capitalizados (audiencia nueva convertida en tuya, resultados analizados), la relación con el colaborador cuidada, y tu reputación como buen socio construida.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des la colaboración por cerrada hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre el valor y el objetivo</p>
+      <ul class="check">
+        <li>Entiendo el valor real de una colab (audiencia nueva, credibilidad prestada, momento de deseo).</li>
+        <li>Tengo definido mi objetivo con la colab y claro qué aporto yo al intercambio.</li>
+      </ul>
+
+      <p class="mini">Sobre la elección y el diseño</p>
+      <ul class="check">
+        <li>Elijo al colaborador por encaje real (audiencia, mundo, valores, estética, credibilidad), no solo por su audiencia.</li>
+        <li>He diseñado un concepto que fusiona ambos mundos en algo deseable que ninguno haría solo.</li>
+        <li>La colab aporta a ambas audiencias y es coherente con ambas marcas.</li>
+      </ul>
+
+      <p class="mini">Sobre el acuerdo y la creación</p>
+      <ul class="check">
+        <li>He estructurado el acuerdo para que ambas partes ganen (roles, reparto, derechos, por escrito).</li>
+        <li>Cuento con apoyo legal si la colab lo justifica.</li>
+        <li>He creado un producto y un momento a la altura del concepto y de ambas marcas, cuidando la calidad.</li>
+      </ul>
+
+      <p class="mini">Sobre el lanzamiento y la relación</p>
+      <ul class="check">
+        <li>Lanzo la colab como un evento/drop, amplificada desde ambas audiencias con credibilidad cruzada.</li>
+        <li>Coordino el lanzamiento entre las dos partes.</li>
+        <li>Convierto la audiencia nueva de la colab en comunidad mía.</li>
+        <li>Cuido la relación con el colaborador y construyo mi reputación como buen socio.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 9.4 · Colaboraciones y colabs de marca · v1.0 · Fase 9</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

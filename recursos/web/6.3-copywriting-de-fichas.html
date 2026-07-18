@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 6.3 — Copywriting de fichas de producto</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 6 · E-commerce y Tienda Online</p>
+    <h1 class="rv">Copy de producto</h1>
+    <p class="meta rv">SOP 6.3 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Las palabras que cierran la venta</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que escribas las <strong>descripciones de producto que venden</strong>: las palabras que acompañan a tus fotos y convierten el deseo en compra. Si las fotos hacen que el cliente <em>desee</em> la prenda, el copy es lo que <span class="hl">resuelve sus dudas, transmite el valor y le convence de darle a comprar</span>.
+    </p>
+    <p>La idea que ordena todo, y que casi todo el mundo hace mal: <strong>la gente no compra características, compra lo que esas características significan para ellos.</strong> «Camiseta de algodón 100%, 200 gramos, corte regular» informa, pero no vende. El cliente no compra el gramaje: compra cómo le va a hacer sentir y ver esa prenda.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 7 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que escribas las descripciones de producto que venden. El copy que vende traduce cada dato en un <strong>beneficio o una sensación</strong>: no «algodón de 200 gramos», sino «un peso que se siente sólido y cae bien, no la típica camiseta fina que se transparenta».</p>
+      <p>Segunda idea clave, especialmente crítica en moda online: <strong>el copy tiene que hacer dos trabajos a la vez.</strong></p>
+      <ul>
+        <li><b>Vender (seducir):</b> transmitir el valor, el deseo, la identidad que da la prenda. Conectar con lo que el cliente quiere ser — su tensión de identidad.</li>
+        <li><b>Informar (resolver dudas):</b> dar la información práctica para comprar sin miedo: el fit, el material, cómo talla, cómo cuidarla. En moda, resolver las dudas es lo que desbloquea la compra de alguien que no puede tocar la prenda.</li>
+      </ul>
+      <p>Un buen copy hace <strong>las dos cosas</strong>: emociona y tranquiliza. Solo vender sin informar deja dudas que frenan la compra; solo informar sin vender no genera deseo. Y la tercera idea, la que hace tu copy <em>tuyo</em>: el copy de producto es <span class="gold">donde tu marca habla</span>. Tiene que estar escrito en el tono de voz de tu marca y en el lenguaje de tu avatar.</p>
+      <p class="pull">Si el copy es malo: listas datos aburridos que no generan deseo, dejas dudas sin resolver que frenan la compra, escribes genérico y desperdicias la oportunidad de marca, o hablas de ti en vez de conectar con lo que el cliente quiere. Un copy pobre desperdicia el deseo que crearon tus fotos y deja la venta a medio cerrar.</p>
+
+      <h3><span class="hn">1.2</span>Elementos necesarios</h3>
+      <ul>
+        <li><b>Tu tono de voz de marca</b> (Brand Book): cómo habla tu marca, qué palabras usa y cuáles no. El copy se escribe en esta voz.</li>
+        <li><b>Tu avatar y su lenguaje literal (0.3):</b> las palabras que usa tu cliente, sus deseos, sus objeciones, su tensión de identidad.</li>
+        <li><b>Las especificaciones reales de cada prenda:</b> material, gramaje, fit, construcción, cuidado. Las características que vas a traducir en beneficios.</li>
+        <li><b>La guía de tallas y la info de fit</b> (patronaje): para resolver la duda número uno.</li>
+        <li><b>Las objeciones reales del cliente</b> (del avatar y de tus datos de devoluciones): lo que frena la compra y el copy debe desactivar.</li>
+        <li><b>Una plantilla de ficha reproducible</b> (la creas en el paso final) para escribir rápido y consistente.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Principios no negociables</h3>
+      <ol>
+        <li><b>Vende beneficios, no características.</b> Traduce cada dato en lo que significa para el cliente. El gramaje no vende; lo que ese gramaje le da, sí.</li>
+        <li><b>Vender Y informar.</b> Necesitas las dos: seducir con el valor y resolver las dudas prácticas. Una sola deja la venta a medias.</li>
+        <li><b>Escribe en tu voz, no genérico.</b> El copy es donde tu marca habla. Una ficha genérica desperdicia una oportunidad de marca en cada producto.</li>
+        <li><b>Habla el idioma del avatar.</b> Usa sus palabras y conecta con su identidad. El copy que suena a «el cliente» vende más que el que suena a «la empresa».</li>
+        <li><b>Resuelve las dudas de moda o pierdes la venta.</b> Fit, talla, material, cuidado. La duda no resuelta es una compra no hecha (o una devolución).</li>
+        <li><b>Lo importante primero, fácil de escanear.</b> La gente no lee, escanea. Estructura para que capten lo clave en segundos.</li>
+        <li><b>Honestidad siempre.</b> No exageres ni prometas lo que la prenda no es. El copy engañoso genera devoluciones y destruye confianza.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De una lista de datos a un copy que cierra la venta</h2>
+      <p>Siete pasos: reunir la materia prima, traducir características en beneficios, conectar con la identidad del cliente, resolver las dudas de moda, escribir en tu voz, estructurar la ficha, y sistematizar con una plantilla.</p>
+
+      <h3><span class="hn">2.1</span>Reunir la materia prima del copy</h3>
+      <p>Antes de escribir, reúne los tres ingredientes de un buen copy de producto. Escribir sin esta materia prima lleva a fichas genéricas o incompletas. Para cada prenda, ten delante:</p>
+      <ol>
+        <li><b>Las características reales de la prenda:</b> material, gramaje, fit, construcción, detalles, cuidado, de qué colección es, qué la hace especial. Son los datos que vas a traducir en beneficios.</li>
+        <li><b>Lo que el cliente quiere y teme:</b> qué desea esta persona (su deseo profundo, su tensión de identidad) y qué le frena (sus objeciones, sus dudas). Esto es lo que el copy debe tocar y resolver.</li>
+        <li><b>El lenguaje del cliente:</b> las palabras reales que usa tu avatar para hablar de lo que quiere y odia. Escribirás en su idioma, no en «idioma marca-empresa».</li>
+      </ol>
+      <p>Con estos tres ingredientes tienes todo lo necesario: qué es la prenda, qué quiere y teme el cliente, y cómo habla. La calidad del copy depende de tener esta materia prima clara antes de escribir.</p>
+
+      <h3><span class="hn">2.2</span>Traducir características en beneficios</h3>
+      <p>Este es el corazón del copy que vende: <strong>convertir cada dato técnico en lo que significa para el cliente.</strong></p>
+      <ol>
+        <li><b>Por cada característica, pregúntate «¿y esto qué le da al cliente?»</b> El dato es el punto de partida, el beneficio es el destino. «Algodón de 300 gramos» → un peso denso que se siente sólido y cae con estructura, nada de la típica camiseta fina que se transparenta. «Corte oversize» → el fit relajado que buscas para ir cómodo sin parecer básico. «Costuras reforzadas» → hecha para durar, no para deshacerse tras tres lavados.</li>
+        <li><b>Conecta el beneficio con la sensación o la identidad:</b> el mejor copy va más allá del beneficio funcional y toca la sensación («te vas a sentir…», «vas a proyectar…»). Aquí conecta con lo que el cliente quiere <em>ser</em>.</li>
+        <li><b>No elimines los datos, tradúcelos y complementa:</b> el cliente quiere el dato <em>y</em> quiere entender qué significa. No es «datos O beneficios», es beneficios respaldados por datos.</li>
+      </ol>
+      <p class="pull">Cada característica merece una traducción. Una ficha que solo lista datos informa pero no seduce; una que los traduce en beneficios y sensaciones vende.</p>
+
+      <h3><span class="hn">2.3</span>Conectar con la identidad del cliente</h3>
+      <p>El copy de moda que más vende va más allá del producto y conecta con <strong>quién quiere ser el cliente al ponerse la prenda.</strong> En moda, el cliente no compra la prenda: compra la versión de sí mismo que la prenda le permite ser.</p>
+      <ol>
+        <li><b>Toca la tensión de identidad del avatar:</b> tu cliente quiere pasar de «cómo se ve hoy» a «cómo quiere que le vean». El copy puede hablar a esa transformación, no describir solo la prenda.</li>
+        <li><b>Conecta con su deseo profundo, no solo el superficial:</b> el superficial es «una sudadera chula»; el profundo puede ser pertenecer, destacar, sentirse seguro. Vendes por el superficial pero conectas por el profundo.</li>
+        <li><b>Habla de él, no de ti:</b> el copy débil habla de la marca («nosotros hacemos…»); el fuerte habla del cliente («te vas a sentir…», «para el que…»).</li>
+        <li><b>Transmite el mundo de la marca:</b> cada ficha refuerza tu concepto. Conectar la prenda con el mundo y los valores de la marca añade una capa de deseo que va más allá del producto.</li>
+      </ol>
+      <p class="pull">Vende la transformación, no solo la prenda. El cliente compra lo que la prenda dice de él y cómo le hace sentir. En moda, esta es una palanca enorme.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El copy conectado con la identidad del cliente (su tensión, su deseo profundo, lo que quiere proyectar) y con el mundo de la marca, centrado en él y no en la empresa.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Resolver las dudas clave de moda</h3>
+      <p>Un copy que vende pero deja dudas prácticas sin resolver pierde la venta, porque el cliente que duda no compra (o compra y devuelve). Las dudas que el copy debe resolver:</p>
+      <ol>
+        <li><b>El fit y cómo talla (la número uno):</b> ¿es oversize, ajustado, regular? ¿talla grande o pequeño? ¿«si dudas entre dos tallas, elige…»? Resolver la duda de talla es lo que más desbloquea la compra y más reduce devoluciones. No la des por obvia: explícala.</li>
+        <li><b>El material y cómo se siente:</b> de qué está hecha, cómo se siente al tacto, cómo cae. El cliente que no puede tocar necesita que se lo describas.</li>
+        <li><b>El cuidado:</b> cómo se lava y mantiene. Una duda práctica que, resuelta, da confianza.</li>
+        <li><b>Los detalles prácticos:</b> qué incluye, cómo combinar, para qué ocasión, cualquier duda específica de esa prenda.</li>
+        <li><b>Las objeciones del avatar:</b> las razones reales por las que tu cliente dudaría. El copy debe desactivar esas objeciones concretas.</li>
+      </ol>
+      <p class="pull">Cada duda no resuelta es una venta a medias. En moda online la incertidumbre —sobre todo de talla y fit— es el mayor freno de compra. El copy que la anticipa convierte más y reduce devoluciones, porque el cliente compra sabiendo lo que recibe.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El copy que resuelve las dudas clave (fit, talla, material, cuidado, detalles prácticos) y desactiva las objeciones reales del avatar.</li>
+      </ul>
+
+      <h3><span class="hn">2.5</span>Escribir en el tono de voz de la marca</h3>
+      <p>Ahora aseguras que el copy suena a <strong>tu marca</strong>, no a una tienda genérica. Cada ficha es una oportunidad de reforzar tu identidad verbal.</p>
+      <ol>
+        <li><b>Aplica tu tono de voz definido:</b> los rasgos de personalidad verbal de tu marca. ¿Directo o cálido? ¿Crudo o refinado? ¿Con humor o serio? El copy de producto habla con esa voz.</li>
+        <li><b>Evita el copy genérico de plantilla:</b> frases vacías que podrían estar en cualquier tienda («prenda de alta calidad para el día a día») desperdician la oportunidad.</li>
+        <li><b>Mantén la coherencia con toda tu comunicación:</b> el copy debe sonar igual que tu feed, tus emails, tu web. Una voz consistente construye marca; una que cambia de tono en cada sitio, la diluye.</li>
+      </ol>
+      <p>El test práctico: lee tu copy y pregúntate «¿esto suena a mi marca o podría ser de cualquiera?». Si al taparlo alguien podría reconocer que es tuyo por cómo está escrito, vas bien.</p>
+
+      <h3><span class="hn">2.6</span>Estructurar la ficha para convertir</h3>
+      <p>Tener buen copy no basta: hay que <strong>estructurarlo para que convierta</strong>, porque la gente no lee las fichas, las <em>escanea</em>.</p>
+      <ol>
+        <li><b>Lo más importante y seductor primero:</b> el cliente decide en segundos. Empieza con el beneficio principal, la sensación, lo que hace especial la prenda. No entierres lo importante al final.</li>
+        <li><b>Fácil de escanear:</b> el gancho inicial y luego la información organizada (beneficios, detalles, fit, material, cuidado) de forma que el ojo la recorra rápido. Bloques cortos baten a un párrafo denso que nadie lee.</li>
+        <li><b>La información práctica accesible, pero no en medio del deseo:</b> los datos técnicos deben estar, pero organizados de forma que no maten el impulso de compra — el gancho arriba, los detalles debajo o desplegables.</li>
+        <li><b>Un camino claro hacia la compra:</b> el copy y la estructura conducen al «añadir al carrito» sin fricción, con la talla y el color fáciles de elegir.</li>
+      </ol>
+      <p class="pull">Estructura para el que escanea, no para el que lee. Una ficha bien estructurada convierte el buen copy en ventas; una mal estructurada lo desperdicia.</p>
+
+      <h3><span class="hn">2.7</span>Crear una plantilla reproducible y sistematizar</h3>
+      <p>El último paso convierte el copywriting en un <strong>proceso reproducible</strong>, para que escribir cada nueva ficha sea rápido y consistente. Es clave cuando tienes catálogos enteros que describir.</p>
+      <ol>
+        <li><b>Crea una plantilla de ficha reproducible:</b> define el esqueleto (gancho inicial → beneficios traducidos → resolución de dudas de fit, talla, material y cuidado → detalles → llamada a la acción). Escribir cada ficha pasa a ser rellenar una estructura probada, no inventar desde cero.</li>
+        <li><b>Define tus fórmulas de traducción:</b> ten a mano cómo traduces las características recurrentes en beneficios (tu forma de describir el algodón, el fit, la construcción). Mantiene la consistencia y ahorra tiempo.</li>
+        <li><b>Mantén una guía de tono para las fichas:</b> un mini-documento con tu voz aplicada a producto (palabras que usas y que no, ejemplos de «sí/no»), para que tú o quien delegues escriba siempre igual.</li>
+        <li><b>Mejora con datos:</b> las fichas que más venden —y las que más se devuelven— te enseñan qué copy funciona. Usa esos datos para afinar la plantilla con el tiempo.</li>
+      </ol>
+      <p class="pull">El copywriting de producto es un sistema, no una inspiración cada vez. Una plantilla y unas fórmulas reproducibles te permiten escribir un catálogo entero rápido, consistente y en tu voz — y delegarlo sin perder calidad.</p>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des el copy por cerrado hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre la materia prima y los beneficios</p>
+      <ul class="check">
+        <li>He reunido las características de la prenda, los deseos y objeciones del avatar y su lenguaje.</li>
+        <li>Traduzco cada característica clave en un beneficio o sensación, sin eliminar los datos que el cliente necesita.</li>
+      </ul>
+
+      <p class="mini">Sobre la conexión y las dudas</p>
+      <ul class="check">
+        <li>El copy conecta con la identidad del cliente (su tensión, su deseo profundo, lo que quiere proyectar).</li>
+        <li>Habla de él, no de la empresa, y transmite el mundo de la marca.</li>
+        <li>Resuelve las dudas clave de moda: fit, cómo talla, material, cuidado.</li>
+        <li>Desactiva las objeciones reales de mi avatar.</li>
+      </ul>
+
+      <p class="mini">Sobre la voz y la estructura</p>
+      <ul class="check">
+        <li>Suena a mi marca (pasa el test de «¿esto es mío o de cualquiera?»).</li>
+        <li>Está estructurado para el que escanea: lo importante primero, fácil de captar.</li>
+      </ul>
+
+      <p class="mini">Sobre el sistema</p>
+      <ul class="check">
+        <li>Tengo una plantilla de ficha reproducible con estructura probada.</li>
+        <li>Tengo fórmulas de traducción y una guía de tono para escribir consistente y rápido.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 6.3 · Copywriting de fichas de producto · v1.0 · Fase 6</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

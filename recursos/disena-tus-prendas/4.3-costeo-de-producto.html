@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 4.3 — Costeo de producto (cost sheet y margen)</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 4 · Muestreo y Desarrollo de Producto</p>
+    <h1 class="rv">Costeo y margen</h1>
+    <p class="meta rv">SOP 4.3 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Lo que cuesta de verdad cada prenda y a qué precio venderla</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que sepas, <strong>con números y antes de producir, cuánto te cuesta de verdad cada prenda y a qué precio tienes que venderla para ganar dinero</strong>. Es el SOP menos glamuroso y <span class="hl">el más decisivo para que la marca sobreviva</span>: puedes tener el mejor diseño, la mejor tela y la mejor campaña, pero si los números no cuadran, cada venta te acerca a la quiebra.
+    </p>
+    <p>La verdad incómoda: <strong>facturar no es ganar.</strong> Muchas marcas venden mucho y pierden dinero en cada prenda sin saberlo. Se enamoran del producto, ponen un precio «que parece razonable», y descubren tarde que, después de sumar todos los costes reales, apenas ganan nada. El costeo es la disciplina que evita eso.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 8 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que sepas, con números y antes de producir, cuánto te cuesta de verdad cada prenda y a qué precio tienes que venderla para ganar dinero. Dos conceptos que hay que separar y que casi todo el mundo confunde:</p>
+      <ul>
+        <li><b>Cost sheet (hoja de costes):</b> el documento que suma <b>todo</b> lo que cuesta producir una unidad: tela, confección, avíos, etiquetas y todos los costes ocultos que casi nadie cuenta. Es el coste real por prenda.</li>
+        <li><b>Margen:</b> la diferencia entre lo que te cuesta la prenda y lo que la vendes. El margen no es «lo que ganas»: es de donde tiene que salir todo lo demás —marketing, plataforma, devoluciones, tú— y aún quedar beneficio.</li>
+      </ul>
+      <p>La regla de referencia que gobierna la moda: el precio de venta suele situarse en un <strong>múltiplo del coste de producción</strong>, habitualmente en torno a 2,5x–4x, y más en marcas premium. No es capricho: ese múltiplo es lo que permite cubrir marketing, devoluciones, plataforma e impuestos y aún ganar. Una prenda vendida a menos de ~2x su coste real casi nunca deja <span class="gold">negocio sano</span>.</p>
+      <p>El resultado concreto es una cost sheet completa por prenda (con los costes ocultos incluidos), el precio de venta calculado con margen sano, la comprobación de que cada prenda es rentable, y el criterio para arreglar las que no dan números.</p>
+      <p class="pull">Si te saltas esto: pones precios «a ojo», olvidas costes ocultos (el packaging, las devoluciones, las comisiones), crees que ganas un margen que no tienes, y descubres al cerrar el año que vendiste mucho y no ganaste nada. El costeo mal hecho es el error silencioso que hunde marcas que van bien de puertas afuera.</p>
+
+      <h3><span class="hn">1.2</span>Elementos necesarios</h3>
+      <ul>
+        <li><b>Las especificaciones y muestras aprobadas</b> de la prenda: el coste real solo se calcula bien cuando la prenda está definida (tela concreta, avíos concretos, construcción concreta).</li>
+        <li><b>Los costes reales de tus proveedores (Fase 3):</b> precio de tela por metro y consumo por prenda, precio de confección, precio de avíos y etiquetas. Sin datos reales, el costeo es ficción.</li>
+        <li><b>Los costes de tu operación:</b> packaging, envío, plataforma y comisiones, coste de devoluciones, tasa de marketing por venta, impuestos aplicables.</li>
+        <li><b>El posicionamiento y el precio de mercado (Fase 0):</b> lo que tu cliente está dispuesto a pagar y lo que cobra la competencia — el otro extremo del cálculo.</li>
+        <li><b>Una hoja de cálculo:</b> el costeo se hace con números en una plantilla reutilizable, no de cabeza.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Principios no negociables</h3>
+      <ol>
+        <li><b>Facturar no es ganar.</b> El objetivo no es vender mucho, es ganar en cada venta. Un negocio que vende con pérdida quiebra más rápido cuanto más vende.</li>
+        <li><b>Cuenta TODOS los costes, sobre todo los ocultos.</b> El coste que olvidas es el que se come tu beneficio. Packaging, devoluciones, comisiones y marketing son costes reales.</li>
+        <li><b>Construye el precio desde el coste, y valídalo contra el mercado.</b> El precio nace del coste (para asegurar margen) pero se valida contra lo que el cliente paga (para asegurar ventas).</li>
+        <li><b>El múltiplo existe por una razón.</b> Vender a menos de ~2x el coste real casi nunca deja negocio sano. Respétalo o entiende exactamente por qué te lo saltas.</li>
+        <li><b>Margen bruto no es beneficio.</b> Del margen sale marketing, devoluciones, plataforma, impuestos y tú. No confundas lo uno con lo otro.</li>
+        <li><b>Si una prenda no da números, no se produce como está.</b> Arréglala o descártala antes de fabricar, nunca después.</li>
+        <li><b>El costeo se hace antes de producir.</b> Calcular la rentabilidad con el almacén ya lleno es tarde. El costeo es una decisión previa.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De no saber tu coste a fijar precios rentables</h2>
+      <p>Ocho pasos: primero sumas los costes directos de la prenda, luego los indirectos y ocultos, calculas el coste real por unidad, construyes el precio con margen, lo validas contra el mercado, compruebas la rentabilidad, arreglas lo que no cuadra y lo sistematizas.</p>
+
+      <h3><span class="hn">2.1</span>Calcular los costes directos de producto</h3>
+      <p>Empieza por lo más tangible: lo que cuesta <strong>fabricar físicamente una unidad</strong>. Son los costes que van «dentro» de la prenda. Súmalos con datos reales de tus proveedores, no con estimaciones.</p>
+      <ol>
+        <li><b>Tela:</b> precio de la tela por metro × <b>consumo</b> (metros que gasta una prenda, incluido el desperdicio del corte). Ojo: no es el precio del metro, es lo que consume la prenda entera. Pregunta a tu patronista o fábrica el consumo real.</li>
+        <li><b>Confección (mano de obra):</b> lo que cobra la fábrica por coser una unidad. Cuanto más compleja la prenda —más operaciones, costuras y detalles—, más caro.</li>
+        <li><b>Avíos (trims):</b> cremalleras, botones, cordones, elásticos, remaches… cada componente que no es la tela principal, sumado por unidad.</li>
+        <li><b>Etiquetas y elementos de marca:</b> etiqueta de cuello, de composición, bandera de costura, hangtag… el coste por prenda de cada uno.</li>
+        <li><b>Otros procesos:</b> estampación, bordado, lavados o tratamientos especiales, si los lleva.</li>
+      </ol>
+      <p>Suma todo esto y tienes el <strong>coste directo de producción por unidad</strong>. Es la base, pero atención: <em>no</em> es el coste real completo. Muchas marcas se quedan aquí, y ese es el error.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El coste directo por unidad calculado (tela + confección + avíos + etiquetas + procesos), con datos reales de proveedores.</li>
+      </ul>
+
+      <h3><span class="hn">2.2</span>Sumar los costes indirectos y ocultos</h3>
+      <p>Aquí está la diferencia entre una marca que sabe sus números y una que se engaña. Hay una capa de costes que <strong>no van dentro de la prenda pero son igual de reales</strong>, y que casi todo el mundo olvida. Ignorarlos es creer que ganas un margen que no tienes.</p>
+      <ol>
+        <li><b>Packaging de envío:</b> la caja o sobre, el papel, las pegatinas, el relleno. Real y recurrente.</li>
+        <li><b>Logística de entrada:</b> si importas, el transporte, aduanas y aranceles repartidos por unidad. Puede ser significativo y se olvida constantemente.</li>
+        <li><b>Comisiones de plataforma y pago:</b> lo que se llevan tu plataforma de venta y la pasarela de pago. Un porcentaje pequeño por venta, pero real.</li>
+        <li><b>Coste de devoluciones:</b> en moda online las devoluciones son altísimas —por talla, sobre todo— y cada una cuesta: el envío de vuelta, el reacondicionamiento, a veces producto que no se puede revender. Hay que <b>repartir ese coste entre las prendas vendidas</b>, porque se come el margen.</li>
+        <li><b>Coste de marketing por venta (CAC):</b> lo que te cuesta de media conseguir una venta. Aunque no sea «de la prenda», sale del mismo margen.</li>
+        <li><b>Merma y stock muerto:</b> las unidades que no se venden se reparten, en la práctica, entre las que sí se venden.</li>
+      </ol>
+      <p>No todos estos costes van necesariamente <em>dentro</em> de la cost sheet de la prenda —algunos son de negocio global—, pero <strong>todos tienen que estar en tu cabeza al fijar el precio</strong>, porque todos salen del margen.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Los costes indirectos y ocultos identificados y estimados (packaging, logística, comisiones, devoluciones, marketing, merma), y claro cuáles salen del margen.</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Determinar el coste real por unidad</h3>
+      <p>Ahora consolidas todo en <strong>el número que de verdad importa</strong>: cuánto te cuesta una prenda de verdad. Este es el suelo por debajo del cual vender es perder dinero.</p>
+      <ol>
+        <li><b>Coste real por unidad = costes directos (2.1) + los costes indirectos que asignas por prenda (2.2).</b> Decide cuáles metes dentro del coste unitario —típicamente packaging, logística de entrada y una parte de devoluciones y merma— y cuáles dejas para cubrir con el margen general.</li>
+        <li><b>Sé conservador, no optimista.</b> Al estimar, redondea hacia arriba y no te olvides de nada. El error clásico es un costeo optimista que ignora costes «pequeños» que sumados son grandes.</li>
+        <li><b>Ten claro tu suelo:</b> este coste real es el mínimo absoluto. Vender por debajo es perder dinero en cada unidad, por muchas que vendas.</li>
+      </ol>
+      <p class="pull">El coste real completo es tu punto de partida para el precio, no el coste directo a secas. Fijar precio sobre el coste directo, olvidando los ocultos, es el camino directo a «vendo mucho y no gano nada».</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El coste real por unidad, consolidado y conservador, como suelo para fijar el precio.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Entender margen bruto vs beneficio real</h3>
+      <p>Antes de poner precio, ten clara una distinción que confunde a casi todo el mundo y que causa quiebras: <strong>la diferencia entre el margen y el beneficio.</strong></p>
+      <ol>
+        <li><b>Margen bruto = precio de venta − coste del producto.</b> Es lo que te queda de cada prenda <em>antes</em> de pagar los gastos generales del negocio. Es una cifra grande y engañosa: parece tu ganancia, pero no lo es.</li>
+        <li><b>Beneficio real = lo que queda del margen bruto DESPUÉS de pagar todo lo demás:</b> marketing, comisiones de plataforma, devoluciones, gastos fijos, impuestos y tu propio sueldo. Es lo que de verdad ganas.</li>
+      </ol>
+      <p>Una prenda puede tener un margen bruto que parece estupendo y aun así dejar <strong>beneficio real cero o negativo</strong> una vez restas todo lo demás. Ese es el espejismo que hunde marcas: miran el margen bruto, creen que ganan, y no ven que marketing y devoluciones se lo comen entero.</p>
+      <p class="pull">Necesitas un margen bruto lo bastante grande como para que, después de todos los gastos, aún quede beneficio real. Por eso el múltiplo sobre el coste tiene que ser generoso: no por codicia, sino porque del margen bruto sale muchísimo más de lo que parece.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Anotada la diferencia entre margen bruto y beneficio real, y claro que el margen debe cubrir todos los gastos del negocio y aún dejar beneficio.</li>
+      </ul>
+
+      <h3><span class="hn">2.5</span>Construir el precio con margen sano</h3>
+      <p>Ahora fijas el <strong>precio de venta</strong>, construido desde el coste para garantizar margen. Aquí entra el múltiplo.</p>
+      <ol>
+        <li><b>Aplica el múltiplo sobre el coste real:</b> parte del coste real por unidad y multiplícalo. La referencia habitual en moda ronda <b>2,5x–4x</b> (2x se considera el mínimo de retail, y los múltiplos suben en premium y lujo). Tiene que ser suficiente para que el margen bruto cubra marketing, devoluciones, comisiones, gastos e impuestos y aún deje beneficio.</li>
+        <li><b>Por qué el múltiplo es alto:</b> no es avaricia. Del precio de venta se van muchas cosas antes de tu beneficio. Un múltiplo bajo (1,5x–2x) deja un margen que los costes ocultos se comen entero. Si vendes a <b>wholesale</b>, necesitas un múltiplo aún mayor, porque el minorista pone otro margen encima y el precio final debe seguir cuadrando.</li>
+        <li><b>Ajusta según canal:</b> vender solo online directo (D2C) permite márgenes distintos que vender a través de tiendas. Ten claro tu canal al fijar el múltiplo.</li>
+      </ol>
+      <p class="pull">El precio nace del coste, no del «me parece caro o barato». Poner precio por intuición sin partir del coste es como conducir con los ojos cerrados. Primero el coste, luego el múltiplo.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El precio de venta calculado desde el coste real con un múltiplo que garantiza margen sano, ajustado a tu canal.</li>
+      </ul>
+
+      <h3><span class="hn">2.6</span>Validar el precio contra el mercado y el cliente</h3>
+      <p>El precio no se construye solo desde el coste: también tiene que <strong>cuadrar con lo que tu cliente paga y con tu posicionamiento</strong>. Este paso cruza los dos extremos — el precio que necesitas y el precio que el mercado acepta.</p>
+      <ol>
+        <li><b>Contra lo que paga tu cliente:</b> ¿el precio que sale del coste está dentro de lo que tu avatar paga por una prenda así (validado en la Fase 0)? Si tu precio necesario es más alto, tienes un problema que resolver en el paso 2.7.</li>
+        <li><b>Contra el posicionamiento:</b> el precio comunica. Uno demasiado bajo contradice un posicionamiento premium —barato se percibe como menos valioso—; uno demasiado alto contradice uno accesible.</li>
+        <li><b>Contra la competencia:</b> ¿cómo se sitúa tu precio frente a marcas comparables? No tienes que ser el más barato —competir por precio suele ser mala idea—, pero sí entender dónde caes.</li>
+      </ol>
+      <p>El punto de encuentro ideal: <strong>el precio que cubre tu coste con margen sano, que tu cliente acepta pagar y que encaja con tu posicionamiento.</strong> Cuando los tres coinciden, tienes un precio ganador.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El precio validado en los tres frentes (coste/margen, cliente, posicionamiento), o identificado el desajuste si el precio necesario no cuadra con el mercado.</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Arreglar las prendas que no dan números</h3>
+      <p>Habrá prendas cuyo costeo no cuadre: el precio que necesitas para tener margen es mayor que el que tu cliente pagaría. <strong>No las produzcas así.</strong> Tienes tres palancas:</p>
+      <ol>
+        <li><b>Subir el valor percibido</b> (para poder cobrar más): mejor tela, mejor acabado, mejor storytelling, mejor branding, exclusividad. A veces el problema no es que sea cara, sino que no se percibe lo bastante valiosa para su precio.</li>
+        <li><b>Bajar el coste</b> (para necesitar cobrar menos): simplificar la construcción (menos operaciones, menos costuras complejas), cambiar a una tela o avíos más eficientes, negociar mejor con proveedores, o aumentar el volumen para bajar el coste unitario. Cada detalle que quitas y no se echa de menos baja el coste.</li>
+        <li><b>Descartar la prenda:</b> si no se puede subir el valor ni bajar el coste hasta que cuadre, la prenda no debería existir. Mejor matarla en el papel que producir cientos de unidades sin margen.</li>
+      </ol>
+      <p class="pull">Una prenda que no es rentable se arregla o se mata antes de producir, nunca después. Producir con la esperanza de que «ya saldrán los números» es como se acumula el stock muerto y se hunde la caja.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Cada prenda no rentable arreglada (subiendo valor o bajando coste hasta que cuadre) o descartada antes de producir.</li>
+      </ul>
+
+      <h3><span class="hn">2.8</span>Sistematizar el costeo como herramienta</h3>
+      <p>El último paso convierte el costeo en una <strong>herramienta reutilizable</strong> que usas en cada prenda y cada colección, y que te da la salud financiera de la marca de un vistazo.</p>
+      <ol>
+        <li><b>Crea una plantilla de cost sheet reutilizable:</b> una hoja donde metes los costes de cualquier prenda y te calcula automáticamente el coste real, el precio sugerido según el múltiplo y el margen. Te ahorra tiempo y te obliga a no olvidar ningún coste.</li>
+        <li><b>Costea cada prenda antes de producirla:</b> ninguna prenda pasa a producción sin su cost sheet aprobada y su rentabilidad confirmada. Es un hábito que protege la marca.</li>
+        <li><b>Revisa los costes periódicamente:</b> sube la tela, cambian las comisiones, varían las devoluciones. Actualiza tus cost sheets con datos reales para que los precios sigan dejando margen.</li>
+        <li><b>Mira la rentabilidad de la colección entera, no solo prenda a prenda:</b> algunas hero pieces pueden tener menos margen porque atraen, y los básicos compensan con volumen. Lo importante es que <b>el conjunto</b> sea rentable.</li>
+      </ol>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Una plantilla de cost sheet reutilizable, el costeo establecido como paso obligatorio antes de producir, y la visión de rentabilidad a nivel de colección.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des el costeo por cerrado hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre los costes</p>
+      <ul class="check">
+        <li>He calculado el coste directo por unidad (tela con consumo real, confección, avíos, etiquetas, procesos).</li>
+        <li>He identificado y estimado los costes ocultos (packaging, logística, comisiones, devoluciones, marketing, merma).</li>
+        <li>Tengo el coste real por unidad consolidado y de forma conservadora, no optimista.</li>
+      </ul>
+
+      <p class="mini">Sobre el margen y el precio</p>
+      <ul class="check">
+        <li>Entiendo la diferencia entre margen bruto y beneficio real.</li>
+        <li>He construido el precio desde el coste real aplicando un múltiplo que deja margen sano (~2,5x–4x de referencia).</li>
+        <li>He ajustado el múltiplo según mi canal (D2C vs wholesale).</li>
+        <li>Sé que el margen bruto debe cubrir todos los gastos del negocio y aún dejar beneficio.</li>
+      </ul>
+
+      <p class="mini">Sobre la validación</p>
+      <ul class="check">
+        <li>He validado el precio contra lo que mi cliente paga, mi posicionamiento y la competencia.</li>
+        <li>He identificado las prendas cuyo precio necesario no cuadra con el mercado.</li>
+        <li>Las prendas no rentables las he arreglado (subir valor / bajar coste) o descartado antes de producir.</li>
+      </ul>
+
+      <p class="mini">Sobre el sistema</p>
+      <ul class="check">
+        <li>Tengo una plantilla de cost sheet reutilizable que calcula coste, precio y margen.</li>
+        <li>El costeo es un paso obligatorio antes de producir cualquier prenda.</li>
+        <li>Reviso los costes periódicamente con datos reales.</li>
+        <li>Compruebo la rentabilidad de la colección entera, no solo prenda a prenda.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 4.3 · Costeo de producto (cost sheet y margen) · v1.0 · Fase 4</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

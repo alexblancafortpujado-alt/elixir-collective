@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 11.3 — Delegación y gestión de freelancers (diseñador, fotógrafo, CM, patronista)</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 11 · Equipo, Delegación y Sistemas</p>
+    <h1 class="rv">Gestión de freelancers</h1>
+    <p class="meta rv">SOP 11.3 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Talento externo que entrega bien, a tiempo y en tu mundo</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que gestiones bien a los <strong>freelancers y colaboradores externos</strong> que sostienen buena parte de una marca de ropa: el diseñador, el fotógrafo, el community manager, el editor de video, el patronista. Mal gestionados, entregan tarde, fuera de marca, o gestionarlos te consume tanto que no compensa. Bien gestionados, <span class="hl">te dan capacidad y calidad especializada sin el peso de un equipo fijo</span>.
+    </p>
+    <p>La idea que hace o rompe el trabajo con freelancers: <strong>la calidad de lo que recibes depende directamente de la calidad del brief que das.</strong> Un freelancer, por bueno que sea, no lee tu mente ni conoce tu marca como tú. La regla es dura pero cierta: la mayoría de los «malos freelancers» son en realidad malos briefs.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 8 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que gestiones bien a los freelancers y colaboradores externos que sostienen buena parte de una marca de ropa: el diseñador, el fotógrafo, el community manager, el editor de video, el patronista, y todos los especialistas que trabajan contigo sin ser empleados fijos. Como vimos en el SOP de contratación, al principio (y a menudo durante mucho tiempo) el talento flexible es la mejor forma de traer capacidad a una marca joven. Pero trabajar bien con freelancers tiene su propio arte.</p>
+      <p>La idea que lo ordena todo: <strong>un freelancer no es un empleado, y gestionarlo bien requiere reconocer esa diferencia.</strong> Un empleado está integrado en tu día a día, comparte tu contexto continuo y crece contigo. Un freelancer entra y sale, trabaja con varios clientes y tiene un contexto limitado del tuyo. Esto tiene implicaciones prácticas: hay que darle un brief mucho más claro y completo, gestionarlo por entregables y resultados (no por presencia), y darle la información de marca necesaria para que su trabajo encaje. Tratarlo como a un empleado, esperando que «pille» el contexto, es la fuente de la mayoría de los problemas.</p>
+      <p>La segunda idea es la que hace o rompe el trabajo con freelancers: <strong>la calidad de lo que recibes depende directamente de la calidad del brief que das.</strong> El error más común y más caro es dar un brief vago («hazme unas fotos chulas», «crea contenido para el mes») y esperar magia. Un brief vago produce un resultado que no encaja, que hay que rehacer, perdiendo tiempo y dinero. Un brief claro (qué necesitas, para qué, con qué estilo, con qué referencias, con qué estándar) produce un resultado que encaja.</p>
+      <p>La tercera: <strong>el objetivo es una relación productiva y repetible, no una transacción de una vez.</strong> Un freelancer que ya conoce tu marca, tu estilo y tu forma de trabajar entrega mucho mejor y más rápido que uno nuevo cada vez. El resultado es <span class="gold">el criterio y el sistema para gestionar tu talento externo</span>: briefear para asegurar buenos entregables, gestionar por resultados, mantener la coherencia de marca y construir un equipo externo estable, sin que la gestión te consuma.</p>
+      <p class="pull">Lo que pasa si lo haces mal: das briefs vagos y recibes trabajo que no encaja y hay que rehacer, culpando al freelancer cuando el problema era tu brief. Gestionas tan mal que hacerlo tú habría sido más fácil. Cambias de freelancer constantemente y nunca construyes la relación estable que da consistencia. El talento flexible que debería darte capacidad se convierte en una fuente de frustración, retrasos y trabajo mal hecho.</p>
+
+      <h3><span class="hn">1.2</span>Indicadores de éxito</h3>
+      <ul>
+        <li>Tus freelancers <b>entregan bien, a tiempo y en tu mundo de marca</b>, no fuera de estilo ni tarde.</li>
+        <li>Das <b>briefs claros</b> que aseguran buenos entregables, en vez de vagos que generan trabajo a rehacer.</li>
+        <li>Gestionas a los freelancers <b>por resultados y entregables</b>, no por presencia, adaptándote a su naturaleza.</li>
+        <li>Su trabajo es <b>coherente con tu marca</b>, porque les das el contexto de marca que necesitan.</li>
+        <li>Construyes <b>relaciones estables y repetibles</b> con buenos freelancers, no transacciones de una vez.</li>
+        <li>Gestionar a los freelancers <b>no te consume</b> más que hacerlo tú: es una ganancia neta de capacidad.</li>
+        <li>Tienes un <b>equipo externo fiable</b> de especialistas que puedes activar cuando los necesitas.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Insumos necesarios</h3>
+      <ul>
+        <li>Claridad sobre <b>qué necesitas de cada freelancer</b> (del SOP de contratación): qué función cubre cada uno.</li>
+        <li>Tu <b>identidad de marca y Brand Book</b> (Fase 1): el contexto de marca que los freelancers necesitan para encajar.</li>
+        <li>Tus <b>SOPs y estándares</b> relevantes: para comunicar cómo se hacen las cosas en tu marca.</li>
+        <li><b>Referencias y ejemplos</b> de lo que buscas (para los briefs): la mejor forma de comunicar un estándar visual o creativo.</li>
+        <li>Un <b>acuerdo claro de términos</b> con cada freelancer (alcance, plazos, pago, derechos): la base de una relación sana.</li>
+        <li>Una <b>forma de gestionar los entregables y la comunicación</b> (cómo pides, revisas y recibes el trabajo).</li>
+        <li>Acceso a <b>buenos freelancers</b> (de tu red, referencias, plataformas): la materia prima de un buen equipo externo.</li>
+      </ul>
+
+      <h3><span class="hn">1.4</span>Principios no negociables</h3>
+      <ol>
+        <li><b>Un freelancer no es un empleado.</b> Gestiónalo por su naturaleza: brief claro (no comparte tu contexto), por resultados (no por presencia), con contexto de marca (no lo absorbe solo).</li>
+        <li><b>La calidad del entregable depende del brief.</b> Un brief claro produce buen trabajo; uno vago, trabajo a rehacer. La mayoría de los «malos freelancers» son malos briefs.</li>
+        <li><b>Gestiona por resultados y entregables.</b> Con freelancers importa lo que entregan, no las horas ni la presencia. Define y evalúa por entregables claros.</li>
+        <li><b>Da el contexto de marca necesario.</b> El freelancer necesita entender tu mundo para que su trabajo encaje. No lo absorbe por ósmosis: dáselo.</li>
+        <li><b>Construye relaciones estables.</b> Los buenos freelancers son relaciones a largo plazo. Un freelancer que conoce tu marca entrega mejor. No cambies constantemente.</li>
+        <li><b>Términos claros desde el principio.</b> Alcance, plazos, pago y derechos, claros y acordados. La ambigüedad genera conflictos.</li>
+        <li><b>Gestionar debe ser una ganancia neta.</b> Si gestionar al freelancer te consume más que hacerlo tú, algo va mal. Sistematiza para que sea una ganancia real de capacidad.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De briefs vagos a un equipo externo fiable</h2>
+      <p>Ocho pasos: entender la diferencia con un empleado, elegir bien al freelancer, acordar términos claros, dominar el arte del brief, gestionar por resultados, mantener la coherencia de marca, construir la relación a largo plazo, y sistematizar la gestión.</p>
+
+      <h3><span class="hn">2.1</span>Entender la diferencia entre freelancer y empleado</h3>
+      <p>Antes de gestionar, interioriza <strong>en qué se diferencia un freelancer de un empleado</strong>, porque gestionarlos igual es la fuente de la mayoría de los problemas. Cada uno requiere un enfoque distinto.</p>
+      <p>Las diferencias clave y sus implicaciones:</p>
+      <ol>
+        <li><b>El freelancer no comparte tu contexto continuo:</b> un empleado vive tu día a día y absorbe el contexto de la marca constantemente; un freelancer entra, hace un trabajo y sale, con un contexto limitado. La implicación: hay que darle explícitamente el contexto que un empleado absorbería solo (el brief, la información de marca). No esperes que «pille» lo que no le has dado.</li>
+        <li><b>El freelancer trabaja con varios clientes:</b> no está dedicado solo a ti, tiene otros proyectos y prioridades. La implicación: hay que ser claro con los plazos y las prioridades, y respetar que no está disponible al instante. La relación se gestiona por entregables y plazos acordados.</li>
+        <li><b>El freelancer se gestiona por resultados, no por presencia:</b> no cuentas sus horas, cuentas lo que entrega. La implicación: define entregables claros y evalúa por ellos. La gestión por resultados es la natural con freelancers, y a menudo más sana que la gestión por presencia.</li>
+        <li><b>El freelancer aporta especialización flexible:</b> su valor es darte una capacidad especializada (fotografía, patronaje, diseño) sin el compromiso de un empleado fijo. La implicación: aprovecha su especialización (a menudo hacen su cosa mejor que tú o que un generalista) y su flexibilidad.</li>
+      </ol>
+      <p class="pull">Gestiona al freelancer por su naturaleza, no como a un empleado. La mayoría de los problemas nacen de gestionar a un freelancer como si fuera un empleado, o al revés.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Entendidas las diferencias entre freelancer y empleado y sus implicaciones: dar contexto explícito, ser claro con plazos, gestionar por resultados, aprovechar la especialización flexible.</li>
+      </ul>
+
+      <h3><span class="hn">2.2</span>Elegir bien al freelancer</h3>
+      <p>La gestión empieza por <strong>elegir al freelancer adecuado.</strong> Un buen freelancer bien elegido hace la gestión fácil; uno mal elegido, imposible por mucho que lo gestiones.</p>
+      <p>Cómo elegir bien:</p>
+      <ol>
+        <li><b>Evalúa la habilidad por su trabajo previo:</b> el portfolio y el trabajo anterior te dicen si tiene la habilidad y el estilo que necesitas. En roles creativos (fotógrafo, diseñador, CM), el estilo de su trabajo previo es clave: busca a alguien cuyo estilo encaje con tu marca, no solo que sea «bueno» en abstracto.</li>
+        <li><b>Busca encaje de estilo con tu marca:</b> especialmente en los roles visibles (fotografía, contenido, diseño), el estilo del freelancer tiene que poder encajar con tu mundo. Un fotógrafo excelente pero de un estilo opuesto al tuyo te dará fotos excelentes que no encajan. El encaje de estilo importa tanto como la habilidad.</li>
+        <li><b>Valora la fiabilidad y la profesionalidad:</b> un freelancer que entrega a tiempo, comunica bien y es fácil de trabajar vale muchísimo, a veces más que uno más talentoso pero poco fiable. La fiabilidad es parte de la calidad.</li>
+        <li><b>Empieza con un proyecto de prueba:</b> antes de comprometerte para algo grande o continuo, un proyecto pequeño te revela cómo trabaja, cómo entrega y si encaja, con poco riesgo. Probar antes de comprometer evita malas relaciones largas.</li>
+      </ol>
+      <p class="pull">Elige freelancers por habilidad, encaje de estilo y fiabilidad, y pruébalos antes de comprometerte. La elección es la mitad de la gestión.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Un criterio de elección de freelancers (habilidad por el trabajo previo, encaje de estilo con la marca, fiabilidad, proyecto de prueba antes de comprometerse) aplicado a tu equipo externo.</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Acordar términos claros desde el principio</h3>
+      <p>Antes de empezar a trabajar, acuerda <strong>términos claros</strong> con el freelancer. Una relación sana se basa en la claridad desde el principio sobre qué, cuándo, cuánto y de quién es el trabajo. Este paso evita los conflictos que nacen de la ambigüedad.</p>
+      <p>Los términos a acordar:</p>
+      <ol>
+        <li><b>El alcance del trabajo:</b> qué exactamente va a hacer el freelancer, qué incluye y qué no. Un alcance claro evita que el trabajo se expanda sin acuerdo y los malentendidos sobre qué esperabais cada uno.</li>
+        <li><b>Los plazos:</b> cuándo se entrega. Claros y acordados por ambas partes, recordando que el freelancer tiene otros clientes. Los plazos claros son la base de que el trabajo llegue cuando lo necesitas.</li>
+        <li><b>El pago:</b> cuánto, cómo y cuándo se paga (por proyecto, por hora, por entregable). Un acuerdo económico claro evita el conflicto más común y más dañino. Acuérdalo con precisión desde el principio.</li>
+        <li><b>Los derechos:</b> de quién es el trabajo creado (las fotos, los diseños, el contenido). Especialmente importante en trabajo creativo: deja claro que los derechos del trabajo que pagas son tuyos, o los términos que acordéis. La ambigüedad aquí genera problemas serios después.</li>
+        <li><b>Ponlo por escrito:</b> aunque sea un acuerdo simple, tener los términos por escrito protege a ambas partes y evita malentendidos. Para colaboraciones importantes, conecta con los SOPs de contratos (Fase 12).</li>
+      </ol>
+      <p class="pull">Acuerda alcance, plazos, pago y derechos claros y por escrito desde el principio. La ambigüedad es la fuente de los conflictos más comunes y dañinos.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Los términos acordados con cada freelancer (alcance, plazos, pago, derechos), claros y por escrito desde el principio.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Dominar el arte del brief (lo más importante)</h3>
+      <p>Este es el paso que más determina la calidad de lo que recibes: <strong>el brief.</strong> La regla es clara: la calidad del entregable depende directamente de la calidad del brief. Dominar el arte de briefear bien es la habilidad más importante para trabajar con freelancers.</p>
+      <p>Cómo dar un brief que asegura buen trabajo:</p>
+      <ol>
+        <li><b>Explica qué necesitas y para qué:</b> el objetivo del trabajo, qué necesitas exactamente, y para qué es (dónde y cómo se usará). El freelancer que entiende el objetivo y el uso puede tomar buenas decisiones; el que solo recibe una tarea sin contexto, no.</li>
+        <li><b>Da el contexto de marca necesario:</b> el mundo, el estilo y el tono de tu marca en lo que afecta a este trabajo (Fase 1). Un fotógrafo necesita tu dirección de arte; un CM, tu tono de voz. Dale el contexto de marca relevante para su tarea.</li>
+        <li><b>Usa referencias y ejemplos (potentísimo):</b> la forma más efectiva de comunicar lo que buscas, sobre todo en trabajo visual o creativo, es con referencias y ejemplos («busco algo como esto», «este estilo sí, este no»). Comunican un estándar visual mucho mejor que las palabras. Un buen brief creativo casi siempre lleva referencias.</li>
+        <li><b>Especifica el estándar y los detalles:</b> qué estándar de calidad esperas, y los detalles concretos (formatos, cantidades, especificaciones técnicas). Cuanto más claros, más encaja el resultado con lo que necesitas.</li>
+        <li><b>Deja espacio para su expertise:</b> un buen brief es claro en el qué y el estándar, pero deja espacio para que el freelancer aporte su expertise en el cómo. Briefear bien no es dictar cada detalle (eso desperdicia su talento), es dar el marco y el objetivo claros. El equilibrio: claro en el qué y el porqué, abierto en el cómo.</li>
+      </ol>
+      <p class="pull">La calidad del entregable depende de la calidad del brief. La mayoría de los «malos freelancers» son en realidad malos briefs: antes de culpar al freelancer por un mal resultado, revisa si le diste un brief que le permitía acertar. El brief es tu mayor palanca de calidad.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Un brief que asegura buen trabajo (qué necesitas y para qué, contexto de marca, referencias y ejemplos, estándar y detalles, espacio para su expertise) dominado como habilidad clave.</li>
+      </ul>
+
+      <h3><span class="hn">2.5</span>Gestionar por resultados y entregables</h3>
+      <p>Con freelancers, la gestión es <strong>por resultados y entregables</strong>, no por presencia ni horas. Este paso trata de cómo gestionar su trabajo de forma que entregue bien y a tiempo, adaptándose a su naturaleza de trabajar por su cuenta.</p>
+      <p>Cómo gestionar por resultados:</p>
+      <ol>
+        <li><b>Define entregables claros:</b> qué se entrega exactamente y cuándo. Un entregable claro (no «trabaja en las fotos» sino «entrega X fotos editadas de estos productos en este formato para esta fecha») es lo que hace la gestión por resultados posible.</li>
+        <li><b>Evalúa por el resultado, no por el proceso:</b> lo que importa es que el entregable cumpla el brief y el estándar, no cómo llega a él (es su expertise). Evalúa el qué, no el cómo. Esto respeta su naturaleza y su especialización.</li>
+        <li><b>Establece puntos de revisión si el proyecto es grande:</b> revisar en puntos intermedios evita descubrir al final que va en la dirección equivocada. Una revisión temprana (un primer avance, unas primeras fotos) permite corregir el rumbo antes de que se haga todo el trabajo. Ahorra rehacer.</li>
+        <li><b>Da feedback claro y constructivo sobre los entregables:</b> un feedback claro (qué funciona, qué ajustar, con referencias si hace falta) es lo que lleva el entregable al estándar. Uno vago («no me convence») no ayuda al freelancer a acertar; uno claro y específico, sí.</li>
+      </ol>
+      <p class="pull">Gestiona al freelancer por entregables claros y resultados, no por presencia. Es lo natural con freelancers, y a menudo más sano que la gestión por presencia.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Un enfoque de gestión por resultados (entregables claros, evaluar por resultado no proceso, puntos de revisión en proyectos grandes, feedback claro y constructivo) adaptado a la naturaleza del freelancer.</li>
+      </ul>
+
+      <h3><span class="hn">2.6</span>Mantener la coherencia de marca en el trabajo externo</h3>
+      <p>Un riesgo del trabajo con freelancers es que <strong>el trabajo de distintas personas externas rompa la coherencia de tu marca.</strong> Cada freelancer tiene su estilo, y sin gestión, tu marca puede acabar pareciendo un collage de estilos distintos.</p>
+      <p>Cómo mantener la coherencia:</p>
+      <ol>
+        <li><b>Da a cada freelancer los códigos de tu marca:</b> tu dirección de arte, tu tono de voz, tus estándares visuales (Fase 1), en lo que afecta a su trabajo. Un freelancer que trabaja con tus códigos produce trabajo coherente; uno sin ellos produce su estilo, no el tuyo.</li>
+        <li><b>Usa tus SOPs y guías como referencia:</b> los SOPs relevantes (de fotografía, de contenido, de tono) dan al freelancer el estándar y la forma de tu marca. Compartirlos hace que el trabajo externo siga tu estándar, no el genérico del freelancer.</li>
+        <li><b>Elige freelancers cuyo estilo ya encaje:</b> la coherencia empieza en la elección. Un freelancer cuyo estilo natural ya encaja produce trabajo coherente con menos esfuerzo; uno de estilo opuesto, aunque le des los códigos, luchará contra su propio estilo.</li>
+        <li><b>Vela por la consistencia entre distintos freelancers:</b> si varios tocan tu marca (varios creadores de contenido, varios fotógrafos), asegura que todos trabajan con los mismos códigos y estándar, para que el conjunto sea coherente. Tú, o quien dirija, eres el guardián de que el trabajo de todos suene a la misma marca.</li>
+      </ol>
+      <p class="pull">Da a los freelancers los códigos de tu marca y vela por la coherencia del conjunto, o tu marca acabará pareciendo un collage de estilos. En moda, donde la coherencia visual es un activo central, esto es crítico.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Un sistema para mantener la coherencia de marca en el trabajo de freelancers: darles los códigos de marca, usar los SOPs como referencia, elegir por encaje, velar por la consistencia del conjunto.</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Construir relaciones estables y productivas</h3>
+      <p>Los mejores freelancers, como los mejores proveedores, son <strong>relaciones a largo plazo.</strong> Este paso trata de construir relaciones estables con buenos freelancers, en lugar de cambiar constantemente, porque un freelancer que conoce tu marca entrega mucho mejor con el tiempo.</p>
+      <p>Cómo construir relaciones estables:</p>
+      <ol>
+        <li><b>Un freelancer que te conoce entrega mejor:</b> uno que ya conoce tu marca, tu estilo, tu forma de trabajar y tus estándares entrega mucho mejor y más rápido que uno nuevo cada vez (necesita menos brief, comete menos errores de encaje, ya está alineado). La familiaridad acumulada es un activo enorme; cambiar constantemente lo tira a la basura.</li>
+        <li><b>Cuida a tus buenos freelancers:</b> trátalos bien, págales a tiempo y de forma justa, comunícate bien, respeta su trabajo. Un buen freelancer bien tratado te prioriza, se implica más y quiere seguir trabajando contigo. Los buenos freelancers también eligen con quién trabajan: sé un cliente por el que quieran trabajar.</li>
+        <li><b>Construye un equipo externo de confianza:</b> con el tiempo, ten tus freelancers de confianza para cada función (tu fotógrafo, tu editor, tu patronista), gente probada que conoce tu marca. Te da la capacidad de un equipo sin el peso de uno fijo.</li>
+        <li><b>Invierte en la relación, no solo en la transacción:</b> las mejores relaciones son colaboraciones. Invertir en la relación (compartir el contexto de tu marca, incluirlos en el mundo, valorar su aporte) hace que entreguen mejor y se impliquen más. Un freelancer que se siente parte de tu proyecto rinde casi como un miembro del equipo.</li>
+      </ol>
+      <p class="pull">Construye relaciones estables con buenos freelancers, no transacciones de una vez. Tu equipo externo estable de especialistas de confianza es uno de los mayores activos de una marca que crece con talento flexible.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Relaciones estables construidas con buenos freelancers (cuidándolos, siendo buen cliente, construyendo un equipo externo de confianza, invirtiendo en la relación) que dan consistencia y calidad.</li>
+      </ul>
+
+      <h3><span class="hn">2.8</span>Sistematizar la gestión de freelancers</h3>
+      <p>El último paso hace la gestión de freelancers <strong>eficiente y escalable</strong>, para que trabajar con talento externo sea una ganancia neta de capacidad, no algo que te consume.</p>
+      <p>Cómo sistematizar:</p>
+      <ol>
+        <li><b>Crea plantillas de brief:</b> una plantilla para los tipos de trabajo que sueles encargar (un brief de sesión de fotos, uno de contenido, uno de diseño) hace briefear rápido y consistente. En vez de escribir cada brief de cero, rellenas una estructura probada que asegura que no te dejas nada. Son de las herramientas más útiles.</li>
+        <li><b>Ten tus materiales de marca listos para compartir:</b> tu Brand Book, tu dirección de arte y tus SOPs relevantes, listos para dar a cualquier freelancer nuevo. Hace la incorporación rápida (conecta con el onboarding adaptado, SOP anterior) y asegura la coherencia.</li>
+        <li><b>Sistematiza el flujo de trabajo:</b> cómo encargas, revisas y recibes el trabajo (cómo pides, cómo se entrega, cómo das feedback, cómo se cierra). Un flujo definido hace la gestión fluida y no un caos distinto cada vez.</li>
+        <li><b>Asegura que la gestión es una ganancia neta:</b> el objetivo de sistematizar es que gestionar al freelancer te consuma poco y te libere mucho. Si te consume tanto que casi habría sido más fácil hacerlo tú, sistematiza más (mejores briefs, mejores relaciones, mejor flujo) hasta que sea una ganancia clara.</li>
+      </ol>
+      <p class="pull">Sistematiza la gestión de freelancers para que sea una ganancia neta de capacidad. El trabajo con freelancers debe darte capacidad, no quitártela.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La gestión de freelancers sistematizada (plantillas de brief, materiales de marca listos, flujo de trabajo definido) que hace el trabajo con talento externo una ganancia neta de capacidad.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des tu gestión de freelancers por cerrada hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre la naturaleza y la elección</p>
+      <ul class="check">
+        <li>Entiendo las diferencias entre freelancer y empleado y gestiono por la naturaleza del freelancer.</li>
+        <li>Elijo freelancers por habilidad, encaje de estilo con mi marca, y fiabilidad.</li>
+        <li>Pruebo con un proyecto pequeño antes de comprometerme en algo grande.</li>
+      </ul>
+
+      <p class="mini">Sobre los términos y el brief</p>
+      <ul class="check">
+        <li>Acuerdo términos claros por escrito (alcance, plazos, pago, derechos) desde el principio.</li>
+        <li>Domino el brief: explico qué necesito y para qué, doy contexto de marca, uso referencias.</li>
+        <li>Especifico el estándar y dejo espacio para el expertise del freelancer.</li>
+        <li>Recuerdo que la mayoría de los «malos freelancers» son malos briefs.</li>
+      </ul>
+
+      <p class="mini">Sobre la gestión y la coherencia</p>
+      <ul class="check">
+        <li>Gestiono por entregables claros y resultados, no por presencia.</li>
+        <li>Reviso en puntos intermedios en proyectos grandes y doy feedback claro.</li>
+        <li>Doy a cada freelancer los códigos de mi marca y velo por la coherencia del conjunto.</li>
+      </ul>
+
+      <p class="mini">Sobre la relación y el sistema</p>
+      <ul class="check">
+        <li>Construyo relaciones estables con buenos freelancers en vez de cambiar constantemente.</li>
+        <li>Cuido a mis buenos freelancers y construyo un equipo externo de confianza.</li>
+        <li>Tengo plantillas de brief y materiales de marca listos para compartir.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 11.3 · Delegación y gestión de freelancers (diseñador, fotógrafo, CM, patronista) · v1.0 · Fase 11</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

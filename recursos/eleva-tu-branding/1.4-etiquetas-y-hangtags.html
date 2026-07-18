@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 1.4 — Diseño de etiquetas, hangtags y labels de prenda</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 1 · Identidad Visual y Branding</p>
+    <h1 class="rv">Etiquetas y hangtags</h1>
+    <p class="meta rv">SOP 1.4 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Las piezas físicas que hacen cara la prenda</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que diseñes bien <strong>las piezas de marca que van sobre y dentro de la prenda</strong> —etiquetas, care labels, hangtags, sellos—: son lo que convierte una camiseta en «una prenda de marca» y lo que hace que <span class="hl">se sienta cara antes de probártela</span>.
+    </p>
+    <p>Dos piezas juegan a la vez, y a distinto juego: unas son <strong>obligación legal</strong> —la etiqueta de composición, que mal hecha es una sanción— y otras son <strong>percepción de valor pura</strong> —el hangtag, el tacto, el grosor del papel—. Este SOP resuelve las dos sin que ninguna arruine a la otra.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 7 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que diseñes bien las piezas de marca que van sobre y dentro de la prenda: son lo que convierte una camiseta en «una prenda de marca». Primero, aclaremos los nombres, porque se confunden constantemente:</p>
+      <ul>
+        <li><b>Etiqueta de cuello (neck label):</b> la marca principal, en el interior del cuello. Puede ir tejida (woven), estampada sobre la tela o en transfer. Es donde vive tu logo dentro de la prenda.</li>
+        <li><b>Etiqueta de composición (care label):</b> la tirita lateral o interior con tallas, composición del tejido, instrucciones de lavado y país de origen. Es obligatoria por ley, no opcional.</li>
+        <li><b>Hangtag (etiqueta colgante):</b> la tarjeta de cartón que cuelga de la prenda en tienda, unida con un hilo o precinto. Se quita al usar. Es tu mayor lienzo de marca y de mensaje.</li>
+        <li><b>Labels secundarios:</b> parches, banderas de costura (la etiquetita en el bajo o la manga), pegatinas, sellos. Detalles de firma opcionales.</li>
+      </ul>
+      <p>El resultado concreto es cada una de estas piezas diseñada, con la información legal obligatoria resuelta, especificada para fabricación (material, técnica, medidas, colores Pantone) y lista para pedir a proveedor.</p>
+      <p class="pull">Lo que pasa si te saltas esto: una etiqueta de cuello que pica y el cliente corta —perdiendo tu marca de la prenda—, un hangtag genérico que resta en vez de sumar, o lo más grave, una etiqueta de composición mal hecha que te expone a una sanción legal.</p>
+
+      <h3><span class="hn">1.2</span>Insumos necesarios</h3>
+      <ul>
+        <li><b>El sistema de identidad ya cerrado:</b> logo, versiones de producción (bordado/tejido), paleta con Pantone y tipografía (SOPs 1.2 y 1.3). Las etiquetas son la aplicación física de todo eso.</li>
+        <li><b>El posicionamiento (0.4):</b> define el nivel de acabado. Premium pide etiqueta tejida y hangtag con buen papel; accesible puede ir estampado y más sobrio.</li>
+        <li><b>Claridad sobre la normativa de etiquetado</b> de tu mercado (para España/UE: composición textil, tallaje, cuidado y datos del responsable). Consúltala o pregunta a tu proveedor o gestoría; varía por país.</li>
+        <li><b>Un proveedor de etiquetas y hangtags</b> (a menudo distinto del que confecciona la ropa) para pedir muestras y conocer sus técnicas y mínimos.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Principios no negociables</h3>
+      <ol>
+        <li><b>Todo obedece al sistema de identidad.</b> Las etiquetas no inventan estética: aplican la que ya definiste. Si no suenan a la marca, están mal.</li>
+        <li><b>La etiqueta de composición es legal, no creativa.</b> Su prioridad es cumplir la ley y ser legible. El estilo va en las otras piezas.</li>
+        <li><b>Comodidad primero en lo que toca la piel.</b> Una etiqueta de cuello que pica se corta, y con ella se va tu marca. Prioriza el tacto.</li>
+        <li><b>Especifica para fabricar, no solo para que se vea bonito.</b> Sin material, técnica, medidas y Pantone, el proveedor improvisa y te llega otra cosa.</li>
+        <li><b>El detalle físico es percepción de valor.</b> El grosor del papel, el tejido de la etiqueta, el acabado: pequeños costes que suben mucho la percepción de precio.</li>
+        <li><b>Valida siempre con muestra física.</b> Lo que ves en pantalla no es lo que llega en tela y cartón. Aprueba con una muestra real antes de producir en masa.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De la identidad a las piezas físicas listas para fábrica</h2>
+      <p>Siete pasos: primero resuelves lo obligatorio (lo legal), luego diseñas cada pieza, y cierras especificando y validando para fábrica.</p>
+
+      <h3><span class="hn">2.1</span>Resolver primero la etiqueta de composición (lo legal)</h3>
+      <p>Empieza por aquí porque es lo <strong>obligatorio</strong> y lo que menos margen creativo tiene: quítatelo de en medio bien hecho. Esta etiqueta debe incluir, según la normativa (verifica la de tu mercado):</p>
+      <ol>
+        <li><b>Composición del tejido:</b> los porcentajes de fibras (100% algodón; 80% algodón, 20% poliéster). Obligatorio y con nomenclatura correcta.</li>
+        <li><b>Talla.</b></li>
+        <li><b>Instrucciones de cuidado:</b> los símbolos de lavado, secado y planchado (hay un estándar internacional de símbolos; úsalos, no inventes iconos).</li>
+        <li><b>País de origen</b> («Made in ___»).</li>
+        <li><b>Identificación del responsable</b> (marca / fabricante / importador), según exija tu país.</li>
+      </ol>
+      <p>Reglas prácticas: debe ser legible y duradera (que no se borre al lavar), colocada donde la ley y el sentido común pidan (lateral interior, cuello), y en un material que no irrite. Puede combinarse con la etiqueta de marca o ir aparte.</p>
+      <p class="pull">Ante cualquier duda legal, pregunta al proveedor (suelen conocer la normativa) o a una gestoría: un error aquí es una sanción, no un detalle estético.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La etiqueta de composición diseñada con toda la info legal obligatoria de tu mercado, verificada.</li>
+      </ul>
+
+      <h3><span class="hn">2.2</span>Diseñar la etiqueta de cuello (la marca dentro de la prenda)</h3>
+      <p>Es tu logo viviendo dentro de la ropa. Dos decisiones: <strong>técnica</strong> y <strong>comodidad</strong>. Elige la técnica según tu posicionamiento y presupuesto:</p>
+      <ol>
+        <li><b>Tejida (woven):</b> el logo se teje con hilo. La más premium y duradera. Ideal para logo simple y monograma; el detalle finísimo se pierde en la trama. Suele tener un mínimo de pedido.</li>
+        <li><b>Estampada sobre la tela (printed):</b> el logo se imprime directamente en el interior del cuello, sin etiqueta física. Tendencia fuerte en streetwear y básicos porque no pica y se ve limpio. Admite más detalle que la tejida.</li>
+        <li><b>Transfer / heat-press:</b> se aplica con calor. Versátil y económico, pero cuidado con la durabilidad al lavado.</li>
+      </ol>
+      <p>La comodidad manda: si va una etiqueta cosida, que sea de material suave (el poliéster rígido barato es el que pica y la gente corta). Ante la duda, el cuello estampado elimina el problema de raíz. Usa aquí tu versión de producción del logo (la simplificada o bordable del SOP 1.2), no la de pantalla.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La etiqueta de cuello diseñada, con técnica elegida y prioridad de comodidad, usando la versión de producción del logo.</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Diseñar el hangtag (tu mayor lienzo de marca)</h3>
+      <p>El hangtag es la tarjeta que cuelga en tienda y se quita al usar. Como no molesta en el uso, es <strong>donde más libertad tienes</strong> para desplegar marca y mensaje. Aprovéchalo: es un punto de contacto que muchas marcas desperdician con solo un logo y un precio. Decide sus tres capas:</p>
+      <ol>
+        <li><b>Función informativa:</b> qué datos lleva (nombre, logo, referencia del producto, precio o espacio para él, código de barras si vendes en retail).</li>
+        <li><b>Capa de marca:</b> aplica el sistema completo: logo, color, tipografía. El hangtag debe sentirse como una pieza de tu mundo, no una etiqueta de precio.</li>
+        <li><b>Capa de mensaje (la que diferencia):</b> un espacio pequeño para conectar. Una frase de tu manifiesto, tu propósito, un mensaje al cliente, un guiño de comunidad, o instrucciones de cuidado del producto. Aquí conviertes una tarjeta en una experiencia de marca.</li>
+      </ol>
+      <p>Y las decisiones físicas, que es donde se juega la percepción de valor:</p>
+      <ul>
+        <li><b>Material y grosor del papel:</b> un cartón grueso, con textura o reciclado, se siente premium. El papel fino se siente barato. Es un coste pequeño con impacto alto.</li>
+        <li><b>Acabados (opcionales, elevan mucho):</b> relieve, estampación, tinta especial, troquelado, bordes de color.</li>
+        <li><b>Formato y forma:</b> el tamaño y la forma (rectangular clásico, cuadrado, troquelado) también comunican.</li>
+        <li><b>Cómo se une a la prenda:</b> hilo, precinto, cordón — otro detalle que se nota.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Diseñar los labels secundarios (opcional)</h3>
+      <p>Los detalles de firma que elevan una prenda de «bien» a «cuidada». Son opcionales: elige los que aporten a tu marca sin recargar.</p>
+      <ul>
+        <li><b>Bandera de costura (woven flag label):</b> la etiquetita cosida en el bajo, la manga o el bolsillo. Sello de firma discreto y muy reconocible.</li>
+        <li><b>Parches:</b> bordados o tejidos, como elemento de diseño visible.</li>
+        <li><b>Pegatinas, sellos o precintos de marca:</b> para el packaging o para cerrar la prenda doblada.</li>
+      </ul>
+      <p>Regla: menos y coherente. Un solo detalle de firma bien puesto vale más que llenar la prenda de etiquetas. Cada uno debe sumar a la percepción de marca, no ser ruido.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Los labels secundarios elegidos (si los hay), coherentes con el sistema.</li>
+      </ul>
+
+      <h3><span class="hn">2.5</span>Comprobar la coherencia del conjunto</h3>
+      <p>Antes de especificar para fábrica, junta <strong>todas las piezas</strong> (composición, cuello, hangtag, secundarios) y míralas como un set. Deben parecer de una sola marca: mismo logo, misma paleta, misma tipografía, mismo nivel de acabado. Comprueba:</p>
+      <ul>
+        <li>¿Todas usan la identidad correctamente y suenan al mismo mundo?</li>
+        <li>¿El nivel de acabado es coherente con el posicionamiento? (No tiene sentido un hangtag de lujo con una etiqueta de cuello que pica.)</li>
+        <li>¿Hay coherencia entre el detalle físico de todas las piezas?</li>
+      </ul>
+      <p>Si una pieza desentona, ajústala aquí. La experiencia de marca se rompe si el cliente nota que una etiqueta es de otra «liga» que el resto.</p>
+
+      <h3><span class="hn">2.6</span>Especificar cada pieza para fabricación</h3>
+      <p>Aquí está la diferencia entre «tengo el diseño» y «puedo pedirlo»: el proveedor necesita especificaciones técnicas, no un JPG bonito. Para cada pieza, documenta:</p>
+      <ol>
+        <li><b>Material:</b> tipo de tejido (para tejidas), gramaje y tipo de papel (para hangtags).</li>
+        <li><b>Técnica:</b> tejida / estampada / transfer / relieve, etc.</li>
+        <li><b>Medidas exactas</b> en milímetros.</li>
+        <li><b>Colores en Pantone:</b> no «azul marino» — el código Pantone exacto, para que el color de la etiqueta coincida con tu marca y entre proveedores.</li>
+        <li><b>Acabados</b> especificados.</li>
+        <li><b>Archivo vectorial</b> del diseño (no una imagen de baja calidad).</li>
+      </ol>
+      <p class="pull">El proveedor necesita especificaciones técnicas, no un JPG bonito. Sin material, técnica, medidas y Pantone, improvisa — y te llega otra cosa.</p>
+      <p>Contacta a tu proveedor de etiquetas (a menudo distinto del taller de confección) y confirma sus mínimos de pedido y técnicas disponibles antes de cerrar el diseño — a veces el mínimo o una limitación técnica te obliga a ajustar.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La ficha de especificación completa de cada pieza, lista para enviar a proveedor.</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Pedir muestra física y aprobar</h3>
+      <p>El paso que evita el desastre caro: <strong>nunca produzcas en masa sin ver una muestra física primero.</strong> Lo que ves en pantalla no es lo que llega en tela y cartón — el color cambia, la textura sorprende, el tamaño se siente distinto. Pide una muestra de cada pieza y valida con las manos:</p>
+      <ul>
+        <li><b>Color:</b> ¿el Pantone real coincide con tu marca? (compáralo con tus otras piezas).</li>
+        <li><b>Tacto:</b> ¿la etiqueta de cuello pica? ¿el papel del hangtag se siente premium?</li>
+        <li><b>Legibilidad:</b> ¿el logo tejido se lee bien? ¿la composición es legible?</li>
+        <li><b>Durabilidad:</b> para lo que se lava, comprueba que aguanta (que la etiqueta de cuidado no se borre).</li>
+        <li><b>Montaje:</b> ¿cómo queda puesta sobre la prenda real?</li>
+      </ul>
+      <p>Corrige lo que falle y repite si hace falta. Solo cuando la muestra esté aprobada, das luz verde a la producción.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Muestra física de cada pieza aprobada (color, tacto, legibilidad, durabilidad, montaje), lista para producir.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des las etiquetas por cerradas hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre lo legal</p>
+      <ul class="check">
+        <li>La etiqueta de composición incluye composición, talla, cuidado, origen y responsable según mi normativa.</li>
+        <li>Es legible, duradera y va en un material que no irrita.</li>
+      </ul>
+
+      <p class="mini">Sobre las piezas de marca</p>
+      <ul class="check">
+        <li>La etiqueta de cuello está resuelta con técnica elegida y prioridad de comodidad (no pica).</li>
+        <li>Uso la versión de producción del logo, no la de pantalla.</li>
+        <li>El hangtag tiene sus tres capas: información, marca y mensaje.</li>
+        <li>He decidido el papel, acabado, formato y sujeción del hangtag.</li>
+        <li>Los labels secundarios (si los hay) suman y no recargan.</li>
+      </ul>
+
+      <p class="mini">Sobre coherencia y fábrica</p>
+      <ul class="check">
+        <li>Todas las piezas suenan a una sola marca y el acabado es coherente con mi posicionamiento.</li>
+        <li>Cada pieza está especificada (material, técnica, medidas, Pantone, acabados, vectorial).</li>
+        <li>He confirmado mínimos y técnicas con el proveedor de etiquetas.</li>
+      </ul>
+
+      <p class="mini">Sobre la validación</p>
+      <ul class="check">
+        <li>He pedido muestra física de cada pieza.</li>
+        <li>He aprobado color, tacto, legibilidad, durabilidad y montaje antes de producir en masa.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 1.4 · Diseño de etiquetas, hangtags y labels de prenda · v1.0 · Fase 1</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

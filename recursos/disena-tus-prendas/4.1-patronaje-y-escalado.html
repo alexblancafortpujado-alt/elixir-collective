@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 4.1 — Patronaje y escalado de tallas (grading)</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 4 · Muestreo y Desarrollo de Producto</p>
+    <h1 class="rv">Patronaje y escalado</h1>
+    <p class="meta rv">SOP 4.1 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Dirigir el patrón sin ser patronista</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que entiendas el <strong>patronaje y el escalado de tallas</strong> lo suficiente para <strong>dirigir a un patronista, evaluar su trabajo y tomar las decisiones que te corresponden</strong> — sin necesidad de convertirte en técnico. El patronaje es un oficio especializado que <span class="hl">casi siempre se delega</span>.
+    </p>
+    <p>Seamos claros: <strong>el patronaje es un oficio técnico de años, y no es tu trabajo dominarlo.</strong> Tu trabajo como fundador no es hacer el patrón, es entenderlo lo bastante para dirigir, evaluar y decidir lo que solo tú puedes decidir.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 8 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que entiendas el patronaje y el escalado de tallas lo suficiente como para dirigir bien a un patronista, evaluar su trabajo y tomar las decisiones que te corresponden — sin necesidad de convertirte en técnico, porque el patronaje es un oficio especializado que casi siempre se delega.</p>
+      <p>Seamos claros desde el principio, porque aquí mucha gente se frustra o se engaña: el patronaje es un oficio técnico de años, y no es tu trabajo dominarlo. Convertir un diseño en las piezas de tela exactas que, cosidas, forman la prenda —y que además tallen bien en todos los cuerpos— es una profesión en sí misma. Tu trabajo como fundador de marca no es hacer el patrón, es entenderlo lo bastante para dirigir al patronista con claridad, saber si su trabajo es bueno, tomar las decisiones de negocio (qué tallas, qué fit, qué curva) que solo tú puedes tomar, y colaborar en los ajustes.</p>
+      <p class="pull">Pretender lo contrario —hacer tú mismo el patrón— es perder tiempo y dinero.</p>
+      <p>Los dos conceptos que sí debes dominar:</p>
+      <ul>
+        <li><b>Patronaje (pattern making):</b> convertir tu diseño (el flat y el tech pack) en el <span class="gold">patrón</span> — las piezas planas de la prenda (delantero, espalda, manga, etc.) que, cortadas en tela y cosidas, la forman en tu talla base. El patrón es el «molde»: de su calidad depende que la prenda quede bien, caiga bien y se pueda producir de forma eficiente.</li>
+        <li><b>Escalado / grading:</b> una vez tienes el patrón perfecto en tu talla base (normalmente una media, como la M), derivar el resto de tallas (S, L, XL…) aumentando y reduciendo cada medida de forma proporcional y coherente. No es simplemente «hacer todo más grande»: es un escalado técnico donde cada punto crece lo que le corresponde.</li>
+      </ul>
+
+      <h3><span class="hn">1.2</span>Elementos necesarios</h3>
+      <ul>
+        <li><b>El diseño y tech pack de cada prenda (Fase 2):</b> el flat, la tabla de medidas (points of measure), los detalles constructivos. El patronista trabaja a partir de esto: cuanto mejor tu tech pack, mejor el patrón.</li>
+        <li><b>Una prenda de referencia (fit sample o reference garment)</b> que talle como quieres: la mejor forma de comunicar el fit y las medidas que buscas es dar una prenda física de ejemplo.</li>
+        <li><b>Datos de tu avatar y tu mercado</b> para decidir el tallaje: qué rango de tallas necesita tu cliente real, qué proporción de cada una.</li>
+        <li><b>Acceso al proceso de muestreo y fitting</b> (SOPs siguientes de la Fase 4): el patronaje se valida y se corrige a través de las muestras físicas.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Principios no negociables</h3>
+      <ol>
+        <li><b>El patronaje se delega; tu trabajo es dirigir y evaluar.</b> No pierdas tiempo intentando ser patronista.</li>
+        <li><b>La talla base primero, el grading después.</b> Nunca escales tallas de un patrón que aún no está perfecto en la base. Los errores se multiplican por todas las tallas.</li>
+        <li><b>El fit se especifica, no se asume.</b> «Una sudadera» no dice el fit. Oversize, regular o ajustado cambia todo el patrón. Especifícalo siempre.</li>
+        <li><b>La consistencia de tallaje es sagrada.</b> Una M que talla distinto en cada prenda destruye la confianza del cliente y dispara devoluciones. Estandariza.</li>
+        <li><b>Valida en cuerpos reales, no solo en medidas.</b> Los números del patrón pueden estar bien y la prenda caer mal. Prueba en personas antes de producir.</li>
+        <li><b>La curva de tallas se basa en tu cliente, no en copiar la de otros.</b> Produce las tallas y proporciones que tu avatar real necesita.</li>
+        <li><b>Un buen patronista es un activo.</b> Cuando encuentres uno bueno, cultiva la relación: es tan valioso como un buen proveedor.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De un diseño a un tallaje que talla bien y consistente</h2>
+      <p>Ocho pasos: primero entiendes el proceso y eliges patronista, luego diriges el patrón de la talla base, defines tu fit y tu tabla de medidas, validas, decides la curva de tallas, escalas y sistematizas la consistencia.</p>
+
+      <h3><span class="hn">2.1</span>Entender el proceso y elegir un buen patronista</h3>
+      <p>Como el patronaje se delega, tu primera tarea real es <strong>entender el flujo y elegir a la persona correcta</strong>. Un buen patronista hace que todo lo demás fluya; uno malo te arruina la prenda sin que sepas por qué. Dos movimientos:</p>
+      <ol>
+        <li><b>Entiende el flujo del patronaje</b> para poder seguirlo: del diseño/tech pack, el patronista crea el patrón de la talla base; se corta y cose una primera muestra con ese patrón; se prueba (fitting) y se corrige el patrón según lo que se ve; se itera hasta que la talla base es perfecta; entonces se escala (grada) al resto de tallas; y se validan las tallas y se aprueba para producción. Entender este flujo te permite saber en qué punto estás y qué toca en cada momento.</li>
+        <li><b>Elige un buen patronista.</b> Es una de las decisiones clave. Dónde encontrarlo: freelance especializado, estudios de patronaje, o el que ofrece tu fábrica. Cómo evaluarlo: su experiencia con tu tipo de prenda (el patronaje de punto y el de calada son mundos distintos; quien hace camisetas puede no dominar sastrería), su portfolio, referencias de otras marcas y cómo se comunica. Un buen patronista además <strong>te enseña</strong> y te explica sus decisiones; huye del que trabaja en silencio y sin prueba.</li>
+      </ol>
+
+      <h3><span class="hn">2.2</span>Dirigir la creación del patrón de la talla base</h3>
+      <p>Ahora diriges al patronista para crear el patrón de tu <strong>talla base</strong>. Tu papel aquí es dar la información clarísima y luego evaluar el resultado, no dibujar el patrón. Cómo dirigir bien:</p>
+      <ol>
+        <li><b>Entrega un brief impecable:</b> el tech pack completo (flat con detalles, tabla de medidas, construcción) y, si la tienes, la prenda de referencia que talla como quieres. Cuanta más claridad des, mejor patrón recibes. La prenda de referencia física es la forma más potente de comunicar el fit.</li>
+        <li><b>Elige la talla base correcta:</b> normalmente una talla media (como la M), porque desde el centro se escala mejor hacia arriba y abajo. Es la talla sobre la que se perfecciona todo.</li>
+        <li><b>Comunica el fit deseado con precisión</b> (esto es tan importante que tiene su propio paso, el 2.3).</li>
+        <li><b>Evalúa el patrón resultante</b> cuando el patronista te lo entrega (a través de la primera muestra que se cose con él). Aquí no evalúas el patrón en papel —eso es técnico— sino su <strong>resultado</strong>: ¿la prenda cae como querías?, ¿el fit es el correcto?, ¿los detalles están?</li>
+      </ol>
+      <p class="pull">Tu claridad al dirigir determina la calidad del patrón. Un brief pobre da un patrón pobre por bueno que sea el patronista. Invierte en comunicar bien qué quieres.</p>
+
+      <h3><span class="hn">2.3</span>Definir y comunicar el fit (ajuste)</h3>
+      <p>El <strong>fit</strong> (cómo se ajusta la prenda al cuerpo) es una de las decisiones más importantes de tu marca y una de las más específicas de comunicar. Un mismo diseño con distinto fit es una prenda completamente distinta. Define y comunica:</p>
+      <ol>
+        <li><b>El tipo de fit de cada prenda:</b> oversize, relajado (relaxed), regular, entallado (slim), ajustado. El fit es parte de la identidad de tu marca; muchas marcas se reconocen por su fit característico.</li>
+        <li><b>Cómo se traduce el fit en medidas:</b> el fit no es abstracto, se materializa en las medidas del patrón (cuánta holgura sobre el cuerpo, dónde). Aquí colaboras con el patronista: tú defines la sensación («quiero una sudadera oversize pero no enorme, con hombro caído») y él lo traduce a medidas concretas.</li>
+        <li><b>La consistencia del fit en toda la marca:</b> decide el fit característico de tu marca y mantenlo coherente entre prendas y colecciones. Si tu cliente aprende que «en esta marca soy M», esa confianza reduce devoluciones y aumenta recompra.</li>
+      </ol>
+      <p>La mejor herramienta para comunicar fit: <strong>la prenda de referencia.</strong> Da al patronista una prenda física con el fit que buscas y di «quiero este ajuste». Es infinitamente más claro que describirlo con palabras. Combínala con tus especificaciones de medidas.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El fit de cada prenda definido y comunicado al patronista (tipo de ajuste + prenda de referencia + medidas de holgura), coherente con el fit característico de tu marca.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Establecer tu tabla de medidas estándar</h3>
+      <p>Para que tu tallaje sea <strong>consistente</strong> (una M que siempre talla igual), necesitas una <strong>tabla de medidas estándar de marca</strong>, no improvisar las medidas de cada prenda por separado. Este es el paso que previene el caos de tallaje. Cómo establecerla:</p>
+      <ol>
+        <li><b>Define tu tabla de medidas base por tipo de prenda:</b> para cada categoría (camiseta, sudadera, pantalón…), las medidas de tu talla base en cada punto clave. Esto se construye con el patronista y con tus prendas de referencia.</li>
+        <li><b>Basa el tallaje en tu cliente real:</b> las medidas deben ajustarse al cuerpo de tu avatar y tu mercado. No copies ciegamente la tabla de otra marca; usa datos de tu mercado y de tu cliente.</li>
+        <li><b>Documenta cómo se mide cada punto</b> (el «how to measure»), para que tú, el patronista y la fábrica midáis igual y no discutáis sobre números medidos de forma distinta.</li>
+      </ol>
+      <p>La regla: tu tabla de medidas es la garantía de consistencia. Es lo que hace que el cliente confíe en tu tallaje y que una M sea siempre una M. Sin ella, cada prenda talla a su aire y las devoluciones se disparan.</p>
+
+      <h3><span class="hn">2.5</span>Validar la talla base en cuerpos reales (fit)</h3>
+      <p>Antes de escalar a otras tallas, la talla base tiene que estar <strong>perfecta y validada en cuerpos reales</strong>. Los números del patrón pueden ser correctos y la prenda caer mal; solo el cuerpo real lo revela. Este paso se cruza con el SOP de fitting, pero la decisión de patronaje se cierra aquí. Cómo validar:</p>
+      <ol>
+        <li><b>Prueba la muestra de la talla base en un fit model</b> (una persona que represente las medidas de tu talla base) o, mejor, en varias personas reales de tu tribu. Ver la prenda puesta en movimiento revela lo que el patrón plano no.</li>
+        <li><b>Evalúa el fit real:</b> ¿cae como querías?, ¿la holgura es la correcta?, ¿se mueve bien?, ¿los detalles quedan en su sitio?, ¿es cómoda?, ¿el largo, las mangas y los hombros están donde deben?</li>
+        <li><b>Colabora con el patronista en los ajustes:</b> los cambios que detectas («acortar 2 cm de manga», «más holgura en el pecho», «el hombro cae demasiado») se los pasas al patronista, que corrige el patrón. Se cose otra muestra y se vuelve a probar. Este ciclo se repite hasta que la talla base es perfecta.</li>
+        <li><b>No escales hasta que la base esté perfecta:</b> este es el principio más importante del patronaje. Escalar un patrón imperfecto multiplica el error por todas las tallas. Perfecciona la base primero, siempre.</li>
+      </ol>
+      <p class="pull">La talla base perfecta es el cimiento de todo el tallaje. Cada minuto invertido en perfeccionarla se multiplica en calidad en todas las tallas; cada error que dejes pasar se multiplica en problemas.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La talla base validada en cuerpos reales y perfeccionada con el patronista, lista para escalar.</li>
+      </ul>
+
+      <h3><span class="hn">2.6</span>Decidir la curva de tallas</h3>
+      <p>Antes de escalar, decide <strong>qué tallas vas a producir y en qué proporción</strong> — la «curva de tallas». Esta es una decisión de negocio que te corresponde a ti (no al patronista) y que impacta directo en ventas y en stock muerto. Define:</p>
+      <ol>
+        <li><b>El rango de tallas que ofreces:</b> ¿de XS a XL?, ¿solo S-M-L?, ¿tallas unisex? Básalo en tu cliente real: qué tallas necesita tu avatar y tu mercado. Ofrecer tallas que tu cliente no usa es fabricar stock que no se vende; no ofrecer las que necesita es perder ventas y excluir gente.</li>
+        <li><b>La proporción de cada talla (la curva):</b> no se produce la misma cantidad de cada talla. Las centrales (M, L) suelen venderse mucho más que los extremos (XS, XXL). Acertar la curva es clave: demasiadas tallas extremas = stock muerto; pocas centrales = agotar lo que más vende y perder ventas.</li>
+        <li><b>Cómo estimar la curva:</b> si tienes datos de ventas previas, úsalos. Si no, parte de curvas de referencia del sector para tu tipo de producto y tu mercado, y ajústalas a lo que sepas de tu cliente. Con cada colección, afinas la curva con tus datos reales.</li>
+      </ol>
+      <p>La regla: la curva de tallas es una decisión de dinero, no solo técnica. Una buena curva minimiza el stock muerto y maximiza las ventas de las tallas que de verdad se piden.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Tu curva de tallas definida (rango de tallas que produces + proporción de unidades de cada una), basada en tu cliente y tu mercado.</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Dirigir el escalado (grading) y validarlo</h3>
+      <p>Con la base perfecta y la curva decidida, el patronista <strong>escala el patrón</strong> al resto de tallas. Tu papel: entender qué hace y validar que las tallas resultantes tallan bien. Qué debes saber y validar:</p>
+      <ol>
+        <li><b>Entiende qué es el grading:</b> el patronista deriva cada talla de la base aumentando o reduciendo cada medida según unas reglas de incremento (cuánto crece cada punto de una talla a la siguiente). No es escalar la prenda entera como una foto: cada zona crece lo que le corresponde para que la prenda talle bien en cada cuerpo. Es un trabajo técnico; confía en el patronista, pero valida el resultado.</li>
+        <li><b>Valida las tallas escaladas:</b> no asumas que porque la base esté bien, todas lo están. Cose muestras de las tallas extremas (la más pequeña y la más grande, además de la base) y pruébalas en cuerpos reales de esas tallas. Los problemas de grading suelen aparecer en los extremos: una prenda que talla bien en M puede fallar en XL si el escalado no está bien hecho.</li>
+        <li><b>Corrige si hace falta:</b> si una talla escalada no cae bien, se ajustan las reglas de grading con el patronista y se vuelve a validar. Igual que con la base, se itera hasta que todas las tallas talleen bien.</li>
+      </ol>
+      <p class="pull">Valida los extremos, no solo la base. Un buen grading hace que la prenda talle igual de bien en todas las tallas; validar solo la talla media te deja ciego a los problemas de los extremos, que son donde más devoluciones se generan.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El patrón escalado a todas las tallas de tu curva, con las tallas extremas validadas en cuerpos reales.</li>
+      </ul>
+
+      <h3><span class="hn">2.8</span>Sistematizar la consistencia y cuidar la relación</h3>
+      <p>El último paso convierte todo esto en un <strong>sistema consistente</strong> para toda la marca y protege el activo que es un buen patronista. Cierra:</p>
+      <ol>
+        <li><b>Estandariza para la consistencia de marca:</b> tu tabla de medidas, tus fits característicos y tus patrones base validados se convierten en el estándar de la marca. Las futuras prendas del mismo tipo parten de esta base, de forma que el tallaje sea consistente entre prendas y colecciones. Esto es lo que hace que el cliente confíe: «en esta marca, soy M, siempre». Esa confianza es oro contra las devoluciones.</li>
+        <li><b>Archiva y organiza los patrones:</b> guarda los patrones finales validados (digitales y/o físicos), bien identificados por prenda, talla y versión. Son un activo de la marca — te ahorran rehacer trabajo y garantizan que reproduces la misma prenda si repites.</li>
+        <li><b>Documenta tu guía de tallas para el cliente:</b> de tu tabla de medidas sale la guía de tallas que publicarás en tu tienda (con las medidas y cómo medirse). Una buena guía de tallas es una de las herramientas que más reduce las devoluciones por talla en venta online.</li>
+      </ol>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El sistema de consistencia establecido (estándares de marca, patrones archivados, guía de tallas para el cliente).</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des tu tallaje por cerrado hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre el rol y el patronista</p>
+      <ul class="check">
+        <li>Entiendo el flujo de patronaje lo suficiente para dirigir y evaluar, sin pretender hacerlo yo.</li>
+        <li>He elegido un patronista con experiencia en mi tipo de prenda (punto/calada) y que me explica su trabajo.</li>
+      </ul>
+
+      <p class="mini">Sobre la talla base y el fit</p>
+      <ul class="check">
+        <li>He dirigido el patrón de la talla base con un brief claro y una prenda de referencia.</li>
+        <li>He definido y comunicado el fit de cada prenda (tipo de ajuste + referencia + holguras).</li>
+        <li>Mi fit es coherente con el fit característico de mi marca.</li>
+        <li>He validado la talla base en cuerpos reales y la he perfeccionado antes de escalar.</li>
+      </ul>
+
+      <p class="mini">Sobre las medidas y el tallaje</p>
+      <ul class="check">
+        <li>Tengo una tabla de medidas estándar por tipo de prenda, basada en mi cliente real.</li>
+        <li>Está documentada con el cómo-se-mide de cada punto.</li>
+        <li>He definido mi curva de tallas (rango + proporción) según mi cliente y mercado.</li>
+      </ul>
+
+      <p class="mini">Sobre el escalado y la consistencia</p>
+      <ul class="check">
+        <li>Entiendo qué es el grading y he dejado que el patronista lo ejecute.</li>
+        <li>He validado las tallas extremas (no solo la base) en cuerpos reales.</li>
+        <li>He estandarizado tabla, fits y patrones para consistencia entre prendas y colecciones.</li>
+        <li>He archivado los patrones validados y creado la guía de tallas para el cliente.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 4.1 · Patronaje y escalado de tallas (grading) · v1.0 · Fase 4</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

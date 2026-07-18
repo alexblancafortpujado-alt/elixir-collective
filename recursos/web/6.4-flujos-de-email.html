@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 6.4 — Flujos de email automatizados</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 6 · E-commerce y Tienda Online</p>
+    <h1 class="rv">Flujos de email</h1>
+    <p class="meta rv">SOP 6.4 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Los emails que venden solos 24/7</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que montes los <strong>flujos de email automatizados</strong>: secuencias que se envían solas, en el momento justo, según lo que hace cada cliente — sin que tú envíes nada manualmente. Son <span class="hl">la herramienta de marketing con mejor retorno que tiene una marca de moda</span>, y una de las más ignoradas por las marcas nuevas.
+    </p>
+    <p>La idea que hay que entender: <strong>el email automatizado es un vendedor que trabaja para ti 24/7 sin sueldo.</strong> Lo montas una vez y sigue vendiendo, recuperando ventas perdidas y fidelizando para siempre. Mientras duermes, un flujo bien montado da la bienvenida a un suscriptor, recupera un carrito abandonado o convierte a un comprador de una vez en cliente recurrente.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 7 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Por qué importa tanto en moda, concretamente, por dos razones. Primera, <strong>el email es tuyo</strong>: a diferencia de las redes sociales, donde el alcance depende del algoritmo y tu audiencia no es «tuya», tu lista es un activo que posees y con el que puedes hablar directamente cuando quieras. Segunda, <strong>el carrito abandonado es enorme en moda</strong>: muchísima gente añade prendas al carrito y no compra —por dudas de talla, por precio, por distracción— y un flujo de recuperación rescata una parte de esas ventas.</p>
+      <p>Los tres flujos fundamentales que cubre este SOP (hay más, pero estos son los que más rinden y por los que hay que empezar):</p>
+      <ul>
+        <li><b>Bienvenida (welcome flow):</b> para el que se suscribe pero aún no ha comprado. Lo presenta a la marca y lo convierte en primer comprador.</li>
+        <li><b>Carrito abandonado:</b> para el que añadió al carrito o empezó el pago y no terminó. Recupera esa venta casi perdida.</li>
+        <li><b>Postventa (post-purchase):</b> para el que ya compró. Cuida la experiencia, pide reseñas y lo convierte en cliente que repite.</li>
+      </ul>
+      <p>Cada uno ataca un momento distinto del ciclo y juntos cubren el viaje completo: de desconocido a comprador, de carrito a venta, de una compra a <span class="gold">cliente fiel</span>.</p>
+      <p class="pull">Si no los tienes: dejas escapar a los suscriptores nuevos sin convertirlos, pierdes todas las ventas de los carritos abandonados —que son muchas en moda—, no fidelizas a los compradores, y dependes solo de las redes (que no controlas) para vender. Es como tener un vendedor dispuesto a trabajar gratis y no contratarlo.</p>
+
+      <h3><span class="hn">1.2</span>Insumos necesarios</h3>
+      <ul>
+        <li><b>Una plataforma de email marketing</b> que se integre con tu tienda y permita montar flujos según el comportamiento del cliente (Klaviyo es el estándar en moda y e-commerce). La integración es lo que permite disparar emails según lo que hace el cliente.</li>
+        <li><b>Tu tienda funcionando</b>, conectada a la plataforma de email.</li>
+        <li><b>Tu tono de voz de marca y el lenguaje del avatar:</b> los emails hablan con la voz de la marca.</li>
+        <li><b>Un incentivo de captación</b> si lo usas (por ejemplo, un descuento de bienvenida a cambio del email).</li>
+        <li><b>Tu política de envíos y devoluciones</b> e info de producto: contenido útil para los flujos, sobre todo postventa y carrito.</li>
+        <li><b>Cumplimiento de la normativa de email</b> (consentimiento, opción de baja): el email marketing está regulado — en la UE, el RGPD. Hay que captar y enviar con permiso.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Principios no negociables</h3>
+      <ol>
+        <li><b>Un flujo se monta una vez y vende para siempre.</b> Es trabajo que rinde indefinidamente. Invierte en montarlo bien.</li>
+        <li><b>El email es tu activo, las redes no.</b> Tu lista es tuya; el alcance en redes no. Constrúyela como el activo que es.</li>
+        <li><b>Timing correcto.</b> El email adecuado en el momento adecuado. Un carrito abandonado se recupera en horas, no en días.</li>
+        <li><b>Aporta valor, no solo vendas.</b> Los emails que solo venden cansan y generan bajas. Los que aportan —historia, valor, cuidado— fidelizan y venden más.</li>
+        <li><b>En el tono de tu marca.</b> Cada email es un punto de contacto de marca. Deben sonar a ti, no a plantilla genérica.</li>
+        <li><b>Empieza por los tres fundamentales.</b> Bienvenida, carrito y postventa cubren el ciclo completo. No te disperses en flujos avanzados antes de tener estos.</li>
+        <li><b>Capta y envía con permiso.</b> Consentimiento para captar, baja fácil siempre.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De cero automatización a tres flujos que venden solos</h2>
+      <p>Siete pasos: montar la herramienta y la captación, construir cada uno de los tres flujos fundamentales, y sistematizar la mejora. El orden importa: primero bienvenida (capta y convierte), luego carrito (recupera), luego postventa (fideliza).</p>
+
+      <h3><span class="hn">2.1</span>Montar la herramienta y conectar la tienda</h3>
+      <p>Antes de crear ningún flujo, monta la <strong>infraestructura</strong>: la plataforma de email conectada a tu tienda. Esa conexión es lo que hace posible la automatización.</p>
+      <ol>
+        <li><b>Elige una plataforma de email marketing para e-commerce:</b> una que se integre con Shopify y permita flujos automatizados según comportamiento. Lo clave es que se conecte con tu tienda y permita disparar emails por acciones del cliente.</li>
+        <li><b>Conecta la plataforma con tu tienda:</b> la integración sincroniza los datos —quién se suscribe, quién compra, quién abandona un carrito— para que los flujos se disparen solos. Sin ella, no hay automatización basada en comportamiento.</li>
+        <li><b>Configura los datos básicos de envío:</b> tu remitente (con el nombre de tu marca), tu dominio verificado (para que los emails no caigan en spam), y el diseño base con tu identidad de marca.</li>
+      </ol>
+      <p class="pull">La infraestructura primero, los flujos después. Sin la herramienta conectada a la tienda no puedes automatizar nada según el comportamiento.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La plataforma de email elegida y conectada a la tienda, con el remitente, el dominio y el diseño base de marca configurados.</li>
+      </ul>
+
+      <h3><span class="hn">2.2</span>Montar la captación de emails (construir la lista)</h3>
+      <p>Los flujos necesitan gente a la que enviar. Antes de los flujos, monta la <strong>captación</strong>: cómo consigues que la gente se una a tu lista.</p>
+      <ol>
+        <li><b>El formulario de captación en la tienda:</b> un popup o formulario que invita a suscribirse. El momento y el diseño importan: que no sea molesto y que dé una razón para suscribirse.</li>
+        <li><b>El incentivo (decisión estratégica):</b> lo más común es ofrecer algo a cambio del email — un <b>descuento de bienvenida</b> o acceso anticipado a drops. Aumenta mucho la captación, pero tiene un coste. Decide según tu margen y posicionamiento: una marca premium puede preferir «acceso exclusivo» en vez de descuento, para no erosionar la percepción de valor.</li>
+        <li><b>Otras vías de captación:</b> el checkout (marcar suscribirse al comprar), las redes, eventos. Cuantas más vías, más crece tu lista.</li>
+        <li><b>Capta con permiso:</b> consentimiento claro y opción de baja siempre. Captar sin permiso es ilegal y contraproducente.</li>
+      </ol>
+      <p class="pull">Tu lista es un activo que construyes desde el día uno. Cada suscriptor es alguien a quien puedes venderle directamente, sin depender del algoritmo. Cuanto antes la construyas, antes rinden tus flujos.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La captación montada (formulario, incentivo decidido, vías de captación, con permiso), construyendo tu lista.</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Construir el flujo de bienvenida</h3>
+      <p>El primer flujo: <strong>la bienvenida.</strong> Se dispara cuando alguien se suscribe pero aún no ha comprado. Su trabajo es presentar la marca, generar confianza y convertir al suscriptor en su <strong>primer comprador</strong>, aprovechando el momento de máximo interés.</p>
+      <ol>
+        <li><b>Email 1 — La bienvenida inmediata:</b> nada más suscribirse. Da la bienvenida, entrega el incentivo prometido y hace sentir al suscriptor parte de algo. Tiene aperturas altísimas: aprovéchalo.</li>
+        <li><b>Email 2 — La historia de la marca:</b> presenta tu mundo, tu concepto, tu porqué. Aquí conectas emocionalmente. En moda, la historia de la marca vende tanto como el producto.</li>
+        <li><b>Email 3 — El producto y la invitación a comprar:</b> muestra tus prendas estrella e invita a la primera compra, recordando el incentivo. Ahora que conoce y confía, es el momento.</li>
+      </ol>
+      <p>Principios del flujo: <strong>aporta valor, no solo vendas</strong> —un flujo que dice «compra» desde el primer email genera bajas—; escribe <strong>en el tono de tu marca</strong>, porque es la primera impresión directa en el buzón del cliente; y usa un <strong>timing espaciado</strong> a lo largo de unos días, no todos de golpe.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El flujo de bienvenida montado (bienvenida + historia + invitación a comprar), en tu tono, convirtiendo suscriptores en primeros compradores.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Construir el flujo de carrito abandonado</h3>
+      <p>El segundo flujo y probablemente el de <strong>mayor retorno directo</strong>. Se dispara cuando alguien añade productos al carrito o empieza el checkout y no completa. Su trabajo es <strong>recuperar esa venta casi perdida</strong>.</p>
+      <ol>
+        <li><b>Email 1 — El recordatorio (timing rápido):</b> pocas horas después del abandono, cuando el interés sigue caliente. Le recuerda lo que dejó, mostrando los productos concretos. A menudo basta un recordatorio amable: mucha gente abandona por distracción, no por decisión.</li>
+        <li><b>Email 2 — Resolver la objeción:</b> si no volvió, este email ataca la razón probable del abandono. En moda, la causa número uno es la <b>duda de talla o fit</b>: recuerda la guía de tallas y la facilidad de devolución, que quita el miedo a equivocarse.</li>
+        <li><b>Email 3 — El incentivo (opcional, con cuidado):</b> algunos flujos ofrecen un pequeño descuento para cerrar. Úsalo con moderación: si siempre das descuento por abandonar, entrenas a la gente a abandonar para conseguirlo.</li>
+      </ol>
+      <p>Principios: <strong>el timing es crítico</strong> (el primer email en horas, no días, porque un carrito se enfría rápido); <strong>resuelve la objeción, no solo recuerdes</strong>; y <strong>facilita volver</strong> al carrito con un clic, sin fricción.</p>
+      <p class="pull">El flujo de carrito recupera ventas que ya casi tenías. Esa gente ya quería comprar — solo necesita un empujón o que le resuelvas una duda. No tenerlo es regalar esas ventas.</p>
+
+      <h3><span class="hn">2.5</span>Construir el flujo de postventa</h3>
+      <p>El tercer flujo: la <strong>postventa.</strong> Se dispara cuando alguien ya compró. Su trabajo es cuidar la experiencia, generar reseñas y convertir al comprador de una vez en un cliente que repite. Es el flujo que muchas marcas ignoran, y donde está la fidelización — más barata y rentable que captar clientes nuevos.</p>
+      <ol>
+        <li><b>Email 1 — Confirmación y cuidado:</b> más allá de la confirmación automática, un email que agradece la compra, refuerza la buena decisión («has elegido bien») y da la información útil de envío y seguimiento. Reduce la ansiedad postcompra.</li>
+        <li><b>Email 2 — Petición de reseña o contenido:</b> tras la entrega, cuando ya le ha dado tiempo a probar la prenda, pide una reseña o que comparta una foto. Las reseñas y el contenido de clientes son oro para la confianza, y este email las genera de forma sistemática.</li>
+        <li><b>Email 3 — La recompra y fidelización:</b> invita a volver con productos relacionados, novedades o una razón para la siguiente compra. Puede incluir hacerle sentir parte de la comunidad de la marca.</li>
+      </ol>
+      <p>Principios: <strong>cuida antes de volver a vender</strong> —un cliente bien cuidado repite; uno al que solo le vuelves a vender, no—; ajusta <strong>el timing a la experiencia del cliente</strong>; y <strong>fideliza con marca, no solo con ofertas</strong>.</p>
+      <p class="pull">La postventa convierte compradores en clientes que repiten, lo más rentable que hay. Captar un cliente nuevo cuesta mucho más que hacer que uno existente vuelva.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El flujo de postventa montado (cuidado postcompra + petición de reseña + recompra), con timing correcto, convirtiendo compradores en clientes recurrentes.</li>
+      </ul>
+
+      <h3><span class="hn">2.6</span>Escribir los emails en la voz de la marca y con valor</h3>
+      <p>Con los tres flujos estructurados, asegura que cada email está <strong>bien escrito</strong>. Un flujo con la estructura correcta pero emails genéricos rinde mucho menos.</p>
+      <ol>
+        <li><b>En el tono de voz de tu marca:</b> cada email es un punto de contacto en el buzón del cliente, con el lenguaje de tu avatar. Un email de plantilla desperdicia la oportunidad.</li>
+        <li><b>Aporta valor, no solo vendas:</b> los mejores emails dan algo —una historia, un consejo, una sensación de pertenencia— además de (o antes de) vender.</li>
+        <li><b>Asuntos que se abren:</b> el asunto decide si el email se abre. Trabájalo para que dé curiosidad o valor, en tu voz, sin caer en el clickbait que decepciona.</li>
+        <li><b>Claros y con una acción clara:</b> cada email con un objetivo y una llamada a la acción evidente, sin confundir con demasiadas cosas a la vez.</li>
+      </ol>
+      <p class="pull">La estructura del flujo importa, pero el copy lo cierra. Un flujo bien estructurado con emails mal escritos rinde poco.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Los emails de los tres flujos escritos en el tono de la marca, aportando valor, con asuntos que se abren y una acción clara en cada uno.</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Activar, medir y mejorar</h3>
+      <p>El último paso: <strong>activar los flujos, medir cómo funcionan y mejorarlos con datos.</strong> Los flujos no se montan y se olvidan: se optimizan, y ese es su superpoder frente al email manual.</p>
+      <ol>
+        <li><b>Activa los flujos y compruébalos:</b> suscríbete tú, abandona un carrito de prueba, haz una compra de prueba. Confirma que se disparan bien, en el timing correcto, y que se ven bien en móvil, donde se leen la mayoría de los emails.</li>
+        <li><b>Mide lo que importa:</b> tasa de apertura (¿se abren?), tasa de clic (¿actúan?) y sobre todo conversión (¿venden?).</li>
+        <li><b>Mejora con datos:</b> ajusta un asunto que no se abre, un email que no convierte, un timing que no funciona. Prueba dos versiones y quédate con la que mejor convierte.</li>
+        <li><b>Amplía cuando los fundamentales funcionen:</b> después puedes añadir flujos avanzados (clientes inactivos, cumpleaños, VIP, reposición de stock). Pero primero domina los tres fundamentales.</li>
+      </ol>
+      <p class="pull">Los flujos se montan una vez y se mejoran para siempre. A diferencia del email manual, un flujo optimizado sigue rindiendo y mejorando automáticamente.</p>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des los flujos por cerrados hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre la infraestructura</p>
+      <ul class="check">
+        <li>Tengo una plataforma de email marketing para e-commerce conectada a mi tienda.</li>
+        <li>El remitente, el dominio y el diseño base de marca están configurados.</li>
+        <li>Tengo la captación de emails montada (formulario, incentivo, con permiso) construyendo mi lista.</li>
+      </ul>
+
+      <p class="mini">Sobre los tres flujos</p>
+      <ul class="check">
+        <li>Tengo el flujo de bienvenida (bienvenida + historia + invitación a comprar) que convierte suscriptores en compradores.</li>
+        <li>Tengo el flujo de carrito abandonado (recordatorio rápido + resolver objeción de talla + incentivo opcional) que recupera ventas.</li>
+        <li>Tengo el flujo de postventa (cuidado + reseña + recompra) que fideliza.</li>
+      </ul>
+
+      <p class="mini">Sobre el copy y el timing</p>
+      <ul class="check">
+        <li>Los emails están escritos en el tono de mi marca y aportan valor, no solo venden.</li>
+        <li>Los asuntos están trabajados para que se abran.</li>
+        <li>El timing de cada flujo es correcto (carrito rápido, reseña tras la entrega).</li>
+      </ul>
+
+      <p class="mini">Sobre la activación y la mejora</p>
+      <ul class="check">
+        <li>He probado que los flujos se disparan bien y se ven bien en móvil.</li>
+        <li>Mido apertura, clic y conversión.</li>
+        <li>Mejoro los flujos con datos de forma continua.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 6.4 · Flujos de email automatizados · v1.0 · Fase 6</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

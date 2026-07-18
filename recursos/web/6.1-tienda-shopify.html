@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 6.1 — Montaje de la tienda de cero (Shopify)</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 6 · E-commerce y Tienda Online</p>
+    <h1 class="rv">Tienda online</h1>
+    <p class="meta rv">SOP 6.1 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Una tienda que vende, no solo que existe</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que montes tu tienda online <strong>como una máquina de vender</strong>, no como un escaparate bonito que no convierte. La tienda es donde todo lo anterior —producto, marca, identidad— <span class="hl">se transforma en dinero real</span>: probablemente el activo digital más importante de tu negocio.
+    </p>
+    <p>Y una aclaración de partida: <strong>te doy el criterio, no los clics.</strong> Shopify cambia su interfaz y sus planes constantemente; para los pasos exactos, su documentación oficial es tu referencia. Lo que vale, y casi nadie explica bien, es qué decisiones importan, en qué orden montar y qué prioriza la conversión.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 8 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que montes tu tienda online como una máquina de vender, no como un escaparate bonito que no convierte. La tienda es donde el producto, la marca y la identidad se transforman en dinero real; es, probablemente, el activo digital más importante de tu negocio: el sitio donde ocurre la transacción.</p>
+      <p>La idea que ordena todo: una tienda que «existe» no es lo mismo que una tienda que «vende». Muchas marcas montan una que se ve bien y no convierte, porque confunden «tener una web estética» con «tener una web que vende». La diferencia está en la <span class="gold">conversión</span>: cada decisión debe reducir la fricción y aumentar la confianza que llevan al cliente a completar la compra.</p>
+      <p>Por qué Shopify: es la plataforma estándar para marcas de moda porque incluye el hosting, la seguridad de pago, la gestión de inventario y el checkout ya resueltos, así que no montas infraestructura técnica: te centras en vender. Empezar «de cero» bien montado te ahorra el caos de una tienda improvisada que luego hay que rehacer.</p>
+      <p class="pull">Una tienda de moda que vende no es la más estética: es la que hace fácil comprar, genera confianza en una marca nueva, y elimina las dudas que frenan el «añadir al carrito».</p>
+
+      <h3><span class="hn">1.2</span>Elementos necesarios</h3>
+      <ul>
+        <li><b>Toda tu identidad de marca</b> (Fase 1): logo, colores, tipografía, Brand Book. La tienda es la aplicación digital de tu identidad.</li>
+        <li><b>Las fotos de producto y el copywriting de fichas</b> (SOPs siguientes de esta fase): la tienda las necesita para vender. Puedes montar la estructura antes, pero no lanzar sin ellas.</li>
+        <li><b>La guía de tallas</b> (de patronaje) y la <b>política de devoluciones</b> (de Fase 5): piezas críticas que van en la tienda.</li>
+        <li><b>Tu catálogo con SKUs</b> e inventario (Fase 5): los productos que vas a cargar.</li>
+        <li><b>El dominio</b> (de tu naming, Fase 0) para conectar a la tienda.</li>
+        <li><b>Una cuenta de Shopify</b> (empieza con la prueba gratuita) y la documentación oficial de Shopify como referencia de los pasos exactos actualizados.</li>
+        <li><b>Claridad sobre tus métodos de pago y envío</b> disponibles en tu país.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Principios no negociables</h3>
+      <ol>
+        <li><b>Vender, no solo existir.</b> Cada decisión se juzga por si acerca al cliente a completar la compra. Bonito sin convertir no sirve.</li>
+        <li><b>La conversión manda sobre la estética.</b> La tienda debe ser atractiva <em>y</em> fácil de comprar. Si hay conflicto, gana la facilidad de compra.</li>
+        <li><b>Móvil primero.</b> La mayoría compra desde el móvil. Una tienda que falla en móvil falla, punto.</li>
+        <li><b>Confianza antes que nada para una marca nueva.</b> El desconocido duda de una marca que no conoce. Cada elemento de confianza reduce ese freno.</li>
+        <li><b>Menos fricción en el checkout.</b> Cada paso, campo o sorpresa de más en el pago pierde ventas. Simplifica hasta el hueso.</li>
+        <li><b>Las piezas críticas de moda no son opcionales.</b> Guía de tallas, devoluciones y fotos son las que deciden la compra en ropa. No las dejes para «luego».</li>
+        <li><b>Lanza y mejora, no persigas la perfección.</b> Una tienda buena viva vende más que una perfecta que nunca lanzas. Lánzala y optimiza con datos.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De cero a una tienda que convierte</h2>
+      <p>Ocho pasos en orden de prioridad: primero lo estructural (plan, catálogo, pagos), luego lo que convierte (fichas, confianza, móvil), y al final revisar y lanzar. El orden importa: monta primero lo que hace que se pueda comprar, no lo decorativo.</p>
+
+      <h3><span class="hn">2.1</span>Elegir el plan y la configuración base</h3>
+      <p>Empieza por lo estructural: la cuenta, el plan y la configuración base. No te obsesiones aquí, es lo más fácil de cambiar después. El objetivo es arrancar bien, no perfecto.</p>
+      <ol>
+        <li><b>El plan de Shopify según tu etapa:</b> para empezar, el plan de entrada (Basic) es suficiente para una marca nueva. No pagues por planes superiores hasta que el volumen lo justifique (aportan cosas como informes avanzados o menores comisiones que solo compensan con cierta facturación). <em>(Los planes y precios cambian, consulta la página oficial de Shopify.)</em></li>
+        <li><b>El dominio:</b> conecta tu dominio propio (el de tu naming) a la tienda. Una marca seria vende en su propio dominio, no en la dirección genérica que da Shopify por defecto.</li>
+        <li><b>La configuración base:</b> moneda, idioma, país, información de la tienda, impuestos según tu mercado. Lo administrativo que hay que dejar correcto desde el principio.</li>
+        <li><b>Shopify Payments si está disponible en tu país:</b> usar el sistema de pago nativo evita comisiones extra de transacción que sí cobran los pagos de terceros. Afecta directo a tu margen.</li>
+      </ol>
+      <p>La regla: arranca simple y correcto, no perfecto. La configuración base se ajusta fácil; no gastes días aquí. Lo que de verdad importa viene en los pasos siguientes.</p>
+
+      <h3><span class="hn">2.2</span>Cargar el catálogo de producto bien estructurado</h3>
+      <p>Ahora cargas tus productos, pero <strong>bien estructurados</strong> desde el principio, porque una estructura ordenada facilita la compra y rehacerla después es un dolor. Este paso es la columna vertebral de la tienda.</p>
+      <ol>
+        <li><b>Cada producto con sus variantes:</b> cada prenda con sus tallas y colores como variantes. Esto conecta la tienda con tu inventario y permite que el stock se descuente bien.</li>
+        <li><b>Colecciones lógicas:</b> agrupa los productos en colecciones/categorías que tengan sentido para tu cliente (por tipo de prenda, por temporada, por «novedades»). Una buena organización ayuda a encontrar lo que busca. La navegación es parte de la conversión.</li>
+        <li><b>Inventario sincronizado:</b> el stock de cada variante conectado a tu sistema de inventario, para que la tienda no venda lo que no tienes. La sincronización evita el desastre de la sobreventa.</li>
+        <li><b>Los datos base de cada producto:</b> título, precio (el que calculaste en el costeo), y el espacio para las fotos y la descripción.</li>
+      </ol>
+      <p>La regla: una estructura de catálogo ordenada desde el inicio se paga sola. Rehacer la organización con la tienda llena es tedioso y rompe enlaces. Monta la estructura lógica ahora, aunque las fichas las pulas después.</p>
+
+      <h3><span class="hn">2.3</span>Configurar pagos y envíos (sin fricción ni sorpresas)</h3>
+      <p>Los <strong>pagos y envíos</strong> son donde más ventas se pierden si hay fricción o sorpresas. Este paso los configura para que comprar sea fácil y para que no haya el clásico abandono por «coste inesperado al final».</p>
+      <ol>
+        <li><b>Los métodos de pago:</b> activa las formas que tu cliente usa (tarjeta vía Shopify Payments, y las alternativas populares en tu mercado). Cuantas más opciones cómodas, menos abandono por «no puedo pagar como quiero». Prioriza Shopify Payments para evitar comisiones extra.</li>
+        <li><b>Los métodos y tarifas de envío:</b> define cómo y cuánto cobras el envío. El coste de envío sorpresa al final del checkout es una de las mayores causas de abandono de carrito. Sé transparente desde el principio. Considera el envío gratis a partir de cierto importe (sube el ticket medio y reduce el abandono) si tu margen lo permite.</li>
+        <li><b>Los impuestos:</b> configurados correctamente según tu mercado, para que el precio que ve el cliente sea el que paga, sin sorpresas.</li>
+        <li><b>La coherencia con tu política de envíos:</b> lo que configuras aquí tiene que coincidir con lo que prometes al cliente.</li>
+      </ol>
+      <p class="pull">La regla de oro: sin sorpresas de coste al final. El abandono de carrito se dispara cuando aparece un coste de envío o un impuesto que el cliente no esperaba. Transparencia total en el precio y el envío desde el inicio.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Los métodos de pago activados (con Shopify Payments si es posible), las tarifas de envío definidas y transparentes, y los impuestos configurados, sin sorpresas de coste al final.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Elegir el tema y aplicar la identidad de marca</h3>
+      <p>Ahora el diseño: eliges el <strong>tema</strong> (la plantilla de la tienda) y le aplicas tu identidad. Aquí mucha gente pierde semanas persiguiendo la perfección estética; no lo hagas. El tema debe ser limpio, rápido y coherente con tu marca, y punto.</p>
+      <ol>
+        <li><b>Elige un tema limpio y orientado a conversión:</b> Shopify tiene temas gratuitos que funcionan perfectamente para empezar. Elige uno limpio, rápido de carga y bueno en móvil. La velocidad y la claridad convierten más que la sofisticación visual.</li>
+        <li><b>Aplica tu identidad de marca:</b> tus colores, tu tipografía, tu logo (Fase 1). La tienda tiene que sonar al mismo mundo que toda tu marca. Aquí tu Brand Book hace el trabajo: no inventas estética, aplicas la que ya definiste.</li>
+        <li><b>Prioriza la claridad sobre el efecto:</b> una tienda que se entiende y se navega fácil vende más que una llena de efectos que distraen o ralentizan. Menos es más: la estética al servicio de la compra.</li>
+        <li><b>No te pierdas personalizando:</b> el error clásico es gastar días en detalles visuales que no mueven la conversión. Monta un diseño limpio, coherente y funcional.</li>
+      </ol>
+      <p class="pull">El tema es un vehículo para vender, no una obra de arte. Un tema limpio y bien aplicado con tu marca es suficiente. La perfección estética es un pozo de tiempo que rara vez mejora las ventas.</p>
+
+      <h3><span class="hn">2.5</span>Construir las fichas de producto que convierten</h3>
+      <p>Las <strong>fichas de producto</strong> son donde se decide la compra. Es la página que el cliente mira antes de comprar, y en moda tiene que vencer una desventaja enorme: no puede tocar ni probarse la prenda. <em>(El copy y las fotos tienen sus propios SOPs; aquí montas la estructura que las hace vender.)</em></p>
+      <ol>
+        <li><b>Fotos que venden (lo más importante):</b> múltiples fotos, producto en cuerpo real y en detalle, color fiel. En moda, las fotos <em>son</em> el producto para el cliente que no puede tocarlo.</li>
+        <li><b>La guía de tallas visible y clara:</b> pieza crítica en moda. El cliente que no sabe qué talla elegir, duda y no compra (o compra y devuelve). Una guía accesible desde la ficha reduce ambas cosas. (De tu tabla de medidas, Fase 4.)</li>
+        <li><b>La descripción que resuelve dudas:</b> copy que describe la prenda, su fit, su material, y responde las objeciones. No solo «camiseta negra», sino la información que da confianza para comprar.</li>
+        <li><b>La información de fit clara:</b> oversize/regular/ajustado, cómo talla. Reduce la duda de talla, la número uno.</li>
+        <li><b>Los elementos de confianza en la ficha:</b> disponibilidad, envío, devoluciones — la información que quita frenos justo en el momento de decidir.</li>
+        <li><b>Un «añadir al carrito» claro y sin fricción:</b> el botón de compra visible y fácil, con la selección de talla/color sencilla.</li>
+      </ol>
+      <p class="pull">La ficha de producto vende por ti cuando no estás. Es tu mejor vendedor: tiene que mostrar la prenda, resolver las dudas (sobre todo la talla) y facilitar el «comprar» en un vistazo. Una ficha pobre pierde la venta justo en el momento decisivo.</p>
+
+      <h3><span class="hn">2.6</span>Añadir los elementos de confianza (marca nueva)</h3>
+      <p>Una marca nueva parte con una desventaja: <strong>nadie la conoce, así que nadie confía todavía.</strong> El cliente duda si el producto será bueno, si le llegará, si podrá devolver, si es fiable pagar. Este paso añade los elementos que generan la confianza que compensa ser desconocido, y es de los que más impacto tienen en la conversión de una tienda nueva.</p>
+      <ol>
+        <li><b>Política de devoluciones visible y clara:</b> saber que puede devolver fácil reduce muchísimo el riesgo percibido de comprar ropa sin probar. Es uno de los mayores generadores de confianza en moda (SOP de devoluciones).</li>
+        <li><b>Información de envío transparente:</b> plazos y costes claros. El cliente quiere saber cuándo y por cuánto le llega antes de comprar.</li>
+        <li><b>Prueba social:</b> reseñas, fotos de clientes reales, contenido de gente llevando la prenda. Al empezar sin reseñas, usa lo que tengas (contenido de la marca en cuerpos reales, testimonios iniciales) y ve construyendo.</li>
+        <li><b>Una marca con cara y una historia:</b> una página «sobre nosotros» con la historia real, el fundador, el porqué (tu concepto de la Fase 0). En moda pequeña, el fundador con cara es un activo de confianza.</li>
+        <li><b>Señales de seguridad y profesionalidad:</b> el dominio propio, el candado de pago seguro (Shopify lo da por defecto), un contacto visible, una tienda cuidada. Detalles que dicen «esto es serio y fiable».</li>
+      </ol>
+      <p class="pull">Para una marca nueva, la confianza es la mitad de la conversión. El producto puede ser genial, pero si el desconocido no confía en comprar, no compra. Cada elemento de confianza reduce el freno de «no la conozco, ¿será fiable?». Priorízalos tanto como el diseño.</p>
+
+      <h3><span class="hn">2.7</span>Optimizar la experiencia móvil y la velocidad</h3>
+      <p><strong>La mayoría de tu tráfico y tus ventas vendrán del móvil.</strong> Una tienda que se ve o funciona mal en el teléfono está perdiendo la mayor parte de sus ventas potenciales, por muy bien que se vea en ordenador. Este paso asegura que la tienda es excelente donde de verdad compra la gente.</p>
+      <ol>
+        <li><b>Revisa TODO en móvil, no solo en ordenador:</b> navega tu tienda entera desde el teléfono como lo haría un cliente — las fichas, el menú, el checkout, las fotos, los botones. Muchas tiendas se montan mirando el ordenador y se ven rotas en móvil.</li>
+        <li><b>Botones y navegación aptos para el dedo:</b> el «añadir al carrito», la selección de talla, el menú, todo tiene que ser fácil de usar con el pulgar en una pantalla pequeña. La fricción en móvil es abandono.</li>
+        <li><b>Velocidad de carga:</b> una tienda lenta pierde clientes antes de que carguen las fotos, sobre todo en móvil con datos. Optimiza el peso de las imágenes y elige un tema rápido. Cada segundo de carga de más pierde ventas.</li>
+        <li><b>El checkout en móvil impecable:</b> el momento del pago tiene que ser especialmente fluido en el teléfono (menos campos, pago rápido, opciones de pago móvil). Es donde se cierra o se pierde la venta.</li>
+      </ol>
+      <p>La regla: si no funciona perfecto en móvil, no funciona. Diseña y prueba pensando en el móvil primero, porque ahí está la mayoría de tus clientes. Una tienda «de ordenador» que descuida el móvil regala la mayor parte de sus ventas.</p>
+
+      <h3><span class="hn">2.8</span>Revisar, testear y lanzar (y mejorar con datos)</h3>
+      <p>El último paso: <strong>probar que todo funciona, lanzar, y mejorar con datos,</strong> en vez de perseguir una perfección que nunca llega. Una tienda buena lanzada vende; una perfecta que nunca sale, no.</p>
+      <ol>
+        <li><b>Haz una compra de prueba completa:</b> recorre el proceso entero como un cliente real, de principio a fin — busca un producto, elige talla, añade al carrito, paga, comprueba que llega la confirmación. Este test de extremo a extremo caza los errores que rompen ventas. No lances sin hacerlo.</li>
+        <li><b>Revisa la checklist crítica de moda:</b> ¿está la guía de tallas? ¿la política de devoluciones visible? ¿las fotos cargadas? ¿el móvil impecable? ¿los pagos funcionando? Estas son las que deciden la compra, confírmalas todas.</li>
+        <li><b>Lanza sin perseguir la perfección:</b> cuando lo esencial funciona (se puede comprar, genera confianza, está bien en móvil), lanza. El error de muchos es no lanzar nunca por seguir puliendo detalles que no mueven la aguja.</li>
+        <li><b>Mejora con datos, no con opiniones:</b> una vez viva, usa los datos reales (qué se ve, qué se abandona, dónde caen las ventas, la tasa de conversión) para optimizar. La tienda no se termina el día del lanzamiento, se mejora continuamente con lo que los clientes reales te enseñan.</li>
+      </ol>
+      <p class="pull">Lanza cuando venda, no cuando sea perfecta, y mejora con datos. La perfección es enemiga del lanzamiento. Una tienda que funciona, genera confianza y está bien en móvil ya vende: sácala, y usa las ventas reales para perfeccionarla.</p>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des la tienda por lista para lanzar hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre lo estructural</p>
+      <ul class="check">
+        <li>He elegido el plan de entrada correcto para mi etapa y conectado mi dominio propio.</li>
+        <li>Uso Shopify Payments (si está disponible) para evitar comisiones extra.</li>
+        <li>El catálogo está cargado con variantes (SKUs), colecciones lógicas e inventario sincronizado.</li>
+        <li>Los pagos, envíos e impuestos están configurados sin sorpresas de coste al final.</li>
+      </ul>
+
+      <p class="mini">Sobre el diseño y las fichas</p>
+      <ul class="check">
+        <li>El tema es limpio, rápido y bueno en móvil, con mi identidad de marca aplicada.</li>
+        <li>No me he perdido en personalización estética a costa de la conversión.</li>
+        <li>Las fichas de producto convierten: fotos, guía de tallas, descripción, info de fit, botón claro.</li>
+      </ul>
+
+      <p class="mini">Sobre la confianza y el móvil</p>
+      <ul class="check">
+        <li>La política de devoluciones y la información de envío están visibles y claras.</li>
+        <li>Hay prueba social y una marca con cara e historia (página «sobre nosotros»).</li>
+        <li>Hay señales de seguridad y profesionalidad.</li>
+        <li>He revisado y optimizado TODA la tienda en móvil (navegación, botones, velocidad, checkout).</li>
+      </ul>
+
+      <p class="mini">Sobre el lanzamiento</p>
+      <ul class="check">
+        <li>He hecho una compra de prueba completa de principio a fin.</li>
+        <li>He confirmado la checklist crítica de moda (tallas, devoluciones, fotos, móvil, pagos).</li>
+        <li>He lanzado sin perseguir la perfección.</li>
+        <li>Tengo un enfoque de mejora continua con datos reales.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 6.1 · Montaje de la tienda de cero (Shopify) · v1.0 · Fase 6</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

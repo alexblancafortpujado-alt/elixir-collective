@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 1.3 — Tipografías y jerarquía</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 1 · Identidad Visual y Branding</p>
+    <h1 class="rv">Tipografía y jerarquía</h1>
+    <p class="meta rv">SOP 1.3 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Las letras que ordenan y dan carácter a la marca</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que elijas <strong>la tipografía de tu marca y montes una jerarquía clara</strong>, de modo que cada texto —web, etiquetas, campañas, emails— se lea sin esfuerzo y se vea de marca. La tipografía es lo que más silenciosamente delata a una marca amateur: <span class="hl">mezclar fuentes al azar grita «hecho sin criterio»</span>, aunque el logo y las fotos estén bien.
+    </p>
+    <p>Dos ideas lo cambian todo. La primera: <strong>la tipografía comunica carácter tanto como el logo</strong> — la misma palabra en una serif con historia o en una grotesca dura dice cosas opuestas. La segunda: <strong>jerarquía es ordenar la información por importancia</strong> para que el ojo sepa qué leer primero, segundo y tercero sin pensar.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 6 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que elijas la tipografía de tu marca y montes una jerarquía clara, de modo que cada texto —web, etiquetas, campañas, emails— se lea sin esfuerzo y se vea de marca. La tipografía es lo que más silenciosamente delata a una marca amateur: mezclar fuentes al azar o dejarlas sin orden grita «hecho sin criterio», aunque el logo y las fotos estén bien.</p>
+      <p>Dos ideas lo cambian todo. Primera: <strong>la tipografía comunica carácter tanto como el logo</strong>. La misma palabra en una serif con historia o en una grotesca dura dice cosas opuestas. Segunda: <strong>jerarquía es ordenar la información por importancia</strong> para que el ojo sepa qué leer primero, segundo y tercero sin pensar. Buena jerarquía = un texto que se siente ordenado y premium; mala jerarquía = ruido, aunque la fuente sea bonita.</p>
+      <p>El resultado concreto es una o dos tipografías elegidas con <span class="gold">licencia comercial resuelta</span>, roles asignados (titular y cuerpo), una escala de tamaños y pesos definida, y las reglas de uso para que cualquiera aplique el texto siempre igual.</p>
+      <p class="pull">Lo que pasa si te saltas esto: usas cinco fuentes porque cada pieza la tocó alguien distinto, tu texto se ve desordenado sin saber por qué, compras una fuente sin licencia y te expones legalmente, o eliges una preciosa para titulares que es ilegible en un párrafo.</p>
+
+      <h3><span class="hn">1.2</span>Elementos necesarios</h3>
+      <ul>
+        <li><b>El moodboard maestro y los códigos visuales (1.1) y el logotipo (1.2):</b> la tipografía tiene que convivir con ellos, no contradecirlos.</li>
+        <li><b>Una fuente de tipografías con licencia clara:</b> Google Fonts para empezar gratis y con licencia abierta; fundiciones de pago para algo más propio, leyendo siempre qué usos cubre la licencia.</li>
+        <li><b>Herramienta de diseño (Figma):</b> para montar y probar la escala.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Principios no negociables</h3>
+      <ol>
+        <li><b>Una o dos fuentes, no más.</b> Una sola bien usada (jugando con pesos y tamaños) casi siempre basta y se ve más limpia que dos mal combinadas.</li>
+        <li><b>Legibilidad antes que personalidad en el cuerpo.</b> La fuente de titular puede tener carácter; la de texto largo manda que se lea sin fatiga.</li>
+        <li><b>Coherencia con el logo y el mundo.</b> Si el wordmark es una serif elegante, el sistema no puede ser una sans dura. Todo suena igual.</li>
+        <li><b>Contraste con propósito, no por decorar.</b> Si eliges dos fuentes, que se diferencien claramente de rol; si se parecen, mejor una sola.</li>
+        <li><b>Sin licencia comercial, no se usa.</b> Una fuente sin derechos para uso comercial es un riesgo legal real. Se verifica siempre.</li>
+        <li><b>La jerarquía es un sistema, no una decisión por pieza.</b> Se define una vez y se repite; improvisar tamaños rompe la marca.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De elegir letras a un sistema tipográfico</h2>
+      <p>Seis pasos que te llevan de la hoja en blanco a una tipografía con roles, jerarquía y reglas.</p>
+
+      <h3><span class="hn">2.1</span>Definir qué debe transmitir tu tipografía</h3>
+      <p>Antes de mirar fuentes, define el carácter que buscas, o te perderás entre mil opciones bonitas. Vuelve al moodboard y al concepto y decide 3-4 adjetivos que la letra debe transmitir («sobria, atemporal, con autoridad» frente a «cruda, directa, urbana»). Esos adjetivos son tu filtro: cada fuente candidata se juzga contra ellos, no por gusto. Ayuda conocer qué dice cada gran familia, a grandes rasgos:</p>
+      <ul>
+        <li><b>Serif</b> (con remates): tradición, autoridad, elegancia, lujo editorial.</li>
+        <li><b>Sans serif</b> (sin remates): moderno, limpio, neutro, funcional.</li>
+        <li><b>Grotescas y neo-grotescas</b> (un tipo de sans): directo, honesto, contemporáneo. Muy usado en moda actual.</li>
+        <li><b>Display y decorativas:</b> mucho carácter, solo para titulares y momentos puntuales — nunca para cuerpo.</li>
+      </ul>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>3-4 adjetivos que tu tipografía debe transmitir + la o las familias que encajan.</li>
+      </ul>
+
+      <h3><span class="hn">2.2</span>Elegir las tipografías con roles</h3>
+      <p>Ahora eliges, pero pensando en <strong>roles</strong>, no en «una fuente que me gusta»:</p>
+      <ol>
+        <li><b>Tipografía de titulares / display:</b> la de más personalidad, para titulares, campañas y momentos de impacto. Puede coincidir con la del wordmark o ser una hermana.</li>
+        <li><b>Tipografía de cuerpo:</b> la que se lee en párrafos largos (web, descripciones, emails). Aquí manda la legibilidad. Elige una con varios pesos disponibles (regular, medium, bold) — la versatilidad de una sola familia bien equipada suele evitar tener que meter una segunda fuente.</li>
+      </ol>
+
+      <h3><span class="hn">2.3</span>Verificar la licencia comercial</h3>
+      <p>Paso corto pero <strong>no negociable</strong>. No toda fuente se puede usar comercialmente, y algunas necesitan licencia distinta para web, para producto o para bordado.</p>
+      <p class="pull">Usar una fuente sin licencia comercial en una marca que vende es exponerse a un problema legal.</p>
+      <p>Comprueba, para cada fuente:</p>
+      <ul>
+        <li>Que la licencia cubre <b>uso comercial</b>.</li>
+        <li>Que cubre los usos que vas a darle: <b>web</b> (webfont), <b>impresión</b> (hangtags, packaging) y <b>producto</b> si va estampada o bordada.</li>
+        <li><b>Google Fonts:</b> licencia abierta, buen punto de partida gratis. Fundiciones de pago: lee el detalle antes de comprar.</li>
+      </ul>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Licencia comercial verificada y documentada para cada fuente (y para cada uso).</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Construir la jerarquía y la escala</h3>
+      <p>Aquí montas el orden. La jerarquía guía el ojo por importancia, y se logra con <strong>cuatro herramientas</strong>: tamaño, peso, espaciado y color/contraste. No hace falta cambiar de fuente para crear jerarquía; basta variar estas. Define una escala tipográfica con niveles claros:</p>
+      <ol>
+        <li><b>Titular (H1):</b> el más grande y contundente. Lo primero que se ve.</li>
+        <li><b>Subtítulo (H2/H3):</b> escalones intermedios para organizar secciones.</li>
+        <li><b>Cuerpo:</b> el tamaño de lectura cómoda (en web, un cuerpo que no obligue a forzar la vista).</li>
+        <li><b>Detalle / caption:</b> lo pequeño (pies de foto, notas, legales).</li>
+      </ol>
+
+      <h3><span class="hn">2.5</span>Probar la tipografía en aplicaciones reales</h3>
+      <p>Antes de documentar nada, baja la tipografía a la realidad: una fuente puede verse perfecta en la pantalla de selección y fallar en uso. Prueba tu sistema en 3-4 <strong>aplicaciones reales</strong> —un producto, una campaña, la web, un texto sobre foto— y comprueba que se lee sin esfuerzo, que la jerarquía ordena de verdad y que sigue sonando al mundo de la marca en cada contexto. Corrige lo que no funcione aquí, no después de publicarlo.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La tipografía probada en 3-4 aplicaciones reales (producto, campaña, web, sobre foto).</li>
+      </ul>
+
+      <h3><span class="hn">2.6</span>Documentar el sistema tipográfico</h3>
+      <p>El último paso lo deja <strong>delegable</strong>. Documenta en una página:</p>
+      <ul>
+        <li>Las fuentes elegidas y sus <b>roles</b> (display / cuerpo).</li>
+        <li>La <b>escala</b> completa (cada nivel con su tamaño, peso e interlineado).</li>
+        <li>Las <b>licencias</b> y de dónde se descargan.</li>
+        <li>Un par de <b>ejemplos</b> de uso correcto e incorrecto («esto sí / esto no»).</li>
+      </ul>
+      <p>Guárdalo con los archivos de fuente en la carpeta única de identidad (la misma del logo). Cuando un CM o diseñador pregunte «¿qué letra y qué tamaño?», tiene la respuesta sin preguntarte. Esto será una sección del Brand Book más adelante; aquí dejas la semilla ordenada.</p>
+      <p class="pull">Disciplina final: la tipografía, como el logo, es estable en el tiempo. Se refina, no se cambia cada temporada — su valor nace de la repetición.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El mini-sistema tipográfico documentado (fuentes + roles + escala + licencias + ejemplos), guardado en la carpeta de identidad.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des la tipografía por cerrada hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre la elección</p>
+      <ul class="check">
+        <li>Tengo 3-4 adjetivos que la tipografía debe transmitir y la o las familias que encajan.</li>
+        <li>He elegido una o dos fuentes con roles claros (display / cuerpo).</li>
+        <li>Las letras son coherentes con el logo y el moodboard maestro.</li>
+      </ul>
+
+      <p class="mini">Sobre la licencia</p>
+      <ul class="check">
+        <li>He verificado que la licencia cubre uso comercial.</li>
+        <li>Cubre todos mis usos (web, impresión y producto si aplica).</li>
+      </ul>
+
+      <p class="mini">Sobre la jerarquía</p>
+      <ul class="check">
+        <li>Tengo una escala con 4-5 niveles y saltos claros entre ellos.</li>
+      </ul>
+
+      <p class="mini">Sobre la prueba y el cierre</p>
+      <ul class="check">
+        <li>He probado la tipografía en 3-4 aplicaciones reales (producto, campaña, web, sobre foto).</li>
+        <li>Tengo el sistema documentado (fuentes + roles + escala + licencias + ejemplos) en la carpeta de identidad.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 1.3 · Tipografías y jerarquía · v1.0 · Fase 1</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

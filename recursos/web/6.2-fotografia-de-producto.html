@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 6.2 — Fotografía de producto (flat lay, ghost, on-model)</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 6 · E-commerce y Tienda Online</p>
+    <h1 class="rv">Fotografía de producto</h1>
+    <p class="meta rv">SOP 6.2 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Online, las fotos SON el producto</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que consigas las <strong>fotos de producto que hacen que tu ropa se venda online</strong>. En moda a distancia hay una verdad que lo cambia todo: el cliente no puede tocar, probar ni sentir la prenda, así que <span class="hl">las fotos SON el producto para él</span>.
+    </p>
+    <p>Las mejores fotos hacen <strong>dos trabajos a la vez</strong>: muestran la prenda con fidelidad total <em>y</em> la hacen deseable. Ni solo bonita —que engaña y decepciona— ni solo funcional —que informa pero no vende.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 8 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que consigas las fotos de producto que hacen que tu ropa se venda online. Hay una verdad que lo cambia todo: el cliente no puede tocar, probar ni sentir la prenda, así que las fotos SON el producto para él, y toda su decisión de compra se basa en lo que ve en la pantalla. Unas fotos malas hacen que una prenda excelente parezca barata; unas buenas hacen que se desee y se compre. La fotografía es, junto con la guía de tallas, <span class="gold">lo que más convierte en una tienda de moda</span>.</p>
+      <p>La idea que ordena todo: las fotos tienen dos trabajos a la vez, y necesitas los dos.</p>
+      <ul>
+        <li><b>Informar:</b> mostrar la prenda con fidelidad total — el color real, la textura, los detalles, cómo es de verdad. El cliente necesita saber exactamente qué va a recibir. Una foto que engaña genera decepción y devolución.</li>
+        <li><b>Seducir:</b> hacer que la prenda se desee, transmitir el mundo de la marca, provocar el «lo quiero». Una foto solo informativa vende poco; tiene que además emocionar.</li>
+      </ul>
+      <p>Y hay tres tipos que dominar, cada uno con su función: <strong>flat lay</strong> (la prenda plana desde arriba), <strong>ghost mannequin</strong> (como si la llevara un cuerpo invisible) y <strong>on-model</strong> (puesta en una persona real). Una ficha potente suele combinar varios (lo vemos en el paso 2.1). El resultado: el criterio para planificar y ejecutar tu fotografía, conseguir fidelidad de color, lograr fotos deseables aunque no seas profesional, mantener la coherencia con tu dirección de arte, y editarlas, de forma que tus fichas conviertan.</p>
+      <p class="pull">Si las fotos son malas: tu prenda excelente parece barata y no se vende, el color que ve el cliente no es el real y disparas las devoluciones, tu ficha no genera deseo y el tráfico rebota, o tus fotos no tienen nada que ver con tu dirección de arte y rompen la coherencia de la marca.</p>
+
+      <h3><span class="hn">1.2</span>Elementos necesarios</h3>
+      <ul>
+        <li><b>Tu dirección de arte y moodboard maestro</b> (SOP 1.1): la fotografía de producto tiene que respetar los códigos visuales de tu marca (luz, color, actitud). Las fotos no inventan estética, ejecutan la que definiste.</li>
+        <li><b>Las muestras de producto finales</b> (las prendas reales aprobadas) bien planchadas y en perfecto estado; una prenda arrugada o con hilos arruina cualquier foto.</li>
+        <li><b>Equipo de fotografía:</b> desde un móvil moderno con buena luz hasta una cámara y estudio. Al empezar, un móvil + buena luz + fondo limpio consigue mucho (paso 2.4).</li>
+        <li><b>Buena luz:</b> la variable más importante. Luz natural de ventana (gratis y excelente) o iluminación de estudio. La luz define la calidad de la foto más que la cámara.</li>
+        <li><b>Fondos y superficie:</b> un fondo limpio (para flat lay y ghost) y, si haces on-model, una localización o set coherente con tu marca.</li>
+        <li><b>Modelo(s)</b> si haces on-model, y/o un <b>maniquí</b> si haces ghost.</li>
+        <li><b>Una herramienta de edición</b> para retoque y, sobre todo, corrección de color.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Principios no negociables</h3>
+      <ol>
+        <li><b>Las fotos SON el producto online.</b> El cliente decide por lo que ve. Trata la fotografía con esa importancia, no como un extra.</li>
+        <li><b>Informar Y seducir.</b> Necesitas las dos: fidelidad total al producto <em>y</em> deseo. Una sola no vende bien.</li>
+        <li><b>La fidelidad de color es sagrada.</b> Una foto con color falso genera decepción y devolución. El color debe ser el real.</li>
+        <li><b>La luz manda sobre la cámara.</b> Buena luz con móvil bate a mala luz con cámara cara. Prioriza la luz.</li>
+        <li><b>Coherencia con la dirección de arte.</b> Las fotos de producto son parte del universo visual de la marca. Deben sonar al mismo mundo (SOP 1.1).</li>
+        <li><b>Consistencia en todo el catálogo.</b> Todas las fotos del mismo tipo, con el mismo estilo, luz y tratamiento. La incoherencia se ve amateur.</li>
+        <li><b>Sistema reproducible, no golpes de suerte.</b> Define una «receta» de foto que puedas repetir siempre igual, así el catálogo es consistente y escalable.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De prendas sin foto a un catálogo que vende</h2>
+      <p>Ocho pasos: entender los tipos y planificar, dominar la luz y el color, montar el set según tu nivel, ejecutar cada tipo de foto, cuidar la coherencia con la marca, editar, y sistematizar.</p>
+
+      <h3><span class="hn">2.1</span>Entender los tipos de foto y planificar qué necesitas</h3>
+      <p>Antes de fotografiar nada, decide <strong>qué tipos de foto necesita cada prenda</strong>. No todas necesitan todo, pero una ficha que convierte suele combinar varios tipos, porque cada uno hace un trabajo distinto.</p>
+      <ol>
+        <li><b>Flat lay (prenda plana desde arriba):</b> muestra la prenda completa, limpia, con sus detalles y su forma real. Fácil, barata, rápida y muy fiel al producto. Ideal para la prenda entera y sus detalles, y como foto de catálogo limpia. Limitación: no muestra cómo cae en un cuerpo.</li>
+        <li><b>Ghost mannequin (cuerpo invisible):</b> la prenda con forma 3D pero sin modelo visible. Muestra el fit y la forma sin la distracción de un modelo, con un look de e-commerce limpio y profesional. Requiere un maniquí y algo de edición (paso 2.5).</li>
+        <li><b>On-model (con modelo real):</b> la prenda puesta en una persona. La que más vende: muestra cómo cae, cómo queda, cómo se ve puesta, y permite al cliente proyectarse («así me quedaría a mí»). También transmite el mundo y la actitud de la marca. Requiere modelo, set y dirección.</li>
+      </ol>
+      <p>Cómo planificar: para cada prenda, decide la combinación. Una ficha potente típica combina una o dos on-model (para vender y mostrar el fit) + flat lay o ghost (para mostrar la prenda limpia y sus detalles) + fotos de detalle (primeros planos de la tela, las costuras, los detalles de marca). La variedad de ángulos y tipos es lo que da al cliente la información completa que necesita para comprar sin tocar.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Para cada prenda, la lista de fotos que necesita (qué combinación de flat lay, ghost, on-model y detalle).</li>
+      </ul>
+
+      <h3><span class="hn">2.2</span>Dominar la luz (la variable más importante)</h3>
+      <p><strong>La luz es lo que más define la calidad de una foto de producto,</strong> más que la cámara. Una prenda con buena luz se ve premium; con mala luz, barata, aunque uses el mejor equipo. Domina esto antes que nada.</p>
+      <ol>
+        <li><b>Luz suave y difusa favorece la ropa:</b> la luz dura (sol directo, flash directo) crea sombras marcadas y brillos que distorsionan el color y la textura. La suave y difusa (día nublado, luz de ventana filtrada, softbox) muestra la prenda de forma fiel y favorecedora. Para producto, casi siempre quieres luz suave.</li>
+        <li><b>La luz natural de ventana es gratis y excelente:</b> al empezar no necesitas equipo caro. Una ventana grande con luz natural indirecta (sin sol directo entrando) da una luz preciosa para fotografiar ropa. Es como muchas marcas empiezan.</li>
+        <li><b>Luz consistente = catálogo consistente:</b> para que todas tus fotos parezcan de la misma marca, la luz tiene que ser la misma en todas. Si fotografías unas con luz de mañana y otras de tarde, el catálogo se ve incoherente. Fija tu setup de luz y repítelo.</li>
+        <li><b>La luz define el color:</b> una luz con dominante cálida o fría cambia cómo se ve el color de la prenda. Para fidelidad de color (paso siguiente), necesitas una luz neutra y consistente.</li>
+      </ol>
+      <p class="pull">Buena luz con móvil bate a mala luz con cámara profesional. Antes de invertir en equipo, domina la luz: es la palanca de calidad más barata y más potente que tienes.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Un setup de luz definido (natural de ventana o de estudio), suave, neutra y consistente, que repetirás en todo el catálogo.</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Conseguir fidelidad de color (crítico en moda)</h3>
+      <p>La <strong>fidelidad de color</strong> es innegociable en moda: el color de la foto tiene que ser el color real de la prenda. Un color falso es de las mayores causas de decepción y devolución — el cliente recibe algo distinto a lo que vio y devuelve.</p>
+      <ol>
+        <li><b>Luz neutra:</b> empieza por la luz (paso anterior). Una luz con dominante de color tiñe la prenda. Necesitas luz neutra y consistente para que el color se capture bien.</li>
+        <li><b>El balance de blancos correcto:</b> ajusta el balance de blancos de tu cámara/móvil para que los blancos salgan blancos y los colores, reales. Un balance mal ajustado da fotos con dominante azulada o anaranjada que falsea todos los colores.</li>
+        <li><b>Compara con la prenda real al editar:</b> el paso definitivo. Al editar, ten la prenda física delante y ajusta la foto hasta que el color en pantalla coincida con el real en tus manos. No te fíes solo de lo que «parece bien» en pantalla.</li>
+        <li><b>Consistencia con tu decisión de color de marca:</b> el color de la prenda viene de tu Pantone y tus lab dips (SOPs de color y muestreo). La foto debe reflejar ese color real, cerrando el círculo: del Pantone → a la tela → a la foto → a lo que ve el cliente → a lo que recibe.</li>
+      </ol>
+      <p class="pull">El color de la foto es el que el cliente espera recibir. Si no coinciden, hay decepción y devolución. La fidelidad de color no es un lujo estético, es prevención de devoluciones. Valídala con la prenda real siempre.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Un proceso de fidelidad de color (luz neutra + balance de blancos + comparación con la prenda real al editar) que garantiza que el color de la foto es el real.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Montar el set según tu nivel y ejecutar flat lay / ghost</h3>
+      <p>Ahora ejecutas las fotos «de producto limpio» —flat lay y ghost—, las más accesibles de hacer tú mismo y la base del catálogo. Este paso adapta el montaje a tus recursos.</p>
+      <p class="mini">Para flat lay (prenda plana)</p>
+      <ol>
+        <li><b>Prepara la prenda impecable:</b> planchada, sin arrugas, sin hilos, colocada con cuidado. Una arruga o un hilo suelto arruina la foto; la preparación es el 50% del resultado.</li>
+        <li><b>Fondo limpio y consistente:</b> una superficie lisa y neutra (según tu dirección de arte: blanco limpio, un tono que pegue con tu marca, una textura). El mismo fondo en todo el catálogo para consistencia.</li>
+        <li><b>Cámara desde arriba, luz suave:</b> fotografía perpendicular desde arriba, con tu luz suave y neutra. Coloca la prenda de forma limpia y natural.</li>
+        <li><b>Muestra los detalles:</b> además de la prenda entera, haz primeros planos de la tela, las costuras y los detalles de marca.</li>
+      </ol>
+      <p class="mini">Para ghost mannequin (cuerpo invisible)</p>
+      <ol>
+        <li><b>Viste un maniquí</b> con la prenda, bien colocada para que muestre su forma y fit reales.</li>
+        <li><b>Fotografía con tu luz y fondo consistentes.</b></li>
+        <li><b>Edita para «eliminar» el maniquí:</b> el efecto fantasma se logra combinando fotos (la prenda con maniquí + una foto del interior) y editando para que el maniquí desaparezca, dejando la prenda con forma 3D «invisible». Requiere algo de edición (o herramientas/servicios que lo hacen).</li>
+      </ol>
+      <p>La regla de montaje según tu nivel: empieza con lo que tienes. Un móvil + luz de ventana + fondo limpio + prenda impecable consigue flat lays perfectamente vendibles. No esperes a tener un estudio: el sistema y la consistencia importan más que el equipo caro.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Las fotos de flat lay (y ghost, si lo usas) ejecutadas con prenda impecable, fondo limpio y consistente, y luz suave, adaptadas a tu nivel de equipo.</li>
+      </ul>
+
+      <h3><span class="hn">2.5</span>Ejecutar las fotos on-model (las que más venden)</h3>
+      <p>Las fotos <strong>on-model</strong> (con persona real) son las que más venden, porque muestran cómo queda la prenda puesta y permiten al cliente proyectarse. Son más complejas de hacer, pero de altísimo impacto.</p>
+      <ol>
+        <li><b>Elige un modelo coherente con tu marca:</b> el modelo comunica a quién pertenece la prenda. Debe encajar con tu avatar y tu mundo. No tiene que ser profesional caro al empezar; alguien real que represente a tu tribu puede funcionar mejor y más auténtico. La coherencia importa más que la «perfección».</li>
+        <li><b>Muestra el fit y el movimiento:</b> la ventaja del on-model es enseñar cómo cae y queda la prenda. Haz fotos que muestren el fit desde varios ángulos (frente, espalda, lado), en poses naturales que enseñen cómo se lleva de verdad.</li>
+        <li><b>Dirige la actitud según tu marca:</b> la pose, la energía, la actitud del modelo transmiten el mundo de tu marca (los códigos de tu dirección de arte: ¿mira a cámara o no? ¿estático o en movimiento? ¿serio, casual, desafiante?). Aquí la foto de producto se cruza con la de campaña.</li>
+        <li><b>Localización o set coherente:</b> dónde ocurre la foto (estudio limpio, calle, interior) comunica el mundo de la marca. Coherente con tu dirección de arte.</li>
+      </ol>
+      <p class="pull">El equilibrio clave en on-model: mostrar la prenda con claridad Y transmitir el mundo de la marca. Una demasiado «de campaña» no muestra bien la prenda; una demasiado «de catálogo» no transmite marca. Busca fotos que hagan las dos cosas.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Las fotos on-model ejecutadas con modelo y actitud coherentes con la marca, mostrando el fit desde varios ángulos y transmitiendo el mundo de la marca.</li>
+      </ul>
+
+      <h3><span class="hn">2.6</span>Cuidar la coherencia con la dirección de arte</h3>
+      <p>Las fotos de producto son <strong>parte del universo visual de tu marca</strong>, no piezas sueltas. Este paso asegura que suenan al mismo mundo que todo lo demás, porque unas fotos que no encajan con tu dirección de arte rompen la coherencia de la marca.</p>
+      <ol>
+        <li><b>Aplica tus códigos visuales:</b> la luz, el color, la actitud, la composición que definiste en tu moodboard maestro (SOP 1.1) deben estar en tus fotos de producto. Si tu dirección de arte es «luz natural cruda y terrosa», tus fotos no pueden ser «estudio frío y pulido»: se contradicen.</li>
+        <li><b>Consistencia de estilo en todo el catálogo:</b> todas las fotos del mismo tipo, con el mismo tratamiento, luz, fondo y edición. Un catálogo donde cada foto tiene un estilo distinto se ve amateur. La consistencia es lo que hace que el catálogo se vea «de marca».</li>
+        <li><b>El test del logo tapado, aplicado a producto:</b> idealmente, alguien debería intuir que tus fotos de producto son de tu marca por su estilo, aunque no vea el logo. Ese es el nivel de coherencia al que aspiras (SOP 1.1).</li>
+        <li><b>Equilibra fidelidad y estilo:</b> la coherencia de marca no puede sacrificar la fidelidad del producto. Aplica tu estilo, pero sin falsear el color ni ocultar la prenda. Las dos cosas conviven: fotos fieles <em>y</em> con el sello de tu marca.</li>
+      </ol>
+      <p>La regla: tus fotos de producto son un punto de contacto de marca más. Tienen que sonar al mismo mundo que tu feed, tu web y tu identidad. La coherencia visual acumulada es lo que construye una marca reconocible.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Las fotos de producto alineadas con los códigos de tu dirección de arte y consistentes en estilo en todo el catálogo.</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Editar las fotos (retoque y color)</h3>
+      <p>La <strong>edición</strong> es donde las fotos pasan de «buenas» a «de venta». No se trata de falsear la prenda, sino de presentarla en su mejor versión real y garantizar la fidelidad. Este paso define un proceso de edición consistente.</p>
+      <ol>
+        <li><b>Corrección de color (lo más importante):</b> ajusta la foto hasta que el color coincida con el real de la prenda (comparando con la prenda física). Es la edición crítica en moda.</li>
+        <li><b>Limpieza:</b> quita distracciones, hilos sueltos que quedaron, motas de polvo, imperfecciones del fondo. Limpia sin alterar la prenda.</li>
+        <li><b>Ajustes de luz y contraste:</b> afina brillo, contraste y tono para que la prenda se vea nítida y favorecedora, dentro de tu estilo de marca.</li>
+        <li><b>Fondo consistente:</b> si usas fondo blanco/neutro de catálogo, asegura que es igual y limpio en todas. Para ghost, aquí se hace el efecto fantasma.</li>
+        <li><b>Un preset/estilo de edición consistente:</b> define un tratamiento («tu look») y aplícalo igual a todo el catálogo. Garantiza consistencia y acelera el trabajo: editas todas las fotos con la misma receta.</li>
+      </ol>
+      <p class="pull">La línea roja: edita para presentar la realidad en su mejor versión, no para falsearla. Retocar el color hasta que sea fiel, quitar un hilo, ajustar la luz: correcto. Cambiar el color real, ocultar defectos, hacer que parezca lo que no es: genera devoluciones y destruye confianza.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Las fotos editadas con un proceso consistente (color fiel, limpieza, ajustes, fondo, preset de marca), presentando la prenda real en su mejor versión sin falsearla.</li>
+      </ul>
+
+      <h3><span class="hn">2.8</span>Sistematizar la producción de fotos</h3>
+      <p>El último paso convierte todo en un <strong>sistema reproducible</strong>, para que cada nueva prenda y colección se fotografíe rápido, consistente y sin reinventar el proceso cada vez. Esto es lo que hace la fotografía escalable y coherente.</p>
+      <ol>
+        <li><b>Define tu «receta de foto» por tipo:</b> documenta el setup exacto (luz, fondo, ángulo, distancia, ajustes, edición) para cada tipo (flat lay, ghost, on-model). Una receta escrita te permite repetir el mismo resultado siempre, aunque lo haga otra persona.</li>
+        <li><b>Crea una checklist de sesión:</b> qué fotos necesita cada prenda, en qué orden, con qué preparación (prenda planchada, etc.). Fotografiar por lotes con checklist es mucho más eficiente que ir prenda a prenda improvisando.</li>
+        <li><b>Organiza y nombra los archivos:</b> un sistema para guardar y nombrar las fotos (por prenda/SKU) para encontrarlas y subirlas a la tienda fácil. Conecta con tu catálogo (SOP de tienda).</li>
+        <li><b>Decide qué haces tú y qué delegas:</b> con el sistema definido, puedes hacer tú las fotos de catálogo (flat lay, ghost) de forma reproducible y delegar/contratar las de campaña (on-model complejas) cuando haga falta.</li>
+      </ol>
+      <p class="pull">La fotografía de producto es un proceso repetible, no un evento creativo cada vez. Una receta reproducible te da un catálogo consistente, te ahorra tiempo en cada colección, y te permite escalar y delegar. Los golpes de suerte no construyen un catálogo; el sistema sí.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El sistema de fotografía documentado (recetas por tipo, checklist de sesión, organización de archivos, qué delegar), reproducible y consistente para todo el catálogo.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des la fotografía de producto por cerrada hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre la planificación y los tipos</p>
+      <ul class="check">
+        <li>Entiendo los tres tipos de foto (flat lay, ghost, on-model) y su función.</li>
+        <li>He decidido la combinación de fotos que necesita cada prenda, incluyendo fotos de detalle.</li>
+      </ul>
+
+      <p class="mini">Sobre la luz y el color</p>
+      <ul class="check">
+        <li>Tengo un setup de luz suave, neutra y consistente para todo el catálogo.</li>
+        <li>Sé que la buena luz importa más que la cámara cara.</li>
+        <li>Aseguro la fidelidad de color (luz neutra + balance de blancos + comparación con la prenda real).</li>
+        <li>El color de mis fotos es el real de la prenda, para no generar devoluciones.</li>
+      </ul>
+
+      <p class="mini">Sobre la ejecución</p>
+      <ul class="check">
+        <li>Preparo cada prenda impecable (planchada, sin hilos) antes de fotografiar.</li>
+        <li>Hago flat lay/ghost con fondo limpio y consistente, adaptado a mi nivel de equipo.</li>
+        <li>Hago on-model mostrando el fit desde varios ángulos y con modelo/actitud coherentes con mi marca.</li>
+        <li>Mis on-model muestran la prenda con claridad Y transmiten el mundo de la marca.</li>
+      </ul>
+
+      <p class="mini">Sobre la coherencia y el sistema</p>
+      <ul class="check">
+        <li>Mis fotos aplican los códigos de mi dirección de arte y son consistentes en estilo.</li>
+        <li>Edito con un proceso consistente (color fiel, limpieza, preset) sin falsear la prenda.</li>
+        <li>Tengo una «receta de foto» documentada por tipo, reproducible y delegable.</li>
+        <li>Tengo un sistema de organización de archivos conectado con mi catálogo.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 6.2 · Fotografía de producto (flat lay, ghost, on-model) · v1.0 · Fase 6</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

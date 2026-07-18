@@ -1367,6 +1367,45 @@
   .ck-row.is-disabled:hover { background: var(--surface); border-color: var(--border); }
   .ck-row.is-disabled .ck-row-trailing { display: none; }
 
+  /* Recursos: subsection header inside a module folder
+     ("Fase 3 · Materiales, telas y sourcing"). Sits in the same flex
+     column as the rows, so it carries its own vertical rhythm. */
+  .sop-sec {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 18px 0 6px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+  .sop-sec:first-child { margin-top: 4px; }
+  .sop-sec::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  /* Recursos: Fase tag pill on a document row */
+  .ck-row-tag {
+    flex: 0 0 auto;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.05);
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--text-tertiary);
+    white-space: nowrap;
+  }
+  @media (max-width: 560px) {
+    /* The section header already states the Fase — drop the pill so long
+       titles keep the full width on narrow screens. */
+    .ck-row-tag { display: none; }
+  }
+
   /* Type: Checklist (checkbox) */
   .ck-row.ck-check .ck-row-icon {
     color: transparent;
@@ -21426,24 +21465,88 @@
   // modules). Each folder holds that module's SOPs and documents.
   const SOPS = CHECKLISTS.map(c => ({ id: c.id, name: c.name }));
 
-  // Per-module SOP list. Each item: { title, url }. Folders fill up as the
-  // client provides the actual documents for each module.
+  // Per-module SOP list. Two item shapes:
+  //   { type: 'section', title }  → uppercase divider grouping the docs that
+  //                                 follow by Fase. Not counted as a document.
+  //   { title, url, [tag] }       → document row; tag renders as a pill.
+  // The SOPs are authored in 11 Fases but Recursos is organised by the 9
+  // checklist modules, so a module can hold more than one Fase (and a Fase
+  // can split across modules — e.g. Fase 10 lands where the student would
+  // look for each topic). The section headers keep that legible.
   const SOP_CONTENT = {
-    'onboarding':         [],
-    'empieza-tu-imperio': [
-      { title: 'SOP 0.1 · Concepto y propósito',        url: 'recursos/empieza-tu-imperio/0.1-concepto-y-proposito.html' },
-      { title: 'SOP 0.2 · Investigación y validación',  url: 'recursos/empieza-tu-imperio/0.2-investigacion-y-validacion.html' },
-      { title: 'SOP 0.3 · Avatar / cliente ideal',      url: 'recursos/empieza-tu-imperio/0.3-avatar-cliente-ideal.html' },
-      { title: 'SOP 0.4 · Ángulo y posicionamiento',    url: 'recursos/empieza-tu-imperio/0.4-angulo-y-posicionamiento.html' },
-      { title: 'SOP 0.5 · Naming',                      url: 'recursos/empieza-tu-imperio/0.5-naming.html' },
+    'onboarding': [
+      { type: 'section', title: 'Fase 11 · Equipo, delegación y sistemas' },
+      { title: 'SOP 11.1 · Cuándo y a quién contratar',        url: 'recursos/onboarding/11.1-a-quien-contratar.html',        tag: 'Fase 11' },
+      { title: 'SOP 11.2 · Onboarding de nuevos miembros',     url: 'recursos/onboarding/11.2-onboarding.html',               tag: 'Fase 11' },
+      { title: 'SOP 11.3 · Delegación y gestión de freelancers', url: 'recursos/onboarding/11.3-delegacion-y-freelancers.html', tag: 'Fase 11' },
     ],
-    'disena-tus-prendas': [],
-    'comunidad':          [],
-    'contenido-outlier':  [],
-    'eleva-tu-branding':  [],
-    'web':                [],
-    'lanzamiento':        [],
-    'shipping':           [],
+    'empieza-tu-imperio': [
+      { type: 'section', title: 'Fase 0 · Fundamentos y estrategia de marca' },
+      { title: 'SOP 0.1 · Concepto y propósito',        url: 'recursos/empieza-tu-imperio/0.1-concepto-y-proposito.html',      tag: 'Fase 0' },
+      { title: 'SOP 0.2 · Investigación y validación',  url: 'recursos/empieza-tu-imperio/0.2-investigacion-y-validacion.html', tag: 'Fase 0' },
+      { title: 'SOP 0.3 · Avatar / cliente ideal',      url: 'recursos/empieza-tu-imperio/0.3-avatar-cliente-ideal.html',      tag: 'Fase 0' },
+      { title: 'SOP 0.4 · Ángulo y posicionamiento',    url: 'recursos/empieza-tu-imperio/0.4-angulo-y-posicionamiento.html',  tag: 'Fase 0' },
+      { title: 'SOP 0.5 · Naming',                      url: 'recursos/empieza-tu-imperio/0.5-naming.html',                    tag: 'Fase 0' },
+    ],
+    'disena-tus-prendas': [
+      { type: 'section', title: 'Fase 2 · Diseño y proceso creativo' },
+      { title: 'SOP 2.1 · Moodboards por colección',    url: 'recursos/disena-tus-prendas/2.1-moodboards-por-coleccion.html',  tag: 'Fase 2' },
+      { title: 'SOP 2.2 · Investigación de tendencias', url: 'recursos/disena-tus-prendas/2.2-investigacion-de-tendencias.html', tag: 'Fase 2' },
+      { title: 'SOP 2.3 · Bocetado y diseño de prendas', url: 'recursos/disena-tus-prendas/2.3-bocetado-y-diseno.html',        tag: 'Fase 2' },
+      { title: 'SOP 2.4 · Tech packs / fichas técnicas', url: 'recursos/disena-tus-prendas/2.4-tech-packs.html',               tag: 'Fase 2' },
+      { title: 'SOP 2.5 · Arquitectura de colección',   url: 'recursos/disena-tus-prendas/2.5-arquitectura-de-coleccion.html', tag: 'Fase 2' },
+      { type: 'section', title: 'Fase 3 · Materiales, telas y sourcing' },
+      { title: 'SOP 3.1 · Guía de tejidos y materiales', url: 'recursos/disena-tus-prendas/3.1-guia-de-tejidos.html',          tag: 'Fase 3' },
+      { title: 'SOP 3.2 · Sourcing de telas',           url: 'recursos/disena-tus-prendas/3.2-sourcing-de-telas.html',         tag: 'Fase 3' },
+      { title: 'SOP 3.3 · Relación con proveedores',    url: 'recursos/disena-tus-prendas/3.3-relacion-con-proveedores.html',  tag: 'Fase 3' },
+      { type: 'section', title: 'Fase 4 · Muestreo y desarrollo de producto' },
+      { title: 'SOP 4.1 · Patronaje y escalado de tallas', url: 'recursos/disena-tus-prendas/4.1-patronaje-y-escalado.html',   tag: 'Fase 4' },
+      { title: 'SOP 4.2 · Gestión de muestras',         url: 'recursos/disena-tus-prendas/4.2-gestion-de-muestras.html',       tag: 'Fase 4' },
+      { title: 'SOP 4.3 · Costeo de producto y margen', url: 'recursos/disena-tus-prendas/4.3-costeo-de-producto.html',        tag: 'Fase 4' },
+    ],
+    'comunidad': [
+      { type: 'section', title: 'Fase 7 · Contenido, RRSS y dirección de arte' },
+      { title: 'SOP 7.3 · Gestión de comunidad y movimiento', url: 'recursos/comunidad/7.3-gestion-de-comunidad.html',         tag: 'Fase 7' },
+      { type: 'section', title: 'Fase 10 · Ventas y comercial' },
+      { title: 'SOP 10.3 · Programa de fidelización',   url: 'recursos/comunidad/10.3-fidelizacion.html',                      tag: 'Fase 10' },
+    ],
+    'contenido-outlier': [
+      { type: 'section', title: 'Fase 7 · Contenido, RRSS y dirección de arte' },
+      { title: 'SOP 7.1 · Estrategia de contenido y pilares', url: 'recursos/contenido-outlier/7.1-estrategia-de-contenido.html', tag: 'Fase 7' },
+      { title: 'SOP 7.2 · Producción de reels (IG / TikTok)', url: 'recursos/contenido-outlier/7.2-produccion-de-reels.html',  tag: 'Fase 7' },
+    ],
+    'eleva-tu-branding': [
+      { type: 'section', title: 'Fase 1 · Identidad visual y branding' },
+      { title: 'SOP 1.1 · Dirección de arte y universo visual', url: 'recursos/eleva-tu-branding/1.1-direccion-de-arte.html',  tag: 'Fase 1' },
+      { title: 'SOP 1.2 · Logotipo e isotipo',          url: 'recursos/eleva-tu-branding/1.2-logotipo-e-isotipo.html',         tag: 'Fase 1' },
+      { title: 'SOP 1.3 · Tipografías y jerarquía',     url: 'recursos/eleva-tu-branding/1.3-tipografias-y-jerarquia.html',    tag: 'Fase 1' },
+      { title: 'SOP 1.4 · Etiquetas, hangtags y labels', url: 'recursos/eleva-tu-branding/1.4-etiquetas-y-hangtags.html',      tag: 'Fase 1' },
+      { title: 'SOP 1.5 · Brand Book / manual de marca', url: 'recursos/eleva-tu-branding/1.5-brand-book.html',                tag: 'Fase 1' },
+    ],
+    'web': [
+      { type: 'section', title: 'Fase 6 · E-commerce y tienda online' },
+      { title: 'SOP 6.1 · Montaje de la tienda (Shopify)', url: 'recursos/web/6.1-tienda-shopify.html',                        tag: 'Fase 6' },
+      { title: 'SOP 6.2 · Fotografía de producto',      url: 'recursos/web/6.2-fotografia-de-producto.html',                   tag: 'Fase 6' },
+      { title: 'SOP 6.3 · Copywriting de fichas',       url: 'recursos/web/6.3-copywriting-de-fichas.html',                    tag: 'Fase 6' },
+      { title: 'SOP 6.4 · Flujos de email automatizados', url: 'recursos/web/6.4-flujos-de-email.html',                        tag: 'Fase 6' },
+    ],
+    'lanzamiento': [
+      { type: 'section', title: 'Fase 9 · Lanzamiento, drops y marketing' },
+      { title: 'SOP 9.1 · Estrategia de lanzamiento / drop', url: 'recursos/lanzamiento/9.1-estrategia-de-lanzamiento.html',   tag: 'Fase 9' },
+      { title: 'SOP 9.2 · Hype y waitlist previa',      url: 'recursos/lanzamiento/9.2-hype-y-waitlist.html',                  tag: 'Fase 9' },
+      { title: 'SOP 9.3 · Email y SMS para el lanzamiento', url: 'recursos/lanzamiento/9.3-email-sms-lanzamiento.html',        tag: 'Fase 9' },
+      { title: 'SOP 9.4 · Colaboraciones y colabs',     url: 'recursos/lanzamiento/9.4-colaboraciones.html',                   tag: 'Fase 9' },
+      { type: 'section', title: 'Fase 10 · Ventas y comercial' },
+      { title: 'SOP 10.1 · Estrategia de precios y márgenes', url: 'recursos/lanzamiento/10.1-estrategia-de-precios.html',     tag: 'Fase 10' },
+    ],
+    'shipping': [
+      { type: 'section', title: 'Fase 5 · Operaciones, inventario y fulfillment' },
+      { title: 'SOP 5.1 · Gestión de inventario y stock', url: 'recursos/shipping/5.1-gestion-de-inventario.html',             tag: 'Fase 5' },
+      { title: 'SOP 5.2 · Preparación de pedidos (fulfillment)', url: 'recursos/shipping/5.2-fulfillment.html',                tag: 'Fase 5' },
+      { title: 'SOP 5.3 · Devoluciones y cambios',      url: 'recursos/shipping/5.3-devoluciones-y-cambios.html',              tag: 'Fase 5' },
+      { type: 'section', title: 'Fase 10 · Ventas y comercial' },
+      { title: 'SOP 10.2 · Atención al cliente y postventa', url: 'recursos/shipping/10.2-atencion-al-cliente.html',           tag: 'Fase 10' },
+    ],
   };
 
   // Espresso-style document icon for resource cards.
@@ -21451,6 +21554,12 @@
   const ICON_OPEN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
 
   let _sopsQuery = '';
+
+  // Only real documents count toward the folder's "N documentos" label —
+  // 'section' items are dividers, not resources.
+  function sopDocCount(id) {
+    return (SOP_CONTENT[id] || []).filter(i => i.type !== 'section').length;
+  }
 
   function renderSopsGrid() {
     const grid = document.getElementById('sopsGrid');
@@ -21462,7 +21571,7 @@
       return;
     }
     grid.innerHTML = list.map((s, i) => {
-      const count = (SOP_CONTENT[s.id] || []).length;
+      const count = sopDocCount(s.id);
       const countLabel = count === 1 ? '1 documento' : count + ' documentos';
       const badgeHtml = s.badge ? '<span class="res-card-badge">' + escapeHtml(s.badge) + '</span>' : '';
       return ''
@@ -21483,7 +21592,7 @@
     const s = SOPS.find(x => x.id === id);
     if (!s) return;
     const items = SOP_CONTENT[id] || [];
-    const count = items.length;
+    const count = sopDocCount(id);
 
     document.getElementById('sopsListView').style.display = 'none';
     document.getElementById('sopsDetail').style.display = 'block';
@@ -21497,14 +21606,21 @@
       return;
     }
     container.innerHTML = items.map(item => {
+      if (item.type === 'section') {
+        return '<div class="sop-sec">' + escapeHtml(item.title) + '</div>';
+      }
       const safeTitle = escapeHtml(item.title);
       const hasUrl = !!item.url;
+      const tagHtml = item.tag
+        ? '<span class="ck-row-tag">' + escapeHtml(item.tag) + '</span>'
+        : '';
       return ''
         + '<' + (hasUrl ? 'a' : 'div') + ' class="ck-row ck-notion' + (hasUrl ? '' : ' is-disabled') + '"'
         +   (hasUrl ? ' href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener noreferrer"' : '')
         +   '>'
         +   '<span class="ck-row-icon">' + ICON_NOTION + '</span>'
         +   '<span class="ck-row-title">' + safeTitle + '</span>'
+        +   tagHtml
         +   '<span class="ck-row-trailing">' + ICON_ARROW + '</span>'
         + '</' + (hasUrl ? 'a' : 'div') + '>';
     }).join('');

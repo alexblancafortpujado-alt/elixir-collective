@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 7.3 — Gestión de comunidad y construcción de movimiento alrededor de la marca</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 7 · Contenido, RRSS y Dirección de Arte</p>
+    <h1 class="rv">Comunidad y movimiento</h1>
+    <p class="meta rv">SOP 7.3 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; De seguidores que pasan a fans que pertenecen</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que conviertas a tu audiencia en una <strong>comunidad real, incluso en un movimiento</strong>: gente que no solo te sigue, sino que pertenece, se identifica, defiende la marca y compra de forma recurrente. El contenido atrae a la gente; <span class="hl">la comunidad es lo que la convierte en fans que se quedan</span>.
+    </p>
+    <p>La idea que separa a las marcas que perduran de las que son una moda pasajera: <strong>la gente no se hace fan de una marca de ropa por la ropa, se hace fan por lo que representa y por sentir que pertenece a algo.</strong> La ropa es el símbolo; la comunidad es lo que le da significado.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 8 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que conviertas a tu audiencia en una comunidad real, incluso en un movimiento: gente que no solo te sigue, sino que pertenece, se identifica, defiende la marca y compra de forma recurrente. El contenido atrae a la gente; la comunidad es lo que la convierte en fans que se quedan. Es la diferencia entre tener seguidores y tener una tribu.</p>
+      <p>La idea que ordena todo: la gente no se hace fan de una marca de ropa por la ropa, se hace fan por lo que la marca representa y por sentir que pertenece a algo. Las marcas de moda más fuertes no venden prendas, venden pertenencia, identidad, un movimiento al que unirse. La ropa es el símbolo; <span class="gold">la comunidad es lo que le da significado</span>.</p>
+      <p>Hay tres niveles, de menor a mayor valor: <strong>audiencia</strong> (gente que te ve, números sin vínculo), <strong>comunidad</strong> (gente que se siente parte, interactúa y se identifica) y <strong>movimiento</strong> (gente que cree en algo tan fuerte que lo defiende y lo hace suyo). El objetivo de este SOP es subir a tu gente por estos niveles: de audiencia a comunidad, y de comunidad a movimiento. Y una comunidad se construye a propósito —con pertenencia, identidad compartida, participación y rituales—, no aparece sola por tener seguidores.</p>
+      <p class="pull">Lo que pasa si no la construyes: tienes seguidores que miran y pasan, sin vínculo ni lealtad, que se van a la siguiente marca que les llame la atención. Dependes de captar constantemente gente nueva (caro) en vez de tener una base fiel que crece sola. Sin comunidad, tu marca es una moda pasajera; con comunidad, es un movimiento que perdura.</p>
+
+      <h3><span class="hn">1.2</span>Insumos necesarios</h3>
+      <ul>
+        <li><b>Tu concepto, mundo y enemigo:</b> la comunidad se construye alrededor de una idea. Tu concepto y tu punto de vista son la causa que une a la tribu.</li>
+        <li><b>Tu avatar:</b> quién es tu tribu, qué le une, con qué se identifica, qué la hace sentir parte. La comunidad son muchas versiones de tu avatar.</li>
+        <li><b>Tu contenido y tus canales:</b> el contenido es donde vive y se alimenta la comunidad.</li>
+        <li><b>Un espacio o espacios donde la comunidad interactúa:</b> tus redes (comentarios, DMs), y potencialmente un espacio más profundo (un grupo, un Discord, un canal) si tu marca lo pide.</li>
+        <li><b>Tiempo y presencia:</b> la comunidad se construye con interacción real y constante, no automatizable del todo. Requiere presencia humana.</li>
+        <li><b>Tu identidad de marca</b> (nombre, códigos, símbolos): la materia prima de la pertenencia, los símbolos que identifican a los tuyos.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Principios no negociables</h3>
+      <ol>
+        <li><b>La gente se une por pertenencia, no por producto.</b> Vendes pertenencia e identidad, y la ropa es el símbolo. Construye la pertenencia, no solo el producto.</li>
+        <li><b>Comunidad se construye a propósito.</b> No aparece por tener seguidores. Se construye deliberadamente con identidad, participación y rituales.</li>
+        <li><b>De audiencia a comunidad a movimiento.</b> El objetivo es subir a tu gente de nivel. Cuanto más arriba, más valor y más lealtad.</li>
+        <li><b>Una comunidad necesita una causa.</b> La gente se une a algo en lo que cree. Tu concepto y tu punto de vista son esa causa. Sin causa, hay audiencia pero no movimiento.</li>
+        <li><b>Haz participar, no solo consumir.</b> La comunidad se activa cuando la gente participa y se siente parte activa, no espectadora pasiva.</li>
+        <li><b>Presencia humana real.</b> La comunidad se construye con interacción genuina y constante, no se automatiza. Requiere tu presencia y cuidado.</li>
+        <li><b>La comunidad es a largo plazo.</b> No se construye en una campaña, se construye con constancia durante mucho tiempo. Es una inversión que compone.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De audiencia pasiva a un movimiento que crece solo</h2>
+      <p>Ocho pasos: entender los niveles, definir la causa que une, dar una identidad compartida, activar la participación, crear rituales y símbolos, gestionar la interacción, elevar a los fans, y decidir un espacio propio.</p>
+
+      <h3><span class="hn">2.1</span>Entender los niveles: de audiencia a movimiento</h3>
+      <p>Antes de construir, entiende <strong>hacia dónde quieres subir a tu gente</strong>, porque cada nivel se construye distinto. El objetivo es mover a las personas de audiencia a comunidad a movimiento.</p>
+      <p>Los tres niveles y cómo se suben:</p>
+      <ol>
+        <li><b>Audiencia (te ven):</b> la base. Gente que consume tu contenido pero sin vínculo. Se gana con contenido. Es necesaria pero no suficiente: una audiencia sin comunidad es frágil.</li>
+        <li><b>Comunidad (se sienten parte):</b> el salto ocurre cuando la gente pasa de consumir a participar y sentirse parte. Se sube dándoles identidad, haciéndolos interactuar, y creando pertenencia. Aquí empieza el vínculo real.</li>
+        <li><b>Movimiento (creen en algo):</b> el salto ocurre cuando la marca representa una causa con la que la gente se identifica tan fuerte que la hace suya. Se sube teniendo un punto de vista claro y una causa (tu concepto, tu enemigo) que la gente adopta como propia. Aquí la marca deja de ser tuya y se vuelve de ellos.</li>
+      </ol>
+      <p>La clave: cada nivel requiere lo del anterior, más algo nuevo. No hay movimiento sin comunidad, ni comunidad sin audiencia. Construyes de abajo arriba, y saber en qué nivel está tu gente te dice qué construir a continuación.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Entendidos los tres niveles (audiencia, comunidad, movimiento) y claro que el objetivo es subir a tu gente de nivel, de abajo arriba.</li>
+      </ul>
+
+      <h3><span class="hn">2.2</span>Definir la causa que une a la comunidad</h3>
+      <p>Una comunidad, y sobre todo un movimiento, se une alrededor de <strong>una causa, una idea, un punto de vista compartido.</strong> Este paso define esa causa, que es el pegamento de tu tribu. Sin una causa, tienes gente que compra tu ropa pero no un movimiento que cree en algo.</p>
+      <p>Cómo definir la causa:</p>
+      <ol>
+        <li><b>Vuelve a tu concepto y tu enemigo:</b> tu causa nace de aquí. ¿Qué representa tu marca más allá de la ropa? ¿Contra qué está? ¿Qué forma de vivir, qué actitud, qué idea defiende? La gente no se une a «una marca de ropa», se une a «los que creen en X» o «los que están contra Y».</li>
+        <li><b>La causa da identidad a la tribu:</b> cuando tu marca representa algo, unirse a ella significa algo. Llevar tu ropa se convierte en una declaración de que compartes esa causa. Eso convierte a un comprador en un miembro de un movimiento.</li>
+        <li><b>La causa tiene que ser real y específica:</b> una causa genérica («ser tu mejor versión») no une a nadie porque no excluye a nadie. Una específica y con punto de vista (que conecta con la tensión de identidad de tu avatar y con tu enemigo) crea pertenencia real.</li>
+        <li><b>La causa hace un movimiento posible:</b> sin causa, puedes tener una comunidad agradable, pero no un movimiento. El movimiento nace cuando la gente cree en la idea tan fuerte que la defiende y la difunde como propia.</li>
+      </ol>
+      <p class="pull">Una comunidad se une por lo que cree, no por lo que compra. Tu causa, tu punto de vista, tu enemigo, es lo que da a la gente algo con lo que identificarse y a lo que pertenecer. La ropa es el símbolo de esa pertenencia.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La causa que une a tu comunidad definida (tu punto de vista, tu enemigo, lo que representas más allá de la ropa), real y específica.</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Dar a la tribu una identidad compartida</h3>
+      <p>Una comunidad fuerte tiene una <strong>identidad compartida</strong>: sus miembros saben que son parte de un «nosotros» y tienen una forma de reconocerse. Este paso le da a tu tribu esa identidad, que es lo que convierte a individuos sueltos en un grupo con sentido de pertenencia.</p>
+      <p>Cómo dar identidad compartida:</p>
+      <ol>
+        <li><b>Un «nosotros» claro:</b> define quiénes son los tuyos. La gente que forma tu comunidad comparte algo (la causa, la actitud, la identidad del avatar). Hacer explícito ese «nosotros» («los que...», «gente que...») da a la gente un grupo al que pertenecer.</li>
+        <li><b>Un nombre para la tribu (si encaja):</b> muchas marcas dan un nombre a su comunidad, una forma de llamar a «los suyos». Un nombre convierte a seguidores dispersos en un grupo con identidad. No es obligatorio, pero es potente si encaja con tu marca.</li>
+        <li><b>Un lenguaje compartido:</b> las comunidades tienen su forma de hablar, sus palabras internas, sus referencias que solo los de dentro captan. Ese lenguaje refuerza la pertenencia: hablar como la tribu es ser de la tribu.</li>
+        <li><b>La identidad conecta con quién quieren ser:</b> debe conectar con la tensión de identidad de tu avatar (quién quiere ser). Pertenecer a tu comunidad ayuda a la persona a ser la versión de sí misma que aspira a ser. Esa es la fuerza de la pertenencia.</li>
+      </ol>
+      <p>La regla: <strong>dale a la gente un «nosotros» con el que identificarse.</strong> Una comunidad no es una suma de individuos, es un grupo con identidad compartida: un «nosotros» claro, un lenguaje propio, y una identidad que conecta con quién quieren ser.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La identidad compartida de tu comunidad definida (el «nosotros», un nombre de tribu si encaja, el lenguaje compartido), conectada con la identidad aspiracional del avatar.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Activar la participación (de espectador a parte activa)</h3>
+      <p>Una comunidad se activa cuando la gente <strong>participa</strong>, cuando pasa de espectadora pasiva a parte activa. Este paso convierte a los que solo miran en los que interactúan, contribuyen y se sienten parte. La participación es lo que da vida a la comunidad.</p>
+      <p>Cómo activar la participación:</p>
+      <ol>
+        <li><b>Invita a interactuar, no solo a consumir:</b> haz preguntas, pide opiniones, crea contenido que invite a responder. Una comunidad donde la gente comenta y aporta está viva; una donde solo consume, es audiencia pasiva.</li>
+        <li><b>Da a la gente un papel:</b> haz que la comunidad participe en la marca, pidiendo su opinión en decisiones (qué producto sacar, qué color), destacando a sus miembros. Cuando la gente siente que su voz cuenta, se convierte en parte, no en espectadora.</li>
+        <li><b>Fomenta el contenido de la comunidad (UGC):</b> anima a la gente a crear y compartir contenido con tu marca (fotos con la ropa, sus looks). El UGC es doblemente valioso: activa a quien lo crea y es prueba social para los demás. Muéstralo, celébralo, hazlo parte de tu marca.</li>
+        <li><b>Crea conversación entre los miembros, no solo contigo:</b> una comunidad madura es cuando sus miembros interactúan entre sí. Facilitar que se conozcan y hablen (en comentarios, en un espacio propio) crea vínculos que hacen la comunidad más fuerte y menos dependiente de ti.</li>
+      </ol>
+      <p class="pull">La participación convierte audiencia en comunidad. El momento en que alguien pasa de mirar a participar es el momento en que se convierte en parte de la comunidad.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Un sistema de activación de la participación (invitar a interactuar, dar papeles, fomentar UGC, crear conversación entre miembros) que convierte espectadores en parte activa.</li>
+      </ul>
+
+      <h3><span class="hn">2.5</span>Crear rituales y símbolos de pertenencia</h3>
+      <p>Las comunidades y los movimientos fuertes tienen <strong>rituales y símbolos</strong>: elementos recurrentes y reconocibles que refuerzan la pertenencia y hacen tangible el «ser parte». Este paso crea esos elementos, que son lo que solidifica una comunidad y la hace sentir real.</p>
+      <p>Los elementos de pertenencia:</p>
+      <ol>
+        <li><b>Símbolos (lo que identifica a los tuyos):</b> en moda esto es especialmente potente, tu ropa es literalmente un símbolo de pertenencia. Los códigos de tu marca (un color, un símbolo, una frase, un detalle) se convierten en señales que los de dentro reconocen. Diseña tu marca para que llevarla signifique pertenecer.</li>
+        <li><b>Rituales (lo que hacemos juntos):</b> momentos o acciones recurrentes que la comunidad comparte. Los drops (un momento que la comunidad espera y vive junta), un tipo de contenido recurrente, una forma de celebrar a los miembros, tradiciones de la marca. Los rituales dan ritmo y momentos compartidos.</li>
+        <li><b>Los drops como ritual (muy potente en moda):</b> los lanzamientos, bien construidos, son un ritual de comunidad, un momento que la tribu espera, vive y comparte junta. Convierte tus drops en eventos de comunidad, no solo en ventas.</li>
+        <li><b>Momentos de reconocimiento:</b> rituales donde celebras a tu comunidad, destacas a miembros, reconoces a los fans. Hacer sentir vistos y valorados a los miembros refuerza enormemente la pertenencia.</li>
+      </ol>
+      <p class="pull">En moda tienes una ventaja enorme: tu producto ya es un símbolo de pertenencia. Los símbolos que identifican a los tuyos y los rituales que os unen convierten una idea abstracta de comunidad en algo que la gente vive, muestra y comparte.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Los rituales y símbolos de pertenencia de tu comunidad definidos (símbolos que identifican a los tuyos, rituales que os unen, drops como evento, momentos de reconocimiento).</li>
+      </ul>
+
+      <h3><span class="hn">2.6</span>Gestionar la interacción con presencia real</h3>
+      <p>Una comunidad se construye y se mantiene con <strong>interacción genuina y constante.</strong> Este paso trata de la presencia humana real —responder, interactuar, cuidar—, que es lo que hace que una comunidad se sienta viva y valorada. No se puede automatizar del todo: requiere tu presencia.</p>
+      <p>Cómo gestionar la interacción:</p>
+      <ol>
+        <li><b>Responde e interactúa de verdad:</b> contesta comentarios, mensajes, participa en las conversaciones. Cuando la gente ve que hay una persona real detrás que responde y le importa, el vínculo se fortalece.</li>
+        <li><b>Sé accesible y humano:</b> una marca con cara, un fundador presente, un tono humano, genera muchísima más comunidad que una marca anónima y distante. La gente se conecta con personas, no con logos. En moda pequeña, tu presencia como fundador es un activo enorme.</li>
+        <li><b>Cuida a tu comunidad, especialmente al principio:</b> cuando la comunidad es pequeña, cada miembro cuenta muchísimo. Cuidar bien a tus primeros fans (responderles, reconocerlos, hacerlos sentir especiales) crea a los defensores más leales. Los primeros miembros bien cuidados son la semilla del movimiento.</li>
+        <li><b>Gestiona con constancia, no a ratos:</b> la comunidad requiere presencia constante, no atención esporádica. Un ritmo constante de interacción la mantiene viva; el silencio la enfría. Haz de la interacción un hábito, no una tarea ocasional.</li>
+      </ol>
+      <p class="pull">La comunidad se construye con presencia humana real y constante. No hay atajo ni automatización que sustituya la interacción genuina. Especialmente al principio, cada interacción cuenta.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Una práctica de gestión de comunidad con presencia real y constante (responder e interactuar de verdad, ser accesible y humano, cuidar a los primeros fans, constancia).</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Elevar a los fans y activar la difusión</h3>
+      <p>Dentro de tu comunidad hay <strong>fans especialmente leales</strong>, y elevarlos convierte a la comunidad en un motor de crecimiento. Este paso trata de reconocer, elevar y activar a tus mayores fans, que son los que difunden la marca y traen a más gente. Es cómo la comunidad empieza a crecer sola.</p>
+      <p>Cómo elevar y activar a los fans:</p>
+      <ol>
+        <li><b>Identifica y reconoce a tus mayores fans:</b> dentro de tu comunidad, algunos son especialmente leales, interactúan más, compran todo, te defienden. Identifícalos, destácalos, dales un papel. Los fans reconocidos se vuelven aún más leales y activos.</li>
+        <li><b>Convierte a los fans en embajadores:</b> tus mayores fans son tus mejores difusores. Facilita y celebra que hablen de la marca y la recomienden. Un fan que trae a un amigo vale más que cualquier anuncio, porque viene con confianza.</li>
+        <li><b>La comunidad trae comunidad:</b> cuando está bien construida y activada, empieza a crecer sola, los miembros traen a más miembros. Este crecimiento orgánico es el más valioso y barato que existe, y es fruto de una comunidad cuidada.</li>
+        <li><b>Da a la comunidad razones para difundir:</b> contenido que quieran compartir, una causa en la que crean, productos que quieran mostrar, una identidad de la que quieran presumir. Cuanto más orgullosa esté la gente de pertenecer, más lo difunde.</li>
+      </ol>
+      <p class="pull">Tus mayores fans son tu motor de crecimiento. Una comunidad bien construida no solo es leal, es difusora: trae a más gente sola, y se convierte en tu mejor canal de captación.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Un sistema para identificar, reconocer y elevar a tus mayores fans, convirtiéndolos en embajadores que difunden la marca y activan el crecimiento orgánico.</li>
+      </ul>
+
+      <h3><span class="hn">2.8</span>Decidir un espacio propio de comunidad</h3>
+      <p>El último paso valora si tu marca necesita un <strong>espacio propio de comunidad</strong> más profundo que las redes, un lugar donde la comunidad interactúa de forma más íntima y directa. No todas las marcas lo necesitan, pero para muchas es el paso que profundiza la comunidad de forma decisiva.</p>
+      <p>Cómo decidirlo:</p>
+      <ol>
+        <li><b>Entiende la diferencia entre redes y espacio propio:</b> las redes son donde atraes y donde vive la comunidad de forma pública, pero el alcance depende del algoritmo y la interacción es más superficial. Un espacio propio (un grupo, un Discord, un canal, una comunidad privada) es donde la comunidad interactúa de forma más profunda y directa, sin algoritmo de por medio.</li>
+        <li><b>Valora si tu marca lo necesita:</b> un espacio propio profundiza mucho la comunidad, pero requiere gestión y una comunidad lo bastante activa para sostenerlo. Tiene sentido cuando tienes una comunidad activa que quiere más profundidad. No lo fuerces antes de tener una comunidad viva.</li>
+        <li><b>Empieza donde estás, profundiza cuando toque:</b> al principio, tus redes son suficientes. El espacio propio es un paso de profundización que das cuando la comunidad lo pide o cuando quieres una relación más directa y comprometida. Es una evolución, no un requisito inicial.</li>
+        <li><b>El espacio propio como núcleo del movimiento:</b> cuando existe, se convierte en el núcleo del movimiento, donde están los fans más comprometidos, donde la identidad se vive más fuerte, donde nacen los defensores más leales.</li>
+      </ol>
+      <p>La regla: <strong>el espacio propio profundiza la comunidad, pero se construye cuando la comunidad ya está viva.</strong> Valora si tu marca lo necesita según lo activa y comprometida que esté tu comunidad, y dalo como un paso de evolución, no como un requisito inicial.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Una decisión sobre si (y cuándo) crear un espacio propio de comunidad más profundo que las redes, según lo viva y comprometida que esté tu comunidad.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des tu comunidad por construida hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre los niveles y la causa</p>
+      <ul class="check">
+        <li>Entiendo los tres niveles (audiencia, comunidad, movimiento) y quiero subir a mi gente de nivel.</li>
+        <li>Tengo definida la causa que une a mi comunidad (mi punto de vista, mi enemigo, lo que represento más allá de la ropa).</li>
+        <li>Mi causa es real y específica, no genérica.</li>
+      </ul>
+
+      <p class="mini">Sobre la identidad y la participación</p>
+      <ul class="check">
+        <li>He dado a mi tribu una identidad compartida (un «nosotros», un lenguaje propio, quizás un nombre).</li>
+        <li>La identidad conecta con quién quiere ser mi avatar.</li>
+        <li>Activo la participación: invito a interactuar, doy papeles, fomento UGC, creo conversación entre miembros.</li>
+      </ul>
+
+      <p class="mini">Sobre los rituales y la presencia</p>
+      <ul class="check">
+        <li>Tengo símbolos de pertenencia (mi ropa y mis códigos identifican a los míos).</li>
+        <li>Tengo rituales que unen a la comunidad (los drops como evento, tradiciones, reconocimiento).</li>
+        <li>Gestiono la interacción con presencia real, humana y constante.</li>
+        <li>Cuido especialmente a mis primeros fans.</li>
+      </ul>
+
+      <p class="mini">Sobre el crecimiento y el espacio</p>
+      <ul class="check">
+        <li>Identifico, reconozco y elevo a mis mayores fans.</li>
+        <li>Convierto a mis fans en embajadores que difunden la marca.</li>
+        <li>Mi comunidad empieza a traer comunidad (crecimiento orgánico).</li>
+        <li>He valorado si (y cuándo) crear un espacio propio de comunidad más profundo.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 7.3 · Gestión de comunidad y construcción de movimiento alrededor de la marca · v1.0 · Fase 7</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

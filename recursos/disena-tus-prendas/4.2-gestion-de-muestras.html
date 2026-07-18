@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 4.2 — Solicitud y gestión de muestras (sampling)</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 4 · Muestreo y Desarrollo de Producto</p>
+    <h1 class="rv">Muestreo</h1>
+    <p class="meta rv">SOP 4.2 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; De la hipótesis en papel a la prenda real</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que gestiones el <strong>muestreo (sampling)</strong> con método: pedir prototipos físicos de tus prendas, evaluarlos y corregirlos ronda tras ronda hasta la muestra final que autoriza la producción. Es <span class="hl">el corazón del desarrollo de producto</span>, el momento en que tu diseño en papel se convierte en prenda real.
+    </p>
+    <p>La idea que ordena todo: <strong>el diseño en papel es una hipótesis; la muestra es la prueba.</strong> Hasta que no tienes la prenda física en las manos no sabes cómo cae la tela, cómo queda la costura ni si el fit funciona.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 8 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que gestiones el muestreo (sampling) con método: el proceso de pedir prototipos físicos de tus prendas, evaluarlos y corregirlos ronda tras ronda hasta llegar a la muestra final aprobada que autoriza la producción. Es el corazón del desarrollo de producto: el momento en que tu diseño en papel se convierte en prenda real y descubres si funciona de verdad.</p>
+      <p>La idea que ordena todo: el diseño en papel es una hipótesis; la muestra es la prueba. Por muy bueno que sea tu tech pack, hasta que no tienes la prenda física en las manos no sabes cómo cae la tela, cómo queda la costura, si el fit funciona o si el detalle que dibujaste se ve bien en la realidad. El muestreo es donde se revelan todos los problemas que el papel esconde —y donde se arreglan— antes de multiplicarlos por cientos de unidades en producción.</p>
+      <p>Segunda idea, la que ahorra más dinero y tiempo: cada ronda de muestra cuesta tiempo y dinero, así que el objetivo es <span class="gold">llegar a la muestra perfecta en las mínimas rondas posibles</span>. Cada muestra implica coste de material, coste de confección y, lo más caro, semanas de plazo. Una marca que necesita 5 rondas para aprobar una prenda va mucho más lenta y gasta mucho más que una que lo consigue en 2-3. La diferencia no es suerte: es método.</p>
+      <p>Los tipos de muestra que verás (los nombres varían por fábrica, pero el concepto es universal):</p>
+      <ul>
+        <li><b>Muestra de fit / proto (fit sample / prototype):</b> la primera, para validar el patrón, el fit y la construcción. Suele hacerse en una tela parecida, no necesariamente la definitiva.</li>
+        <li><b>Muestra de producto (en tela y color reales):</b> ya con la tela, el color y los avíos definitivos, para ver la prenda como será de verdad.</li>
+        <li><b>Muestra final / pre-producción (PP sample):</b> la muestra aprobada que sirve de referencia para la producción. Es el «sello» de que la prenda está lista y el estándar contra el que se comparará el pedido.</li>
+      </ul>
+      <p>El resultado concreto: un sistema para solicitar muestras con instrucciones claras, evaluarlas con criterio, comunicar correcciones sin ambigüedad, gestionar las rondas de forma organizada, y aprobar la muestra final que autoriza la producción — todo con el mínimo de iteraciones.</p>
+      <p class="pull">Lo que pasa si lo gestionas mal: pides muestras con instrucciones confusas y llegan mal, evalúas de forma desordenada y se te escapan errores que aparecen en producción, comunicas las correcciones de forma vaga y la siguiente muestra vuelve con los mismos problemas, o apruebas una muestra que no estaba lista y acabas con cientos de prendas defectuosas. El sampling mal gestionado es lento, caro, y deja pasar errores al pedido final, que es donde de verdad duelen.</p>
+
+      <h3><span class="hn">1.2</span>Elementos necesarios</h3>
+      <ul>
+        <li><b>El tech pack completo y actualizado</b> de cada prenda (Fase 2): es la base sobre la que la fábrica hace la muestra. Un tech pack claro es lo que más reduce las rondas.</li>
+        <li><b>El patrón validado</b> (SOP anterior) y las decisiones de fit y tabla de medidas.</li>
+        <li><b>La tela, color y avíos definitivos</b> (o lo más cercano posible) cuando toque la muestra de producto: la relación con proveedores de la Fase 3 alimenta esto.</li>
+        <li><b>Tu fábrica o confeccionista</b> (o el proveedor que hace muestras): quien cose los prototipos. Su calidad de muestreo es parte de por qué lo elegiste.</li>
+        <li><b>Un fit model o personas reales</b> para probar las muestras (del SOP de patronaje y del de fitting).</li>
+        <li>Un sistema para <b>registrar y organizar</b> las muestras: versiones, fotos, comentarios de cada ronda. Y un sitio físico para archivarlas etiquetadas.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Principios no negociables</h3>
+      <ol>
+        <li><b>La muestra es la prueba de la hipótesis.</b> No apruebes ni produzcas nada basándote en el papel. La prenda física manda.</li>
+        <li><b>Menos rondas = método, no suerte.</b> Cada muestra cuesta tiempo y dinero. Evaluar y comunicar bien es lo que reduce las iteraciones.</li>
+        <li><b>Instrucciones claras al pedir; correcciones claras al devolver.</b> La ambigüedad es lo que multiplica las rondas. Precisión en las dos direcciones.</li>
+        <li><b>Evalúa con método, no por impresión.</b> Una evaluación desordenada deja pasar errores a producción. Revisa siempre los mismos puntos, de forma sistemática.</li>
+        <li><b>Documenta cada ronda.</b> Qué muestra es, qué se pidió cambiar, qué cambió. Sin registro, te pierdes y repites errores.</li>
+        <li><b>No apruebes lo «casi bueno».</b> Un defecto que dejas pasar en la muestra se multiplica por todo el pedido. La muestra final debe estar perfecta.</li>
+        <li><b>La muestra final es el estándar de producción.</b> Es la referencia contra la que se juzga el pedido. Guárdala como oro.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · Del primer prototipo a la muestra final aprobada</h2>
+      <p>Ocho pasos: preparar la solicitud, pedir la primera muestra, evaluarla con método, comunicar correcciones, gestionar las rondas, avanzar a la muestra en tela real, aprobar la final y sistematizar.</p>
+
+      <h3><span class="hn">2.1</span>Preparar la solicitud de muestra</h3>
+      <p>Antes de pedir nada, prepara una <strong>solicitud impecable</strong>. La calidad de lo que pides determina la calidad de lo que recibes y cuántas rondas necesitarás. Una solicitud floja garantiza una primera muestra floja y rondas extra. Prepara:</p>
+      <ol>
+        <li><b>El tech pack completo y actualizado</b> de la prenda: es el documento base. Todo lo que quieres que la muestra tenga debe estar especificado ahí (flat, medidas, construcción, materiales, avíos, colores).</li>
+        <li><b>Instrucciones claras de qué muestra pides:</b> ¿es una muestra de fit (para validar patrón, quizá en tela parecida) o ya una muestra de producto (en tela y color reales)? Deja claro el propósito de esta muestra.</li>
+        <li><b>Los materiales, si los aportas tú:</b> si mandas tú la tela o los avíos, especifícalo y coordínalo. Si los pone la fábrica, confirma que son los correctos.</li>
+        <li><b>Tus expectativas de plazo:</b> cuándo necesitas la muestra, sabiendo que encaja en tu calendario de colección.</li>
+      </ol>
+      <p>La regla: lo que no especifiques, la fábrica lo decidirá a su manera. Cada hueco en tu solicitud es una fuente potencial de error y de ronda extra. Sé completo.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La solicitud de muestra preparada: tech pack actualizado + tipo de muestra + materiales + plazo, lista para enviar a la fábrica.</li>
+      </ul>
+
+      <h3><span class="hn">2.2</span>Solicitar la primera muestra (de fit / proto)</h3>
+      <p>Envías la solicitud y pides la primera muestra, que normalmente es la <strong>muestra de fit o prototipo</strong>: la que valida que el patrón, el fit y la construcción básica funcionan, antes de invertir en la tela y color definitivos. Al pedirla:</p>
+      <ol>
+        <li><b>Envía todo el paquete</b> (tech pack + instrucciones) y confirma que la fábrica lo ha entendido. Un buen movimiento: pregúntales si tienen dudas antes de empezar — resolver una duda ahora ahorra una ronda después.</li>
+        <li><b>Entiende qué esperar de una muestra de fit:</b> esta primera muestra sirve sobre todo para ver el patrón, el fit y la construcción. Puede venir en una tela parecida (no la definitiva) precisamente para no gastar la tela buena hasta validar que el molde funciona. No te alarmes si la tela o el color aún no son los finales: su trabajo es validar la forma.</li>
+        <li><b>Confirma el plazo</b> y déjalo registrado.</li>
+      </ol>
+      <p>La lógica de por qué se empieza por el fit y no por todo a la vez: validas lo estructural (patrón, fit) antes de comprometer lo caro (tela y color definitivos). Si el fit está mal, da igual la tela: hay que corregir el patrón primero. Ir por capas ahorra dinero y evita rehacer muestras completas.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La primera muestra (de fit/proto) solicitada, con la fábrica habiendo confirmado que entiende el encargo.</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Evaluar la muestra con método</h3>
+      <p>Cuando llega la muestra, la evalúas <strong>sistemáticamente</strong>, revisando siempre los mismos puntos. Una evaluación por impresión («me gusta / no me gusta») deja pasar errores que aparecerán multiplicados en producción; el método es lo que los caza. Evalúa cada muestra en estos frentes, siempre en el mismo orden:</p>
+      <ol>
+        <li><b>Medidas:</b> mide la prenda punto por punto y compárala con tu tabla de medidas del tech pack. ¿Está dentro de tolerancia? Las desviaciones de medida son la causa número uno de problemas de tallaje.</li>
+        <li><b>Fit (en cuerpo real):</b> pruébala en un fit model o en personas reales. ¿Cae como querías? ¿La holgura, el largo, los hombros y las mangas están bien? ¿Se mueve bien?</li>
+        <li><b>Construcción y calidad:</b> revisa las costuras, los remates, los acabados. ¿Están bien hechos? ¿Hay algo mal cosido, torcido o sin rematar?</li>
+        <li><b>Detalles:</b> ¿están todos los detalles del diseño (bolsillos, cierres, etiquetas, bordados) y en su sitio correcto?</li>
+        <li><b>Materiales y avíos:</b> ¿la tela, el color, las cremalleras y los botones son los que pediste? (En la muestra de fit puede que aún no; en la de producto, sí.)</li>
+        <li><b>Impresión general:</b> con todo lo anterior revisado, la valoración de conjunto: ¿esta prenda es lo que quieres que sea?</li>
+      </ol>
+      <p class="pull">Evalúa siempre los mismos puntos, en el mismo orden. El método sistemático es lo que evita que se te escape el error que luego aparece en 300 unidades. Ten una plantilla de evaluación y úsala en cada muestra.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La muestra evaluada sistemáticamente en todos los frentes, con la lista de todo lo que está bien y todo lo que hay que corregir.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Comunicar las correcciones (los comentarios de fitting)</h3>
+      <p>Con la evaluación hecha, comunicas a la fábrica <strong>qué corregir</strong>, de forma tan clara que la siguiente muestra lo arregle de verdad. Estos son los «comentarios de fitting» (fit comments), y su precisión determina si la siguiente ronda avanza o repite errores. Cómo comunicar correcciones que funcionan:</p>
+      <ol>
+        <li><b>Sé específico y medible.</b> No «la manga es muy larga» sino «acortar la manga 2 cm». No «el pecho va justo» sino «añadir 1,5 cm de holgura en el pecho por lado». Las correcciones vagas dan resultados vagos; las medibles se ejecutan bien.</li>
+        <li><b>Combina texto e imagen.</b> Marca sobre fotos de la muestra dónde está cada problema, con flechas y notas. Una corrección señalada sobre la foto se entiende mucho mejor que descrita en un párrafo.</li>
+        <li><b>Vuelca las correcciones al tech pack.</b> El tech pack es documento vivo (lo vimos en su SOP): actualiza medidas, materiales o construcción con los cambios acordados y sube la versión. Así la fábrica trabaja siempre sobre la versión corregida.</li>
+        <li><b>Prioriza y agrupa.</b> Lista todas las correcciones juntas y ordenadas (por zona de la prenda o por importancia), para que la fábrica las aborde todas de una vez y no se quede ninguna suelta.</li>
+      </ol>
+      <p class="pull">La regla de oro para reducir rondas: junta TODAS las correcciones en una sola comunicación clara. El error que multiplica rondas es corregir a trozos («cambia esto»… y en la siguiente muestra «ah, y también esto otro»). Detecta y comunica todo de golpe para que una sola ronda resuelva el máximo posible.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Los comentarios de corrección comunicados de forma específica, medible, con imágenes, volcados al tech pack y agrupados en una sola comunicación clara.</li>
+      </ul>
+
+      <h3><span class="hn">2.5</span>Gestionar las rondas de muestra</h3>
+      <p>El muestreo es <strong>iterativo</strong>: pides, evalúas, corriges y repites hasta que la prenda está perfecta. Este paso gestiona ese ciclo para que avance eficientemente hacia la aprobación y no se eternice. Cómo gestionar las rondas:</p>
+      <ol>
+        <li><b>Repite el ciclo con disciplina:</b> solicitar → evaluar (mismo método) → corregir (comentarios claros) → nueva muestra. Cada ronda debe acercarte claramente a la prenda final.</li>
+        <li><b>Verifica que cada ronda corrige lo anterior:</b> al recibir una muestra nueva, comprueba primero que las correcciones de la ronda anterior están hechas. Si la fábrica no corrigió algo, señálalo de inmediato, no lo dejes pasar pensando que «ya se arreglará».</li>
+        <li><b>Vigila el número de rondas:</b> cada ronda cuesta tiempo y dinero. Si estás en la ronda 4-5 y sigue habiendo problemas de fondo, algo va mal: o tu comunicación no es clara, o el tech pack tiene huecos, o la fábrica no está a la altura. Diagnostícalo en vez de seguir iterando sin fin.</li>
+        <li><b>Registra cada ronda:</b> guarda cada muestra identificada por su número de ronda, con fotos y los comentarios de esa ronda. Este registro evita confusiones («¿esta es la v2 o la v3?») y te da trazabilidad.</li>
+      </ol>
+      <p>La regla: cada ronda debe resolver problemas, no crear nuevos ni repetir viejos. Si las rondas no convergen claramente hacia la prenda final, para y diagnostica la causa en lugar de acumular muestras.</p>
+
+      <h3><span class="hn">2.6</span>Avanzar a la muestra en tela y color reales</h3>
+      <p>Una vez validado el fit y la construcción (con las muestras de fit), avanzas a la <strong>muestra de producto</strong>: la prenda ya en la tela, el color y los avíos definitivos. Aquí ves la prenda como será de verdad, y aparecen cosas que la muestra de fit no mostraba. Qué validar específicamente en esta fase:</p>
+      <ol>
+        <li><b>La tela real:</b> cómo cae, se siente y se comporta la prenda en la tela definitiva (que puede caer distinto que la tela parecida de la muestra de fit). Confirma tacto, caída y comportamiento.</li>
+        <li><b>El color real (crítico):</b> aquí se valida el color sobre la tela definitiva. El color en la prenda real debe coincidir con el Pantone acordado. Recuerda: pantalla ≠ tela; solo la muestra física confirma el color.</li>
+        <li><b>Los avíos definitivos:</b> las cremalleras, botones, cordones y etiquetas reales, en su sitio y con su acabado correcto.</li>
+        <li><b>La prenda como conjunto final:</b> con todo lo definitivo, ¿la prenda es exactamente lo que quieres producir? Este es el momento de detectar cualquier último ajuste antes de la aprobación.</li>
+      </ol>
+      <p>La lógica de por qué esta fase va después del fit: primero se valida la forma (barato de iterar), luego se compromete la tela y el color reales (más caro). Llegar a la tela definitiva con el fit ya resuelto evita gastar tela buena en muestras cuyo patrón aún cambiaba.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La muestra de producto en tela, color y avíos definitivos, con el color validado contra el Pantone y la prenda revisada como conjunto final.</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Aprobar la muestra final (PP sample)</h3>
+      <p>Cuando la prenda está perfecta, apruebas la <strong>muestra final de pre-producción (PP sample)</strong>: el sello de que la prenda está lista y la referencia contra la que se juzgará todo el pedido. Este es un paso decisivo —aprobar es autorizar la producción— así que no se hace a la ligera. Antes de aprobar, confirma:</p>
+      <ol>
+        <li><b>Todo está correcto:</b> medidas, fit, construcción, detalles, tela, color, avíos. Pasa la evaluación sistemática completa una última vez. No debe quedar ningún «casi» ni ningún defecto pendiente.</li>
+        <li><b>Es exactamente la prenda que quieres producir cientos de veces:</b> porque eso es lo que va a pasar. Cualquier defecto que apruebes aquí se multiplicará por todo el pedido.</li>
+        <li><b>La muestra final queda como estándar de producción:</b> esta muestra aprobada (a menudo se sella o etiqueta como «aprobada») es la referencia oficial de calidad. La producción debe coincidir con ella, y en el control de calidad compararás las prendas del pedido contra esta muestra.</li>
+        <li><b>El tech pack refleja la muestra aprobada:</b> la versión final del tech pack, con todas las correcciones volcadas, corresponde a esta muestra. Esa versión es la que autoriza la producción.</li>
+      </ol>
+      <p class="pull">La regla de oro, la que más dinero salva: no apruebes nunca una muestra «casi buena». La tentación de aprobar para no perder más tiempo es real, pero cada defecto aceptado en la muestra se convierte en cientos de prendas defectuosas. Si no está lista, una ronda más. La muestra final debe estar perfecta.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La muestra final (PP sample) aprobada y sellada como estándar de producción, con el tech pack final correspondiente, autorizando la producción.</li>
+      </ul>
+
+      <h3><span class="hn">2.8</span>Sistematizar y archivar</h3>
+      <p>El último paso convierte el muestreo en un <strong>sistema ordenado</strong> y protege las muestras como activos y referencias. Cierra:</p>
+      <ol>
+        <li><b>Archiva la muestra final aprobada físicamente y etiquetada:</b> es tu estándar de calidad de referencia. La guardarás para compararla contra la producción cuando llegue el pedido (control de calidad). No la pierdas ni la uses/deformes.</li>
+        <li><b>Guarda el registro completo del muestreo:</b> las fotos de cada ronda, los comentarios, las versiones del tech pack. Este historial es valioso: te enseña cuántas rondas necesitaste y por qué, para mejorar en la siguiente prenda.</li>
+        <li><b>Extrae aprendizajes para reducir rondas futuras:</b> revisa qué causó rondas extra (¿tech pack incompleto?, ¿comunicación vaga?, ¿fábrica floja?) y corrígelo para la próxima. El objetivo permanente es llegar a la muestra final en menos rondas cada vez.</li>
+        <li><b>Consolida tu relación de muestreo con la fábrica:</b> una fábrica que ya conoce tu marca, tus estándares y tu forma de comunicar corrige mejor y más rápido. La continuidad reduce rondas con el tiempo, otra razón para cuidar la relación (SOP de proveedores).</li>
+      </ol>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La muestra final archivada como estándar, el registro completo del muestreo guardado, y los aprendizajes extraídos para reducir rondas en futuras prendas.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No autorices producción hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre la solicitud</p>
+      <ul class="check">
+        <li>Tengo el tech pack completo y actualizado como base de la muestra.</li>
+        <li>He especificado claramente qué tipo de muestra pido (fit o producto) y con qué materiales.</li>
+        <li>He confirmado que la fábrica entiende el encargo antes de empezar.</li>
+      </ul>
+
+      <p class="mini">Sobre la evaluación</p>
+      <ul class="check">
+        <li>Evalúo cada muestra con método, revisando siempre los mismos puntos (medidas, fit, construcción, detalles, materiales).</li>
+        <li>Mido la prenda contra mi tabla de medidas y la pruebo en cuerpo real.</li>
+        <li>No apruebo por impresión: reviso sistemáticamente para no dejar pasar errores.</li>
+      </ul>
+
+      <p class="mini">Sobre las correcciones y las rondas</p>
+      <ul class="check">
+        <li>Comunico correcciones específicas y medibles («acortar 2 cm»), no vagas.</li>
+        <li>Combino texto e imagen marcando los problemas sobre fotos.</li>
+        <li>Junto todas las correcciones en una sola comunicación clara para no multiplicar rondas.</li>
+        <li>Vuelco las correcciones al tech pack y subo la versión.</li>
+        <li>Verifico que cada ronda corrige lo anterior y registro cada muestra.</li>
+      </ul>
+
+      <p class="mini">Sobre la tela real y la aprobación</p>
+      <ul class="check">
+        <li>He avanzado a la muestra en tela, color y avíos definitivos tras validar el fit.</li>
+        <li>He validado el color real contra el Pantone (lab dip) sobre la tela definitiva.</li>
+        <li>No apruebo ninguna muestra «casi buena»: la final está perfecta.</li>
+        <li>La muestra final aprobada queda como estándar de producción y el tech pack final la refleja.</li>
+      </ul>
+
+      <p class="mini">Sobre el archivo</p>
+      <ul class="check">
+        <li>He archivado físicamente la muestra final etiquetada como referencia de calidad.</li>
+        <li>He guardado el registro completo del muestreo (fotos, comentarios, versiones).</li>
+        <li>He extraído aprendizajes para reducir rondas en futuras prendas.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 4.2 · Solicitud y gestión de muestras (sampling) · v1.0 · Fase 4</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

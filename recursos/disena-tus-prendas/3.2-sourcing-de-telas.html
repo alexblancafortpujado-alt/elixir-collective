@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 3.2 — Sourcing de telas y proveedores de materia prima</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 3 · Materiales, Telas y Sourcing</p>
+    <h1 class="rv">Sourcing de telas</h1>
+    <p class="meta rv">SOP 3.2 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Encontrar y asegurar a tus proveedores</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que <strong>encuentres y asegures a los proveedores de tu materia prima</strong>: la gente que te vende la tela y los avíos. En el SOP anterior aprendiste <em>qué</em> tela quieres; este trata de <span class="hl">dónde conseguirla y de quién</span>, un problema completamente distinto donde muchas marcas nuevas se atascan durante meses.
+    </p>
+    <p>La idea de fondo: <strong>el sourcing es una relación, no una compra.</strong> No buscas «una web donde comprar tela»: buscas socios de suministro de los que dependerá tu producción durante años. Por eso este SOP no va solo de encontrar, va de evaluar y construir relación.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 8 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que encuentres y asegures a los proveedores de tu materia prima: la gente que te vende la tela y los avíos. En el SOP anterior aprendiste <em>qué</em> tela quieres; este trata de <em>dónde conseguirla y de quién</em>, que es un problema completamente distinto y donde muchas marcas nuevas se atascan durante meses.</p>
+      <p>La idea de fondo: el sourcing es una relación, no una compra. No estás buscando «una web donde comprar tela», estás buscando <span class="gold">socios de suministro</span> de los que dependerá tu producción durante años. Un buen proveedor te consigue la tela correcta al precio correcto, cumple los plazos y mantiene la calidad constante lote a lote; un mal proveedor te retrasa, te cambia la calidad sin avisar, te falla en temporada alta y hunde tu colección. Por eso este SOP no va solo de «encontrar»: va de evaluar y construir relación.</p>
+      <p>Un concepto clave desde el principio: el <strong>MOQ (mínimo de pedido)</strong>. Los proveedores de tela venden por cantidades mínimas —muchas veces por rollos o por cientos de metros— y esos mínimos condicionan todo tu negocio: cuánta tela debes comprar, cuánto dinero inmovilizas y qué proveedores son siquiera viables para tu tamaño. Además, hay distintos tipos de proveedor según dónde estés en la cadena, y elegir el nivel correcto para tu tamaño lo cambia todo (paso 2.2).</p>
+      <p class="pull">Lo que pasa si te saltas esto o lo haces mal: aceptas al primer proveedor que encuentras sin comparar y pagas de más o recibes mala calidad, te comprometes con un MOQ que no puedes financiar, descubres tarde que no cumple plazos y te quedas sin producto para el lanzamiento, o te llega un lote distinto al de la muestra y no tienes forma de reclamar. El sourcing mal hecho es donde mueren muchas colecciones antes de nacer.</p>
+
+      <h3><span class="hn">1.2</span>Elementos necesarios</h3>
+      <ul>
+        <li><b>Las especificaciones de tela de cada prenda (SOP anterior):</b> composición, gramaje, construcción. Sin saber exactamente qué tela quieres, no puedes buscar proveedor con criterio.</li>
+        <li><b>Tu presupuesto y los MOQ que puedes asumir</b> (del SOP de arquitectura de colección): esto filtra qué proveedores son viables.</li>
+        <li><b>El posicionamiento (0.4):</b> define el nivel de calidad de tela que buscas y, a veces, requisitos (producción local, sostenibilidad, certificaciones).</li>
+        <li><b>Canales de búsqueda de proveedores:</b> ferias de tejidos, directorios y marketplaces textiles, mercados de tela mayoristas, recomendaciones de otras marcas y de tu confeccionista, plataformas B2B.</li>
+        <li>Un sistema para <b>comparar proveedores</b> (una tabla) y para <b>archivar muestras</b> con sus datos.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Principios no negociables</h3>
+      <ol>
+        <li><b>El sourcing es una relación, no una compra.</b> Buscas socios de suministro a largo plazo, no una transacción única. Trátalos como tales.</li>
+        <li><b>Nunca comprometas un pedido grande sin muestra.</b> La muestra física es la verdad; la ficha del proveedor es la promesa. Valida antes de pagar en volumen.</li>
+        <li><b>Compara siempre varios proveedores.</b> El primero que encuentras casi nunca es el mejor en precio, calidad y fiabilidad a la vez.</li>
+        <li><b>El MOQ manda sobre el enamoramiento.</b> Una tela perfecta con un MOQ que no puedes financiar no es una opción. Elige lo que puedes sostener.</li>
+        <li><b>Fiabilidad y plazos valen tanto como precio y calidad.</b> El proveedor más barato que falla en temporada te cuesta más que el caro que cumple.</li>
+        <li><b>No dependas de un solo proveedor.</b> Ten alternativas para lo crítico. Un único punto de fallo es un riesgo para toda la marca.</li>
+        <li><b>Valida la consistencia lote a lote.</b> Que la primera muestra sea buena no garantiza que el pedido de 300 metros lo sea. Confirma la constancia.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De no tener proveedores a una cadena de suministro fiable</h2>
+      <p>Ocho pasos: primero preparas qué buscas y entiendes los tipos de proveedor, luego los encuentras, los evalúas con muestras, negocias y seleccionas, y sientas las bases de la relación.</p>
+
+      <h3><span class="hn">2.1</span>Preparar el brief de sourcing</h3>
+      <p>Antes de buscar, ten clarísimo <strong>qué necesitas exactamente</strong>. Buscar proveedor sin especificaciones concretas es perder el tiempo: te enseñarán mil telas y no sabrás decidir. El brief es tu filtro. Reúne, para cada tela que necesitas:</p>
+      <ol>
+        <li><b>La especificación técnica</b> (del SOP anterior): composición, gramaje, construcción. Cuanto más preciso, mejor te entenderá el proveedor y más comparables serán las ofertas.</li>
+        <li><b>La cantidad aproximada que necesitas:</b> cuántos metros para tu colección (esto define qué MOQ te sirven).</li>
+        <li><b>Tu rango de precio objetivo por metro:</b> lo que la tela puede costar para que tu prenda deje margen (recuerda la regla de margen de la Fase 0).</li>
+        <li><b>Tus requisitos innegociables:</b> certificaciones (orgánico, OEKO-TEX, etc.), origen (si vendes «hecho aquí»), sostenibilidad.</li>
+        <li><b>Tus avíos también:</b> no solo tela — cremalleras, botones, hilos, etiquetas. Puedes necesitar proveedores distintos para cada cosa.</li>
+      </ol>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El brief de sourcing con especificación, cantidad, precio objetivo y requisitos de cada tela y avío que necesitas.</li>
+      </ul>
+
+      <h3><span class="hn">2.2</span>Entender los tipos de proveedor y elegir el nivel correcto</h3>
+      <p>No todos los proveedores son iguales, y elegir el <strong>nivel</strong> correcto para tu tamaño es lo que más te ahorra dinero y frustración. Estos son los tipos, de más grande a más accesible:</p>
+      <ol>
+        <li><b>Fabricante / molino de tela (mill):</b> quien produce la tela. Mejor precio y más personalización, pero MOQ altísimos, pensados para marcas grandes. Normalmente inaccesible para quien empieza.</li>
+        <li><b>Mayorista / distribuidor de tela:</b> compra a los molinos y revende en cantidades menores. MOQ más manejables, precio algo mayor que el molino pero mucho más accesible. Suele ser el nivel correcto para marcas emergentes y medianas.</li>
+        <li><b>Proveedor de «stock» o deadstock:</b> vende tela ya producida y disponible (a veces sobrantes de grandes producciones). MOQ bajos, disponibilidad inmediata, precios variables. Bueno para empezar, para muestras y colecciones pequeñas, pero la disponibilidad no es constante (lo que compras hoy puede no estar mañana).</li>
+        <li><b>Mercados de tela / proveedores locales:</b> físicos, donde puedes ir, tocar y comprar cantidades pequeñas. Ideales para prototipos, muestras y arranque, aunque no siempre para volumen.</li>
+      </ol>
+      <p>Además, una decisión estratégica: <strong>proveedor local vs internacional.</strong> El internacional (típicamente Asia) suele dar mejor precio en volumen pero con plazos largos, más complejidad (aduanas, idioma, comunicación) y MOQ altos. El local/cercano da plazos cortos, comunicación fácil, MOQ menores y refuerza un discurso de «producción local», a mayor coste unitario. Para empezar, lo local/cercano suele reducir riesgo aunque cueste más.</p>
+      <p class="pull">Elige el nivel de proveedor que encaja con tu tamaño actual. Empezar buscando molinos con MOQ de miles de metros es perder el tiempo; empieza por mayoristas, deadstock o mercados locales, y sube de nivel cuando tu volumen lo justifique.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Decidido qué tipo(s) de proveedor y qué origen (local/internacional) encajan con tu etapa y volumen.</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Encontrar proveedores (construir la lista)</h3>
+      <p>Ahora buscas activamente y construyes una <strong>lista de candidatos</strong>. El objetivo es tener varios para comparar, no quedarte con el primero. Dónde buscar:</p>
+      <ol>
+        <li><b>Recomendaciones:</b> pregunta a tu confeccionista (suelen conocer proveedores de tela), a otras marcas, en comunidades del sector. Una recomendación de quien ya trabaja con el proveedor vale oro: te da referencia de fiabilidad.</li>
+        <li><b>Directorios y marketplaces B2B textiles:</b> plataformas donde se listan proveedores por tipo de tela y región.</li>
+        <li><b>Mercados de tela mayoristas</b> de tu ciudad o país, para lo local y accesible.</li>
+        <li><b>Ingeniería inversa:</b> identifica marcas con la tela que admiras y averigua —preguntando, investigando— de dónde sacan su material o quién produce en su segmento.</li>
+      </ol>
+      <p>La meta de este paso no es elegir, es tener opciones suficientes para comparar bien en el siguiente.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Una lista de varios proveedores candidatos por cada tela/avío, con sus datos de contacto.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Contactar y pedir muestras</h3>
+      <p>Con la lista, contactas a los candidatos y pides lo más importante para decidir: <strong>muestras físicas de tela (swatches)</strong> y su información comercial. Nunca se elige un proveedor sin tocar su tela. Qué pedir a cada uno:</p>
+      <ol>
+        <li><b>Muestras físicas (swatches)</b> de las telas que encajan con tu brief. Pídelas siempre, es innegociable.</li>
+        <li><b>La información comercial completa:</b> precio por metro (y si baja por volumen), MOQ (el dato que puede descartarlo de entrada), plazos de entrega (lead time), disponibilidad y continuidad (¿estará disponible para repedir o es stock puntual?), condiciones de pago, y certificaciones si las requieres.</li>
+      </ol>
+      <p>Cómo contactar bien: sé claro y profesional, usa tu brief (especificación exacta) y comunica que buscas una relación a largo plazo. Los proveedores tratan distinto a quien ven como cliente recurrente que a quien parece una compra única; un contacto profesional y específico te consigue mejores respuestas y mejores precios.</p>
+
+      <h3><span class="hn">2.5</span>Evaluar y comparar proveedores</h3>
+      <p>Ahora que tienes muestras e información, <strong>evalúas y comparas</strong> para decidir con criterio, no por corazonada ni solo por precio. Monta una tabla comparativa y puntúa cada proveedor en las cinco dimensiones:</p>
+      <ol>
+        <li><b>Calidad de la tela (la muestra):</b> ¿el swatch cumple lo que buscas? Tacto, gramaje real, comportamiento (pásalo por las validaciones del SOP anterior: lavado, encogimiento, pilling). Sin calidad, el resto da igual.</li>
+        <li><b>Precio:</b> ¿encaja con tu objetivo y deja margen? Compara precio por metro <em>a igual calidad</em> (un precio bajo con tela mala no es barato, es caro).</li>
+        <li><b>MOQ:</b> ¿el mínimo es asumible para tu presupuesto y tu colección? Un MOQ inviable descarta al proveedor por bueno que sea.</li>
+        <li><b>Fiabilidad:</b> ¿es un proveedor serio? Señales: cómo se comunica, referencias de otras marcas, profesionalidad, años operando. Una mala fiabilidad te falla cuando más lo necesitas.</li>
+        <li><b>Plazos (lead time):</b> ¿sus tiempos encajan con tu calendario de colección? Uno que tarda más de lo que tu lanzamiento permite no sirve, aunque todo lo demás sea perfecto.</li>
+      </ol>
+      <p class="pull">El mejor proveedor equilibra las cinco, no gana en una sola. El más barato que falla en fiabilidad o el de mejor calidad con MOQ imposible no son buenas elecciones. Al empezar, MOQ asumible y fiabilidad suelen pesar más que el precio óptimo.</p>
+
+      <h3><span class="hn">2.6</span>Negociar y hacer un pedido de prueba</h3>
+      <p>Antes de comprometer un pedido grande con tu finalista, <strong>negocia condiciones</strong> y, si es posible, <strong>haz un pedido pequeño de prueba</strong>. Esto reduce el riesgo de comprometer presupuesto grande con un proveedor no probado del todo. Dos movimientos:</p>
+      <ol>
+        <li><b>Negociar (con criterio y respeto):</b> los precios y condiciones a menudo tienen margen, sobre todo si comunicas volumen futuro y relación a largo plazo. Puedes negociar precio por metro, MOQ, plazos y condiciones de pago. Busca un acuerdo sostenible para ambos: apretar demasiado a un proveedor con el que quieres relación larga es contraproducente. La relación importa más que ganar un céntimo.</li>
+        <li><b>Pedido de prueba (si el MOQ lo permite):</b> antes del pedido de producción completo, haz uno más pequeño para comprobar en la práctica que el proveedor cumple: que la tela del pedido real coincide con la muestra, que respeta el plazo, que la consistencia lote a lote es buena. Un proveedor puede tener una muestra perfecta y fallar en el volumen; el pedido de prueba lo revela antes de que sea caro.</li>
+      </ol>
+      <p>Aviso de consistencia: confirma que <strong>lo que compras en volumen es igual que la muestra que aprobaste.</strong> Pide que el pedido de producción se contraste con el swatch aprobado. Las diferencias de lote (color ligeramente distinto, gramaje que varía) son un problema real en textil; anticípalo.</p>
+
+      <h3><span class="hn">2.7</span>Seleccionar y formalizar</h3>
+      <p>Con todo evaluado y probado, <strong>seleccionas a tus proveedores</strong> y formalizas la relación de forma ordenada, para que no haya malentendidos cuando llegue el pedido grande. Cierra:</p>
+      <ol>
+        <li><b>Selecciona el proveedor (o proveedores) por cada tela/avío,</b> basándote en la evaluación y la prueba. Puede que uses distintos proveedores para distintas telas o avíos — es normal.</li>
+        <li><b>Deja las condiciones por escrito:</b> precio, MOQ, plazos, condiciones de pago, especificación exacta de la tela acordada. Tenerlo por escrito te protege si algo cambia. Para volúmenes serios, un acuerdo o contrato básico es recomendable.</li>
+        <li><b>Confirma el proceso de repedido:</b> cómo pides más de la misma tela, con qué plazo, y si la disponibilidad está garantizada. Es clave si esperas repetir esa tela: no quieres construir una prenda estrella sobre una tela que luego no puedes reponer.</li>
+      </ol>
+
+      <h3><span class="hn">2.8</span>Construir relación y reducir dependencia</h3>
+      <p>El último paso mira al largo plazo: convertir a tus proveedores en <strong>socios fiables</strong> y protegerte de depender de uno solo. El sourcing no acaba con el primer pedido; es una relación que se cultiva. Dos trabajos:</p>
+      <ol>
+        <li><b>Cultivar la relación con los proveedores clave.</b> Comunícate bien, paga a tiempo, sé un cliente serio y recurrente. Los proveedores dan mejor precio, mejor trato, prioridad en temporada alta y más flexibilidad a las marcas con las que tienen buena relación. Tu fiabilidad como cliente te compra fiabilidad como proveedor; con el tiempo, un buen proveedor se convierte en un aliado que te resuelve problemas y te avisa de oportunidades.</li>
+        <li><b>Reducir la dependencia de un único punto de fallo.</b> Para tus telas y avíos críticos, ten identificada una alternativa (un proveedor B). Si tu principal falla, sube precios, cierra o se queda sin stock en temporada, no puedes quedarte parado. No hace falta comprar a los dos siempre, pero sí tener el plan B listo. Depender al 100% de un solo proveedor para algo crítico puede parar toda tu producción.</li>
+      </ol>
+      <p>Y mantén viva tu <strong>librería de proveedores</strong> (junto a tu librería de telas del SOP anterior): quién te vende qué, a qué precio, con qué MOQ y plazo, y cómo ha cumplido. Es un activo que acelera cada colección futura y facilita delegar el sourcing con criterio.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Un plan de relación con proveedores clave, un proveedor alternativo identificado para lo crítico, y la librería de proveedores iniciada.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des tu sourcing por cerrado hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre la preparación</p>
+      <ul class="check">
+        <li>Tengo el brief de sourcing con especificación, cantidad, precio objetivo y requisitos de cada tela/avío.</li>
+        <li>Entiendo los tipos de proveedor y he elegido el nivel correcto para mi etapa.</li>
+        <li>He decidido conscientemente entre proveedor local e internacional según mi riesgo y volumen.</li>
+      </ul>
+
+      <p class="mini">Sobre la búsqueda y las muestras</p>
+      <ul class="check">
+        <li>Tengo varios proveedores candidatos por cada tela, no dependo del primero.</li>
+        <li>He pedido muestras físicas a todos los candidatos.</li>
+        <li>He recogido su información comercial (precio, MOQ, plazos, disponibilidad, pago).</li>
+      </ul>
+
+      <p class="mini">Sobre la evaluación</p>
+      <ul class="check">
+        <li>He comparado a los proveedores en las cinco dimensiones (calidad, precio, MOQ, fiabilidad, plazos).</li>
+        <li>He validado la calidad de las muestras (tacto, gramaje, lavado, encogimiento, pilling).</li>
+        <li>He elegido buscando equilibrio, no solo el precio más bajo.</li>
+      </ul>
+
+      <p class="mini">Sobre la prueba, selección y relación</p>
+      <ul class="check">
+        <li>He negociado condiciones buscando un acuerdo sostenible.</li>
+        <li>Si el MOQ lo permitía, he hecho un pedido de prueba para validar cumplimiento y consistencia.</li>
+        <li>He confirmado que lo que compro en volumen coincide con la muestra aprobada.</li>
+        <li>He formalizado las condiciones por escrito y confirmado el proceso de repedido.</li>
+        <li>Tengo un proveedor alternativo para lo crítico y he iniciado mi librería de proveedores.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 3.2 · Sourcing de telas y proveedores de materia prima · v1.0 · Fase 3</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

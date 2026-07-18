@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 1.1 — Dirección de arte y universo visual</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 1 · Identidad Visual y Branding</p>
+    <h1 class="rv">Dirección de arte</h1>
+    <p class="meta rv">SOP 1.1 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; El universo visual que se reconoce sin el logo</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que tu marca tenga <strong>un universo visual propio y coherente</strong>, no una colección de fotos bonitas sin relación entre sí. El entregable central es el <strong>moodboard maestro</strong>: el documento que gobierna <span class="hl">cómo se ve absolutamente todo lo que produce la marca</span> — fotos de producto, campañas, feed, packaging, web, etiquetas.
+    </p>
+    <p>Una distinción que lo cambia todo: <strong>dirección de arte no es tener buen gusto, es controlar la coherencia.</strong> Cualquiera guarda imágenes chulas; el trabajo real es que cada decisión visual —la luz, el color, quién sale, cómo posa— diga <em>lo mismo</em>. En moda esto es la mitad del producto: la gente no compra la prenda, compra el mundo al que la prenda le da acceso, y ese mundo se comunica por imagen antes que por palabra.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 8 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que tu marca tenga un universo visual propio y coherente. El moodboard maestro no es un tablero de inspiración cualquiera: es la <strong>constitución visual</strong> de la marca, la fuente única de verdad a la que vuelves cada vez que produces algo o se lo encargas a un fotógrafo, un editor o un diseñador. Si no existe, cada foto es una negociación desde cero y la marca nunca cuaja una identidad.</p>
+      <p>El resultado concreto es un moodboard maestro editado y codificado —no un vertedero de imágenes—, con sus capas visuales definidas (color, luz, textura, composición, casting, localización, estilismo, tipografía y actitud), traducido a una <span class="gold">dirección de arte propia y ejecutable</span> con tus recursos reales, y convertido en un sistema que tu equipo y tus freelancers pueden seguir sin ti.</p>
+      <p class="pull">Si te saltas esto: tu feed parece de cinco marcas distintas, cada colaborador interpreta la marca a su manera, contratas a un fotógrafo y te entrega algo correcto que «no es la marca», y gastas dinero en contenido que no construye reconocimiento porque no se acumula. La incoherencia visual es la razón número uno por la que una marca pequeña con buen producto parece pequeña.</p>
+
+      <h3><span class="hn">1.2</span>Principios no negociables</h3>
+      <ol>
+        <li><b>Coherencia por encima de belleza.</b> Una imagen espectacular que rompe el mundo hace más daño que una imagen correcta que lo refuerza. La marca se construye por acumulación coherente.</li>
+        <li><b>Referencia no es identidad.</b> Guardar imágenes de otros es el punto de partida, no el destino. Copiar un moodboard ajeno da una marca clon; el trabajo es destilar el <em>porqué</em> y recombinarlo en algo tuyo.</li>
+        <li><b>Roba de fuera de tu categoría.</b> Si solo te inspiras en otras marcas de ropa, serás una versión de ellas. Las direcciones de arte con alma vienen del cine, la fotografía, las épocas y las subculturas.</li>
+        <li><b>La luz manda.</b> En imagen de moda, la luz define el mood más que ninguna otra variable. Antes que el color o el set, decide tu luz.</li>
+        <li><b>Si no puedes producirlo, no es tu dirección de arte.</b> Un moodboard que solo se recrea con medios que no tienes es un deseo, no un sistema. La dirección real es la que ejecutas cada semana.</li>
+        <li><b>Menos elementos, más repetidos.</b> El reconocimiento nace de repetir pocos códigos con disciplina, no de acumular muchos recursos usados una sola vez.</li>
+        <li><b>El moodboard maestro es ley, no sugerencia.</b> Cada pieza visual se aprueba contra él. Si no encaja, se corrige o se descarta.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · Del vertedero de imágenes a un mundo reconocible</h2>
+      <p>Ocho pasos que te llevan de «guardo cosas que me molan» a un sistema visual propio, coherente y ejecutable. El proceso es un embudo creativo: primero abres mucho (recolectas de todas partes), luego cierras con disciplina brutal (editas, destilas y codificas).</p>
+
+      <h3><span class="hn">2.1</span>Entender qué es dirección de arte (y qué no)</h3>
+      <p>Antes de tocar una sola imagen, interioriza qué estás construyendo, porque casi todo el mundo confunde la dirección de arte con «hacer las cosas bonitas». Tres verdades que reordenan el trabajo:</p>
+      <ol>
+        <li><b>Dirección de arte es un sistema de decisiones, no un momento de inspiración.</b> No es la foto genial de un día; es que <em>todas</em> las fotos, para siempre, obedezcan las mismas reglas. El valor está en la repetición coherente, no en el golpe puntual de talento.</li>
+        <li><b>La coherencia es lo que crea la sensación de «marca».</b> Una imagen suelta no dice nada; cinco imágenes que comparten luz, color y actitud construyen un mundo. El cerebro reconoce patrones: tu trabajo es darle uno que reconocer.</li>
+        <li><b>El moodboard maestro es la fuente de verdad, no un adorno.</b> Es el documento contra el que se aprueba cada foto, cada encargo y cada colaboración. No es para enseñárselo a nadie: es para dirigir la producción.</li>
+      </ol>
+      <p class="pull">La inspiración dice «quiero que se sienta así». La dirección dice «para que se sienta así, la luz es de tarde y lateral, el fondo es hormigón, la modelo no mira a cámara y el color dominante es un gris apagado». La primera es un deseo; la segunda se ejecuta y se repite.</p>
+
+      <h3><span class="hn">2.2</span>Traducir la estrategia en intención visual</h3>
+      <p>El error que arruina el 90% de los moodboards: empezar guardando fotos bonitas. Si abres Pinterest antes de tener clara la intención, terminas con un tablero precioso que no significa nada. Este paso pone el porqué antes que las imágenes. Antes de recolectar, define por escrito:</p>
+      <ol>
+        <li><b>Qué debe hacer sentir tu imagen.</b> Vuelve al concepto (0.1). ¿La marca se siente cruda o refinada, cálida o fría, nostálgica o futurista, dura o íntima? Elige 3-5 adjetivos-sensación que la imagen tiene que provocar. Son tu brújula.</li>
+        <li><b>Qué debe decir sin palabras.</b> Tu posicionamiento (0.4) y tu enemigo (0.1). Si tu enemigo es el fast fashion sin alma, tu imagen tiene que oler a lo contrario. Si tu posición es «premium discreto», la imagen no puede ser llamativa y con mucha luz.</li>
+        <li><b>A qué mundo pertenece.</b> Las referencias culturales del concepto: la época, la subcultura, la disciplina, el lugar. Esto ancla la estética en algo con raíz, no en una moda visual pasajera.</li>
+      </ol>
+      <p>La prueba de este paso: deberías poder escribir un párrafo describiendo tu universo visual <strong>sin usar una sola imagen</strong>, solo palabras. Si no puedes, aún no sabes qué buscas, y recolectar sería perder el tiempo. Ese párrafo es el brief de tu propio moodboard.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>3-5 adjetivos-sensación que tu imagen debe provocar.</li>
+        <li>Un párrafo de intención visual escrito solo con palabras, ligado a concepto, enemigo y posicionamiento.</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Recolectar referencias con amplitud (fase divergente)</h3>
+      <p>Ahora empezamos a elegir, pero con una regla que marca la diferencia entre una marca con alma y un clon: <strong>recolecta sobre todo desde fuera de la moda.</strong> Si te inspiras solo en otras marcas de ropa, tu dirección de arte será un remix de las suyas y te verás como «una más del nicho». Recolecta de estas fuentes:</p>
+      <ol>
+        <li><b>Cine y foto fija:</b> directores de fotografía, fotógrafos, un frame de una película. El cine es la mejor escuela de luz y atmósfera que existe.</li>
+        <li><b>Subculturas:</b> el mundo real de donde nace tu tribu (skate, rave, atletismo, arte, lo que sea del concepto). La estética con verdad viene de subculturas reales, no de tendencias de Pinterest.</li>
+        <li><b>Arquitectura, diseño, arte:</b> texturas, materiales, paletas, composiciones. Un edificio brutalista puede darte más identidad que diez feeds de moda.</li>
+        <li><b>Y sí, algo de moda:</b> pero como una fuente más, no la principal. Fíjate en la <em>dirección de arte</em> de las marcas que admiras, no en sus prendas.</li>
+      </ol>
+      <p>Recolecta amplio (50-200 imágenes) guiándote por los adjetivos del paso 2.2: si una imagen no aporta a esas sensaciones, no la guardes por bonita. Y anota, aunque sea en una palabra, <strong>qué te robas de cada imagen</strong>: ¿la luz?, ¿el color?, ¿el encuadre?, ¿la actitud? Esa nota vale oro para construir tu universo visual.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Un tablero amplio (50-200 imágenes) con peso real de fuentes ajenas a la moda.</li>
+        <li>Junto a cada bloque, una nota de «qué me robo de aquí».</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Descomponer el universo visual en sus capas</h3>
+      <p>Aquí está lo que separa a un profesional de un novato. Un moodboard amateur es un montón de imágenes; un universo visual es un conjunto de <strong>capas definidas</strong>, cada una con una decisión tomada. Recorre tu material y define cada capa:</p>
+      <ol>
+        <li><b>Color / paleta de mundo.</b> No solo tus colores de marca — el color de <em>todo el entorno</em>: fondos, localizaciones, props, hasta el tono de piel del casting. Define tu paleta dominante y qué colores están prohibidos. El color es lo primero que el cerebro registra a distancia.</li>
+        <li><b>Luz y mood.</b> La variable reina. ¿Natural o de estudio? ¿Dura (sombras marcadas, sol directo) o suave (nublado, difusa)? ¿Cálida o fría? ¿Qué hora del día? La luz define el 60% de la sensación de una imagen de moda. Elige <em>tu</em> luz y sé fiel a ella.</li>
+        <li><b>Textura y materialidad.</b> ¿Grano de película o limpio digital? ¿Mate o brillante? ¿Sucio y crudo o pulido? La textura da tacto a la marca y es una firma facilísima de poseer.</li>
+        <li><b>Composición y encuadre.</b> ¿Planos cerrados o abiertos? ¿Centrado y frontal o dinámico y descentrado? ¿Mucho aire (espacio negativo) o lleno? El encuadre es una firma silenciosa.</li>
+        <li><b>Casting y cuerpos.</b> Quién sale en la imagen es identidad pura de marca. ¿Modelos o gente real? ¿Qué cuerpos, edades, actitudes, energía? El casting comunica a quién perteneces antes que la ropa.</li>
+        <li><b>Localización y mundo.</b> ¿Dónde ocurre? Estudio, calle, naturaleza, interior doméstico, espacio industrial. El lugar cuenta la historia del mundo de la marca.</li>
+        <li><b>Estilismo y proporción.</b> Cómo se lleva la ropa: capas, volúmenes, cómo se combina, qué se enseña y qué se esconde. El estilismo convierte una prenda en un look, y un look en una actitud.</li>
+        <li><b>Tipografía como imagen.</b> Cómo aparece el texto sobre las fotos, en el feed, en campañas. La tipografía es parte del universo visual, no solo del logo.</li>
+        <li><b>Actitud y pose.</b> La energía humana: ¿mira a cámara o no? ¿Estática o en movimiento? ¿Seria, distante, íntima, desafiante? La actitud es lo que hace que alguien se identifique o se sienta excluido.</li>
+      </ol>
+      <p>Para cada capa, escribe una <strong>decisión concreta</strong>, no un adjetivo vago. «Luz cálida» es débil; «luz natural de última hora de la tarde, lateral, con sombras largas» es una decisión que un fotógrafo puede ejecutar. Cuanto más específica la capa, más reproducible el mundo.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Las 9 capas definidas con una decisión concreta y ejecutable cada una.</li>
+      </ul>
+
+      <h3><span class="hn">2.5</span>Destilar el moodboard maestro y sus códigos</h3>
+      <p>Recolectaste amplio; ahora cierras con disciplina brutal. Este es el paso de la tijera: pasas del tablero de 50-200 referencias al <strong>moodboard maestro</strong>, el mundo destilado. Dos movimientos:</p>
+      <ol>
+        <li><b>Reduce a 20-40 imágenes que formen un solo mundo.</b> Quita todo lo que sea bonito pero no encaje. Si dos imágenes dicen lo mismo, quédate con la mejor. Al final, las que quedan tienen que parecer sacadas del mismo universo aunque vengan de fuentes distintas.</li>
+        <li><b>Extrae 5-8 códigos visuales escritos.</b> Un código es una regla repetible que resume tu mundo: «luz natural dura y lateral», «paleta de grises y tierra, nunca saturados», «espacio negativo generoso», «casting de gente real, nunca sonriendo». Los códigos son lo que de verdad gobierna la producción — el moodboard los ilustra, pero los códigos los ejecutas.</li>
+      </ol>
+      <p class="pull">La prueba: si le das tus 5-8 códigos a alguien que no ha visto el moodboard, debería poder producir una imagen que encaje en el mundo. Si no, tus códigos aún son adjetivos vagos, no reglas.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El moodboard maestro destilado a 20-40 imágenes que forman un solo mundo.</li>
+        <li>Los 5-8 códigos visuales escritos como reglas ejecutables.</li>
+      </ul>
+
+      <h3><span class="hn">2.6</span>Convertir el moodboard en dirección de arte propia</h3>
+      <p>Aquí resuelves el mayor peligro del moodboarding: <strong>quedarte en un collage de la estética de otros.</strong> Un moodboard lleno de imágenes ajenas, por muy coherente que sea, todavía no es <em>tu</em> marca: es un mapa de tus influencias. Cómo hacerlo tuyo:</p>
+      <ol>
+        <li><b>Recombina, no copies.</b> Tu originalidad no nace de inventar algo que nadie ha visto, sino de la <em>combinación única</em> de referencias que nadie más junta. La luz de un director de cine + la paleta de una época + la actitud de una subcultura + tu producto = un cruce que solo es tuyo. La firma está en la mezcla.</li>
+        <li><b>Define tu elemento de firma.</b> Elige uno o dos códigos que vas a llevar al extremo y repetir siempre, hasta que sean tuyos. Las marcas reconocibles tienen un gesto visual que repiten con obsesión. Elige el tuyo.</li>
+        <li><b>Pasa de referencia a producción propia.</b> En cuanto puedas, sustituye las imágenes ajenas del moodboard por <em>tus propias imágenes</em> que cumplen los códigos. Un moodboard maestro está hecho de fotos de la marca, no de fotos de otros.</li>
+      </ol>
+      <p class="pull">Ese es el norte: un moodboard maestro que ya no necesita imágenes de nadie más porque está hecho con las tuyas.</p>
+
+      <h3><span class="hn">2.7</span>Testear la ejecutabilidad: aspiracional vs operativo</h3>
+      <p>Un moodboard que no puedes producir con tus medios reales es un cuadro bonito colgado en la pared: se admira, no se usa. Este paso baja la dirección de arte a la realidad de tu presupuesto, tu cámara y tu tiempo, que es lo único que la hace funcionar semana a semana. Haz la separación honesta:</p>
+      <ol>
+        <li><b>Moodboard aspiracional:</b> la visión completa, con el nivel de producción de tus sueños (localizaciones, equipo, casting profesional). Sirve de norte a largo plazo, pero no puede ser tu guía diaria.</li>
+        <li><b>Moodboard operativo:</b> cómo consigues <em>esos mismos códigos</em> con lo que tienes hoy. Si tu código es «luz natural dura», eso lo consigues con el sol y un móvil, sin estudio. Si es «grano de película», con un filtro o un revelado, sin cámara analógica cara. La pregunta clave: ¿cómo reproduzco mi código con recursos mínimos?</li>
+        <li><b>Recetas reproducibles:</b> para las piezas que produces cada semana (foto de producto, contenido de feed), escribe la «receta» concreta: qué luz, qué fondo, qué hora, qué encuadre, qué edición. Una receta convierte tu dirección de arte en algo que ejecutas en cinco minutos y sale consistente aunque lo haga otra persona.</li>
+      </ol>
+      <p class="pull">Tu dirección de arte real es la que puedes ejecutar de forma consistente, no la que solo logras una vez con suerte. Mejor un código humilde que clavas siempre que uno espectacular que consigues una de cada diez veces.</p>
+
+      <h3><span class="hn">2.8</span>Codificar en un sistema y mantenerlo vivo</h3>
+      <p>El último paso convierte todo lo anterior en un <strong>sistema que otros pueden seguir sin ti</strong>, y lo mantiene vivo en el tiempo. Una dirección de arte que solo vive en tu cabeza se rompe en cuanto delegas una foto o creces. Monta el documento de dirección de arte con:</p>
+      <ol>
+        <li><b>El moodboard maestro</b> (las 20-40 imágenes del mundo).</li>
+        <li><b>Los códigos visuales escritos</b> (los 5-8 del paso 2.5).</li>
+        <li><b>Las capas definidas</b> (color, luz, textura, etc. del 2.4), cada una con su decisión.</li>
+        <li><b>Los «sí y los no» (do's & don'ts):</b> ejemplos visuales de lo que SÍ es la marca al lado de lo que NO lo es. Este contraste alinea a un freelancer más rápido que nada: ver un «esto no» evita el 80% de los errores.</li>
+        <li><b>Las recetas reproducibles</b> del 2.7.</li>
+      </ol>
+      <p>Este documento es el que le pasas a cualquier fotógrafo, editor, diseñador o community manager antes de que produzca nada para la marca. Dejas de corregir a mano: el sistema corrige por ti.</p>
+      <p class="pull">La dirección de arte es un documento vivo con un núcleo fijo. El ADN —tus códigos de firma— se mantiene estable; cambiarlo cada temporada borra el reconocimiento que tanto cuesta construir. Puede evolucionar en los bordes: cada colección es un capítulo distinto del mismo libro, no un libro nuevo.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El documento de dirección de arte completo (moodboard + códigos + capas + do's/don'ts + recetas), listo para entregar a cualquier colaborador.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des la dirección de arte por cerrada hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre la intención</p>
+      <ul class="check">
+        <li>Tengo claro qué mundo visual quiero que la gente reconozca y por qué la coherencia manda sobre la belleza.</li>
+        <li>Tengo 3-5 adjetivos-sensación que mi imagen debe provocar.</li>
+        <li>Tengo un párrafo de intención visual escrito solo con palabras, ligado a concepto, enemigo y posicionamiento.</li>
+      </ul>
+
+      <p class="mini">Sobre la recolección y las capas</p>
+      <ul class="check">
+        <li>He recolectado amplio (50-200 imágenes) con peso real de fuentes ajenas a la moda.</li>
+        <li>He anotado «qué me robo» de cada bloque de referencias.</li>
+        <li>He definido las 9 capas (color, luz, textura, composición, casting, localización, estilismo, tipografía, actitud) con una decisión concreta cada una.</li>
+      </ul>
+
+      <p class="mini">Sobre la destilación y la propiedad</p>
+      <ul class="check">
+        <li>He destilado el moodboard maestro a 20-40 imágenes que forman un solo mundo.</li>
+        <li>Tengo los 5-8 códigos visuales escritos.</li>
+        <li>He definido mi combinación única de referencias (qué cruzo que nadie más cruza).</li>
+        <li>He definido mi elemento (o dos) de firma para repetir con obsesión.</li>
+      </ul>
+
+      <p class="mini">Sobre la ejecución y el sistema</p>
+      <ul class="check">
+        <li>He separado moodboard aspiracional y operativo.</li>
+        <li>Tengo recetas reproducibles de mis formatos recurrentes (producto y feed).</li>
+        <li>Mi dirección de arte es ejecutable de forma consistente con mis recursos reales.</li>
+        <li>Tengo el documento de dirección de arte completo (moodboard + códigos + capas + do's/don'ts + recetas).</li>
+      </ul>
+    </section>
+
+    <footer>SOP 1.1 · Dirección de arte y universo visual · v1.0 · Fase 1</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

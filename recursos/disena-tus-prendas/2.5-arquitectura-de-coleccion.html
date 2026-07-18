@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 2.5 — Arquitectura de colección</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 2 · Diseño y Proceso Creativo</p>
+    <h1 class="rv">Arquitectura de colección</h1>
+    <p class="meta rv">SOP 2.5 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Qué prendas, cuántas y en qué proporción para que venda</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que estructures tu colección como un <strong>conjunto estratégico</strong>, no como una lista de prendas sueltas que te apetecía hacer. La arquitectura es el plano que decide <span class="hl">cuántas prendas, de qué tipo, en qué proporción y con qué papel</span>, antes de producir.
+    </p>
+    <p>La idea central: <strong>una colección no es una galería de arte, es un negocio con forma de ropa.</strong> Cada prenda cumple una función comercial distinta — unas cargan el concepto, otras pagan las facturas. Confundir sus papeles es uno de los errores más caros de una marca nueva.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 7 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que estructures tu colección como un conjunto estratégico, no como una lista de prendas sueltas que te apetecía hacer. La arquitectura de colección es el plano que decide cuántas prendas, de qué tipo, en qué proporción y con qué papel, antes de producir. Es la diferencia entre una colección que vende y financia la siguiente, y una que se ve bonita pero deja el almacén lleno.</p>
+      <p>La idea central: <strong>una colección no es una galería de arte, es un negocio con forma de ropa.</strong> Cada prenda cumple una función comercial distinta. Unas existen para llamar la atención y cargar el concepto; otras para vender en volumen y pagar las facturas. Confundir sus papeles, o hacer una colección solo de piezas «de portada» sin básicos que vendan, es uno de los errores más caros y comunes de una marca nueva.</p>
+      <p>La distinción que gobierna todo el SOP:</p>
+      <ul>
+        <li><b>Hero pieces (piezas protagonistas):</b> las prendas de statement, las que cargan el concepto de la colección, las que salen en campaña y generan deseo y conversación. Son arriesgadas, memorables, «instagrameables». Venden menos unidades, pero <em>crean la marca</em>.</li>
+        <li><b>Básicos / core (piezas de fondo):</b> las prendas sencillas, versátiles, de menor riesgo (la camiseta buena, la sudadera lisa). No salen en portada, pero <em>son las que más se venden</em> y sostienen la caja. Son el pan de cada día del negocio.</li>
+      </ul>
+      <p>Una colección sana equilibra las dos: las hero piezas atraen y posicionan; los básicos convierten y financian. Demasiadas hero = colección con alma pero sin ventas. Solo básicos = colección que vende pero sin identidad ni deseo. El arte está en la proporción.</p>
+      <p>El resultado concreto es un plan de arquitectura de tu colección —número total de prendas, mix de categorías, proporción de hero/básicos, y el papel comercial de cada pieza—, decidido antes de producir, coherente con tu presupuesto y tu avatar.</p>
+      <p class="pull">Lo que pasa si te saltas esto: produces por intuición, sacas ocho piezas arriesgadas y ningún básico vendible, inmovilizas presupuesto en prendas que no rotan, o sacas una colección desproporcionada. En moda, donde cada prenda es dinero congelado en stock por los mínimos de producción, una mala arquitectura es un agujero directo en la caja.</p>
+
+      <h3><span class="hn">1.2</span>Principios no negociables</h3>
+      <ol>
+        <li><b>Cada prenda tiene un trabajo.</b> Si no sabes qué función comercial cumple una prenda, no debería estar en la colección.</li>
+        <li><b>Los básicos pagan las facturas; las hero construyen la marca.</b> Necesitas las dos. Sacrificar una por la otra desequilibra el negocio.</li>
+        <li><b>Menos y mejor.</b> Una colección enfocada vende más que una dispersa. Ante la duda, quita prendas, no añadas.</li>
+        <li><b>La colección se combina.</b> Las prendas deben poder llevarse juntas; una colección es un guardarropa, no piezas aisladas.</li>
+        <li><b>El presupuesto y el MOQ mandan sobre la ambición.</b> Diseña la arquitectura que puedes producir y financiar, no la de tus sueños.</li>
+        <li><b>Sirve al avatar, no a tu ego creativo.</b> La arquitectura se juzga por lo que tu cliente comprará y usará, no por lo que a ti te apetece diseñar.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · Del concepto a un plan de colección estructurado</h2>
+      <p>Siete pasos que te llevan de un concepto de colección a un plan de prendas con función y proporción. El orden: primero entiendes los roles y pones los límites (presupuesto/MOQ), luego decides tamaño, mix y proporción, y validas como conjunto.</p>
+
+      <h3><span class="hn">2.1</span>Definir los papeles comerciales de las prendas</h3>
+      <p>Antes de decidir cuántas prendas, entiende <strong>qué tipos de papel</strong> puede jugar una prenda. Cada colección se compone de piezas con funciones distintas, y nombrarlas te permite construir con intención. Los papeles principales:</p>
+      <ol>
+        <li><b>Hero pieces (protagonistas):</b> las piezas de statement que cargan el concepto, salen en campaña y generan deseo. Pocas, memorables, arriesgadas. Su trabajo es <em>atraer y posicionar</em>, no vender en volumen.</li>
+        <li><b>Básicos / core:</b> las piezas sencillas y versátiles de bajo riesgo. Su trabajo es <em>vender en volumen y sostener la caja</em>. Son la base del negocio.</li>
+        <li><b>Piezas de conexión (opcional):</b> las que están entre medias, no son statement puro ni básico puro, pero completan looks y dan profundidad a la colección. Ayudan a que las prendas se combinen.</li>
+      </ol>
+      <p>La regla: <strong>una colección sana necesita las tres, con predominio de lo que vende.</strong> Las hero crean el deseo que atrae a la gente; los básicos convierten ese deseo en ventas repetidas. Diseñar entendiendo el papel de cada prenda es lo que separa una colección-negocio de una colección-capricho.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Entendidos los papeles comerciales (hero / básico / conexión) y su función en el negocio.</li>
+      </ul>
+
+      <h3><span class="hn">2.2</span>Poner los límites: presupuesto y mínimos de producción</h3>
+      <p>Antes de soñar con el tamaño de la colección, define el <strong>límite duro</strong> que lo condiciona todo: cuánto puedes producir. En moda, cada prenda multiplica por el MOQ, así que el presupuesto acota radicalmente cuántos modelos puedes sacar. Aterriza los números:</p>
+      <ol>
+        <li><b>Tu presupuesto total de producción</b> para esta colección: cuánto dinero puedes inmovilizar en fabricar stock.</li>
+        <li><b>El MOQ de tu fábrica</b> (mínimo por modelo, a veces por color y talla): esto define cuántas unidades mínimas debes producir de cada prenda que metas. Si el MOQ es alto, cada modelo extra es mucho dinero comprometido.</li>
+        <li><b>El cálculo de realidad:</b> presupuesto ÷ (coste por unidad × MOQ) ≈ cuántos modelos puedes permitirte. Este número es tu techo real de prendas, te guste o no.</li>
+      </ol>
+      <p class="pull">Con presupuesto limitado, mejor pocas prendas bien producidas que muchas mal financiadas. El MOQ es lo que empuja a las marcas nuevas hacia colecciones pequeñas y enfocadas, y suele ser lo correcto.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El presupuesto, el MOQ y el número máximo realista de modelos que puedes producir.</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Decidir el tamaño de la colección</h3>
+      <p>Con el techo presupuestario claro, decide <strong>cuántas prendas</strong> tendrá la colección. Ni tan pocas que parezca floja, ni tantas que dispersen atención y dinero. Guías para el tamaño:</p>
+      <ol>
+        <li><b>Empieza pequeño si eres nuevo.</b> Una colección compacta y fuerte bate a una grande y diluida. Es más fácil de producir, financiar, contar y vender. Puedes crecer en las siguientes.</li>
+        <li><b>Piensa en «salidas» completas, no en piezas sueltas.</b> Una buena medida es: ¿mi colección permite montar varios looks completos combinables? Suele valer más una colección que ofrece 3-4 looks sólidos que una con muchas piezas que no se combinan.</li>
+        <li><b>Enfoque sobre amplitud.</b> Es mejor dominar unas pocas prendas que hacerlas todas a medias. Una marca reconocida por su sudadera perfecta bate a una que hace veinte cosas mediocres.</li>
+      </ol>
+      <p>La regla: <strong>el tamaño correcto es el más pequeño que cuenta la historia completa de la colección y da a tu avatar lo que necesita.</strong> Si puedes quitar una prenda sin que la colección pierda, quítala.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El número de prendas de la colección, justificado por presupuesto, combinabilidad y enfoque.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Definir el mix de categorías</h3>
+      <p>Ahora decides <strong>qué tipos de prenda</strong> componen ese número: la mezcla de categorías. Esto asegura que la colección cubra lo que tu avatar necesita y no se amontone en un solo tipo de prenda. Cómo definir el mix:</p>
+      <ol>
+        <li><b>Parte del avatar y su armario.</b> ¿Qué prendas necesita y desea de verdad? ¿Qué le falta, qué combina, qué se pondría? El mix sirve a su guardarropa (SOP 0.3), no a tu antojo.</li>
+        <li><b>Cubre las categorías necesarias sin dispersarte.</b> Define qué familias de prenda entran (por ejemplo: parte de arriba, parte de abajo, capa exterior, accesorio) y cuántos modelos de cada una. Evita el error de sacar cinco modelos de una categoría y ninguno de otra que tu cliente necesitaría para completar el look.</li>
+        <li><b>Prioriza tus prendas ancla.</b> Si tu marca tiene un tipo de prenda estrella (la que te define), esa categoría lleva más peso. No repartas por igual solo por simetría.</li>
+      </ol>
+      <p>La regla: <strong>el mix debe permitir vestir a tu avatar de la cabeza a los pies dentro de tu mundo</strong>, o al menos ofrecerle looks completos, sin huecos obvios ni exceso en una sola familia.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El mix de categorías definido (qué familias de prenda y cuántos modelos de cada una).</li>
+      </ul>
+
+      <h3><span class="hn">2.5</span>Establecer la proporción hero / básicos</h3>
+      <p>Aquí tomas la decisión más estratégica: <strong>qué porcentaje de la colección son hero pieces y qué porcentaje básicos.</strong> Esta proporción determina si la colección atrae <em>y</em> vende, o solo una de las dos. Cómo decidirla:</p>
+      <ol>
+        <li><b>La mayoría del volumen, en lo que vende.</b> Los básicos y las piezas de conexión suelen ser la mayor parte de las unidades producidas, porque son las que rotan. Las hero piezas son pocas en número aunque protagonicen la comunicación. Una guía habitual: pocas hero que lideran la campaña, y un cuerpo mayor de piezas vendibles detrás.</li>
+        <li><b>Ajusta según tu etapa y riesgo.</b> Marca muy nueva o presupuesto ajustado → inclínate más hacia básicos seguros con una o dos hero que generen deseo. Marca ya establecida con comunidad → puedes permitirte más statement.</li>
+        <li><b>Asigna presupuesto por rol.</b> Produce más unidades de los básicos (venden más) y menos de las hero (venden menos, generan deseo). No produzcas la misma cantidad de una pieza arriesgada que de un básico seguro: es como se acumula stock muerto.</li>
+      </ol>
+      <p class="pull">La regla de oro: las hero piezas traen a la gente; los básicos les cobran. La campaña se construye sobre las hero, pero la caja se llena con los básicos.</p>
+
+      <h3><span class="hn">2.6</span>Asignar el papel de cada prenda concreta</h3>
+      <p>Baja de las proporciones a lo concreto: <strong>asigna a cada prenda de la colección su papel y su función.</strong> Esto convierte el plan abstracto en una lista real de prendas con propósito. Para cada prenda, define:</p>
+      <ol>
+        <li><b>Su papel:</b> ¿hero, básico o conexión?</li>
+        <li><b>Su función comercial:</b> ¿atraer y posicionar (campaña), vender en volumen, completar looks?</li>
+        <li><b>Su nivel de riesgo y producción:</b> las hero pueden ser más arriesgadas y en menos unidades; los básicos, más seguros y en más unidades.</li>
+        <li><b>Su combinabilidad:</b> con qué otras prendas de la colección se lleva. Esto asegura que la colección funcione como conjunto.</li>
+      </ol>
+      <p>El resultado es una <strong>lista maestra de la colección</strong>: cada prenda con su nombre/código, su papel, su función y sus unidades previstas. Esta lista es el plano que guía diseño, tech packs y producción.</p>
+      <p class="pull">La prueba: si miras la lista y cada prenda tiene un porqué comercial claro, la arquitectura está bien. Si hay prendas de las que no sabes decir por qué existen o a quién le venderán, sobran o hay que replantearlas.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La lista maestra de la colección con el papel, función y unidades previstas de cada prenda.</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Validar la colección como conjunto y contra el negocio</h3>
+      <p>El último paso comprueba que la arquitectura funciona <strong>como conjunto y como negocio</strong>, antes de lanzarte a producir. Es la revisión final del plano. Valida en tres planos:</p>
+      <ol>
+        <li><b>Como conjunto (coherencia y combinabilidad):</b> ¿las prendas parecen de la misma colección? ¿Se combinan en looks completos? ¿Hay equilibrio entre statement y vendible, sin huecos ni redundancias? Una colección donde las piezas se potencian vende más que piezas sueltas.</li>
+        <li><b>Contra el avatar:</b> ¿cubre lo que tu cliente necesita y desea? ¿Le permite montar looks de tu mundo? ¿Hay algo que claramente le faltaría o que no compraría?</li>
+        <li><b>Contra el negocio:</b> ¿cabe en el presupuesto? ¿Respeta los MOQ? ¿La proporción hero/básicos asegura ventas y no solo deseo? ¿Las unidades por prenda tienen sentido con lo que esperas vender? Esta es la validación que evita el stock muerto.</li>
+      </ol>
+      <p class="pull">Corregir la arquitectura antes de producir cuesta cero; corregirla con el almacén lleno cuesta la caja de la marca. Si algo falla —una prenda sin función, un hueco en el mix, una proporción que no vende, un presupuesto que no cuadra—, ajústalo aquí, en el papel, que es gratis.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La arquitectura de colección validada como conjunto, contra el avatar y contra el negocio, ajustada donde hiciera falta y lista para pasar a producción.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des la arquitectura por cerrada hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre los papeles y los límites</p>
+      <ul class="check">
+        <li>Entiendo los papeles comerciales (hero / básico / conexión) y la función de cada uno.</li>
+        <li>Tengo claro mi presupuesto de producción y el MOQ de mi fábrica.</li>
+        <li>He calculado el número máximo realista de modelos que puedo producir.</li>
+      </ul>
+
+      <p class="mini">Sobre el tamaño y el mix</p>
+      <ul class="check">
+        <li>He decidido el número de prendas, priorizando enfoque sobre amplitud.</li>
+        <li>La colección permite montar varios looks completos combinables.</li>
+        <li>He definido el mix de categorías partiendo del armario de mi avatar.</li>
+        <li>No hay exceso en una sola familia de prenda ni huecos obvios.</li>
+      </ul>
+
+      <p class="mini">Sobre la proporción y los papeles concretos</p>
+      <ul class="check">
+        <li>He establecido una proporción consciente hero / básicos / conexión.</li>
+        <li>He asignado más unidades a los básicos (venden) y menos a las hero (generan deseo).</li>
+        <li>Cada prenda de la lista maestra tiene papel, función comercial y unidades previstas.</li>
+        <li>No hay ninguna prenda de la que no sepa decir por qué existe.</li>
+      </ul>
+
+      <p class="mini">Sobre la validación</p>
+      <ul class="check">
+        <li>La colección es coherente y combinable como conjunto.</li>
+        <li>Cubre lo que mi avatar necesita y desea, sin huecos ni redundancias.</li>
+        <li>Cabe en mi presupuesto, respeta los MOQ y la proporción asegura ventas.</li>
+        <li>He ajustado en el papel todo lo que fallaba antes de pasar a producir.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 2.5 · Arquitectura de colección · v1.0 · Fase 2</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

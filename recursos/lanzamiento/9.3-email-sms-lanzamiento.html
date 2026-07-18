@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 9.3 — Estrategia de email/SMS para el lanzamiento</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 9 · Lanzamiento, Drops y Marketing</p>
+    <h1 class="rv">Email y SMS</h1>
+    <p class="meta rv">SOP 9.3 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Tus canales directos, las primeras ventas del drop</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que uses el <strong>email y el SMS</strong> de forma estratégica alrededor de un lanzamiento, y conviertas la lista que construiste en las primeras y mejores ventas del drop. Los SOPs anteriores construyeron el deseo y capturaron a la gente en una waitlist; este trata de <span class="hl">comunicar el lanzamiento a esa gente en el momento exacto</span> para que compre.
+    </p>
+    <p>La idea central: <strong>el email y el SMS son tus únicos canales directos, los que llegan sí o sí, sin depender de un algoritmo.</strong> Son la diferencia entre «espero que algunos vean que lancé» y «aviso a toda mi lista en el segundo del drop».</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 8 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que uses el email y el SMS (tus canales directos) de forma estratégica alrededor de un lanzamiento, para convertir la lista que construiste en las primeras y mejores ventas del drop. Los SOPs anteriores construyeron el deseo y capturaron a la gente en una waitlist; este trata de cómo comunicar el lanzamiento a esa gente en el momento exacto para que compre.</p>
+      <p>La idea central: el email y el SMS son tus únicos canales directos, los que llegan sí o sí, sin depender de un algoritmo. En redes, cuando publicas que lanzas, solo una fracción de tus seguidores lo ve. Cuando envías un email o un SMS, llega a la bandeja de cada persona de tu lista, directamente. Para un lanzamiento, donde el timing lo es todo, esto es oro: puedes comunicar el drop a toda tu gente en el momento exacto, <span class="gold">con la certeza de que les llega</span>.</p>
+      <p>Los dos canales trabajan juntos y se complementan. El <strong>email</strong> tiene más espacio, más contenido, más visual: ideal para contar, mostrar el producto, construir deseo con imágenes y texto. Es el canal principal de la comunicación de lanzamiento. El <strong>SMS</strong> es corto, inmediato, con altísima tasa de apertura: ideal para lo urgente y puntual («el drop acaba de abrir», «últimas unidades»). Y la estrategia no es un solo email: es una <strong>secuencia coordinada con las tres fases del drop</strong> (antes, durante, después), donde cada mensaje tiene su momento y su función. A diferencia de las redes, esta lista es tuya, la construiste, y es tu línea directa con tu gente más comprometida.</p>
+      <p class="pull">Lo que pasa si no lo haces: dependes solo de las redes (que no controlas), así que solo una fracción de tu gente se entera y las ventas son tibias. No aprovechas tu waitlist con una comunicación potente en el momento, desperdiciando la lista que construiste. Envías un email suelto en lugar de una secuencia coordinada. Desperdicias tu canal directo más fiable justo donde más importa.</p>
+
+      <h3><span class="hn">1.2</span>Indicadores de éxito</h3>
+      <ul>
+        <li>Comunicas tu lanzamiento a <b>toda tu lista directamente</b>, sin depender del algoritmo.</li>
+        <li>Tu <b>waitlist recibe la comunicación primero</b> y con su acceso anticipado, convirtiéndose en las primeras ventas.</li>
+        <li>Usas <b>email y SMS para lo que cada uno hace mejor</b> (email para contar y mostrar, SMS para la urgencia).</li>
+        <li>Tienes una <b>secuencia coordinada</b> con las tres fases del drop, no un email suelto.</li>
+        <li>Tu email/SMS <b>genera un pico de ventas</b> en el momento del drop.</li>
+        <li>Recuperas a los <b>indecisos</b> con seguimiento después del drop.</li>
+        <li>Tus mensajes están en el <b>tono de tu marca</b> y aportan, no solo gritan «compra».</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Elementos necesarios</h3>
+      <ul>
+        <li><b>Tu lista de email y SMS:</b> la audiencia a la que comunicas. Sin lista, no hay estrategia.</li>
+        <li><b>Tu waitlist del lanzamiento:</b> la gente más caliente, a la que comunicas primero y con acceso anticipado.</li>
+        <li><b>Tu plataforma de email y SMS:</b> la herramienta para enviar las secuencias. Necesitas capacidad de SMS además de email.</li>
+        <li><b>Tu estrategia de lanzamiento:</b> las tres fases y la fecha, que la secuencia de email/SMS acompaña.</li>
+        <li><b>Tu tono de voz de marca:</b> los mensajes hablan con la voz de la marca.</li>
+        <li><b>El contenido del lanzamiento</b> (visuales del producto, historia de la colección): la materia prima de los emails.</li>
+        <li><b>Cumplimiento de la normativa</b> de email y SMS: consentimiento, especialmente estricto en SMS; baja fácil siempre.</li>
+      </ul>
+
+      <h3><span class="hn">1.4</span>Principios no negociables</h3>
+      <ol>
+        <li><b>Email y SMS son tu canal directo, tu ventaja.</b> Llegan sí o sí, sin algoritmo. Son tu arma más fiable de lanzamiento. Úsalos.</li>
+        <li><b>Secuencia coordinada, no un email suelto.</b> La estrategia es una secuencia con las tres fases del drop, cada mensaje con su momento y función.</li>
+        <li><b>Cada canal para lo que hace mejor.</b> Email para contar y mostrar; SMS para la urgencia e inmediatez. Complementarios, no redundantes.</li>
+        <li><b>La waitlist primero y con ventaja.</b> Tu gente más caliente recibe la comunicación primero y con su acceso anticipado. Son las primeras ventas.</li>
+        <li><b>El timing lo es todo en un lanzamiento.</b> El mensaje correcto en el momento exacto. En un drop, comunicar en el segundo justo maximiza el pico.</li>
+        <li><b>En el tono de tu marca, aportando.</b> Cada mensaje es un punto de contacto de marca. Que suene a ti y aporte, no que solo grite «compra».</li>
+        <li><b>Con permiso, sobre todo el SMS.</b> El SMS es más íntimo y está más regulado. Consentimiento claro y baja fácil, siempre.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De una lista a una secuencia que genera ventas</h2>
+      <p>Ocho pasos: entender el rol de cada canal, planificar la secuencia con las tres fases, los emails de la fase «antes», el acceso anticipado de la waitlist, la comunicación del momento del drop, el uso del SMS para la urgencia, el seguimiento de la fase «después», y la medición y sistematización.</p>
+
+      <h3><span class="hn">2.1</span>Entender el rol de cada canal y su poder directo</h3>
+      <p>Antes de planificar, entiende <strong>por qué el email y el SMS son tan potentes para un lanzamiento y qué hace mejor cada uno.</strong> Grabar esto te permite usarlos con estrategia, no enviar por enviar.</p>
+      <p>Lo que hay que entender:</p>
+      <ol>
+        <li><b>Llegan directamente, sin algoritmo:</b> a diferencia de las redes, donde el alcance lo decide el algoritmo, el email y el SMS llegan a cada persona de tu lista. Es control total sobre el timing y el alcance de tu comunicación de lanzamiento.</li>
+        <li><b>Le hablas a tu gente más comprometida:</b> tu lista es gente que activamente te dio su contacto, ya te eligió. Es tu audiencia más caliente y de mayor conversión.</li>
+        <li><b>El email hace de canal narrativo y visual:</b> tiene espacio para contar, mostrar el producto con imágenes, construir el deseo, dar la información completa. Es el canal principal para comunicar el lanzamiento en detalle.</li>
+        <li><b>El SMS hace de canal de urgencia e inmediatez:</b> es corto, directo, y tiene una tasa de apertura altísima (la gente lo abre casi siempre y al momento). Es el canal para los momentos urgentes y puntuales del drop. Su poder es la inmediatez.</li>
+        <li><b>Juntos se complementan:</b> el email construye y comunica en detalle, el SMS activa en los momentos urgentes. Una estrategia de lanzamiento usa los dos, no uno u otro.</li>
+      </ol>
+      <p>La regla: <strong>el email y el SMS te dan control directo sobre tu comunicación de lanzamiento.</strong> Entender que llegan sí o sí, que le hablas a tu gente más comprometida, y que cada canal tiene su función, es lo que te permite usarlos como el arma de lanzamiento potente que son.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Entendido el poder directo del email y el SMS y el rol de cada canal (email narrativo/visual, SMS urgencia/inmediatez).</li>
+      </ul>
+
+      <h3><span class="hn">2.2</span>Planificar la secuencia coordinada con las tres fases</h3>
+      <p>La estrategia de email/SMS es una <strong>secuencia coordinada con las tres fases del drop</strong> (antes, durante, después), no un mensaje suelto. Este paso planifica esa secuencia, mapeando qué mensaje se envía cuándo y con qué función.</p>
+      <p>Cómo planificar la secuencia:</p>
+      <ol>
+        <li><b>Mapea los mensajes a las tres fases:</b> <em>antes</em> (construcción y aviso), emails que acompañan la construcción del hype, comunican que viene el drop, invitan a la waitlist, cuentan la historia y anuncian la fecha; <em>durante</em> (el momento del drop), la comunicación potente del lanzamiento, el acceso anticipado de la waitlist, el aviso de que abre, la urgencia; <em>después</em> (seguimiento y cierre), los mensajes que recuperan indecisos, comunican la escasez que queda y cierran ventas.</li>
+        <li><b>Decide qué va por email y qué por SMS en cada fase:</b> el email para lo narrativo y detallado, el SMS para lo urgente y puntual (avisos, cuenta atrás, últimas unidades). Cada mensaje en el canal que mejor lo sirve.</li>
+        <li><b>Secuencia los momentos exactos:</b> en un lanzamiento el timing es crítico. Define exactamente cuándo sale cada mensaje (el email de aviso, el SMS de «ya abrió», el email de seguimiento), coordinado con la fecha y hora del drop.</li>
+        <li><b>Coordina con el resto del lanzamiento:</b> la secuencia acompaña y se coordina con todo lo demás (contenido, redes, la ejecución del drop). Todos los canales apuntando al mismo momento amplifican el impacto.</li>
+      </ol>
+      <p>La regla: <strong>la estrategia de email/SMS es una secuencia coordinada, no mensajes sueltos.</strong> La secuencia coordinada convierte tus canales directos en una máquina de comunicación de lanzamiento.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La secuencia de email/SMS planificada y mapeada a las tres fases del drop (qué mensaje, qué canal, qué momento), coordinada con el resto del lanzamiento.</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Los emails de la fase «antes» (construir y avisar)</h3>
+      <p>Los emails de la fase previa <strong>acompañan la construcción del hype y preparan a tu lista para el drop.</strong> Este paso ejecuta la comunicación de email de las semanas antes del lanzamiento, que calienta a tu lista y la lleva a la waitlist.</p>
+      <p>Qué emails enviar antes del drop:</p>
+      <ol>
+        <li><b>Email de «algo viene» (teaser):</b> acompañando el teasing, un email que insinúa que se acerca un lanzamiento, generando curiosidad. Tu gente más comprometida es la primera en saber que algo viene.</li>
+        <li><b>Email de la historia de la colección:</b> cuenta el concepto, el mundo, la inspiración, con espacio e imágenes. El email es ideal para construir la conexión emocional con la colección antes del drop.</li>
+        <li><b>Email de invitación a la waitlist:</b> invita a tu lista a apuntarse a la waitlist del drop, comunicando el beneficio (acceso anticipado, ser los primeros). Convierte a tu lista general en waitlist comprometida.</li>
+        <li><b>Email(s) de revelación progresiva:</b> acompañando la revelación del producto, emails que van mostrando las piezas y construyendo el deseo. Tu lista ve el producto con detalle e imágenes.</li>
+        <li><b>Email de anuncio de la fecha:</b> comunica claramente cuándo es el drop, para que tu lista lo marque y esté lista. Crea la cita.</li>
+      </ol>
+      <p class="pull">Los emails de antes calientan a tu lista y la llevan a la waitlist. Convierten a tu audiencia general en la waitlist caliente que comprará primero.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Los emails de la fase «antes» ejecutados (teaser, historia, invitación a waitlist, revelación progresiva, anuncio de fecha) que calientan a tu lista y la llevan a la waitlist.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>El acceso anticipado de la waitlist (las primeras ventas)</h3>
+      <p>Aquí está una de las mecánicas más potentes: dar a tu <strong>waitlist acceso anticipado al drop vía email y SMS</strong>, convirtiéndola en las primeras ventas del lanzamiento. Este paso premia a tu gente más caliente y arranca el drop con fuerza.</p>
+      <p>Cómo ejecutar el acceso anticipado:</p>
+      <ol>
+        <li><b>Comunica a la waitlist su acceso primero:</b> antes de que el drop se abra al público general, comunica a los de la waitlist (por email y SMS) que ellos entran primero. Este es el premio por su compromiso y los convierte en los primeros compradores.</li>
+        <li><b>Dales una ventana de compra anticipada:</b> un periodo (horas, o el tiempo que decidas) en que solo la waitlist puede comprar. Esto concentra las primeras ventas en tu gente más deseosa, arranca el drop con fuerza, y refuerza la exclusividad.</li>
+        <li><b>Usa email para presentar y SMS para activar:</b> un email que presenta el acceso anticipado con el producto y el enlace, y un SMS que avisa en el momento exacto de que su acceso está abierto. El email cuenta, el SMS activa en el segundo justo.</li>
+        <li><b>Aprovecha el arranque fuerte:</b> las ventas de la waitlist arrancan el drop con fuerza, crean prueba social («ya se está vendiendo», «piezas agotándose»), y generan el momento que amplifica las ventas del público general después.</li>
+      </ol>
+      <p class="pull">El acceso anticipado convierte tu waitlist en las primeras y mejores ventas del drop. Es donde la waitlist que construiste da su fruto directo.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El acceso anticipado de la waitlist ejecutado (comunicación de su acceso primero, ventana de compra anticipada, email para presentar y SMS para activar) que convierte la waitlist en las primeras ventas.</li>
+      </ul>
+
+      <h3><span class="hn">2.5</span>La comunicación del momento del drop (el pico)</h3>
+      <p>Cuando el drop se abre al público general, la comunicación de email y SMS <strong>genera el pico de ventas del lanzamiento.</strong> Este paso ejecuta la comunicación del momento, donde todo el deseo construido se convierte en un pico de compras a través de tus canales directos.</p>
+      <p>Cómo comunicar el momento del drop:</p>
+      <ol>
+        <li><b>El email de lanzamiento potente:</b> en el momento del drop (o justo antes), envía el email principal de lanzamiento a toda tu lista, «ya está aquí», con el producto, la historia y el enlace directo a comprar. Es el email que activa el drop para el público general.</li>
+        <li><b>El SMS de «el drop está abierto»:</b> un SMS corto e inmediato avisando de que el drop acaba de abrir. Por su altísima apertura inmediata, convierte «algunos verán el email» en «toda mi lista sabe que abrió, ahora».</li>
+        <li><b>Comunica la urgencia real:</b> en los mensajes del momento, activa la urgencia real: stock limitado, el drop es ahora. La urgencia bien comunicada convierte el deseo en compra inmediata.</li>
+        <li><b>Concentra el pico:</b> la comunicación coordinada de email y SMS en el momento del drop concentra la atención y la compra, creando el pico de ventas del lanzamiento.</li>
+      </ol>
+      <p class="pull">La comunicación del momento del drop convierte el deseo en el pico de ventas. Es donde tus canales directos dan su máximo.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La comunicación del momento del drop ejecutada (email de lanzamiento potente, SMS de «ya abrió», urgencia real) que genera el pico de ventas del lanzamiento.</li>
+      </ul>
+
+      <h3><span class="hn">2.6</span>Usar el SMS para la urgencia y los momentos clave</h3>
+      <p>El <strong>SMS merece un uso estratégico propio</strong> por su inmediatez y su poder en los momentos de urgencia. Este paso profundiza en cómo usarlo para maximizar su impacto en los momentos clave del drop, sin abusar de él, porque es un canal íntimo.</p>
+      <p>Cómo usar el SMS estratégicamente:</p>
+      <ol>
+        <li><b>Reserva el SMS para lo urgente e importante:</b> la gente lo abre siempre. Precisamente por eso, úsalo para los momentos que de verdad importan (el acceso de la waitlist, la apertura del drop, las últimas unidades, la cuenta atrás final), no para todo. Abusar del SMS molesta y genera bajas.</li>
+        <li><b>Aprovecha su inmediatez en los momentos pico:</b> el SMS es imbatible para «esto está pasando ahora». El aviso de que el drop abrió, el «quedan pocas unidades», el «última hora para comprar», son los momentos donde su inmediatez convierte.</li>
+        <li><b>Corto, directo, con un enlace claro:</b> el SMS es breve por naturaleza. Un mensaje corto, la urgencia clara, y un enlace directo a comprar. Sin rodeos: la gente lo lee en segundos y actúa.</li>
+        <li><b>Respeta el permiso y la frecuencia:</b> el SMS está más regulado y es más íntimo que el email. Envía solo con consentimiento claro, no abuses de la frecuencia, y da baja fácil siempre. Bien usado es potentísimo; mal usado, quema la relación rápido.</li>
+      </ol>
+      <p class="pull">El SMS es el arma de la urgencia: úsalo con criterio en los momentos pico. Reservado para lo que importa, convierte como ningún otro canal.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El uso estratégico del SMS definido (reservado para lo urgente e importante, aprovechando su inmediatez en los momentos pico, corto y directo, con permiso y frecuencia respetada).</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>El seguimiento de la fase «después» (recuperar y cerrar)</h3>
+      <p>El email y el SMS de la fase «después» <strong>recuperan a los indecisos y cierran las ventas</strong> que no ocurrieron en el pico. Este paso capitaliza la cola del lanzamiento y recupera ventas que de otro modo se perderían.</p>
+      <p>Cómo ejecutar el seguimiento:</p>
+      <ol>
+        <li><b>Recupera a los que no compraron:</b> no todo el que quería compró en el momento del drop. Emails de seguimiento a los que abrieron pero no compraron, o a los que no abrieron, recuperan a los indecisos. Un recordatorio de «aún disponible» o «no te quedes sin» recupera ventas.</li>
+        <li><b>Aprovecha los flujos de carrito abandonado:</b> el drop genera carritos abandonados. Tus flujos de carrito abandonado recuperan estas ventas casi hechas. En un drop, con la urgencia añadida de la escasez, recuperan especialmente bien.</li>
+        <li><b>Comunica la escasez real que queda:</b> si quedan pocas unidades de algo, comunícalo (real) por email y SMS: «últimas unidades», «casi agotado». La escasez real en la recta final cierra a los que lo dejaban para luego. El SMS es ideal para este aviso.</li>
+        <li><b>Usa la prueba social del lanzamiento:</b> tras el drop tienes ventas, quizás agotados. Comunica esa prueba social («se está agotando», «gracias por agotar X»), que genera urgencia y recupera a los indecisos que ven que se acaba.</li>
+        <li><b>Cuida a los nuevos compradores:</b> los que compraron entran en tus flujos de postventa, que cuidan la experiencia y los convierten en recurrentes. El seguimiento no es solo recuperar ventas, también es cuidar a los que ya compraron.</li>
+      </ol>
+      <p>La regla: <strong>el seguimiento recupera y cierra las ventas que el pico no capturó.</strong> El después bien trabajado extiende el resultado del drop.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El seguimiento de la fase «después» ejecutado (recuperar indecisos, carrito abandonado, escasez real que queda, prueba social, cuidado de nuevos compradores) que recupera y cierra ventas.</li>
+      </ul>
+
+      <h3><span class="hn">2.8</span>Medir, escribir en tu voz y sistematizar</h3>
+      <p>El último paso asegura que todo está <strong>bien escrito en tu voz, medido y sistematizado</strong> para futuros lanzamientos. La estrategia de email/SMS mejora con datos y se vuelve un playbook repetible.</p>
+      <p>Cierra:</p>
+      <ol>
+        <li><b>Escribe todo en el tono de tu marca:</b> cada email y SMS es un punto de contacto de marca. Deben sonar a ti, aportar y emocionar, no solo gritar «compra». Los mensajes que suenan a tu marca convierten más y construyen marca; los genéricos y puramente comerciales cansan.</li>
+        <li><b>Mide los resultados de la secuencia:</b> aperturas, clics, y sobre todo conversión de cada mensaje y del conjunto. Cuánto vendió el acceso anticipado, cuánto el email de lanzamiento, cuánto el SMS, cuánto el seguimiento.</li>
+        <li><b>Aprende para el próximo lanzamiento:</b> qué mensajes convirtieron mejor, qué timing funcionó, qué canal rindió más. Cada lanzamiento te enseña a hacer mejor la secuencia del siguiente.</li>
+        <li><b>Sistematiza tu playbook de email/SMS:</b> convierte tu secuencia en un sistema documentado y repetible (los mensajes de cada fase, los canales, el timing, las plantillas). Un playbook te permite ejecutar cada lanzamiento mejor y más rápido, y delegarlo. La recurrencia además entrena a tu lista a esperar y actuar en tus lanzamientos.</li>
+      </ol>
+      <p class="pull">La estrategia de email/SMS se escribe en tu voz, se mide y se sistematiza. Tus canales directos se vuelven una máquina de lanzamiento cada vez más afinada.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Los mensajes escritos en tu voz, las métricas de la secuencia medidas, los aprendizajes extraídos, y un playbook de email/SMS de lanzamiento documentado y repetible.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des la estrategia de email/SMS por cerrada hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre la comprensión y la planificación</p>
+      <ul class="check">
+        <li>Entiendo el poder directo del email y el SMS (llegan sí o sí, sin algoritmo) y el rol de cada canal.</li>
+        <li>Tengo la secuencia planificada y mapeada a las tres fases del drop (qué mensaje, qué canal, qué momento).</li>
+        <li>Coordino la secuencia con el resto del lanzamiento.</li>
+      </ul>
+
+      <p class="mini">Sobre las fases «antes» y «durante»</p>
+      <ul class="check">
+        <li>Tengo los emails de la fase «antes» (teaser, historia, invitación a waitlist, revelación, fecha).</li>
+        <li>Doy a la waitlist acceso anticipado (comunicado primero, ventana de compra, email para presentar y SMS para activar).</li>
+        <li>Comunico el momento del drop con fuerza (email de lanzamiento potente + SMS de «ya abrió» + urgencia real).</li>
+      </ul>
+
+      <p class="mini">Sobre el SMS y el «después»</p>
+      <ul class="check">
+        <li>Uso el SMS con criterio para lo urgente e importante, aprovechando su inmediatez.</li>
+        <li>Respeto el permiso y la frecuencia del SMS.</li>
+        <li>Hago seguimiento en la fase «después» (recuperar indecisos, carrito abandonado, escasez real, prueba social).</li>
+      </ul>
+
+      <p class="mini">Sobre la voz y el sistema</p>
+      <ul class="check">
+        <li>Escribo todo en el tono de mi marca, aportando, no solo gritando «compra».</li>
+        <li>Mido la conversión de cada mensaje y del conjunto.</li>
+        <li>Extraigo aprendizajes para el próximo lanzamiento.</li>
+        <li>Tengo un playbook de email/SMS de lanzamiento documentado y repetible.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 9.3 · Estrategia de email/SMS para el lanzamiento · v1.0 · Fase 9</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

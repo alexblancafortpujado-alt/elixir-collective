@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 5.1 — Sistema de gestión de inventario y stock</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 5 · Operaciones, Inventario y Fulfillment</p>
+    <h1 class="rv">Gestión de inventario</h1>
+    <p class="meta rv">SOP 5.1 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; El activo más caro de tu marca, bajo control</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que tengas <strong>control total sobre tu stock</strong>: saber en todo momento qué tienes, cuánto, dónde y qué hacer con ello. En moda, el inventario no son «cajas en un almacén»: es <span class="hl">el dinero de tu marca convertido en producto</span>, y cada prenda parada es capital congelado que no puedes usar para nada más hasta que se venda.
+    </p>
+    <p>La idea que ordena todo: el inventario es un <strong>equilibrio entre dos errores opuestos</strong> —quedarte sin lo que vende y acumular lo que no— y los dos cuestan dinero. Ninguna marca lo clava siempre, pero una con sistema se equivoca mucho menos que una que gestiona «de cabeza».</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 8 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que tengas control total sobre tu stock: saber en todo momento qué tienes, cuánto, dónde y qué hacer con ello. Gestionar el inventario no es una tarea administrativa aburrida: es gestionar <span class="gold">el activo más grande y más líquido-o-atascado de tu negocio</span>.</p>
+      <p>La idea central que ordena todo: el inventario es un equilibrio entre dos errores opuestos, y los dos cuestan dinero.</p>
+      <ul>
+        <li><b>Quedarte sin stock (stockout):</b> se te agota lo que vende. Cada venta que no puedes servir es dinero que dejas sobre la mesa, un cliente frustrado y momentum perdido, especialmente doloroso justo cuando un producto está funcionando.</li>
+        <li><b>Acumular stock muerto (overstock):</b> te sobra lo que no vende. Capital congelado que ocupa espacio, pierde valor con el tiempo y muchas veces acaba malvendido con descuento o directamente en pérdida.</li>
+      </ul>
+      <p>Un factor lo hace especialmente crítico en moda: los plazos de producción son largos. Reponer no es pedir hoy y tener mañana —entre producir, confeccionar y recibir pasan semanas o meses—, así que las decisiones de inventario se toman con mucha antelación, prediciendo qué vas a necesitar antes de necesitarlo. El resultado concreto: un sistema para registrar y controlar tu stock (qué, cuánto, dónde), señales para saber cuándo reponer y cuándo parar, un método para decidir cuánto producir de cada prenda y talla, y un enfoque para gestionar el stock muerto y liberar el capital atascado.</p>
+      <p class="pull">Si no lo tienes: vendes sin saber cuánto queda y decepcionas a clientes con productos «agotados» que creías tener, o produces de más y acabas con un almacén lleno de dinero congelado que malvendes en rebajas. Sin control de inventario, decides a ciegas sobre el activo más caro de tu negocio, y en moda eso se paga carísimo.</p>
+
+      <h3><span class="hn">1.2</span>Insumos necesarios</h3>
+      <ul>
+        <li><b>El producto ya producido o en producción</b> (Fase 5 anterior) con sus referencias claras: cada prenda, talla y color identificada con un código.</li>
+        <li><b>Tus plazos de producción reales</b> (de la relación con proveedores/fábrica): cuánto tardas en reponer. Este dato condiciona toda la anticipación.</li>
+        <li><b>Una herramienta de gestión de inventario:</b> el propio sistema de tu tienda (Shopify gestiona inventario nativo), una hoja de cálculo bien montada al principio, o software de inventario específico cuando crezcas.</li>
+        <li><b>Un espacio de almacenamiento organizado</b> (tratado en su propio SOP, pero el inventario y el almacén van de la mano).</li>
+        <li><b>Datos de venta</b> en cuanto empieces a vender: qué se vende, a qué ritmo, qué tallas — la materia prima para decidir reposiciones y curvas.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Principios no negociables</h3>
+      <ol>
+        <li><b>El inventario es dinero, no cajas.</b> Cada prenda parada es capital congelado. Gestiónalo con la seriedad de gestionar el dinero de la marca.</li>
+        <li><b>Ni stockout ni overstock: equilibrio.</b> Los dos extremos cuestan. El trabajo es minimizar ambos, no eliminar solo uno.</li>
+        <li><b>Decide con antelación por los plazos largos.</b> En moda no puedes reponer al instante. Anticipa la reposición al plazo de producción, siempre.</li>
+        <li><b>Una única fuente de verdad del stock.</b> El número de stock tiene que estar en un solo sitio y sincronizado con la tienda. Nada de contar «más o menos».</li>
+        <li><b>Cada unidad, identificada.</b> Cada prenda-talla-color tiene su código (SKU). Sin identificación única, no hay control posible.</li>
+        <li><b>Decide con datos, no con optimismo.</b> Cuánto producir y reponer se calcula con ventas reales, no con lo que te gustaría vender.</li>
+        <li><b>El stock muerto se gestiona, no se ignora.</b> Capital congelado que no mueves es pérdida silenciosa. Ten siempre un plan para liberarlo.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De no saber qué tienes a controlar tu stock como un activo</h2>
+      <p>Ocho pasos: primero montas el sistema de identificación y registro, lo sincronizas con la tienda, defines señales de reposición, decides cuánto producir, gestionas la reposición con los plazos, controlas la salud del inventario, gestionas el stock muerto y lo sistematizas.</p>
+
+      <h3><span class="hn">2.1</span>Identificar cada producto con un SKU</h3>
+      <p>La base de todo control de inventario es que cada variante de producto tenga un identificador único. Sin esto no puedes controlar nada: es como llevar cuentas sin nombres. Ese identificador es el <strong>SKU</strong> (Stock Keeping Unit).</p>
+      <ol>
+        <li><b>Crea un SKU para cada combinación única de prenda-talla-color.</b> No basta con «sudadera negra»: necesitas «sudadera modelo X, negra, talla M» como una unidad distinta de la talla L. Cada una es un SKU, porque cada una se cuenta, se vende y se repone por separado.</li>
+        <li><b>Usa un sistema de códigos lógico y consistente:</b> un código que tú y tu equipo podáis leer (ej. una estructura tipo «modelo-color-talla»). La consistencia importa más que la elegancia — que siempre siga la misma lógica.</li>
+        <li><b>Aplica el SKU en todas partes:</b> en tu sistema de inventario, en la tienda, en las etiquetas de producto, en el almacén. El mismo código conecta la prenda física con su registro digital.</li>
+      </ol>
+      <p class="pull">Sin SKUs sabes que «te quedan sudaderas», pero no que «te quedan cero M negras y quince XXL grises», que es la información que de verdad necesitas para decidir qué se vende, qué queda y qué reponer.</p>
+
+      <h3><span class="hn">2.2</span>Montar el registro de stock (la fuente de verdad)</h3>
+      <p>Con los SKUs definidos, montas el <strong>registro central de stock</strong>: el sitio único donde vive la verdad de cuánto tienes de cada cosa. Es el número que consultas para cualquier decisión.</p>
+      <ol>
+        <li><b>Una entrada por SKU</b> con: cuántas unidades tienes, dónde están, su coste y su estado (disponible, reservado, en producción).</li>
+        <li><b>La herramienta adecuada a tu tamaño:</b> al empezar, una hoja de cálculo bien montada puede bastar. Al crecer, el inventario nativo de tu plataforma (Shopify y similares llevan control de stock integrado) o un software específico. Lo importante no es la herramienta, es que haya UN solo registro fiable.</li>
+        <li><b>Movimientos registrados:</b> el stock cambia con cada entrada (llega producción) y cada salida (venta, devolución, muestra regalada). El registro tiene que reflejar esos movimientos para no desincronizarse de la realidad.</li>
+      </ol>
+      <p class="pull">La regla de oro: una sola fuente de verdad. El error fatal es tener el stock «en varios sitios» —una hoja, la cabeza, la tienda— que no coinciden. Cuando hay varias versiones del stock, ninguna es fiable.</p>
+
+      <h3><span class="hn">2.3</span>Sincronizar el inventario con la tienda</h3>
+      <p>Tu registro de stock y tu tienda online tienen que estar <strong>sincronizados</strong>, para que la web nunca venda lo que no tienes ni oculte lo que sí. Una desincronización aquí genera los peores problemas de cara al cliente.</p>
+      <ol>
+        <li><b>El stock de la tienda refleja el stock real:</b> cuando se vende una unidad, el disponible baja automáticamente; cuando llega reposición, sube. Plataformas como Shopify lo hacen de forma nativa si gestionas el inventario dentro de ellas.</li>
+        <li><b>Evita la sobreventa:</b> el peor escenario es vender online algo que ya no tienes y tener que cancelar el pedido — mata la confianza del cliente. Un inventario sincronizado lo previene: cuando llega a cero, la tienda lo marca agotado sola.</li>
+        <li><b>Gestiona el multicanal si vendes en varios sitios:</b> si vendes en tu web y además en otro canal (un marketplace, pop-ups, wholesale), el stock tiene que descontarse de un pool común para no vender la misma unidad dos veces. Suele requerir que todos los canales lean del mismo registro.</li>
+      </ol>
+      <p>La regla: la tienda nunca debe prometer lo que el almacén no puede cumplir. La sincronización stock-tienda es lo que hace que la experiencia de compra sea fiable. Priorízala.</p>
+
+      <h3><span class="hn">2.4</span>Definir las señales de reposición y los niveles</h3>
+      <p>Para no quedarte sin lo que vende, necesitas <strong>señales que te avisen cuándo reponer</strong> antes de llegar a cero, y con la antelación que exige tu plazo de producción. Este es el mecanismo que evita los stockouts.</p>
+      <ol>
+        <li><b>El punto de reposición (reorder point):</b> el nivel de stock al que, cuando llegas, tienes que lanzar la reposición. La clave: no es cero ni cerca de cero, es el nivel que te da tiempo a reponer <em>antes</em> de agotarte, contando el plazo de producción.</li>
+        <li><b>El stock de seguridad (safety stock):</b> un colchón extra por si las ventas se disparan o la producción se retrasa. Un margen que te protege de los imprevistos.</li>
+        <li><b>Las alertas:</b> configura tu sistema (o revisa manualmente si usas hoja de cálculo) para que te avise cuando un SKU llega a su punto de reposición. Así no dependes de «acordarte de mirar».</li>
+      </ol>
+      <p>El matiz crítico de moda: por los plazos largos, la decisión de reponer hay que tomarla mucho antes de quedarte sin stock. Una tienda normal repone cuando ve poco; tú tienes que reponer cuando aún tienes bastante, porque lo que pidas hoy tardará semanas en llegar. Anticipación es la palabra.</p>
+
+      <h3><span class="hn">2.5</span>Decidir cuánto producir de cada prenda y talla</h3>
+      <p>La decisión más importante y más difícil del inventario: <strong>cuánto producir de cada cosa.</strong> Producir de más = stock muerto; producir de menos = stockout y ventas perdidas. Este paso te da el criterio para acertar más.</p>
+      <ol>
+        <li><b>Usa la curva de tallas (del SOP de patronaje):</b> no produzcas la misma cantidad de cada talla. Las centrales (M, L) venden mucho más que los extremos. Respeta la curva para no acabar con XXL sin vender y M agotadas.</li>
+        <li><b>Basa la cantidad en datos, no en optimismo:</b> si tienes ventas previas de esa prenda o similares, úsalas para estimar. Si es un lanzamiento nuevo sin datos, sé conservador. Empieza corto y repón lo que funcione.</li>
+        <li><b>Ten en cuenta el MOQ:</b> el mínimo de producción de tu fábrica condiciona cuánto puedes producir. A veces te obliga a producir más de lo que querrías de un SKU, tenlo presente al decidir.</li>
+        <li><b>Considera la estrategia de escasez:</b> producir poco a propósito (drops limitados) puede ser una decisión de marca que además reduce el riesgo de stock muerto y genera deseo. Producir menos no siempre es limitación; a veces es estrategia (conecta con el SOP de drops).</li>
+      </ol>
+      <p class="pull">La regla de oro para marcas nuevas: es más seguro quedarse corto y reponer un éxito que pasarse y comerse el stock. Un stockout de algo que vende es una oportunidad perdida —recuperable reponiendo—; un almacén de algo que no vende es dinero perdido. Ante la duda, produce menos.</p>
+
+      <h3><span class="hn">2.6</span>Gestionar la reposición con los plazos en cuenta</h3>
+      <p>Cuando un producto funciona, hay que <strong>reponerlo bien y a tiempo,</strong> y aquí los plazos largos de moda hacen que la anticipación lo sea todo. Este paso gestiona el ciclo de reposición para no perder ventas de tus productos ganadores.</p>
+      <ol>
+        <li><b>Actúa en el punto de reposición, no cuando ves poco stock:</b> cuando un SKU llega a su reorder point, lanza la reposición ya, aunque aún tengas unidades. Lo que pidas tardará semanas; esperar a tener poco es garantizar el stockout.</li>
+        <li><b>Prioriza reponer lo que rota:</b> identifica tus productos ganadores (los que se venden rápido) y no te quedes sin ellos nunca. Perder ventas de tu producto estrella por mala reposición es de los errores más caros.</li>
+        <li><b>Cuenta con la disponibilidad de materia prima:</b> reponer una prenda requiere tener la tela y avíos. Aquí se paga haber asegurado el repedido de telas (Fase 3): si la tela de tu producto estrella no se puede reponer, no puedes reponer la prenda. Anticipa también la materia prima.</li>
+        <li><b>Decide qué NO reponer:</b> tan importante como reponer lo que vende es no reponer lo que no vende. Un producto que se movió lento no merece una segunda producción solo porque quedó bien: reponerlo es fabricar más stock muerto.</li>
+      </ol>
+      <p class="pull">Repón agresivamente lo que vende, y no repongas lo que no. La reposición es donde separas a los ganadores (que exprimes) de los que no funcionaron (que dejas morir sin insistir).</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Un proceso de reposición que actúa en el punto de reposición contando el plazo, prioriza los productos que rotan, anticipa la materia prima y descarta reponer lo que no vende.</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Controlar la salud del inventario y gestionar el stock muerto</h3>
+      <p>Un inventario sano se <strong>vigila con métricas</strong> y se limpia del stock que no rota. Este paso te da las señales de salud y el plan para el capital atascado, que es dinero que puedes recuperar.</p>
+      <ol>
+        <li><b>Vigila la salud del inventario con métricas simples:</b> la <em>rotación</em> (qué se vende rápido y qué se atasca: repón lo rápido, plantéate liquidar lo lento), la <em>antigüedad del stock (aging)</em> (cuánto lleva una unidad sin venderse: lo viejo pierde valor y urge moverlo), y el <em>capital inmovilizado</em> (cuánto dinero tienes atascado en stock parado, el recordatorio de que el inventario es dinero, no cajas).</li>
+        <li><b>Gestiona el stock muerto activamente:</b> el producto que no rota hay que moverlo para liberar el capital, no dejarlo eternamente. Opciones: descuentos o rebajas para liquidarlo, bundles (venderlo junto a un producto que sí funciona), un «outlet» o venta privada, regalos/seeding a creadores (que al menos genera marketing), o donarlo. La clave es recuperar el capital y el espacio, aunque sea con menos margen.</li>
+      </ol>
+      <p class="pull">El stock muerto ignorado es una pérdida que crece. Ten un umbral («si en X tiempo no se vendió, se liquida») y actúa: no lo dejes acumularse por inercia o por cariño al producto.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Un control de salud del inventario con métricas simples (rotación, antigüedad, capital inmovilizado) y un plan activo para liquidar el stock muerto y liberar capital.</li>
+      </ul>
+
+      <h3><span class="hn">2.8</span>Sistematizar y hacer inventario periódico</h3>
+      <p>El último paso convierte todo en una <strong>rutina fiable</strong> y asegura que tu registro digital coincide con la realidad física.</p>
+      <ol>
+        <li><b>Haz recuentos físicos periódicos (stock takes):</b> por muy bueno que sea tu sistema, el stock digital y el físico se desincronizan con el tiempo (errores, roturas, pérdidas, devoluciones mal registradas). Cuenta físicamente cada cierto tiempo y cuadra el registro con la realidad. Un inventario que nunca se cuenta acaba mintiendo.</li>
+        <li><b>Establece rutinas de actualización:</b> define cuándo y cómo se actualiza el registro (al recibir producción, al procesar devoluciones, tras cada periodo de ventas). El inventario se mantiene sano con rutina, no con revisiones de pánico.</li>
+        <li><b>Revisa los datos para decidir mejor cada colección:</b> tu histórico (qué rotó, qué se atascó, qué tallas volaron, qué curva acertaste) es oro para decidir la producción de la siguiente colección. El inventario bien llevado te enseña a producir mejor en el futuro.</li>
+        <li><b>Prepara el sistema para delegar y escalar:</b> un inventario sistematizado (SKUs claros, registro único, rutinas definidas) es lo que te permite delegar la operativa y crecer sin perder el control. Un inventario «en tu cabeza» no escala.</li>
+      </ol>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Las rutinas de inventario establecidas (recuentos físicos periódicos, actualizaciones regladas), el uso del histórico para decidir producción futura, y el sistema listo para delegar y escalar.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des el sistema de inventario por cerrado hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre la identificación y el registro</p>
+      <ul class="check">
+        <li>Cada variante (prenda-talla-color) tiene un SKU único, lógico y consistente.</li>
+        <li>Tengo un registro central de stock como única fuente de verdad (cantidad, ubicación, coste, estado por SKU).</li>
+        <li>El registro refleja los movimientos de entrada y salida.</li>
+      </ul>
+
+      <p class="mini">Sobre la sincronización y las señales</p>
+      <ul class="check">
+        <li>El inventario está sincronizado con la tienda (y todos los canales) para no sobrevender.</li>
+        <li>Tengo puntos de reposición y stock de seguridad definidos, contando el plazo de producción.</li>
+        <li>Tengo alertas que me avisan cuándo reponer, con antelación.</li>
+      </ul>
+
+      <p class="mini">Sobre la producción y la reposición</p>
+      <ul class="check">
+        <li>Decido cuánto producir con la curva de tallas y con datos, no con optimismo.</li>
+        <li>Al empezar, prefiero quedarme corto y reponer un éxito antes que pasarme.</li>
+        <li>Repongo agresivamente lo que rota y no repongo lo que no vende.</li>
+        <li>Anticipo también la materia prima para poder reponer a tiempo.</li>
+      </ul>
+
+      <p class="mini">Sobre la salud y el sistema</p>
+      <ul class="check">
+        <li>Vigilo la salud del inventario (rotación, antigüedad, capital inmovilizado).</li>
+        <li>Tengo un plan activo para liquidar el stock muerto y liberar capital.</li>
+        <li>Hago recuentos físicos periódicos y cuadro el registro con la realidad.</li>
+        <li>Uso el histórico de inventario para decidir mejor la producción de cada colección.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 5.1 · Sistema de gestión de inventario y stock · v1.0 · Fase 5</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

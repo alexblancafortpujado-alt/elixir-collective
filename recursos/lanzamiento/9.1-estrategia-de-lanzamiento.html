@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 9.1 — Estrategia de lanzamiento / drop</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 9 · Lanzamiento, Drops y Marketing</p>
+    <h1 class="rv">Estrategia de drop</h1>
+    <p class="meta rv">SOP 9.1 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Convertir el lanzamiento en un evento que agota</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que conviertas el lanzamiento de tu colección en un <strong>evento</strong>: un momento construido que genera deseo, expectación y ventas concentradas, en lugar de subir los productos a la tienda y esperar a que alguien los vea. Cómo lanzas determina en gran medida cuánto vendes — <span class="hl">es la diferencia entre una colección que se agota y una que se queda en el almacén</span>.
+    </p>
+    <p>La mecánica central de la moda moderna: <strong>el drop convierte la compra de ropa en un evento con urgencia</strong>, en vez de una tienda siempre abierta con todo siempre disponible. Transforma el «puedo comprarlo cuando quiera» —que a menudo significa nunca— en «tengo que comprarlo ahora», que significa venta.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 8 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que conviertas el lanzamiento de tu colección en un evento, un momento construido que genera deseo, expectación y ventas concentradas, en lugar de simplemente «subir los productos a la tienda» y esperar a que alguien los vea. La diferencia entre un lanzamiento bien construido y uno improvisado suele ser la diferencia entre una colección que se agota y una que se queda en el almacén.</p>
+      <p>El modelo de drop (lanzamientos puntuales, a menudo limitados, en un momento concreto) es lo que usan las marcas de moda más deseadas, y funciona por una razón psicológica potente: <span class="gold">la escasez y el momento concreto crean urgencia y deseo</span>. Cuando algo está siempre disponible, no hay prisa por comprarlo; cuando se lanza en un momento concreto y puede agotarse, la gente actúa.</p>
+      <p>Segunda idea: <strong>un lanzamiento no es el día del lanzamiento, es todo lo que ocurre antes, durante y después.</strong> Antes: las semanas previas donde generas expectación, calientas a la audiencia y construyes la lista de espera; ahí se gana o se pierde el lanzamiento. Durante: el día del drop, cuando la urgencia está en su máximo. Después: los días siguientes, donde mantienes el momento, recuperas a los indecisos y capitalizas el pico de atención. Y el drop es donde converge todo lo que construiste —producto, tienda, contenido y sobre todo comunidad—: una marca con comunidad lanza a gente que ya la espera; una sin comunidad lanza al vacío.</p>
+      <p class="pull">Lo que pasa si no lo tienes: subes la colección con un «ya disponible» y no la ve casi nadie, no generas urgencia ni deseo así que la gente no siente prisa por comprar, desperdicias el pico de atención de un lanzamiento por no construirlo, y tu colección se vende lenta y a medias en lugar de agotarse.</p>
+
+      <h3><span class="hn">1.2</span>Elementos necesarios</h3>
+      <ul>
+        <li><b>Tu colección lista</b> (producto producido o en producción): lo que vas a lanzar.</li>
+        <li><b>Tu tienda funcionando:</b> donde ocurre la venta, preparada para el pico de tráfico del drop.</li>
+        <li><b>Tu contenido y tus canales:</b> las herramientas para construir el deseo y comunicar el lanzamiento.</li>
+        <li><b>Tu comunidad:</b> tu mayor ventaja de lanzamiento, la gente que ya espera y comprará.</li>
+        <li><b>Tu lista de email y flujos:</b> la lista de espera y los emails de lanzamiento son clave.</li>
+        <li><b>Tu decisión de escasez y cantidad:</b> cuánto produces determina si el drop es limitado y cómo juegas la escasez.</li>
+        <li><b>Un calendario de lanzamiento</b> para coordinar todas las piezas hacia la fecha.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Principios no negociables</h3>
+      <ol>
+        <li><b>El drop es un evento, no un «disponible».</b> Construye el lanzamiento como un momento, con deseo y urgencia, no como subir productos a la tienda.</li>
+        <li><b>La escasez y el momento crean urgencia.</b> Lo siempre disponible no tiene prisa. El drop concentra el deseo en un momento concreto.</li>
+        <li><b>El lanzamiento es antes, durante y después.</b> La mayor parte del trabajo (y del resultado) está en la construcción previa. No pienses solo en el día.</li>
+        <li><b>Construye deseo antes de vender.</b> El lanzamiento se gana en las semanas previas calentando a la audiencia, no el día del drop.</li>
+        <li><b>La comunidad es tu ventaja de lanzamiento.</b> Lanzas a gente que ya te espera. Cuida y activa a tu comunidad para el drop.</li>
+        <li><b>Coordina todos los activos.</b> Producto, tienda, contenido, comunidad y email, todos apuntando a la fecha. Un lanzamiento es una operación coordinada.</li>
+        <li><b>La escasez debe ser real y coherente.</b> No finjas escasez que no existe. La escasez real (o la limitación genuina) funciona; la falsa, con el tiempo, quema la confianza.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De subir productos a un lanzamiento que agota</h2>
+      <p>Ocho pasos: entender el modelo de drop, definir la estrategia del lanzamiento, construir el deseo (fase «antes»), montar la lista de espera, ejecutar el día del drop (fase «durante»), aprovechar el momento (fase «después»), coordinar todos los activos, y sistematizar para futuros drops.</p>
+
+      <h3><span class="hn">2.1</span>Entender el modelo de drop y la psicología de la escasez</h3>
+      <p>Antes de planificar, entiende <strong>por qué funciona el modelo de drop</strong>, porque toda la estrategia se apoya en esta psicología. El drop no es una moda arbitraria, es una mecánica que aprovecha cómo funciona el deseo humano.</p>
+      <p>Lo que hay que entender:</p>
+      <ol>
+        <li><b>La escasez crea deseo:</b> cuando algo es limitado o puede agotarse, se desea más. Lo que está siempre disponible en cantidad ilimitada no genera urgencia, se puede comprar «cuando sea», que a menudo es nunca. La escasez —real de cantidad, o de tiempo— es lo que convierte el «me gusta» en «lo compro ahora».</li>
+        <li><b>El momento concreto concentra la acción:</b> un lanzamiento en una fecha y hora definidas concentra la atención y la compra en ese momento, creando un evento. En vez de ventas dispersas y tibias a lo largo del tiempo, tienes un pico concentrado de deseo y compra.</li>
+        <li><b>La urgencia vence a la indecisión:</b> el mayor enemigo de la venta es el «ya lo compraré luego», que se convierte en nunca. La urgencia (esto se acaba, esto es ahora) es lo que rompe esa indecisión y hace actuar.</li>
+        <li><b>La exclusividad refuerza la pertenencia:</b> conseguir algo limitado, ser de los que lo tienen, refuerza la identidad y la pertenencia a la comunidad. El drop no es solo una venta, es un momento de comunidad donde los tuyos consiguen algo especial.</li>
+      </ol>
+      <p class="pull">El drop convierte el deseo pasivo en acción urgente. Entender la psicología de la escasez y el momento es lo que te permite construir un lanzamiento que hace que la gente actúe, en lugar de uno que la deja «pensándoselo».</p>
+
+      <h3><span class="hn">2.2</span>Definir la estrategia del lanzamiento</h3>
+      <p>Antes de ejecutar, define <strong>cómo va a ser tu lanzamiento concreto.</strong> No todos los drops son iguales, y las decisiones estratégicas de aquí condicionan todo lo demás.</p>
+      <p>Define:</p>
+      <ol>
+        <li><b>El tipo de lanzamiento:</b> ¿un drop limitado (cantidad concreta, se agota)? ¿un lanzamiento de colección con más stock? ¿una preventa (se vende antes de producir)? ¿made-to-order? Cada modelo tiene su lógica y su nivel de escasez.</li>
+        <li><b>El nivel y tipo de escasez:</b> ¿la escasez es de cantidad (unidades limitadas), de tiempo (disponible solo un periodo), o ambas? Decide qué escasez juegas, y que sea real y coherente con tu producción y tu marca.</li>
+        <li><b>La fecha y el momento:</b> cuándo lanzas. Una fecha y hora concretas crean el evento. Elige un momento que funcione para tu audiencia, cuando esté más disponible tu tribu.</li>
+        <li><b>El objetivo del lanzamiento:</b> ¿agotar el drop? ¿maximizar ventas? ¿ganar comunidad y notoriedad? Una marca nueva puede priorizar notoriedad y agotar un drop pequeño (que genera prueba social); una establecida, maximizar ventas.</li>
+        <li><b>El encaje con tu calendario de drops:</b> si vas a hacer drops recurrentes, cómo encaja este en tu ritmo.</li>
+      </ol>
+      <p>La regla: <strong>define la estrategia antes de ejecutar.</strong> El tipo de lanzamiento, el nivel de escasez, la fecha y el objetivo condicionan toda la ejecución. Definirlos con claridad primero hace que todo lo demás tenga una dirección clara.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La estrategia del lanzamiento definida (tipo, nivel de escasez, fecha/momento, objetivo, encaje en el calendario).</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Construir el deseo (la fase «antes»)</h3>
+      <p>Aquí es donde se gana la mayoría de los lanzamientos: <strong>las semanas previas construyendo deseo y expectación.</strong> El error más común es no hacer esta fase y lanzar «en frío». Un buen lanzamiento calienta a la audiencia durante las semanas anteriores, para que cuando llegue el día, la gente ya lo esté esperando y deseando.</p>
+      <p>Cómo construir el deseo antes del drop:</p>
+      <ol>
+        <li><b>Genera expectación (teasing):</b> en las semanas previas, deja ver que algo viene, sin enseñarlo todo. Adelantos, pistas, detalles, la fecha. El teasing crea curiosidad y la gente empieza a esperar el lanzamiento.</li>
+        <li><b>Cuenta la historia de la colección:</b> usa el concepto de la colección para construir una narrativa en las semanas previas. Muestra el mundo, la inspiración, el proceso. Cuando la gente conecta con la historia antes del drop, la desea más.</li>
+        <li><b>Ve revelando el producto progresivamente:</b> no enseñes todo de golpe. Revela las piezas poco a poco, construyendo el deseo pieza a pieza. El deseo se construye por acumulación.</li>
+        <li><b>Activa a la comunidad:</b> haz que tu comunidad sea parte de la construcción, involúcrala, hazla sentir que el drop es un momento de la tribu. Una comunidad activada llega al día del drop deseando y lista para comprar. Es tu mayor ventaja aquí.</li>
+        <li><b>Anuncia la fecha y crea el evento:</b> comunica cuándo es el drop, para que la gente lo marque y lo espere. Un momento concreto y anunciado crea el evento.</li>
+      </ol>
+      <p class="pull">El lanzamiento se gana antes del día del lanzamiento. La mayoría del trabajo y del resultado está en esta fase previa. No la saltes.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La fase «antes» ejecutada (teasing, historia de la colección, revelación progresiva, activación de la comunidad, anuncio de la fecha) que construye deseo hacia el drop.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Montar la lista de espera y capturar el interés</h3>
+      <p>Una herramienta clave de la fase «antes» es la <strong>lista de espera (waitlist)</strong>: capturar el interés de la gente que quiere el drop, antes de que ocurra. Merece su propio paso porque es una de las mecánicas más potentes de un lanzamiento y de las más ignoradas.</p>
+      <p>Cómo usar la lista de espera:</p>
+      <ol>
+        <li><b>Captura el interés antes del drop:</b> invita a la gente interesada a apuntarse (dejar su email, unirse a una lista, activar un aviso) para ser avisada del lanzamiento. Esto convierte el interés difuso en una lista concreta de gente que quiere comprar.</li>
+        <li><b>La lista es doblemente valiosa:</b> te da una audiencia caliente y comprometida lista para el día del drop, y la propia acción de apuntarse aumenta el compromiso. Además, su tamaño te indica la demanda antes de lanzar.</li>
+        <li><b>Ofrece acceso anticipado o exclusivo a la lista:</b> una mecánica muy efectiva es dar a los de la lista acceso anticipado al drop (comprar antes que el público general) o alguna exclusividad. Premia el compromiso, refuerza la pertenencia (los de la lista son los «insiders»), y concentra las primeras ventas en gente ya deseosa.</li>
+        <li><b>Conecta con tu email y tu comunidad:</b> la lista de espera se nutre de tu comunidad y alimenta tus flujos de email. El día del drop, esta lista es a quien primero y más fuerte comunicas.</li>
+      </ol>
+      <p class="pull">La lista de espera convierte el interés en ventas listas para el día del drop. Capturar a la gente interesada antes del lanzamiento, y premiar su compromiso con acceso anticipado, te da una audiencia caliente que compra en cuanto lanzas.</p>
+
+      <h3><span class="hn">2.5</span>Ejecutar el día del drop (la fase «durante»)</h3>
+      <p>El día del lanzamiento es cuando <strong>todo el deseo construido se convierte en ventas.</strong> La urgencia está en su máximo, y tu trabajo es capitalizarla.</p>
+      <p>Cómo ejecutar el día del drop:</p>
+      <ol>
+        <li><b>Comunica el lanzamiento con fuerza:</b> comunícalo a todos tus canales y sobre todo a tu lista de espera y tu comunidad, en el momento. Emails, contenido, historias, todo apuntando a «ya está aquí, ahora». La comunicación concentrada crea el pico de atención.</li>
+        <li><b>Aprovecha la urgencia:</b> comunica la escasez real (stock limitado, tiempo limitado) para activar la urgencia. «Unidades limitadas», «solo hoy», lo que sea real en tu drop. La urgencia bien comunicada convierte el deseo en compra inmediata.</li>
+        <li><b>Asegura que la tienda aguanta y convierte:</b> el día del drop tu tienda recibe el pico de tráfico. Que funcione bien, cargue rápido, el checkout sea fluido y el stock esté sincronizado. Un problema técnico el día del drop es una catástrofe: pierdes las ventas del momento de máximo deseo.</li>
+        <li><b>Mantén la energía y la presencia:</b> está presente, comunica, muestra el momento (gente comprando, piezas agotándose), crea la sensación de evento en directo. Mostrar que se está agotando crea urgencia real.</li>
+        <li><b>Da a la lista de espera su acceso:</b> si prometiste acceso anticipado, ejecútalo, la lista compra primero. Esto arranca el drop con ventas fuertes de gente ya deseosa, creando prueba social y momento para el resto.</li>
+      </ol>
+      <p>La regla: <strong>el día del drop, convierte todo el deseo en ventas concentradas.</strong> Todo el trabajo previo desemboca en este momento; ejecutarlo bien es capitalizar el pico de deseo que construiste.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El día del drop ejecutado (comunicación fuerte, urgencia real, tienda que aguanta, energía de evento, acceso de la lista de espera) que convierte el deseo en ventas concentradas.</li>
+      </ul>
+
+      <h3><span class="hn">2.6</span>Aprovechar el momento (la fase «después»)</h3>
+      <p>El lanzamiento no termina el día del drop. Los días siguientes son una <strong>fase de oportunidad</strong> para capitalizar el pico de atención, recuperar a los indecisos y aprovechar el momento. Esta fase, ignorada por muchos, recupera ventas y extiende el impacto del lanzamiento.</p>
+      <p>Cómo aprovechar el después:</p>
+      <ol>
+        <li><b>Recupera a los indecisos:</b> no todo el que quería comprar compró el día del drop. Usa tus flujos (carrito abandonado, emails de seguimiento) y tu contenido para recuperar a los que dudaron. Recordatorios de «aún disponible» o «últimas unidades» (si es real) recuperan ventas.</li>
+        <li><b>Aprovecha la prueba social del lanzamiento:</b> tras el drop tienes clientes, ventas, quizás piezas agotadas. Muestra que se está vendiendo, que se agota, el contenido de la comunidad con las piezas. La gente compra lo que ve que otros compran.</li>
+        <li><b>Comunica la escasez real que queda:</b> si quedan pocas unidades de algo, comunícalo (real). «Últimas unidades», «casi agotado» crea urgencia en la recta final y recupera a los que lo dejaban para luego.</li>
+        <li><b>Capitaliza el pico de atención:</b> un lanzamiento genera un pico de atención sobre tu marca. Aprovéchalo para convertir a la gente nueva que llegó en seguidores y comunidad, no solo en ventas puntuales.</li>
+        <li><b>Gestiona el post-venta del drop:</b> la avalancha de pedidos hay que servirla bien y cuidar a los nuevos clientes para convertirlos en recurrentes. Un drop mal servido después quema la buena impresión.</li>
+      </ol>
+      <p class="pull">El después extiende y capitaliza el lanzamiento. Un lanzamiento que ignora el después desperdicia la cola del momento; uno que la aprovecha, extiende su impacto.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La fase «después» ejecutada (recuperar indecisos, prueba social del lanzamiento, escasez real que queda, capitalizar el pico de atención en comunidad, post-venta cuidado).</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Coordinar todos los activos hacia el lanzamiento</h3>
+      <p>Un lanzamiento es una <strong>operación coordinada</strong> donde todos tus activos apuntan a la misma fecha. Este paso asegura que producto, tienda, contenido, comunidad y email trabajan juntos y sincronizados hacia el drop, en lugar de ir descoordinados.</p>
+      <p>Cómo coordinar:</p>
+      <ol>
+        <li><b>Monta un calendario de lanzamiento:</b> un plan que coordine todas las piezas hacia la fecha. Qué contenido sale cuándo, cuándo se abre la lista de espera, cuándo se comunica la fecha, qué pasa el día, qué pasa después. Todo mapeado en el tiempo.</li>
+        <li><b>Asegura que cada activo está listo:</b> el producto (producido, fotografiado), la tienda (montada, con las fichas, aguantando el tráfico), el contenido (producido para las tres fases), la comunidad (activada), los emails (los flujos y la lista de espera listos). Un lanzamiento falla si un activo clave no está a punto.</li>
+        <li><b>Coordina la comunicación en todos los canales:</b> el mensaje coherente y coordinado en redes, email y comunidad. Todos los canales contando la misma historia y apuntando al mismo momento amplifica el impacto.</li>
+        <li><b>Prepara la operación para el pico:</b> el drop genera un pico de tráfico, ventas y pedidos. Asegura que la tienda aguanta, el inventario está sincronizado y el fulfillment está preparado para la avalancha. La operación tiene que soportar el éxito.</li>
+      </ol>
+      <p>La regla: <strong>un lanzamiento es una operación coordinada, no acciones sueltas.</strong> La descoordinación diluye el impacto; la coordinación lo amplifica.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Un calendario de lanzamiento que coordina todos los activos (producto, tienda, contenido, comunidad, email) hacia la fecha del drop, con cada uno listo y la operación preparada para el pico.</li>
+      </ul>
+
+      <h3><span class="hn">2.8</span>Analizar y sistematizar para futuros drops</h3>
+      <p>El último paso convierte cada lanzamiento en <strong>aprendizaje para el siguiente.</strong> Si vas a hacer drops recurrentes, cada uno debe enseñarte a hacer mejor el próximo. Este paso cierra el ciclo y sistematiza el lanzamiento como una capacidad de la marca.</p>
+      <p>Cómo sistematizar:</p>
+      <ol>
+        <li><b>Analiza los resultados del drop:</b> qué se vendió y qué no, qué generó más deseo, qué funcionó en la construcción del deseo, cuánto convirtió la lista de espera, qué falló.</li>
+        <li><b>Extrae los aprendizajes:</b> qué repetir (lo que funcionó) y qué cambiar (lo que no). Cada drop es un experimento del que sales sabiendo más sobre tu audiencia, tu producto y tu ejecución.</li>
+        <li><b>Documenta tu playbook de lanzamiento:</b> convierte tu proceso de drop en un sistema documentado y repetible (las tres fases, el calendario, las mecánicas de escasez y lista de espera, la coordinación). Un playbook te permite ejecutar cada drop mejor y más rápido, y delegarlo cuando crezcas.</li>
+        <li><b>Conecta con tu calendario de drops:</b> si haces drops recurrentes, cada lanzamiento alimenta tu ritmo. El aprendizaje acumulado hace cada drop mejor que el anterior, y la recurrencia entrena a tu comunidad a esperar y actuar en tus lanzamientos.</li>
+      </ol>
+      <p class="pull">Cada drop enseña a hacer mejor el siguiente. Los mejores droppers no nacieron sabiendo, aprendieron drop a drop.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El análisis del drop hecho, los aprendizajes extraídos, un playbook de lanzamiento documentado, y la conexión con el calendario de drops para mejorar con cada lanzamiento.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des el lanzamiento por cerrado hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre la comprensión y la estrategia</p>
+      <ul class="check">
+        <li>Entiendo la psicología del drop (escasez, momento, urgencia, exclusividad).</li>
+        <li>He definido la estrategia del lanzamiento (tipo, nivel de escasez, fecha, objetivo).</li>
+        <li>Mi escasez es real y coherente con mi producción y mi marca.</li>
+      </ul>
+
+      <p class="mini">Sobre la fase «antes»</p>
+      <ul class="check">
+        <li>Construyo deseo en las semanas previas (teasing, historia de la colección, revelación progresiva).</li>
+        <li>Activo a mi comunidad hacia el drop.</li>
+        <li>Tengo una lista de espera montada y nutrida.</li>
+        <li>Premio el compromiso de la lista con acceso anticipado o exclusividad.</li>
+      </ul>
+
+      <p class="mini">Sobre el día y el después</p>
+      <ul class="check">
+        <li>El día del drop comunico con fuerza y aprovecho la urgencia real.</li>
+        <li>Mi tienda aguanta el pico y convierte bien.</li>
+        <li>Mantengo la energía de evento y doy acceso a la lista de espera.</li>
+        <li>En el después recupero indecisos, uso la prueba social y comunico la escasez real que queda.</li>
+        <li>Capitalizo el pico de atención convirtiendo gente nueva en comunidad.</li>
+      </ul>
+
+      <p class="mini">Sobre la coordinación y el sistema</p>
+      <ul class="check">
+        <li>Tengo un calendario de lanzamiento que coordina todos los activos hacia la fecha.</li>
+        <li>Cada activo (producto, tienda, contenido, comunidad, email) está listo.</li>
+        <li>La operación está preparada para el pico (tienda, inventario, fulfillment).</li>
+        <li>Analizo los resultados y extraigo aprendizajes.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 9.1 · Estrategia de lanzamiento / drop · v1.0 · Fase 9</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

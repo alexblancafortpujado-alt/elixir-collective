@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 1.5 — Creación del Brand Book / manual de marca</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 1 · Identidad Visual y Branding</p>
+    <h1 class="rv">Brand Book</h1>
+    <p class="meta rv">SOP 1.5 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; La identidad entera en un documento aplicable</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que reúnas <strong>todo lo que has construido en las Fases 0 y 1 en un único documento maestro</strong>: el Brand Book. No es un trabajo nuevo de creación, es de <strong>consolidación</strong> — el concepto, el avatar, el posicionamiento, la dirección de arte, el logo, el color, la tipografía y las etiquetas ya existen; el Brand Book los ordena para que dejen de vivir dispersos en diez documentos y se conviertan en <span class="hl">un sistema aplicable</span>.
+    </p>
+    <p>La distinción que lo cambia todo: <strong>el Brand Book no es un PDF bonito para presumir, es una herramienta de trabajo.</strong> Su única pregunta de diseño es «¿puede una persona que no soy yo aplicar la marca correctamente solo con este documento?». Si un fotógrafo, un fabricante o un community manager pueden abrirlo y saber qué hacer sin preguntarte, funciona. Si necesitan llamarte, no sirve.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 7 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que reúnas todo lo que has construido en las Fases 0 y 1 en un único documento maestro: el Brand Book. No es un trabajo nuevo de creación, es de consolidación. El concepto, el avatar, el posicionamiento, la dirección de arte, el logo, el color, la tipografía y las etiquetas ya existen; el Brand Book los ordena en un solo sitio para que dejen de vivir dispersos y se conviertan en un sistema aplicable.</p>
+      <p>La distinción que hay que entender: el Brand Book no es un PDF bonito para presumir, es una herramienta de trabajo. Su única pregunta de diseño es: <em>«¿puede una persona que no soy yo aplicar la marca correctamente solo con este documento?»</em>. Si un fotógrafo, un diseñador, un fabricante o un community manager pueden abrirlo y saber exactamente qué hacer sin preguntarte, el Brand Book funciona. Si necesitan llamarte, no sirve.</p>
+      <p class="pull">Una marca no muere por falta de buen diseño; muere por incoherencia acumulada. El Brand Book es lo que congela la coherencia y la hace escalable — literalmente lo que te permite crecer sin diluirte.</p>
+      <p>El resultado concreto es un documento único, ordenado y accesible que contiene las dos capas de la marca —la <span class="gold">estrategia</span> (quién eres) y el <span class="gold">sistema visual y verbal</span> (cómo te ves y suenas)—, con reglas claras de uso, ejemplos de «sí y no», y todos los archivos enlazados, listo para entregar a cualquier colaborador.</p>
+      <p>Lo que pasa si te saltas esto: tu marca vive en tu cabeza y en carpetas sueltas, cada colaborador la aplica distinto, repites las mismas explicaciones una y otra vez, y la identidad se degrada sin que nadie lo decida. El Brand Book convierte «una marca que solo tú sabes aplicar» en «una marca que tu equipo aplica igual que tú».</p>
+
+      <h3><span class="hn">1.2</span>Elementos necesarios</h3>
+      <p>Todo lo que necesitas ya existe si has hecho los SOPs anteriores. El Brand Book los reúne:</p>
+      <ul>
+        <li><b>De la Fase 0:</b> concepto y propósito (0.1), avatar (0.3), posicionamiento y ángulo (0.4), y si los hiciste: misión, visión, valores.</li>
+        <li><b>De la Fase 1:</b> dirección de arte y moodboard maestro (1.1), logotipo e isotipo (1.2), sistema de color, tipografía, y sistema de etiquetas y packaging.</li>
+        <li><b>Los archivos maestros</b> ya organizados: vectoriales del logo, fuentes con licencia, códigos de color (HEX/RGB/CMYK/Pantone).</li>
+        <li><b>Una herramienta para montarlo:</b> puede ser un documento (Notion, Google Docs, PDF de diseño) o un archivo de diseño (Figma, Canva). Lo importante no es el formato, es que sea accesible y actualizable por tu equipo.</li>
+      </ul>
+      <p>Nota: si algún elemento no existe todavía, el Brand Book revela el hueco. Ese es un beneficio secundario — montar el manual te enseña qué partes de la marca aún no están definidas.</p>
+
+      <h3><span class="hn">1.3</span>Principios no negociables</h3>
+      <ol>
+        <li><b>Es una herramienta de trabajo, no un objeto decorativo.</b> Cada página existe para que alguien aplique la marca mejor. Si una sección no ayuda a ejecutar, sobra.</li>
+        <li><b>Recoge estrategia Y ejecución.</b> Un manual que solo tiene logos y colores está a medias. Sin el «quién eres» (concepto, avatar, tono), la ejecución pierde el porqué.</li>
+        <li><b>Muestra, no solo cuentes.</b> Los ejemplos de «sí y no» enseñan más que los párrafos. El contraste visual es lo que evita errores.</li>
+        <li><b>Documento vivo.</b> La marca evoluciona; el manual también. Un Brand Book congelado hace un año ya miente en algo. Se actualiza.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De activos dispersos a un manual único y aplicable</h2>
+      <p>Siete pasos: primero decides estructura y formato, luego ensamblas las dos capas (estrategia y sistema visual), añades las reglas y ejemplos, y lo cierras como herramienta viva y accesible.</p>
+
+      <h3><span class="hn">2.1</span>Definir el propósito y el usuario del Brand Book</h3>
+      <p>Antes de montar nada, decide <strong>para quién es y qué debe permitir hacer</strong>. Esto determina qué incluir y con qué profundidad. Un Brand Book no se hace «por tener uno»; se hace para resolver un problema concreto de aplicación. Responde:</p>
+      <ol>
+        <li><b>¿Quién lo va a usar?</b> Lista los perfiles reales: fabricantes, fotógrafos, editores, diseñadores, community manager, colaboradores, tú mismo. Cada uno necesita partes distintas — el fabricante quiere Pantones y vectoriales, el CM quiere tono de voz y reglas de feed.</li>
+        <li><b>¿Qué debe permitirles hacer sin ti?</b> Define las tareas concretas que el manual tiene que cubrir (aplicar el logo, elegir colores, escribir en el tono correcto, dirigir una foto, pedir etiquetas).</li>
+        <li><b>¿Qué nivel de profundidad?</b> Una marca pequeña no necesita el manual de 200 páginas de una multinacional. Necesita lo esencial, bien hecho. Ajusta el alcance a tu tamaño real.</li>
+      </ol>
+      <p>Esta decisión evita el error clásico: hacer un manual precioso pero inútil porque no está pensado para nadie en concreto.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Definido quién usará el Brand Book y qué tareas debe permitir hacer sin ti.</li>
+      </ul>
+
+      <h3><span class="hn">2.2</span>Estructurar el documento y elegir formato</h3>
+      <p>Ahora defines el <strong>esqueleto</strong> (el índice) y el <strong>formato</strong>. La estructura es lo que hace un manual navegable, y navegable = usable. La estructura estándar vive en dos grandes bloques:</p>
+      <p class="mini">Bloque A · La marca (quién eres)</p>
+      <ul>
+        <li>Introducción y esencia de la marca (concepto y gran idea).</li>
+        <li>Propósito, misión, visión y valores.</li>
+        <li>La historia / el mito fundacional.</li>
+        <li>El cliente / avatar.</li>
+        <li>Posicionamiento y ángulo diferencial.</li>
+        <li>Personalidad y <b>tono de voz</b> (cómo habla la marca).</li>
+      </ul>
+      <p class="mini">Bloque B · El sistema visual (cómo te ves)</p>
+      <ul>
+        <li>Logotipo e isotipo (versiones y reglas de uso).</li>
+        <li>Sistema de color (paleta y códigos).</li>
+        <li>Tipografía y jerarquía.</li>
+        <li>Dirección de arte y moodboard maestro (fotografía, códigos visuales).</li>
+        <li>Etiquetas, hangtags y packaging.</li>
+        <li>Aplicaciones (cómo se ve todo junto: feed, web, prenda, físico).</li>
+      </ul>
+      <p>No todas las marcas necesitan las doce secciones — coge las que apliquen. Pero el orden importa: primero el quién eres (estrategia), luego el cómo te muestras (visual), porque lo visual solo se entiende con la estrategia delante.</p>
+      <p>Sobre el formato: elige según cómo trabaje tu equipo. Un documento navegable (Notion, web) es ideal para actualizar y compartir con enlaces; un PDF diseñado o Figma es mejor si el propio manual tiene que verse impecable como pieza. Lo crítico no es cuál elijas, sino que sea accesible y actualizable: huye de un PDF cerrado que quede obsoleto y nadie pueda tocar.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El índice del Brand Book definido (las secciones que aplican) y el formato elegido.</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Ensamblar el bloque de estrategia (el «quién eres»)</h3>
+      <p>Aquí traes todo el trabajo de la Fase 0 y lo condensas. <strong>No copies los documentos enteros</strong> — el Brand Book es la versión destilada y aplicable, no el archivo de trabajo. Cada sección debe ser lo esencial que alguien necesita para entender y aplicar. Consolida, de forma concisa:</p>
+      <ol>
+        <li><b>La esencia / gran idea:</b> tu concepto en su forma más clara. Qué es la marca, su mundo, su enemigo. El manifiesto puede ir aquí.</li>
+        <li><b>Propósito y valores:</b> el porqué y los principios que guían las decisiones.</li>
+        <li><b>La historia:</b> el mito fundacional en su versión breve y contable.</li>
+        <li><b>El avatar:</b> quién es el cliente, su tensión de identidad, para quién se viste, su lenguaje. La versión útil, no las diez páginas del documento original.</li>
+        <li><b>Posicionamiento:</b> el statement, el ángulo diferencial, la palabra que posees, contra quién compites.</li>
+        <li><b>Tono de voz:</b> cómo habla la marca. Esta sección es oro para cualquiera que escriba (CM, copy, atención al cliente). Incluye los 3-4 rasgos de personalidad verbal, qué palabras usa la marca y cuáles nunca, y ejemplos de frases «en la voz de la marca» frente a «no en la voz».</li>
+      </ol>
+      <p>Este bloque es el que da <strong>sentido</strong> a todo lo visual. Sin él, un diseñador aplica el logo pero no entiende por qué la marca es como es, y las decisiones sencillas fallan.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El bloque de estrategia ensamblado y destilado (esencia, propósito, historia, avatar, posicionamiento, tono de voz).</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Ensamblar el bloque de sistema visual (el «cómo te ves»)</h3>
+      <p>Ahora traes la Fase 1. Aquí cada sección necesita <strong>la regla + el archivo + el ejemplo</strong>. No basta con enseñar el logo; hay que decir cómo se usa, dar el archivo, y mostrar el uso correcto e incorrecto. Consolida cada sistema:</p>
+      <ol>
+        <li><b>Logotipo e isotipo:</b> las versiones (primario, secundario, monograma, blanco/negro), el área de respeto, el tamaño mínimo, y los «no» (no deformar, no recolorear, no rotar). Enlaza los archivos vectoriales.</li>
+        <li><b>Color:</b> la paleta con roles (marca / neutros / acento) y todos los códigos (HEX/RGB para digital, CMYK para papel, Pantone para producto). Sin los códigos completos, esta sección no sirve para fabricar.</li>
+        <li><b>Tipografía:</b> las fuentes con sus roles (display / cuerpo), la escala y jerarquía, y las licencias. Enlaza los archivos de fuente.</li>
+        <li><b>Dirección de arte:</b> el moodboard maestro, los códigos visuales (la luz, el color, el casting, la composición), y las recetas reproducibles. Esta sección es la que dirige a fotógrafos y editores.</li>
+        <li><b>Etiquetas y packaging:</b> las piezas físicas con sus especificaciones (material, técnica, Pantone).</li>
+      </ol>
+      <p class="pull">Cada sistema visual debe ser accionable: un color sin código no se puede usar, un logo sin archivo no se puede aplicar, una dirección de arte sin ejemplos no se puede seguir. Incluye o enlaza todo lo necesario para ejecutar.</p>
+
+      <h3><span class="hn">2.5</span>Añadir las reglas de uso y los ejemplos «sí / no»</h3>
+      <p>Este es el paso que convierte un catálogo de activos en un <strong>manual que enseña</strong>. La diferencia entre un Brand Book mediocre y uno excelente son los ejemplos de aplicación correcta e incorrecta. Un párrafo de reglas se olvida; un «esto sí / esto no» visual se entiende al instante y se recuerda. Para las secciones clave, añade el contraste:</p>
+      <ol>
+        <li><b>Do's &amp; Don'ts visuales:</b> al lado de cada regla importante, muestra un ejemplo bien hecho y uno mal hecho. Logo: bien colocado frente a deformado o mal color. Color: combinación correcta frente a una que rompe la paleta. Foto: una imagen que cumple los códigos frente a una que no. Tono: una frase en la voz de la marca frente a una que suena a otra marca.</li>
+        <li><b>Aplicaciones reales:</b> una sección que muestra todo junto en contexto — cómo se ve un post de feed, la web, una prenda etiquetada, el packaging. Ver el sistema aplicado a la vez ayuda a entender cómo encaja todo.</li>
+      </ol>
+      <p class="pull">Los «no» evitan el 80% de los errores que cometería un colaborador. La gente no rompe la marca por mala fe, sino porque no sabía que algo estaba prohibido. Mostrárselo lo previene.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Ejemplos de «sí / no» en las secciones clave (logo, color, foto, tono) y una sección de aplicaciones reales en contexto.</li>
+      </ul>
+
+      <h3><span class="hn">2.6</span>Enlazar los archivos y crear el kit descargable</h3>
+      <p>Un Brand Book que explica pero no da los archivos obliga a la gente a pedírtelos, y ahí se rompe la autonomía. Este paso conecta el manual con los <strong>recursos utilizables</strong>. Asegura que desde el Brand Book se accede a:</p>
+      <ol>
+        <li><b>Los logos</b> en todos los formatos (vectorial SVG/PDF, PNG transparentes, todas las versiones y lockups).</li>
+        <li><b>Las fuentes</b> (archivos o enlaces de descarga) con sus licencias.</li>
+        <li><b>Los códigos de color</b> en un sitio copiable (no solo mostrados en una imagen: que se puedan copiar y pegar).</li>
+        <li><b>Plantillas</b> si las tienes (de feed, de story, de etiqueta).</li>
+      </ol>
+      <p>Organízalo como un «kit de marca» descargable o una carpeta única enlazada desde el manual. Nómbralo todo con claridad. La regla: cuando un colaborador necesite algo, lo encuentra y lo descarga solo, sin escribirte. Ese es el punto entero del Brand Book.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Todos los archivos enlazados o incluidos, organizados en un kit accesible desde el Brand Book.</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Publicar, dar acceso y mantener vivo</h3>
+      <p>El último paso pone el Brand Book <strong>en circulación</strong> y define cómo se mantiene. Un manual perfecto que nadie usa o que envejece no sirve. Cierra:</p>
+      <ol>
+        <li><b>Ubícalo en un sitio único y de fácil acceso</b> (un enlace de Notion, una carpeta en la nube, una web interna). Este es EL sitio de la marca. Cuando alguien entra a trabajar contigo, le mandas este enlace, no diez archivos sueltos.</li>
+        <li><b>Da acceso a tu equipo y colaboradores</b> y establece la norma: <em>toda pieza de marca se hace consultando el Brand Book</em>. Conviértelo en el reflejo del equipo.</li>
+        <li><b>Define cómo se actualiza:</b> quién puede editarlo, y la regla de revisarlo cuando la marca evolucione (nueva colección, nuevo canal, ajuste de identidad). Un Brand Book es un documento vivo con un núcleo estable: la esencia y los activos base no cambian cada temporada (eso destruiría el reconocimiento), pero el manual se afina y se amplía a medida que la marca crece.</li>
+      </ol>
+      <p class="pull">El Brand Book nunca está «terminado del todo», y está bien. Es mejor tener una versión 1.0 usable hoy que esperar a la versión perfecta que nunca llega. Publícalo cuando cubra lo esencial y mejóralo con el uso.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El Brand Book publicado en un sitio único accesible, con acceso dado al equipo y una regla de mantenimiento definida.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des el Brand Book por cerrado hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre el propósito y la estructura</p>
+      <ul class="check">
+        <li>He definido quién usará el Brand Book y qué tareas debe permitir hacer sin mí.</li>
+        <li>Tengo el índice definido con los dos bloques (estrategia y sistema visual) en orden.</li>
+        <li>He elegido un formato accesible y actualizable, no un PDF cerrado que quede obsoleto.</li>
+      </ul>
+
+      <p class="mini">Sobre el contenido</p>
+      <ul class="check">
+        <li>El bloque de estrategia está ensamblado y destilado (esencia, propósito, historia, avatar, posicionamiento, tono de voz).</li>
+        <li>El bloque visual está completo (logo, color, tipografía, dirección de arte, etiquetas), cada sección con regla + archivo + códigos.</li>
+        <li>Los códigos de color están completos (HEX/RGB, CMYK, Pantone).</li>
+        <li>La sección de tono de voz permite a alguien escribir en la voz de la marca.</li>
+      </ul>
+
+      <p class="mini">Sobre lo que lo hace usable</p>
+      <ul class="check">
+        <li>Cada sección clave tiene ejemplos de «sí / no» (logo, color, foto, tono).</li>
+        <li>Hay una sección de aplicaciones reales que muestra todo junto en contexto.</li>
+        <li>Todos los archivos (logos, fuentes, colores, plantillas) están enlazados o incluidos y son descargables solos.</li>
+      </ul>
+
+      <p class="mini">Sobre la publicación y el mantenimiento</p>
+      <ul class="check">
+        <li>Está en un sitio único y de fácil acceso.</li>
+        <li>Mi equipo y colaboradores tienen acceso y saben que es la fuente de verdad.</li>
+        <li>He definido quién lo actualiza y cuándo se revisa.</li>
+        <li><b>La prueba final:</b> alguien externo puede aplicar la marca correctamente solo con este documento.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 1.5 · Creación del Brand Book / manual de marca · v1.0 · Fase 1</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

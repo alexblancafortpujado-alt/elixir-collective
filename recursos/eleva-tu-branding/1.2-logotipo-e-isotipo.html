@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 1.2 — Diseño de logotipo e isotipo</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 1 · Identidad Visual y Branding</p>
+    <h1 class="rv">Logotipo e isotipo</h1>
+    <p class="meta rv">SOP 1.2 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Las dos piezas gráficas ancla de la marca</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que diseñes —o sepas dirigir a quien diseñe— las <strong>dos piezas gráficas ancla de tu identidad: el logotipo y el isotipo</strong>. El entregable es una familia visual coherente: un wordmark con espaciado y correcciones ópticas de profesional, un monograma construido y simplificado, y <span class="hl">todo testeado en los contextos duros donde una marca falla</span> — tamaño mínimo, bordado, desenfoque.
+    </p>
+    <p>Una distinción que casi todos confunden: el <strong>logotipo</strong> es solo texto —el nombre convertido en pieza gráfica—; el <strong>isotipo</strong> es solo símbolo. En moda, la combinación que casi siempre gana es el logotipo como pieza principal y el monograma como firma secundaria: el sello bordable que va en el cuello, el botón, la etiqueta.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 8 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP es para que diseñes, o sepas dirigir a quien diseñe, las <strong>dos piezas gráficas base de tu identidad: el logotipo y el isotipo</strong>. Antes de nada, la confusión que hay que matar de raíz, porque casi todo el mundo usa mal estas palabras:</p>
+      <ul>
+        <li><b>Logotipo:</b> solo texto. El nombre de la marca convertido en una pieza gráfica diseñada (piensa en marcas cuyo «logo» es solo su nombre con una tipografía).</li>
+        <li><b>Isotipo:</b> solo símbolo, sin texto, que ya representa a la marca por sí mismo. Dentro de él hay familias: monograma (iniciales entrelazadas), sigla o inicial, anagrama (el nombre contraído), pictograma (una figura reconocible) o símbolo abstracto.</li>
+        <li><b>Imagotipo:</b> símbolo + texto, pero separables — funcionan juntos o cada uno por su lado.</li>
+        <li><b>Isologo:</b> símbolo + texto fundidos en una sola pieza inseparable.</li>
+      </ul>
+      <p>Saber esto no es opcional: define qué estás diseñando y cómo. En moda, la combinación que casi siempre gana es <strong>el logotipo (wordmark) como pieza principal y el isotipo en forma de monograma como firma secundaria</strong>: el logotipo te presenta y se lee, el monograma es el sello bordable que va en el cuello, el botón, la etiqueta.</p>
+      <p>El resultado concreto es un logotipo diseñado con espaciado y correcciones ópticas de profesional, un isotipo o monograma construido y simplificado, ambos como una <span class="gold">familia visual coherente</span>, con sus lockups (versiones combinadas), sus versiones a un color y en negativo, y todo testeado en los contextos duros donde una marca falla: tamaño mínimo, bordado, desenfoque.</p>
+
+      <h3><span class="hn">1.2</span>Herramientas necesarias</h3>
+      <ul>
+        <li><b>El concepto (0.1):</b> el mundo, el arquetipo, el enemigo, los códigos. El isotipo especialmente nace de aquí — un símbolo sin concepto detrás es decoración vacía.</li>
+        <li><b>El moodboard maestro y los códigos visuales (1.1):</b> el logotipo y el isotipo tienen que sonar a ese mundo. Son su condensación gráfica.</li>
+        <li><b>El naming cerrado:</b> no se diseña el logotipo sin el nombre definitivo.</li>
+        <li><b>Herramienta vectorial (Illustrator o Figma):</b> un logo se diseña siempre en vectorial —curvas escalables—, nunca en un editor de fotos. Si no lo diseñas tú, esto es lo que exiges al diseñador.</li>
+        <li><b>Papel y lápiz.</b> No es opcional: el bocetado a mano genera diez veces más ideas y mejores que empezar en la pantalla. La pantalla te ata a lo que la herramienta hace fácil.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Principios no negociables</h3>
+      <ol>
+        <li><b>Simplicidad primero.</b> Cuanto más simple, más reconocible, más memorable y mejor se reproduce. Si dudas entre añadir o quitar, quita.</li>
+        <li><b>Un logotipo no es una fuente escrita.</b> Partir de una tipografía está bien; dejarla intacta y sin espaciar, no. La gracia está en la personalización y el espaciado.</li>
+        <li><b>El isotipo se gana el derecho a existir solo.</b> Un símbolo puro para una marca desconocida no comunica nada al principio; por eso en moda suele empezar como firma secundaria, no como logo principal.</li>
+        <li><b>Logotipo e isotipo son familia.</b> Se diseñan juntos y comparten ADN (grosor, geometría, terminaciones). Dos piezas que no pegan rompen la identidad.</li>
+        <li><b>Vectorial siempre.</b> Para que escale infinito y para que la fábrica lo reproduzca. Un logo en JPG es un logo mal entregado.</li>
+        <li><b>Atemporal por encima de «de moda».</b> Un logo que grita una tendencia gráfica caduca con ella. Los que aguantan son sobrios.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De la hoja en blanco a dos marcas construidas</h2>
+      <p>Ocho pasos que te llevan del boceto a dos piezas terminadas, familia y a prueba de producción. El orden es: primero decides qué construyes, luego bocetas a mano, después construyes cada pieza en vectorial, las haces familia, las refinas ópticamente y las sellas.</p>
+
+      <h3><span class="hn">2.1</span>Decidir qué piezas necesitas y su relación</h3>
+      <p>Antes de dibujar, decide la <strong>estructura de tu identidad</strong>: qué piezas vas a tener y cómo se relacionan. Esto evita diseñar cosas que no usarás y asegura que todo encaje. Para una marca de ropa, la decisión suele ser:</p>
+      <ol>
+        <li><b>Logotipo (wordmark) como pieza principal.</b> Es lo que se lee y lo que presenta la marca. En moda, el nombre legible es parte del valor.</li>
+        <li><b>Isotipo secundario, normalmente un monograma</b> (las iniciales de la marca). Es el sello: va bordado pequeño, en etiquetas, botones, como detalle reconocible. Se deriva del nombre, así que nace emparentado con el logotipo.</li>
+        <li><b>Definir cómo se combinan (los lockups):</b> logotipo solo, isotipo solo, y las versiones juntas (imagotipo). Decidir esto ahora evita improvisar después.</li>
+      </ol>
+      <p>Para la mayoría de marcas nuevas de ropa, un <strong>monograma bien construido</strong> es más potente y honesto que un símbolo abstracto inventado, porque conecta directo con el nombre y no exige «educar» al mercado sobre qué significa un dibujo raro. Reserva el símbolo abstracto o pictórico para cuando tengas un concepto que lo pida de verdad: un animal, un objeto, una forma con significado real en tu mundo.</p>
+
+      <h3><span class="hn">2.2</span>Bocetar a mano en abundancia (fase divergente)</h3>
+      <p>El paso que los amateurs se saltan y que más separa el resultado. <strong>Antes de tocar el ordenador, bocetas a mano.</strong> Motivo: en papel generas decenas de direcciones en minutos y no te ata lo que la herramienta hace fácil; en pantalla, sin querer, diseñas lo que Illustrator te sugiere. El papel piensa más libre.</p>
+      <ol>
+        <li><b>Cantidad sobre calidad.</b> Llena páginas. Mínimo 30-50 miniaturas pequeñas y rápidas, no tres dibujos «buenos». Las ideas fuertes aparecen cuando ya vaciaste las obvias.</li>
+        <li><b>Explora direcciones distintas, no variaciones de una.</b> Para el logotipo: distintos caracteres, modificaciones, terminaciones. Para el isotipo: distintas formas de entrelazar las iniciales, distintos niveles de abstracción.</li>
+        <li><b>Busca «el detalle».</b> El logotipo memorable casi siempre tiene <em>un</em> gesto propio: una letra modificada, una ligadura (dos letras que se unen), un corte, una terminación especial. Boceta buscando ese único detalle que lo hace tuyo sin volverlo recargado.</li>
+        <li><b>No juzgues mientras bocetas.</b> Primero llena hojas con ideas; después seleccionas los 3-5 caminos con más fuerza para llevar a vectorial.</li>
+      </ol>
+      <p>La señal de un buen bocetado: al final tienes varias direcciones <em>distintas de verdad</em> sobre la mesa, no la misma idea repetida.</p>
+
+      <h3><span class="hn">2.3</span>Construir el logotipo: de la tipografía base al wordmark propio</h3>
+      <p>Aquí conviertes un nombre escrito en un logotipo diseñado. El proceso profesional casi nunca es «dibujar letras de cero» (dificilísimo), es <strong>partir de una buena tipografía base y personalizarla</strong>. Lo que hace que sea un logotipo y no «texto en una fuente» son las cuatro capas de trabajo que vienen después:</p>
+      <ol>
+        <li><b>Elegir la tipografía base correcta.</b> Escoge una fuente cuyo carácter ya sea coherente con el mundo de la marca (del moodboard). Empiezas con algo que ya está en el tono, no que haya que forzar.</li>
+        <li><b>Personalizar (la cirugía de letras).</b> Aquí nace lo propio. Modifica una o dos letras: alarga un trazo, corta una terminación, crea una ligadura entre dos letras, ajusta un ángulo, unifica un detalle que se repita. Un solo cambio bien hecho convierte una fuente en un logotipo ownable. No lo llenes de trucos: <em>un</em> detalle memorable vale más que cinco.</li>
+        <li><b>Espaciar a mano (el kerning).</b> Una fuente trae su espaciado por defecto; un logotipo se ajusta letra a letra hasta que la palabra respira pareja. Como dice el principio, la gracia está en la personalización <em>y el espaciado</em>: es la mitad del oficio que no se ve pero se nota.</li>
+        <li><b>Ajustar peso y proporción.</b> Afina el grosor y las proporciones para que el conjunto tenga la densidad y el aire correctos para tu mundo: más peso = más contundente; más aire = más premium y sereno.</li>
+      </ol>
+      <p class="pull">Regla de oro: el logotipo se juzga como conjunto, no letra a letra. Aléjate, entrecierra los ojos, mira la mancha general. Debe leerse limpio y equilibrado de un vistazo.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El logotipo construido en vectorial: tipografía base + personalización + espaciado + ajuste de peso.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Construir el isotipo o monograma</h3>
+      <p>Ahora la segunda pieza. Si elegiste <strong>monograma</strong> (lo más habitual en moda), lo construyes a partir de las iniciales del nombre, y aquí mandan la geometría y la simplicidad. Si elegiste pictograma o abstracto, aplican los mismos principios de construcción:</p>
+      <ol>
+        <li><b>Deriva del nombre y del concepto.</b> El monograma sale de las iniciales; el pictograma o abstracto sale de un elemento real del mundo de la marca (0.1). No inventes una forma «porque queda bien»: tiene que tener raíz, o se quedará vacía y perderá fuerza.</li>
+        <li><b>Construye con estructura, no a pulso.</b> Usa una retícula (grid) o formas geométricas base (círculos, cuadrados, ángulos consistentes) para que la pieza tenga orden interno. Las marcas gráficas que se sienten «bien resueltas» casi siempre están construidas sobre una geometría coherente, no dibujadas a mano alzada.</li>
+        <li><b>Explota el espacio negativo.</b> Los mejores símbolos usan el hueco tanto como el trazo: una forma que aparece «entre» las letras del monograma, una figura que se lee en el vacío. No es obligatorio, pero un buen uso del negativo eleva mucho una marca.</li>
+        <li><b>Simplifícalo al máximo.</b> Quita todo lo que puedas sin que pierda identidad. La prueba: si eliminas un elemento y sigue reconociéndose, sobraba. Un isotipo debe funcionar como una silueta simple.</li>
+      </ol>
+      <p><strong>Test de reducción, ya:</strong> encoge el isotipo a 16 píxeles (tamaño favicon) y míralo. Si se emborrona o deja de reconocerse, es demasiado complejo — simplifica hasta que aguante pequeño. Un isotipo que solo funciona grande no sirve.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El isotipo o monograma construido en vectorial, con estructura geométrica, simplificado.</li>
+        <li>Superado el test de reducción a tamaño mínimo.</li>
+      </ul>
+
+      <h3><span class="hn">2.5</span>Hacerlos familia y construir los lockups</h3>
+      <p>Tienes dos piezas; ahora tienen que parecer <strong>de la misma familia</strong> y saber convivir. Este paso es lo que convierte «un logotipo y un símbolo» en «una identidad». Dos trabajos:</p>
+      <ol>
+        <li><b>Unificar el ADN.</b> Compara logotipo e isotipo lado a lado y ajústalos hasta que compartan grosor de trazo coherente (que el símbolo no sea mucho más fino o grueso que las letras), geometría y ángulos consistentes, terminaciones con el mismo lenguaje y el mismo carácter general — los dos crudos o los dos refinados, no uno de cada. Si parecen de dos marcas distintas, retócalos hasta que sean hermanos.</li>
+        <li><b>Construir los lockups (combinaciones oficiales).</b> Define y bloquea las versiones que usarás siempre igual: horizontal (isotipo + logotipo en línea, para cabeceras y formatos anchos), vertical o apilado (isotipo arriba, logotipo debajo, para formatos cuadrados), e isotipo solo y logotipo solo para usos independientes. Fija las proporciones y distancias de cada lockup para que nadie los combine a su antojo.</li>
+      </ol>
+      <p>Un lockup definido = una marca que se aplica siempre igual.</p>
+
+      <h3><span class="hn">2.6</span>Refinar: correcciones ópticas y prueba en contexto duro</h3>
+      <p>Aquí está el pulido invisible que distingue al profesional. El ojo humano no ve la geometría matemática como «correcta»: hay que hacer <strong>correcciones ópticas</strong> para que <em>parezca</em> bien, aunque técnicamente no lo esté. Y hay que probar la marca donde de verdad se rompe:</p>
+      <ul>
+        <li><b>Tamaño mínimo:</b> ¿aguanta pequeño? (favicon, etiqueta).</li>
+        <li><b>Un solo color:</b> ¿funciona en negro pleno y en blanco pleno sobre fondo oscuro?</li>
+        <li><b>Test del desenfoque (blur test):</b> desenfoca el logo; si la silueta general sigue reconociéndose, es fuerte; si se vuelve una mancha ilegible, es débil.</li>
+        <li><b>Test del bordado:</b> ¿las líneas más finas sobrevivirían en hilo? Si no, prepara una versión simplificada para bordar.</li>
+        <li><b>Sobre fondos variados:</b> foto clara, foto oscura, color de marca.</li>
+      </ul>
+      <p class="pull">Si la marca falla alguna prueba, no es «mala suerte de la prueba»: es una señal de que hay que simplificar o corregir. Mejor descubrirlo aquí que en la muestra de fábrica.</p>
+
+      <h3><span class="hn">2.7</span>Adaptar a producción física (versiones de trabajo)</h3>
+      <p>Una marca de ropa vive sobre tela, y ahí el logo «perfecto de pantalla» a veces no cabe. Este paso prepara las <strong>versiones adaptadas</strong> a cada técnica, para no improvisar cuando la fábrica te lo pida. Prepara, según cómo vayas a aplicar la marca:</p>
+      <ol>
+        <li><b>Versión para bordado:</b> simplificada, sin líneas finísimas ni detalles diminutos (el hilo no los reproduce). El monograma suele ser la pieza estrella aquí. Ten esta versión lista aparte.</li>
+        <li><b>Versión para serigrafía o estampado:</b> admite más detalle, pero cada color añade coste; ten claro en cuántos colores se imprime.</li>
+        <li><b>Versión para etiqueta tejida:</b> detalle limitado por la trama; el logo simple y el monograma funcionan, lo recargado no.</li>
+        <li><b>Versión monocromática de alto contraste:</b> para grabados, relieves, cueros, metales (botones, remaches).</li>
+      </ol>
+      <p class="pull">La regla: no uses el mismo archivo para todo. El logo de la web puede tener detalle que el bordado no soporta. Ten una pequeña familia de versiones —completa, simplificada, bordable— y sabe cuál va en cada sitio.</p>
+
+      <h3><span class="hn">2.8</span>Finalizar archivos, construcción y entrega</h3>
+      <p>El último paso deja las piezas <strong>listas para usarse y delegarse sin que nadie las estropee</strong>. Un logo genial mal entregado —en JPG, sin versiones, mal nombrado— da tantos problemas como un logo mediocre. Cierra:</p>
+      <ol>
+        <li><b>Vectoriza y limpia el archivo maestro.</b> Curvas limpias, sin puntos sobrantes, sin efectos que dependan de un programa. El texto del logotipo, convertido a curvas (outlines) para que se vea igual en cualquier ordenador sin la fuente instalada.</li>
+        <li><b>Exporta en todos los formatos necesarios:</b> vectorial (SVG, PDF, AI/EPS) para escalar y para la fábrica; PNG transparente en negro y en blanco para uso digital rápido; y cada lockup y cada versión de producción como archivo propio.</li>
+        <li><b>Nómbralo con orden y guárdalo en un sitio único.</b> Nombres claros («logotipo-horizontal-negro.svg», «monograma-bordado.svg»), no «logo_final_DEF_v4.png». Todo en una carpeta en la nube que sea la fuente de verdad. Cuando alguien pida «el logo», mandas el enlace, no un recorte de WhatsApp.</li>
+        <li><b>Documenta las reglas mínimas</b> que viajan con las piezas: área de respeto, tamaño mínimo, versión por técnica, y los «no» básicos (no deformar, no recolorear fuera de paleta, no rotar). Esto se integrará luego en el Brand Book, pero debe existir ya para poder delegar.</li>
+      </ol>
+      <p class="pull">Estas dos piezas son el ancla estable de la marca. No se rediseñan cada temporada — se refinan con los años, si acaso. Su valor nace de la repetición: cuanto más consistentes en el tiempo, más las reconoce tu tribu. Elígelas bien ahora y defiéndelas.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El archivo maestro vectorial limpio, con el texto en curvas.</li>
+        <li>La carpeta completa de exportaciones (vectorial + PNG, todos los lockups y versiones), bien nombrada y accesible, con las reglas mínimas documentadas.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des el logotipo y el isotipo por cerrados hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre la decisión y el bocetado</p>
+      <ul class="check">
+        <li>Tengo clara la estructura: qué piezas (logotipo, isotipo o monograma) y qué lockups voy a construir.</li>
+        <li>He decidido con criterio el tipo de isotipo (monograma / pictograma / abstracto).</li>
+        <li>He bocetado 30-50 miniaturas a mano y elegido 3-5 caminos para vectorizar.</li>
+      </ul>
+
+      <p class="mini">Sobre el logotipo</p>
+      <ul class="check">
+        <li>Parte de una tipografía base coherente con el mundo de la marca.</li>
+        <li>Tiene al menos un detalle propio (letra modificada, ligadura, corte) — no es una fuente intacta.</li>
+        <li>Tiene el peso y la proporción ajustados y se lee limpio como conjunto.</li>
+      </ul>
+
+      <p class="mini">Sobre el isotipo</p>
+      <ul class="check">
+        <li>Nace del nombre o del concepto, no de una forma inventada al azar.</li>
+        <li>Supera el test de reducción a tamaño mínimo (favicon / bordado).</li>
+      </ul>
+
+      <p class="mini">Sobre la familia y el refinamiento</p>
+      <ul class="check">
+        <li>Logotipo e isotipo comparten ADN (grosor, geometría, carácter) — parecen hermanos.</li>
+        <li>Superan las pruebas duras: tamaño mínimo, un color, desenfoque, bordado, fondos variados.</li>
+      </ul>
+
+      <p class="mini">Sobre producción y entrega</p>
+      <ul class="check">
+        <li>Tengo las versiones de producción preparadas (bordado, serigrafía, tejido, monocromo).</li>
+        <li>El archivo maestro está vectorizado, limpio y con el texto en curvas.</li>
+        <li>Tengo la carpeta de exportaciones completa, bien nombrada y en un sitio único accesible.</li>
+        <li>He documentado las reglas mínimas (área de respeto, tamaño mínimo, versión por técnica, los «no»).</li>
+      </ul>
+    </section>
+
+    <footer>SOP 1.2 · Diseño de logotipo e isotipo · v1.0 · Fase 1</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

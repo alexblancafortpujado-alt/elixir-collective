@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 2.4 — Creación de tech packs / fichas técnicas</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 2 · Diseño y Proceso Creativo</p>
+    <h1 class="rv">Tech packs</h1>
+    <p class="meta rv">SOP 2.4 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; El idioma exacto entre tu diseño y la fábrica</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que crees el <strong>tech pack</strong> (ficha técnica) de cada prenda: el documento que traduce tu diseño al idioma que la fábrica entiende y ejecuta. Si el flat es <em>qué</em> prenda quieres, el tech pack es <span class="hl">exactamente cómo se hace</span>, con cada medida, costura, avío y color especificado sin dejar nada a la interpretación.
+    </p>
+    <p>La idea que hay que interiorizar: <strong>la fábrica no adivina, ejecuta lo que le das.</strong> Cada hueco en tu ficha es una decisión que tomará otra persona, probablemente mal. El tech pack existe para eliminar esos huecos: es el idioma común entre tu visión y su máquina de coser.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 8 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que crees el tech pack (ficha técnica) de cada prenda: el documento que traduce tu diseño al idioma que la fábrica entiende y ejecuta. Si el flat (SOP anterior) es <em>qué</em> prenda quieres, el tech pack es <em>exactamente cómo</em> se hace, con cada medida, costura, avío y color especificado sin dejar nada a la interpretación.</p>
+      <p>La idea que hay que interiorizar: <strong>la fábrica no adivina, ejecuta lo que le das.</strong> Un confeccionista no está dentro de tu cabeza, hará exactamente lo que diga el tech pack, y lo que no esté especificado lo decidirá él a su manera (que casi nunca es la tuya). Cada hueco en tu ficha es una decisión que tomará otra persona, probablemente mal. El tech pack existe para eliminar esos huecos. Es, literalmente, el idioma común entre tu visión y su máquina de coser.</p>
+      <p>Segunda idea clave: <strong>el tech pack es un documento vivo, no un papel de una sola vez.</strong> Se crea antes de la primera muestra y se actualiza en cada ronda de muestreo con las correcciones (los «comentarios de fitting»). El tech pack final, ya corregido, es lo que autoriza la producción. Un tech pack que no se actualiza con lo aprendido en las muestras no sirve.</p>
+      <p>Y un alivio: <strong>no necesitas ser técnico textil para hacer un buen tech pack.</strong> Necesitas ser <span class="gold">claro, completo y organizado</span>. Muchas de sus partes las rellenas con lógica y con ayuda de la fábrica o el patronista. Lo que no se perdona no es la falta de experiencia, es la ambigüedad.</p>
+      <p>El resultado concreto es un tech pack completo por prenda, con flats técnicos, tabla de medidas, especificaciones de construcción, materiales, avíos, colorways, etiquetado y detalles de marca, en un formato que tu fábrica entiende, listo para pedir la primera muestra.</p>
+      <p class="pull">Lo que pasa si te saltas esto o lo haces mal: la muestra llega con la manga más larga, el color que no era, o tallando distinto de lo que esperabas, y cada error cuesta una ronda de muestra más (tiempo y dinero). Con un tech pack claro, hay un documento que dice exactamente qué se acordó. Este documento es tu mayor protección en la relación con producción.</p>
+
+      <h3><span class="hn">1.2</span>Elementos necesarios</h3>
+      <ul>
+        <li><b>El paquete de diseño de cada prenda (SOP anterior):</b> el flat de frente y espalda, los detalles constructivos, materiales y detalles de identidad. El tech pack se construye sobre esto.</li>
+        <li><b>Una plantilla de tech pack:</b> puedes usar una descargable estándar, una de Illustrator, o incluso una hoja de cálculo bien estructurada. Lo importante es que sea completa y clara, no la herramienta.</li>
+        <li><b>Referencias de medidas:</b> una prenda real que talle como quieres (una «prenda patrón» o <em>reference garment</em>) de la que sacar medidas, o una tabla de medidas base para tu tipo de prenda. Esto es clave y se detalla en el paso 2.4.</li>
+        <li><b>Los avíos y materiales previstos:</b> qué tela, qué cremalleras, botones, cordones, etiquetas. Con referencias concretas (proveedor, código) cuando las tengas.</li>
+        <li><b>Comunicación abierta con tu fábrica o patronista:</b> ellos te dirán qué formato usan, qué información necesitan y cómo la prefieren. El mejor tech pack es el que habla el idioma de tu fábrica concreta.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Principios no negociables</h3>
+      <ol>
+        <li><b>Lo no especificado, lo decide la fábrica (mal).</b> Cada hueco es un riesgo. Especifica todo lo que importe.</li>
+        <li><b>Claridad y precisión por encima de todo.</b> Números exactos, no aproximaciones. «Manga 62 cm», no «manga larga».</li>
+        <li><b>Muestra visualmente, no solo describas.</b> Un detalle dibujado o fotografiado se entiende mejor que un párrafo. Combina imagen y texto.</li>
+        <li><b>Habla el idioma de tu fábrica.</b> Unidades, idioma y formato que ellos usen. Un tech pack perfecto que la fábrica no entiende no sirve.</li>
+        <li><b>Es un documento vivo.</b> Se actualiza en cada ronda de muestra. El final refleja lo aprobado, no la primera idea.</li>
+        <li><b>Un tech pack por prenda y por color/variante cuando haga falta.</b> No mezcles varias prendas en un solo documento confuso.</li>
+        <li><b>No hace falta ser técnico, hace falta ser completo.</b> Apóyate en la fábrica y el patronista para lo que no domines, pero no dejes huecos.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De un diseño a una ficha que la fábrica ejecuta</h2>
+      <p>Ocho pasos que te llevan del paquete de diseño a un tech pack completo y actualizable. El orden: primero entiendes el documento y su estructura, luego rellenas cada sección (flats, medidas, construcción, materiales, avíos, color, etiquetado), y lo dejas listo para muestreo y actualización.</p>
+
+      <h3><span class="hn">2.1</span>Entender qué es un tech pack y hablar con tu fábrica primero</h3>
+      <p>Antes de montar nada, entiende qué es el documento y, muy importante, <strong>pregunta a tu fábrica cómo lo quiere</strong>. Cada fábrica tiene sus preferencias, y adaptarte a ellas evita fricción. Dos movimientos previos:</p>
+      <ol>
+        <li><b>Entiende su función.</b> El tech pack es un documento técnico que contiene <em>toda</em> la información para producir una prenda: cómo se ve, cuánto mide, de qué está hecha, cómo se construye, qué avíos lleva, en qué colores, y cómo se etiqueta. No es un dibujo bonito, es un manual de fabricación de esa prenda.</li>
+        <li><b>Habla con tu fábrica antes de empezar.</b> Pregúntales: ¿en qué <em>idioma</em> lo quieren? ¿en <em>centímetros o pulgadas</em>? ¿tienen una <em>plantilla propia</em> que prefieren que uses? ¿qué información les resulta imprescindible? Muchas fábricas tienen su formato, y usar el suyo acelera todo. Este simple paso evita rehacer el documento entero.</li>
+      </ol>
+      <p>Si es tu primera vez y no tienes fábrica aún, monta un tech pack completo con una plantilla estándar; lo ajustarás cuando elijas confeccionista.</p>
+
+      <h3><span class="hn">2.2</span>Montar la portada y la información general</h3>
+      <p>Empieza por la cabecera del documento: la información que identifica la prenda y da contexto. Parece obvio, pero un tech pack sin buena identificación genera confusión cuando manejas varias prendas y varias versiones. Incluye en la portada / información general:</p>
+      <ol>
+        <li><b>Identificación de la prenda:</b> nombre de la marca, nombre y <em>código/referencia</em> de la prenda (un código único, ej. «SUD-001»), colección y temporada.</li>
+        <li><b>Versión y fecha:</b> número de versión del tech pack y fecha. Crítico porque el documento se actualizará: hay que saber cuál es la versión vigente.</li>
+        <li><b>La imagen principal:</b> el flat de la prenda (o una foto de la referencia) para identificarla de un vistazo.</li>
+        <li><b>Descripción general:</b> una línea de qué es la prenda y, si aplica, su ajuste (fit) previsto (oversize, regular, ajustado).</li>
+      </ol>
+      <p>Esta cabecera es lo que evita el caos cuando tienes una colección entera de tech packs y varias rondas de cada uno.</p>
+
+      <h3><span class="hn">2.3</span>Incluir los flats técnicos detallados</h3>
+      <p>El corazón visual del tech pack son los <strong>dibujos planos</strong> (que ya hiciste en el SOP anterior), aquí presentados con el máximo detalle técnico. La fábrica mira esto primero. Asegura que los flats:</p>
+      <ol>
+        <li><b>Muestran frente y espalda</b> (y vistas de detalle si hace falta: un cuello, un bolsillo, un puño ampliados).</li>
+        <li><b>Señalan todos los detalles constructivos:</b> con líneas guía y llamadas (<em>callouts</em>), indica dónde va cada costura, pespunte, cierre, bolsillo, etiqueta. Un callout es una flecha con una nota que apunta a un detalle concreto («pespunte doble aquí», «bolsillo interior 12x14 cm»).</li>
+        <li><b>Incluyen vistas de detalle (detail views)</b> de los puntos complejos o de identidad: si un detalle es importante o poco común, amplíalo y explícalo aparte para que no haya duda.</li>
+      </ol>
+      <p class="pull">Si un detalle importa, se ve y se explica. No confíes en que la fábrica «entienda» un detalle sutil solo por el flat general: amplíalo y anótalo. Los detalles de marca (dónde va el bordado, la etiqueta, la firma) son especialmente importantes de señalar aquí.</p>
+
+      <h3><span class="hn">2.4</span>Crear la tabla de medidas (points of measure)</h3>
+      <p>Esta es la sección más técnica y la que más errores de tallaje evita. La <strong>tabla de medidas</strong> (o <em>points of measure</em>, POM) especifica cuánto mide cada punto de la prenda. Sin ella, la fábrica talla «a su manera» y la prenda llega con un fit que no es el tuyo. Cómo construirla:</p>
+      <ol>
+        <li><b>Lista los puntos de medida clave</b> de tu tipo de prenda: para una camiseta, por ejemplo, ancho de pecho, largo total, ancho de hombro, largo de manga, apertura de cuello, etc. Cada tipo de prenda tiene sus puntos estándar.</li>
+        <li><b>Da la medida exacta de cada punto</b>, en las unidades de tu fábrica (cm normalmente). De dónde sacas estas medidas si no eres técnico: midiendo una prenda real que talle como quieres (tu <em>reference garment</em>), o partiendo de una tabla de medidas base que la fábrica o el patronista te proporcione y ajustándola.</li>
+        <li><b>Especifica cómo se mide cada punto (HTM, «how to measure»).</b> «Ancho de pecho» puede medirse de formas distintas; indica cómo (ej. «de axila a axila con la prenda plana»). Esto evita que fábrica y tú midáis distinto y discutáis sobre un número que medisteis diferente.</li>
+        <li><b>Añade la tolerancia.</b> Ninguna prenda sale exacta al milímetro; define cuánta desviación aceptas en cada medida (ej. ±1 cm). La tolerancia es lo que separa «aceptable» de «rechazable» en el control de calidad.</li>
+      </ol>
+      <p>Nota honesta: esta parte es donde más te apoyas en el patronista o la fábrica si empiezas. No pasa nada, lo importante es que la tabla exista y sea clara. La curva de tallas completa (el escalado a todas las tallas, el <em>grading</em>) se coordina con el patronaje; aquí defines al menos tu talla base bien especificada.</p>
+
+      <h3><span class="hn">2.5</span>Especificar materiales y avíos (bill of materials)</h3>
+      <p>Ahora detallas <strong>de qué está hecha</strong> la prenda: la tela y todos los componentes. Esta lista se llama <em>bill of materials</em> (BOM) o lista de materiales, y asegura que la fábrica use exactamente lo que quieres, no un sustituto parecido. Especifica:</p>
+      <ol>
+        <li><b>Tela principal:</b> composición (ej. 100% algodón), gramaje (ej. 320 g/m²), tipo de tejido, acabado. Cuanto más preciso, menos margen de error. Si tienes una referencia de proveedor o un código de tela, inclúyelo.</li>
+        <li><b>Telas secundarias / forros / ribetes</b> si los hay, con la misma precisión.</li>
+        <li><b>Avíos (trims):</b> cada componente que no es tela: cremalleras, botones, cordones, elásticos, remaches, cintas. Para cada uno: tipo, tamaño, color, acabado, y proveedor/código si lo tienes. Un botón «genérico» y un botón especificado dan prendas de percepción muy distinta.</li>
+        <li><b>Hilo:</b> color y tipo, especialmente si el pespunte es visible y a contraste (un detalle de diseño).</li>
+        <li><b>Etiquetas y elementos de marca:</b> la etiqueta de cuello, la de composición, la bandera de costura, hangtags, remitiendo a las especificaciones de tu SOP de etiquetas.</li>
+      </ol>
+      <p class="pull">Cada componente, especificado. Lo que dejes como «lo que tenga la fábrica» será lo más barato que tengan, no lo que tu marca necesita.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La lista completa de materiales y avíos (tela, forros, trims, hilo, etiquetas), cada uno especificado con detalle y referencia cuando exista.</li>
+      </ul>
+
+      <h3><span class="hn">2.6</span>Definir la construcción y los colorways</h3>
+      <p>Dos especificaciones más que cierran el «cómo se hace» y el «en qué colores».</p>
+      <p><strong>Construcción (cómo se ensambla):</strong></p>
+      <ol>
+        <li><b>Tipo de costuras y acabados:</b> qué costura se usa en cada unión, cómo se rematan los bordes, dónde hay pespuntes visibles y de qué tipo. Esto afecta a calidad, aspecto y coste.</li>
+        <li><b>Detalles de ensamblaje</b> que no se vean obvios en el flat: orden de montaje si importa, refuerzos, entretelas.</li>
+        <li>Si no dominas la terminología técnica de costuras, <b>apóyate en la fábrica</b>: descríbelo con tus palabras + referencia visual, y ellos traducen a su técnica. Lo importante es que quede claro el resultado que quieres.</li>
+      </ol>
+      <p><strong>Colorways (las variantes de color):</strong></p>
+      <ol>
+        <li><b>Especifica cada color en el que se producirá la prenda</b>, cada uno como una variante (<em>colorway</em>).</li>
+        <li><b>Da el color en Pantone</b>, no en nombre. «Azul marino» es ambiguo; el código Pantone es exacto (recuerda la distinción del SOP de color: pantalla ≠ tela).</li>
+        <li><b>Indica qué parte va en qué color</b> si la prenda combina varios (cuerpo, mangas, ribetes, hilo).</li>
+        <li>Recuerda la regla de oro del color en producción: <b>el color final se valida con una muestra física de tela (lab dip)</b>, no en pantalla. El tech pack define el Pantone objetivo; la muestra lo confirma.</li>
+      </ol>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Las especificaciones de construcción (costuras, acabados, ensamblaje) y los colorways definidos en Pantone.</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Ensamblar, revisar y enviar para la primera muestra</h3>
+      <p>Con todas las secciones hechas, <strong>ensamblas el tech pack completo</strong>, lo revisas buscando huecos, y lo envías para pedir la primera muestra. Cierra:</p>
+      <ol>
+        <li><b>Ensambla el documento completo</b> con todas las secciones: portada, flats con callouts, tabla de medidas, materiales y avíos, construcción, colorways, y etiquetado/detalles de marca.</li>
+        <li><b>Revisa cazando huecos.</b> Recórrelo con la mentalidad de la fábrica: «si yo solo tuviera este papel, ¿sabría hacer la prenda entera sin preguntar nada?». Cada duda que te surja es un hueco que rellenar. Presta atención especial a lo que diste por obvio: lo obvio para ti no lo es para quien está a miles de kilómetros.</li>
+        <li><b>Envíalo a la fábrica y pide la muestra.</b> El tech pack es la base sobre la que producen el primer prototipo (que evaluarás en el SOP de muestreo).</li>
+      </ol>
+
+      <h3><span class="hn">2.8</span>Actualizar el tech pack en cada ronda (documento vivo)</h3>
+      <p>El último paso es la mentalidad que hace que el tech pack funcione de verdad: <strong>se actualiza con cada muestra hasta que la prenda está perfecta.</strong> El primer tech pack es una hipótesis; las muestras la corrigen. Cómo mantenerlo vivo:</p>
+      <ol>
+        <li><b>Registra los comentarios de fitting.</b> Cuando llega una muestra y la evalúas (SOP de muestreo), anotas las correcciones: «acortar manga 2 cm», «cambiar el botón», «el pespunte va a contraste». Esos comentarios se vuelcan al tech pack, actualizando medidas, materiales o construcción.</li>
+        <li><b>Sube la versión.</b> Cada actualización es una versión nueva con su fecha. Así fábrica y tú sabéis siempre cuál es la vigente y evitáis producir sobre una versión antigua.</li>
+        <li><b>El tech pack final autoriza producción.</b> Cuando la muestra está aprobada, el tech pack ya refleja todas las correcciones. Esa versión final (la de la prenda aprobada) es la que autoriza la producción en masa. Producir con un tech pack sin actualizar es producir los errores que ya habías detectado.</li>
+      </ol>
+      <p class="pull">El tech pack y la prenda física convergen ronda a ronda. Cada muestra acerca el documento a la realidad, hasta que el papel describe exactamente la prenda que quieres fabricar cientos de veces.</p>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des el tech pack por cerrado hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre la preparación</p>
+      <ul class="check">
+        <li>Entiendo que la fábrica ejecuta lo que le doy y no adivina lo que falta.</li>
+        <li>He confirmado con mi fábrica su formato preferido (idioma, unidades, plantilla).</li>
+      </ul>
+
+      <p class="mini">Sobre las secciones del documento</p>
+      <ul class="check">
+        <li>Tengo la portada con identificación, código, versión, fecha e imagen.</li>
+        <li>Los flats muestran frente, espalda, callouts de cada detalle y vistas ampliadas.</li>
+        <li>Tengo la tabla de medidas con puntos clave, medidas exactas, cómo-se-mide y tolerancias.</li>
+        <li>Tengo la lista completa de materiales y avíos, cada uno especificado con referencia.</li>
+        <li>Tengo las especificaciones de construcción (costuras, acabados, ensamblaje).</li>
+        <li>Tengo los colorways definidos en Pantone.</li>
+        <li>He incluido el etiquetado y los detalles de marca (dónde va cada uno).</li>
+      </ul>
+
+      <p class="mini">Sobre la calidad del documento</p>
+      <ul class="check">
+        <li>No hay huecos: con solo este papel, la fábrica podría hacer la prenda sin preguntar.</li>
+        <li>He revisado especialmente lo que di por obvio.</li>
+        <li>Está en el idioma, unidades y formato que mi fábrica entiende.</li>
+      </ul>
+
+      <p class="mini">Sobre el documento vivo</p>
+      <ul class="check">
+        <li>Sé cómo volcar los comentarios de fitting al tech pack tras cada muestra.</li>
+        <li>Versiono el documento con fecha en cada actualización.</li>
+        <li>Tengo claro que solo la versión final corregida autoriza la producción en masa.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 2.4 · Creación de tech packs / fichas técnicas · v1.0 · Fase 2</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

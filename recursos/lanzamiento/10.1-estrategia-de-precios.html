@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 10.1 — Estrategia de precios y márgenes</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 10 · Ventas y Comercial</p>
+    <h1 class="rv">Precios y márgenes</h1>
+    <p class="meta rv">SOP 10.1 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; El precio como decisión estratégica, no como número</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que pongas precio a tus prendas de forma <strong>estratégica</strong>: un precio que refleje tu marca, proteja tu margen y <span class="hl">sostenga tu negocio a largo plazo</span>. El precio es una de las decisiones más importantes y peor tomadas en las marcas nuevas, porque la mayoría lo pone «a ojo» o copiando a otros, cuando en realidad determina tu posicionamiento, tu rentabilidad y tu supervivencia.
+    </p>
+    <p>La idea que lo cambia todo: <strong>el precio no es solo matemática de costes, es una decisión estratégica que comunica y posiciona.</strong> Parte del coste real para no perder dinero, pero se decide por el valor, el posicionamiento y la psicología. Y su margen no cubre solo producir: cubre el marketing, los envíos, las devoluciones, los descuentos, el equipo y el beneficio. Todo el negocio.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 8 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que pongas precio a tus prendas de forma estratégica: un precio que refleje tu marca, proteja tu margen y sostenga tu negocio a largo plazo. La mayoría de las marcas nuevas lo pone «a ojo» o copiando a otros, cuando en realidad el precio determina tu posicionamiento, tu rentabilidad y tu supervivencia.</p>
+      <p>Hay dos errores opuestos, y los dos son caros. El primero es poner precio solo desde el coste (coste más un margen), ignorando que el precio comunica valor y posiciona. El segundo es ponerlo a ojo, sin saber si cubre los costes reales y deja margen para sobrevivir. El precio correcto navega entre ambos: <strong>parte del coste real para no perder dinero, pero se decide por el valor, el posicionamiento y la psicología</strong> para reflejar la marca y maximizar el margen sano.</p>
+      <p>Más allá de cubrir costes, tu precio hace tres cosas:</p>
+      <ul>
+        <li><b>Comunica valor y calidad:</b> el precio es una señal. La gente lo usa para juzgar lo que vale algo, sobre todo en moda, donde el valor es en parte percibido.</li>
+        <li><b>Posiciona la marca:</b> define en qué liga juegas (accesible, medio, premium, lujo) y a quién atraes. Es una de las declaraciones de posicionamiento más fuertes que hace tu marca.</li>
+        <li><b>Determina tu margen y tu supervivencia:</b> el precio menos todos los costes (no solo el de producir) es lo que te queda para sostener y hacer crecer el negocio.</li>
+      </ul>
+      <p>La segunda idea, la que más marcas ignoran y la que más las hunde: <strong>el coste de producir no es tu único coste, y el margen tiene que cubrir muchísimo más.</strong> El error fatal es calcular «me cuesta X, lo vendo a 2X, gano X». Ese «margen» tiene que cubrir además el marketing, los envíos, las devoluciones, las plataformas, los descuentos, el equipo y los gastos fijos, y aún dejar beneficio. El resultado que buscas es <span class="gold">el criterio y el método para poner precio de forma estratégica</span>: partir del coste real, decidir por valor y posicionamiento, entender los márgenes que necesita la moda, y construir una estructura de precios coherente con tu marca.</p>
+      <p class="pull">Lo que pasa si lo haces mal: pones precio demasiado bajo y no dejas margen para sobrevivir (vendes y aun así pierdes o no creces), o demasiado alto para tu posicionamiento y no vendes. Calculas el margen solo sobre el coste de producir, así que crees que ganas cuando en realidad no cubres los gastos. Un error de precio es de los que hunden marcas que «venden bien» pero no ganan dinero.</p>
+
+      <h3><span class="hn">1.2</span>Indicadores de éxito</h3>
+      <ul>
+        <li>Tu precio <b>parte del coste real</b> (todos los costes, no solo producir) para no perder dinero.</li>
+        <li>Tu precio <b>se decide por valor y posicionamiento</b>, no solo por coste más margen.</li>
+        <li>Tu precio <b>refleja y posiciona tu marca</b> correctamente, en la liga que quieres jugar.</li>
+        <li>Tu margen <b>cubre los costes reales del negocio</b> (marketing, envíos, devoluciones, equipo, fijos) y deja beneficio.</li>
+        <li>Entiendes por qué la moda necesita <b>márgenes amplios</b> y calculas los tuyos con criterio.</li>
+        <li>Tienes una <b>estructura de precios coherente</b> en toda tu colección.</li>
+        <li>Tu precio <b>sostiene el negocio a largo plazo</b>, no solo cubre el coste de una prenda.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Elementos necesarios</h3>
+      <ul>
+        <li>Tu <b>costeo real por prenda</b> (SOP de costeo, Fase 4): el coste completo de producir cada prenda. Es el suelo del precio.</li>
+        <li>Tus <b>costes del negocio</b> (no solo de producto): marketing, envíos, devoluciones, plataformas, equipo, gastos fijos. El margen tiene que cubrirlos.</li>
+        <li>Tu <b>posicionamiento de marca</b> (Fase 0): en qué liga juegas (accesible, medio, premium), que el precio debe reflejar.</li>
+        <li>Tu <b>avatar</b> (SOP 0.3): qué puede y quiere pagar tu cliente, su percepción de valor.</li>
+        <li>El <b>precio de referencia del mercado y los competidores:</b> para situar tu precio en contexto, no para copiar, para posicionar.</li>
+        <li>Tu <b>arquitectura de colección</b> (hero pieces vs básicos): distintos tipos de prenda pueden tener distinta lógica de precio.</li>
+        <li>Claridad sobre tus <b>canales de venta</b> (directo, wholesale): el canal afecta a la estructura de precios.</li>
+      </ul>
+
+      <h3><span class="hn">1.4</span>Principios no negociables</h3>
+      <ol>
+        <li><b>El precio es estrategia, no solo matemática.</b> Parte del coste, pero se decide por valor, posicionamiento y psicología. No es coste más un número.</li>
+        <li><b>El coste real es tu suelo, no tu precio.</b> El coste te dice el mínimo para no perder. El precio se decide por encima, por valor y posicionamiento.</li>
+        <li><b>El margen cubre mucho más que producir.</b> Marketing, envíos, devoluciones, plataformas, equipo, fijos, beneficio. Un margen sobre el coste de producir engaña.</li>
+        <li><b>La moda necesita márgenes amplios para sobrevivir.</b> No es codicia, es lo que exige cubrir todos los costes reales del negocio. Calcula el tuyo con criterio.</li>
+        <li><b>El precio comunica y posiciona.</b> Tu precio dice a qué liga perteneces y qué valor tienes. Que sea coherente con tu marca.</li>
+        <li><b>Coherencia en toda la colección.</b> Tu estructura de precios debe tener una lógica coherente, no precios al azar.</li>
+        <li><b>Precio sostenible sobre precio bajo.</b> Un precio demasiado bajo que no deja margen hunde la marca aunque venda. Prioriza sostener el negocio.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De poner precio a ojo a una estrategia que sostiene la marca</h2>
+      <p>Ocho pasos: partir del coste real, entender todos los costes que cubre el margen, entender los márgenes de la moda, decidir el posicionamiento de precio, situar tu precio en el mercado, decidir el precio por valor y psicología, construir la estructura de precios, y proteger el margen en el tiempo.</p>
+
+      <h3><span class="hn">2.1</span>Partir del coste real (el suelo del precio)</h3>
+      <p>El precio empieza (pero no termina) en el <strong>coste real de la prenda.</strong> Este es tu suelo: el mínimo por debajo del cual pierdes dinero seguro. Este paso ancla el precio en el coste completo, para no cometer el error de poner precio sin saber tu suelo real.</p>
+      <p>Cómo partir del coste:</p>
+      <ol>
+        <li><b>Usa tu costeo completo por prenda (Fase 4):</b> no el coste de la tela, sino el coste completo de producir la prenda (materiales, confección, avíos, y la parte proporcional de muestreo, transporte). Este es el coste real de producir una unidad.</li>
+        <li><b>Este coste es tu suelo absoluto:</b> por debajo de él pierdes dinero en cada venta, seguro. El precio tiene que estar por encima, y bastante, porque además del coste de producir hay que cubrir todo lo demás.</li>
+        <li><b>No confundas el coste de producir con «casi el precio»:</b> el error clásico es pensar «me cuesta X, con vender a algo más que X ya gano». Falso: ese margen sobre el coste tiene que cubrir muchísimo más. El coste de producir es solo el suelo, no una referencia cercana al precio.</li>
+      </ol>
+      <p class="pull">El coste real es tu suelo, no tu precio. Te dice el mínimo absoluto por debajo del cual pierdes, pero el precio se decide muy por encima: hay que cubrir todos los demás costes del negocio y dejar beneficio.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El coste real completo de cada prenda (de tu costeo, Fase 4), establecido como el suelo del precio.</li>
+      </ul>
+
+      <h3><span class="hn">2.2</span>Entender todos los costes que el margen debe cubrir</h3>
+      <p>Aquí está el paso que salva a las marcas de hundirse: entender que <strong>el margen entre el coste y el precio tiene que cubrir muchísimo más que producir.</strong> Es el error fatal más común, y entenderlo bien es lo que separa una marca rentable de una que «vende pero no gana».</p>
+      <p>Todo lo que el margen tiene que cubrir, además del coste de producir:</p>
+      <ol>
+        <li><b>El marketing y la captación:</b> conseguir clientes cuesta (ads, contenido, colaboraciones). Es a menudo uno de los mayores costes de una marca de moda, y sale del margen.</li>
+        <li><b>Los envíos:</b> el coste de enviar los pedidos (y a veces las devoluciones), especialmente si ofreces envío gratis.</li>
+        <li><b>Las devoluciones:</b> altísimas en moda. Cada devolución tiene un coste (envío de vuelta, reacondicionamiento, producto no revendible), y sale del margen.</li>
+        <li><b>Las plataformas y comisiones:</b> la tienda, las pasarelas de pago, las apps, las comisiones de venta. Un porcentaje de cada venta.</li>
+        <li><b>Los descuentos y rebajas:</b> rara vez vendes todo a precio completo. Promociones y rebajas reducen el margen real.</li>
+        <li><b>El equipo y los gastos fijos:</b> si tienes equipo, colaboradores o gastos fijos (espacio, herramientas), salen del margen.</li>
+        <li><b>El beneficio:</b> lo que de verdad te queda para reinvertir y vivir. Si el margen solo cubre los costes, la marca no gana nada.</li>
+      </ol>
+      <p class="pull">El margen sobre el coste de producir tiene que cubrir todo el negocio, no solo la siguiente producción. Un «margen» que parece grande sobre el coste puede ser insuficiente cuando cubres todo lo demás.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Entendidos todos los costes que el margen debe cubrir, más allá de producir: marketing, envíos, devoluciones, plataformas, descuentos, equipo, fijos y beneficio.</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Entender los márgenes que necesita la moda</h3>
+      <p>Con la conciencia de todo lo que cubre el margen, entiende <strong>por qué la moda usa los márgenes amplios que usa.</strong> Este paso explica la lógica de los múltiplos históricos, para que calcules tu margen con criterio y no creas que es codicia.</p>
+      <p>Lo que hay que entender:</p>
+      <ol>
+        <li><b>Los múltiplos históricos existen por una razón:</b> en moda se multiplica históricamente el coste varias veces para fijar el precio (por 2, por 2,5, por más, según el modelo). No es codicia arbitraria: ese múltiplo es lo que permite cubrir todos los costes reales del negocio y dejar beneficio.</li>
+        <li><b>Distintos modelos, distintos múltiplos:</b> una marca que vende directo al cliente (DTC) puede usar un múltiplo; una que vende también a tiendas (wholesale) necesita uno mayor, porque la tienda se lleva su parte y la marca aun así tiene que ganar. El múltiplo depende de tu modelo de venta.</li>
+        <li><b>El múltiplo protege contra los costes reales y los imprevistos:</b> un margen amplio no es lujo, es lo que te protege cuando las devoluciones son altas, el marketing es caro o tienes que descontar. Un margen ajustado deja la marca sin colchón.</li>
+        <li><b>Calcula tu margen objetivo con criterio:</b> entendiendo lo que cubre el margen y los múltiplos de la moda, decide qué margen necesitas tú para cubrir tus costes reales y ser sostenible. No copies un múltiplo a ciegas, calcúlalo según tus costes y tu modelo.</li>
+      </ol>
+      <p class="pull">Los márgenes amplios de la moda son supervivencia, no codicia. Los múltiplos históricos existen porque cubrir todos los costes reales del negocio exige un margen amplio.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Entendidos los márgenes que necesita la moda y su lógica, y calculado tu margen objetivo según tus costes reales y tu modelo de venta.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Decidir el posicionamiento de precio de tu marca</h3>
+      <p>Ahora subes del cálculo a la estrategia: <strong>en qué liga de precio juega tu marca.</strong> El precio posiciona, así que decidir tu nivel de precio es una decisión de marca, no solo de números.</p>
+      <p>Cómo decidir el posicionamiento:</p>
+      <ol>
+        <li><b>Decide tu liga de precio:</b> ¿accesible? ¿medio? ¿premium? ¿lujo? Esta decisión define a quién atraes, cómo te perciben y con quién compites. Debe ser coherente con tu posicionamiento de marca general (Fase 0): tu marca y tu precio tienen que contar la misma historia.</li>
+        <li><b>El precio debe ser coherente con tu marca y tu producto:</b> un precio premium exige una marca, un producto y una experiencia premium que lo justifiquen. Un precio alto sin nada que lo respalde no cuela. La coherencia entre precio, marca y producto es lo que lo hace creíble.</li>
+        <li><b>Considera lo que tu avatar puede y quiere pagar:</b> tu cliente (SOP 0.3) tiene una capacidad y una disposición de pago. El precio tiene que tener sentido para él, ni tan alto que lo excluya (si no es tu estrategia), ni tan bajo que desconfíe o que no te deje margen.</li>
+        <li><b>El precio como declaración de posicionamiento:</b> tu nivel de precio es una de las declaraciones más fuertes que hace tu marca sobre quién es y a quién sirve. Un precio bien elegido posiciona; uno incoherente confunde. Decide tu liga a propósito.</li>
+      </ol>
+      <p class="pull">El posicionamiento de precio es una decisión de marca. Tu precio cuenta una historia sobre quién eres y a quién sirves; asegúrate de que cuenta la que quieres, coherente con todo lo demás.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El posicionamiento de precio de tu marca decidido (tu liga), coherente con tu marca, tu producto y lo que tu avatar puede y quiere pagar.</li>
+      </ul>
+
+      <h3><span class="hn">2.5</span>Situar tu precio en el contexto del mercado</h3>
+      <p>Tu precio no existe en el vacío: se percibe <strong>en relación con el mercado y los competidores.</strong> Este paso sitúa tu precio en su contexto competitivo, no para copiar, sino para posicionarlo conscientemente frente a las referencias que tu cliente ya tiene.</p>
+      <p>Cómo situar tu precio:</p>
+      <ol>
+        <li><b>Conoce los precios de referencia de tu mercado:</b> qué cuestan prendas similares en tu liga y tu categoría. Tu cliente tiene referencias (sabe más o menos qué cuesta una sudadera de cierto tipo) y percibirá tu precio en relación a ellas.</li>
+        <li><b>Usa el mercado para posicionar, no para copiar:</b> el precio de los competidores es contexto, no una regla. Puedes situarte por encima, a la par o por debajo, pero decídelo a propósito, sabiendo dónde te sitúas y por qué.</li>
+        <li><b>Un precio fuera de contexto necesita justificación:</b> si tu precio es muy superior al de referencia, necesitas un valor percibido (marca, producto, experiencia) que lo justifique. Si es muy inferior, puede generar sospecha de baja calidad o no dejarte margen. Salirte de la referencia requiere una razón sólida.</li>
+        <li><b>El contexto informa, tu estrategia decide:</b> conoce el mercado, pero deja que tu estrategia (posicionamiento, valor, margen) decida el precio. El mercado te dice dónde está la referencia; tú decides dónde te sitúas respecto a ella.</li>
+      </ol>
+      <p class="pull">Sitúa tu precio en el contexto del mercado a propósito, no lo copies. El mercado te dice dónde está la referencia; tú decides conscientemente dónde te sitúas respecto a ella.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Tu precio situado en el contexto del mercado: conocidas las referencias y decidido conscientemente dónde te sitúas y por qué, usando el mercado para posicionar, no para copiar.</li>
+      </ul>
+
+      <h3><span class="hn">2.6</span>Decidir el precio final por valor y psicología</h3>
+      <p>Con el suelo (coste), el margen objetivo, el posicionamiento y el contexto, decides el <strong>precio final</strong>, y aquí entran el valor percibido y la psicología del precio. Este paso cierra la decisión integrando la matemática con la estrategia y la percepción.</p>
+      <p>Cómo decidir el precio final:</p>
+      <ol>
+        <li><b>Decide por valor percibido, no solo por coste:</b> el precio final se decide por lo que la prenda vale para el cliente (su valor percibido, que depende de la marca, el producto, la experiencia), respetando siempre el suelo del coste y el margen objetivo. El valor percibido es lo que permite cobrar por encima del coste más un margen mínimo.</li>
+        <li><b>Asegura que cubre el suelo y el margen:</b> el precio decidido por valor tiene que respetar el suelo (coste) y alcanzar tu margen objetivo (que cubre todos los costes reales). El valor decide cuánto por encima del suelo; la matemática asegura que el margen es suficiente.</li>
+        <li><b>Aplica la psicología del precio:</b> cómo se presenta el precio afecta a la percepción (los precios terminados en cierta cifra, los umbrales psicológicos, cómo se muestra). Sin obsesionarse, es una herramienta real que afecta a cómo se percibe y convierte.</li>
+        <li><b>Verifica la coherencia:</b> el precio final debe ser coherente con tu posicionamiento (tu liga), con el mercado (tu situación consciente frente a la referencia) y con tu marca. Un precio que cumple la matemática pero rompe la coherencia de marca es un mal precio.</li>
+      </ol>
+      <p class="pull">El precio final se decide por valor, respetando el suelo y el margen. Es donde la estrategia y la matemática se encuentran en un número que refleja tu marca y sostiene tu negocio.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El precio final de cada prenda decidido por valor percibido y psicología, respetando el suelo del coste y el margen objetivo, y coherente con tu posicionamiento y el mercado.</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Construir una estructura de precios coherente</h3>
+      <p>Los precios de tu colección deben tener una <strong>lógica coherente entre sí</strong>, no ser números sueltos al azar. Este paso construye la arquitectura de precios de toda la colección, la que hace que tu oferta tenga sentido para el cliente.</p>
+      <p>Cómo construir la estructura:</p>
+      <ol>
+        <li><b>Da coherencia a los precios de la colección:</b> prendas similares a precios similares, más complejas o premium a más precio. Una estructura coherente hace que el cliente entienda tu oferta; precios incoherentes confunden.</li>
+        <li><b>Usa la arquitectura de colección (hero pieces vs básicos):</b> las hero pieces (más elaboradas, más deseables) sostienen precios más altos; los básicos pueden ser más accesibles. La estructura de precios refleja la arquitectura de la colección.</li>
+        <li><b>Considera los rangos de precio (price points):</b> tener prendas en distintos rangos permite distintas entradas a la marca (un accesorio o básico accesible como entrada, piezas premium como aspiración). Los rangos bien pensados amplían quién puede comprar y cómo entra.</li>
+        <li><b>Mantén la coherencia con el posicionamiento:</b> toda la estructura debe ser coherente con tu liga (Fase 0). Una marca premium mantiene precios premium en toda la estructura; una accesible, accesibles. La estructura entera cuenta la misma historia.</li>
+      </ol>
+      <p class="pull">Tu estructura de precios debe tener una lógica coherente, no precios al azar. Una estructura coherente es en sí misma una herramienta de marca y de venta.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Una estructura de precios coherente para toda la colección: precios con lógica entre sí, que reflejan la arquitectura de colección (hero pieces vs básicos), con rangos pensados y coherentes con el posicionamiento.</li>
+      </ul>
+
+      <h3><span class="hn">2.8</span>Proteger el margen en el tiempo</h3>
+      <p>El último paso asegura que <strong>el margen se protege y se mantiene sano a lo largo del tiempo</strong>, no solo en el momento de fijar el precio. El margen se erosiona si no se vigila, y protegerlo es lo que mantiene la marca sostenible.</p>
+      <p>Cómo proteger el margen:</p>
+      <ol>
+        <li><b>Vigila el margen real, no solo el teórico:</b> el margen que fijaste se erosiona en la práctica con los descuentos, las devoluciones y los costes que suben. Vigila lo que de verdad te queda tras todo, no solo el margen teórico del precio. El margen real es el que sostiene la marca.</li>
+        <li><b>Gestiona los descuentos con cuidado:</b> los descuentos y rebajas comen margen directamente. Úsalos con estrategia, no por costumbre: cada descuento reduce tu margen real y, si abusas, entrenas al cliente a esperar rebajas y erosionas el valor percibido.</li>
+        <li><b>Revisa los precios cuando cambian los costes:</b> si tus costes suben (materiales, producción, marketing), tus precios pueden necesitar revisión para mantener el margen. Un precio fijado con costes viejos puede haber dejado de ser sostenible. Revisa periódicamente.</li>
+        <li><b>Protege tu posicionamiento de precio:</b> bajar precios o descontar constantemente daña tu posicionamiento y tu margen. Compite por valor, no por precio a la baja (que es una carrera hacia el fondo).</li>
+      </ol>
+      <p class="pull">El margen se protege en el tiempo, no solo se fija una vez. Un buen precio inicial no sirve de nada si se erosiona por descuentos constantes o costes que suben sin revisar.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Una gestión continua del margen: vigilar el margen real, gestionar los descuentos con cuidado, revisar precios ante cambios de coste y proteger el posicionamiento.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des tu estrategia de precios por cerrada hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre el coste y el margen</p>
+      <ul class="check">
+        <li>Parto del coste real completo de cada prenda como el suelo del precio (no como casi el precio).</li>
+        <li>Entiendo que el margen debe cubrir mucho más que producir (marketing, envíos, devoluciones, plataformas, descuentos, equipo, fijos, beneficio).</li>
+        <li>Entiendo los márgenes que necesita la moda y he calculado mi margen objetivo con criterio.</li>
+      </ul>
+
+      <p class="mini">Sobre el posicionamiento y el mercado</p>
+      <ul class="check">
+        <li>He decidido mi posicionamiento de precio (mi liga), coherente con mi marca y mi producto.</li>
+        <li>He considerado lo que mi avatar puede y quiere pagar.</li>
+        <li>He situado mi precio en el contexto del mercado a propósito, para posicionar, no para copiar.</li>
+      </ul>
+
+      <p class="mini">Sobre el precio final y la estructura</p>
+      <ul class="check">
+        <li>He decidido el precio final por valor percibido y psicología, respetando el suelo y el margen.</li>
+        <li>El precio final es coherente con mi posicionamiento y el mercado.</li>
+        <li>Tengo una estructura de precios coherente en toda la colección (reflejando hero pieces vs básicos, con rangos pensados).</li>
+      </ul>
+
+      <p class="mini">Sobre la protección del margen</p>
+      <ul class="check">
+        <li>Vigilo mi margen real, no solo el teórico.</li>
+        <li>Gestiono los descuentos con cuidado para no erosionar margen ni valor de marca.</li>
+        <li>Reviso los precios cuando cambian los costes.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 10.1 · Estrategia de precios y márgenes · v1.0 · Fase 10</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

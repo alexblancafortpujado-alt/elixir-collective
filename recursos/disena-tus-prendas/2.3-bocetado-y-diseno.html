@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 2.3 — Bocetado y diseño de prendas</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 2 · Diseño y Proceso Creativo</p>
+    <h1 class="rv">Bocetado y diseño</h1>
+    <p class="meta rv">SOP 2.3 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; De una idea a una prenda dibujada y fabricable</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que conviertas <strong>una dirección de colección en prendas concretas dibujadas</strong>: del «quiero una sudadera que transmita esto» a un dibujo claro que un patronista o una fábrica puedan entender y producir. Es <span class="hl">el puente entre la inspiración y la ficha técnica que se manda a fabricar</span>.
+    </p>
+    <p>Un alivio importante: <strong>no necesitas dibujar como un ilustrador de moda.</strong> Lo que una marca necesita de verdad son dibujos planos claros —los <em>flats</em>—: la prenda de frente y de espalda, como un plano. Un flat feo pero claro vale más que una ilustración bonita pero ambigua, porque el flat es lo que la fábrica lee.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 8 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que conviertas una dirección de colección en prendas concretas dibujadas: del «quiero una sudadera que transmita esto» a un dibujo claro que un patronista o una fábrica puedan entender y producir. Es el puente entre la inspiración (moodboard de colección) y la ficha técnica que se manda a fabricar.</p>
+      <p>Antes de nada, un alivio importante: <strong>no necesitas dibujar como un ilustrador de moda.</strong> Mucha gente se bloquea aquí creyendo que hay que hacer figurines preciosos. No. Lo que una marca necesita de verdad son <strong>dibujos planos claros</strong> (los llamados <em>flats</em> o <em>technical drawings</em>): la prenda dibujada de frente y de espalda, como un plano, mostrando cortes, costuras y detalles. Un flat feo pero claro vale más que una ilustración bonita pero ambigua, porque el flat es lo que la fábrica lee. Y si el dibujo se te da fatal, tu trabajo es <strong>dirigir</strong> a quien sepa (un diseñador freelance o un patronista), sabiendo exactamente qué pedir.</p>
+      <p>La distinción que ordena este SOP, dos tipos de dibujo con funciones distintas:</p>
+      <ul>
+        <li><b>Boceto / sketch:</b> exploración rápida a mano, para generar ideas y probar direcciones. Feo, veloz, desechable. Sirve para <em>pensar</em>.</li>
+        <li><b>Dibujo plano / flat técnico:</b> el dibujo limpio, a escala, de frente y espalda, con todos los detalles. Sirve para <em>comunicar a producción</em>. Es el que importa para fabricar.</li>
+      </ul>
+      <p>El resultado concreto es un método para idear y bocetar prendas alineadas con la colección, convertirlas en dibujos planos claros (tú o dirigiendo a alguien), con sus detalles constructivos definidos, listos para pasar a ficha técnica (tech pack) y muestreo.</p>
+      <p class="pull">Lo que pasa si te saltas el rigor: diseñas prendas «de oído» que la fábrica interpreta a su manera y llegan mal, dibujas algo ambiguo que genera diez idas y venidas con el confeccionista, o te bloqueas por creer que no sabes dibujar y nunca sacas la colección. Este SOP te da el proceso para diseñar con claridad aunque no seas dibujante.</p>
+
+      <h3><span class="hn">1.2</span>Elementos necesarios</h3>
+      <ul>
+        <li><b>El moodboard de colección y las direcciones de diseño (SOP 2.1):</b> paleta, atmósfera, materiales, siluetas, detalles. Las prendas nacen de aquí; sin esto, diseñas al azar.</li>
+        <li><b>La arquitectura de colección</b> (qué prendas y cuántas), si ya la definiste; si no, este SOP alimenta esa decisión.</li>
+        <li><b>Papel y lápiz</b> para bocetar (lo más rápido para idear) y una herramienta para los flats limpios: <b>Illustrator</b> (estándar profesional para flats), <b>Procreate/iPad</b>, o incluso plantillas de flats descargables si empiezas.</li>
+        <li><b>Referencias de construcción de prendas:</b> fotos de prendas similares, de dentro y fuera, para entender cómo están hechas (costuras, cortes, detalles). Estudiar cómo está construida una prenda que admiras enseña a diseñar la tuya.</li>
+        <li><b>Acceso a un patronista o diseñador técnico</b> (freelance o de la fábrica) si no dominas la parte técnica: tu diseño se lo pasarás a ellos.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Principios no negociables</h3>
+      <ol>
+        <li><b>Claridad por encima de belleza.</b> Un flat claro y feo comunica; una ilustración bonita y ambigua, no. La fábrica lee planos, no arte.</li>
+        <li><b>Cada prenda pertenece a la colección.</b> Si no encaja con el moodboard, la paleta y el concepto de la colección, no entra, por buena que sea la idea suelta.</li>
+        <li><b>Diseña para fabricar, no solo para soñar.</b> Piensa desde el principio en construcción, materiales y coste. Una prenda imposible o carísima de hacer no es un buen diseño.</li>
+        <li><b>El detalle es el diseño.</b> La diferencia entre una prenda genérica y una de marca casi siempre está en los detalles constructivos (una costura, un corte, un acabado), no en la silueta obvia.</li>
+        <li><b>Boceta para pensar, dibuja plano para comunicar.</b> No mezcles las dos funciones. Explora sucio y rápido; comunica limpio y preciso.</li>
+        <li><b>Si no sabes, dirige.</b> No dominar el dibujo técnico no es excusa para diseñar mal. Aprende a dar instrucciones precisas a quien tenga el oficio.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De la idea a la prenda lista para tech pack</h2>
+      <p>Ocho pasos que te llevan de una dirección de colección a prendas dibujadas y especificables. El flujo: primero ideas y bocetas sucio, luego seleccionas, después conviertes en flats limpios con detalles, y validas que sea fabricable.</p>
+
+      <h3><span class="hn">2.1</span>Partir de la dirección de colección, no de la nada</h3>
+      <p>Antes de bocetar una sola prenda, ánclate en la dirección de la colección. Diseñar prendas sueltas «porque molan» es el error que rompe la coherencia. Cada prenda debe nacer del brief de la colección (SOP 2.1). Ten delante, del moodboard de colección:</p>
+      <ol>
+        <li><b>El concepto y la atmósfera:</b> qué debe transmitir la colección — y por tanto cada prenda.</li>
+        <li><b>La paleta:</b> los colores en los que trabajas.</li>
+        <li><b>Las siluetas y volúmenes</b> sugeridos por la dirección.</li>
+        <li><b>Los materiales y texturas</b> que evoca el concepto.</li>
+        <li><b>Los detalles y códigos</b> de esta colección concreta.</li>
+      </ol>
+      <p>Y ten claro <strong>qué prenda estás diseñando y qué papel juega</strong> en la colección (esto conecta con la arquitectura de colección): ¿es una pieza protagonista (hero piece) o un básico de apoyo? Una hero piece carga el concepto y puede ser más arriesgada; un básico es más sobrio y vendible. Diseñar sin saber el rol de la prenda lleva a colecciones descompensadas.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Claro qué prenda vas a diseñar, qué papel juega en la colección, y las direcciones (concepto, paleta, silueta, material, detalle) que debe respetar.</li>
+      </ul>
+
+      <h3><span class="hn">2.2</span>Bocetar rápido y sucio (fase divergente)</h3>
+      <p>Ahora ideas la prenda bocetando <strong>rápido, feo y en cantidad</strong>. El objetivo es explorar direcciones, no hacer dibujos bonitos. El boceto es para pensar con la mano. Cómo bocetar:</p>
+      <ol>
+        <li><b>Cantidad sobre calidad.</b> Haz muchas variaciones rápidas de la prenda: distintas siluetas, largos, cuellos, mangas, cierres, proporciones. No te enamores de la primera idea; las buenas suelen aparecer tras vaciar las obvias.</li>
+        <li><b>Explora las variables de la prenda.</b> Para cada prenda hay decisiones que puedes mover: proporción y volumen (oversize, ajustado), largo, tipo de cuello/escote, tipo de manga, cierres, bolsillos, cortes. Boceta jugando con estas variables.</li>
+        <li><b>No te frenes por no saber dibujar.</b> Estos bocetos no los ve nadie. Palotes, formas, garabatos con notas, vale todo. La función es generar opciones, no lucir técnica.</li>
+        <li><b>Anota, no solo dibujes.</b> Al lado de cada boceto, escribe la idea: «manga más larga, puño elástico», «corte diagonal en el pecho». Las palabras completan lo que el dibujo torpe no captura.</li>
+      </ol>
+      <p class="pull">No te enamores de la primera idea; las buenas suelen aparecer tras vaciar las obvias.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Varias exploraciones rápidas de la prenda jugando con sus variables, con notas.</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Seleccionar y refinar la dirección</h3>
+      <p>De todos los bocetos, ahora <strong>eliges y afinas</strong> la dirección de cada prenda. Pasas de «muchas opciones» a «esta es la prenda». Cómo seleccionar:</p>
+      <ol>
+        <li><b>Filtra por la colección.</b> ¿Cuál de las opciones encaja mejor con el concepto, la paleta y el mundo de la colección? Descarta las que se salen, por bonitas que sean.</li>
+        <li><b>Filtra por deseabilidad y avatar.</b> ¿Cuál querría de verdad tu avatar (0.3)? ¿Cuál resuelve su tensión de identidad, cuál se pondría? El diseño no es arte personal: es una prenda que alguien debe querer llevar.</li>
+        <li><b>Filtra por viabilidad.</b> ¿Cuál se puede fabricar con sensatez y a un coste que deje margen? (Esto se valida a fondo en el paso 2.6, pero ya empieza a pesar aquí.)</li>
+        <li><b>Refina la elegida.</b> Coge la dirección ganadora y afínala: ajusta proporciones, decide detalles, resuelve dudas. El boceto elegido se pule hasta estar listo para pasar a limpio.</li>
+      </ol>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La dirección de cada prenda seleccionada y refinada, lista para convertir en flat.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Convertir en dibujo plano (flat técnico)</h3>
+      <p>Ahora conviertes el boceto elegido en el dibujo que <strong>comunica a producción</strong>: el flat técnico. Este es el dibujo que de verdad importa para fabricar. Si no lo dibujas tú, este es el momento de dirigir a quien lo haga. Qué es y qué lleva un buen flat:</p>
+      <ol>
+        <li><b>Vista de frente y de espalda</b>, siempre las dos. La espalda tiene tanta información como el frente y olvidarla causa errores.</li>
+        <li><b>A escala y con proporciones correctas.</b> El flat representa la prenda como es, no estilizada como en un figurín de moda. Las proporciones reales importan porque de aquí sale el patrón.</li>
+        <li><b>Todos los detalles constructivos visibles:</b> costuras, pespuntes, cortes, pinzas, bolsillos, cierres (cremalleras, botones), pretinas, puños, cuellos, dobladillos. Cada línea de costura se dibuja.</li>
+        <li><b>Limpio y claro.</b> Líneas nítidas, sin sombreado artístico. El flat es un plano técnico, no una ilustración.</li>
+      </ol>
+      <p>Cómo hacerlo según tu nivel:</p>
+      <ul>
+        <li><b>Si dibujas:</b> hazlo en Illustrator (vectorial, estándar profesional) o sobre plantillas de flats.</li>
+        <li><b>Si no dibujas:</b> usa plantillas base de prendas y modifícalas, o <b>dirige a un diseñador freelance</b> pasándole tus bocetos + notas + referencias. Tu trabajo es que el flat final represente exactamente tu idea; revísalo hasta que así sea.</li>
+      </ul>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El dibujo plano (frente y espalda) de cada prenda, limpio, a escala y con todos los detalles constructivos.</li>
+      </ul>
+
+      <h3><span class="hn">2.5</span>Definir los detalles constructivos y las especificaciones</h3>
+      <p>El flat muestra la prenda; ahora <strong>defines cómo está hecha por dentro</strong>. Aquí es donde una prenda pasa de «dibujo» a «algo fabricable», y donde vive gran parte de la calidad y la identidad de marca. Define, para cada prenda:</p>
+      <ol>
+        <li><b>Construcción y costuras:</b> qué tipo de costuras y acabados (esto afecta calidad, coste y aspecto). Detalles como pespuntes visibles, remates, refuerzos.</li>
+        <li><b>Cierres y avíos (trims):</b> cremalleras, botones, cordones, elásticos, remaches — qué tipo, dónde, de qué acabado. Los avíos comunican calidad y son parte del diseño.</li>
+        <li><b>Detalles de identidad:</b> dónde va la etiqueta de cuello, la bandera de costura, el bordado o el detalle de firma (conecta con tu SOP de etiquetas). La prenda debe llevar los códigos de la marca.</li>
+        <li><b>Colores y materiales previstos:</b> qué tejido y qué color(es) de tu paleta, sabiendo que se confirmarán en sourcing y muestreo.</li>
+      </ol>
+      <p>Nota importante sobre el patronaje: <strong>definir la prenda no es lo mismo que hacer el patrón.</strong> El patronaje (convertir el diseño en las piezas de tela cortables y escaladas por tallas) es un oficio técnico específico que tiene su propio SOP y que normalmente hace un patronista. Tu trabajo aquí es especificar la prenda con la claridad suficiente para que el patronista la ejecute bien. No te bloquees intentando patronar si no es lo tuyo: especifica y delega.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Los detalles constructivos y especificaciones de cada prenda definidos (costuras, avíos, detalles de marca, materiales previstos).</li>
+      </ul>
+
+      <h3><span class="hn">2.6</span>Validar viabilidad: fabricación y coste</h3>
+      <p>Antes de dar una prenda por terminada, comprueba que <strong>se puede fabricar con sensatez y deja margen</strong>. Diseñar sin pensar en esto lleva a prendas preciosas que son imposibles o ruinosas de producir. Chequea:</p>
+      <ol>
+        <li><b>Complejidad de construcción:</b> cuantas más operaciones, cortes, costuras y avíos, más caro y más difícil de producir bien. Pregúntate si cada detalle <em>aporta</em> o solo complica. A veces quitar una costura mejora la prenda y baja el coste.</li>
+        <li><b>Estimación de coste:</b> un cálculo aproximado de tela + confección + avíos. Cruza con el precio de venta al que aspiras y la regla de margen (recuerda el ~2,5x-4x del coste como referencia de la Fase 0). Si la prenda no da margen, hay que simplificarla, cambiar material, o replantearla.</li>
+        <li><b>Realismo con tu fábrica:</b> ¿tu confeccionista puede hacer esta construcción? Algunas técnicas requieren maquinaria o especialización concretas. Diseñar algo que tu fábrica no puede ejecutar es diseñar un problema.</li>
+      </ol>
+      <p class="pull">El mejor diseño es el que equilibra deseabilidad, identidad y viabilidad: una prenda que tu avatar desea, que es inconfundiblemente de tu marca, y que se puede fabricar con margen sano. Si falla una de las tres, ajústala.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Cada prenda validada en fabricabilidad y coste estimado, ajustada si no daba margen o no era ejecutable.</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Revisar la colección completa como conjunto</h3>
+      <p>Una prenda no vive sola: vive en una colección. Antes de cerrar, sube la mirada y revisa <strong>todas las prendas juntas</strong> como conjunto. Este paso evita colecciones que son buenas prenda a prenda pero incoherentes o descompensadas en conjunto. Comprueba:</p>
+      <ol>
+        <li><b>Coherencia:</b> ¿todas las prendas parecen de la misma colección? ¿Comparten el mundo, la paleta, los códigos? Una prenda que desentona rompe el conjunto.</li>
+        <li><b>Combinabilidad:</b> ¿las prendas funcionan juntas? ¿Se pueden combinar en looks? Una colección donde las piezas se potencian entre sí vende más que prendas sueltas inconexas.</li>
+        <li><b>Equilibrio:</b> ¿hay una mezcla sana de hero pieces (que cargan concepto) y básicos (que sostienen ventas)? ¿Cubre las necesidades de tu avatar? Demasiadas piezas arriesgadas y sin básicos = colección que no vende; solo básicos = colección sin alma.</li>
+        <li><b>Sin redundancia ni huecos:</b> ¿hay prendas que sobran (muy parecidas entre sí) o que faltan (un hueco obvio en la línea)?</li>
+      </ol>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La colección revisada como conjunto (coherencia, combinabilidad, equilibrio) y ajustada — prendas añadidas, quitadas o modificadas según haga falta.</li>
+      </ul>
+
+      <h3><span class="hn">2.8</span>Preparar el paso a producción</h3>
+      <p>El último paso deja cada prenda <strong>lista para el siguiente eslabón</strong>: la ficha técnica (tech pack) y el muestreo, que tienen sus propios SOPs. Aquí ordenas y entregas. Cierra:</p>
+      <ol>
+        <li><b>Consolida el paquete de cada prenda:</b> el flat (frente y espalda), los detalles constructivos, las especificaciones de material y color, y los detalles de identidad. Todo junto y ordenado por prenda.</li>
+        <li><b>Deja claro qué va al tech pack.</b> El tech pack (SOP siguiente de la fase) es el documento técnico completo que se manda a fábrica; tu diseño limpio y especificado es su materia prima. Cuanto más claro entregues aquí, mejor sale el tech pack.</li>
+        <li><b>Archiva los descartes útiles.</b> Las direcciones que no elegiste pueden servir para una futura colección. No las tires, guárdalas.</li>
+      </ol>
+      <p class="pull">El diseño no termina hasta que la muestra física confirma que la prenda funciona: el diseño en papel es una hipótesis que el muestreo valida. Diseña con la mente abierta a esos ajustes.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El paquete de diseño de cada prenda consolidado y ordenado, listo para pasar a tech pack y muestreo.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des el diseño de la colección por cerrado hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre el anclaje en la colección</p>
+      <ul class="check">
+        <li>Cada prenda nace de la dirección de la colección (concepto, paleta, silueta, material, detalle).</li>
+        <li>Sé qué papel juega cada prenda (hero piece o básico) en la colección.</li>
+      </ul>
+
+      <p class="mini">Sobre el bocetado y la selección</p>
+      <ul class="check">
+        <li>He bocetado rápido y en cantidad, explorando las variables de cada prenda.</li>
+        <li>He seleccionado filtrando por colección, por deseabilidad del avatar y por viabilidad.</li>
+        <li>He refinado la dirección elegida de cada prenda.</li>
+      </ul>
+
+      <p class="mini">Sobre el dibujo técnico</p>
+      <ul class="check">
+        <li>Cada prenda tiene un flat limpio, a escala, de frente y espalda.</li>
+        <li>El flat muestra todos los detalles constructivos (costuras, cierres, cortes, acabados).</li>
+        <li>Si no dibujo yo, he dirigido a quien dibuja hasta que el flat representa mi idea exacta.</li>
+      </ul>
+
+      <p class="mini">Sobre construcción y viabilidad</p>
+      <ul class="check">
+        <li>He definido los detalles constructivos y avíos de cada prenda.</li>
+        <li>He incluido los detalles de identidad (etiqueta, firma, bordado).</li>
+        <li>He validado que cada prenda es fabricable por mi tipo de fábrica.</li>
+        <li>He estimado el coste y confirmado que deja margen (regla ~2,5x-4x).</li>
+      </ul>
+
+      <p class="mini">Sobre el conjunto y el cierre</p>
+      <ul class="check">
+        <li>He revisado la colección completa (coherencia, combinabilidad, equilibrio hero/básicos).</li>
+        <li>He consolidado el paquete de diseño de cada prenda, listo para tech pack y muestreo.</li>
+        <li>Entiendo que el diseño se confirma con la muestra física y estoy abierto a ajustes.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 2.3 · Bocetado y diseño de prendas · v1.0 · Fase 2</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

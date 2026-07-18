@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 10.3 — Programa de fidelización / comunidad de clientes</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 10 · Ventas y Comercial</p>
+    <h1 class="rv">Fidelización de clientes</h1>
+    <p class="meta rv">SOP 10.3 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Maximizar lo que vale cada cliente a lo largo del tiempo</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que construyas un <strong>sistema deliberado de fidelización</strong>: una forma estructurada de premiar, retener y profundizar la relación con tus clientes, para que compren más, más veces y <span class="hl">se sientan parte de algo</span>. Donde la atención al cliente y la comunidad fidelizan a través del trato y la pertenencia, este SOP le da una estructura: un programa que hace la fidelización intencionada y medible.
+    </p>
+    <p>La idea que lo ordena todo: <strong>el valor de un cliente no está en su primera compra, está en todas las que hace a lo largo del tiempo.</strong> Una marca que solo piensa en la primera venta deja sobre la mesa la mayor parte del valor de cada cliente. Y la matemática de fondo es implacable: captar es caro y cada vez más; retener y hacer recomprar es barato y muy rentable.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 8 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que construyas un sistema deliberado de fidelización: una forma estructurada de premiar, retener y profundizar la relación con tus clientes, para que compren más, más veces y se sientan parte de algo. Los SOPs anteriores (atención al cliente, comunidad) construyen fidelización a través del trato y la pertenencia; este le da una estructura, un programa que hace la fidelización intencionada y medible, no solo un subproducto de tratar bien a la gente.</p>
+      <p>La idea que lo ordena todo: <strong>el valor de un cliente no está en su primera compra, está en todas las que hace a lo largo del tiempo.</strong> Es el concepto de valor del cliente a largo plazo (lifetime value): un cliente no vale lo que gasta una vez, sino todo lo que gastará durante su relación con tu marca. La matemática de fondo lo confirma: captar clientes nuevos es caro y cada vez más; retener y hacer recomprar a los que ya tienes es barato y muy rentable. La fidelización no es un «extra bonito», es una palanca central de la rentabilidad de una marca de moda.</p>
+      <p>La distinción clave de este SOP, dos formas de fidelizar que se complementan:</p>
+      <ul>
+        <li><b>Fidelización por incentivo (el programa):</b> premiar la recompra y la lealtad con ventajas tangibles (puntos, recompensas, descuentos por lealtad, acceso, ventajas de cliente frecuente). Es la fidelización estructurada y transaccional, la que da una razón concreta para volver.</li>
+        <li><b>Fidelización por pertenencia (la comunidad):</b> hacer que el cliente vuelva porque se siente parte de algo, del mundo y la comunidad de la marca. Es la fidelización emocional, más profunda y duradera.</li>
+      </ul>
+      <p>Las marcas de moda más fuertes combinan ambas: incentivos que dan razones concretas para volver, y pertenencia que crea lealtad emocional profunda. El resultado es <span class="gold">el criterio y el sistema para construir la fidelización de tu marca</span>, combinando el programa de incentivos con la pertenencia integrada en tu comunidad, de forma que maximices cuánto compra cada cliente a lo largo del tiempo y construyas una base leal que sostiene la marca.</p>
+      <p class="pull">Lo que pasa si no lo tienes: tratas cada venta como si fuera la primera y dejas sobre la mesa la mayor parte del valor de cada cliente. Dependes de captar constantemente gente nueva en vez de exprimir el valor de la que ya tienes. Sin fidelización estructurada, tu marca vive en la cinta de correr cara de la captación constante, en vez de construir la base leal que la hace rentable y sostenible.</p>
+
+      <h3><span class="hn">1.2</span>Indicadores de éxito</h3>
+      <ul>
+        <li>Piensas y gestionas el <b>valor del cliente a largo plazo</b>, no solo la primera venta.</li>
+        <li>Tus clientes <b>compran más veces</b>: tienes recompra, no solo compras únicas.</li>
+        <li>Combinas <b>fidelización por incentivo</b> (un programa o ventajas) y <b>por pertenencia</b> (comunidad).</li>
+        <li>Tus clientes tienen <b>razones concretas para volver</b> (ventajas) y <b>razones emocionales</b> (pertenencia).</li>
+        <li>Tu <b>dependencia de la captación cara baja</b>, porque retienes y exprimes el valor de los clientes que ya tienes.</li>
+        <li>Tu programa de fidelización es <b>coherente con tu marca</b>, no un sistema de puntos genérico que la abarata.</li>
+        <li>Tienes una <b>base de clientes leales</b> que sostiene la marca y que además la defiende y difunde.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Elementos necesarios</h3>
+      <ul>
+        <li>Tus <b>SOPs de atención al cliente y comunidad</b> (Fases 7 y 10): la fidelización se apoya y se integra con ellos.</li>
+        <li>Tus <b>datos de clientes y compras</b> (de la tienda, Fase 6): quién compra, cuánto, cuántas veces. La base para entender y gestionar el valor a largo plazo.</li>
+        <li>Tu <b>sistema de email/SMS y tienda</b> (Fase 6): la infraestructura para comunicar y ejecutar el programa.</li>
+        <li>Tu <b>comunidad</b> (SOP de comunidad): la base de la fidelización por pertenencia.</li>
+        <li>Tu <b>posicionamiento y margen</b> (Fases 0 y 10): las ventajas del programa tienen un coste y deben ser coherentes con tu margen y tu marca.</li>
+        <li>Claridad sobre qué <b>ventajas puedes ofrecer</b> de forma sostenible (descuentos, acceso, exclusividad, puntos), según tu margen y tu marca.</li>
+        <li>Una <b>herramienta de fidelización</b> si usas un programa estructurado (hay apps de fidelización para tiendas, o puedes empezar simple).</li>
+      </ul>
+
+      <h3><span class="hn">1.4</span>Principios no negociables</h3>
+      <ol>
+        <li><b>El valor está en el largo plazo, no en la primera venta.</b> Gestiona el valor del cliente a lo largo del tiempo. Ahí está la rentabilidad.</li>
+        <li><b>Retener es más rentable que captar.</b> La fidelización reduce la dependencia de la captación cara. Es una palanca central, no un extra.</li>
+        <li><b>Combina incentivo y pertenencia.</b> Da razones concretas para volver (ventajas) y razones emocionales (comunidad). Las dos juntas fidelizan más.</li>
+        <li><b>Coherente con la marca.</b> Un programa de fidelización debe reforzar tu marca, no abaratarla con descuentos genéricos que erosionan el valor percibido.</li>
+        <li><b>Sostenible con tu margen.</b> Las ventajas tienen un coste. Diséñalas de forma que fidelicen sin hundir tu margen.</li>
+        <li><b>Premia la lealtad, no solo la primera compra.</b> El objetivo es la recompra y la relación duradera. Premia volver, no solo llegar.</li>
+        <li><b>Fidelización por valor, no solo por descuento.</b> Descontar constantemente entrena a comprar solo en rebaja. Fideliza con exclusividad, acceso y pertenencia.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De tratar cada venta como la primera a maximizar el valor de cada cliente</h2>
+      <p>Ocho pasos: entender el valor a largo plazo, decidir tu enfoque de fidelización, diseñar la fidelización por incentivo, integrar la fidelización por pertenencia, cuidar a los clientes VIP, ejecutar y comunicar el programa, mantenerlo coherente con la marca y el margen, y medir y optimizar.</p>
+
+      <h3><span class="hn">2.1</span>Entender el valor del cliente a largo plazo</h3>
+      <p>Antes de construir nada, interioriza el concepto que ordena todo: <strong>el valor de un cliente es todo lo que compra a lo largo de su relación con tu marca, no lo que gasta una vez.</strong> Grabar esto cambia cómo valoras cada cliente y por qué la fidelización es tan rentable.</p>
+      <p>Lo que hay que entender:</p>
+      <ol>
+        <li><b>El cliente vale su relación completa, no una compra:</b> uno que compra una vez y no vuelve vale esa venta; uno que compra varias veces al año durante años vale muchísimo más. El valor real es la suma de todo lo que comprará mientras sea tu cliente (su lifetime value).</li>
+        <li><b>Maximizar el valor a largo plazo es una palanca enorme de rentabilidad:</b> aumentar cuánto y cuántas veces compra cada cliente tiene un impacto directo, a menudo mayor que captar más clientes nuevos. Exprimir el valor de tu base es de las formas más eficientes de crecer.</li>
+        <li><b>La fidelización es la palanca del valor a largo plazo:</b> hacer que los clientes vuelvan y compren más es exactamente lo que aumenta su valor. Un programa de fidelización es la herramienta sistemática para maximizarlo, dando razones (incentivo y pertenencia) para que la relación dure y se profundice.</li>
+        <li><b>La captación paga; la fidelización rentabiliza:</b> la captación trae clientes (con un coste); la fidelización los rentabiliza (haciéndolos comprar más). Una marca necesita ambas, pero la fidelización es la que convierte el gasto en captación en rentabilidad real.</li>
+      </ol>
+      <p class="pull">Gestiona el valor del cliente a largo plazo, no la venta única. El foco pasa de «captar y vender una vez» a «captar y maximizar el valor de cada cliente en el tiempo».</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Interiorizado el concepto del valor del cliente a largo plazo y por qué la fidelización es la palanca para maximizarlo.</li>
+      </ul>
+
+      <h3><span class="hn">2.2</span>Decidir tu enfoque de fidelización</h3>
+      <p>Antes de diseñar un programa concreto, decide <strong>cómo va a fidelizar tu marca</strong>, porque no todas las marcas fidelizan igual. Este paso define tu enfoque: la combinación de incentivo y pertenencia que encaja con tu marca, tu margen y tu cliente.</p>
+      <p>Cómo decidir el enfoque:</p>
+      <ol>
+        <li><b>Decide el peso de incentivo vs pertenencia:</b> ¿tu fidelización será más por incentivo (ventajas tangibles, programa de recompensas) o más por pertenencia (comunidad, mundo, exclusividad)? Una marca más premium suele fidelizar por pertenencia y exclusividad; una más accesible puede usar más incentivos tangibles. La mayoría combina ambos, pero el peso varía.</li>
+        <li><b>Elige un enfoque coherente con tu posicionamiento:</b> un programa de puntos y descuentos genérico puede encajar en una marca accesible pero abaratar una premium. Una fidelización por acceso exclusivo, pertenencia y trato VIP encaja mejor con un posicionamiento mayor. El enfoque debe reforzar tu marca, no contradecirla.</li>
+        <li><b>Considera tu margen:</b> las ventajas de fidelización tienen un coste que sale de tu margen. Muchas de las fidelizaciones más potentes (acceso, exclusividad, pertenencia, trato) cuestan poco margen y fidelizan mucho, más que los descuentos que lo erosionan.</li>
+        <li><b>Piensa en qué valora tu cliente:</b> ¿tu avatar valora más un descuento, o el acceso exclusivo y sentirse parte? Diseña la fidelización alrededor de lo que de verdad lo mueve. Para muchos clientes de moda, la exclusividad y la pertenencia fidelizan más que un descuento.</li>
+      </ol>
+      <p class="pull">Decide tu enfoque de fidelización según tu marca, tu margen y tu cliente. Uno bien elegido fideliza reforzando la marca; uno mal elegido (un programa de descuentos genérico en una marca premium) fideliza a costa de abaratarla.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Tu enfoque de fidelización decidido: peso de incentivo vs pertenencia, coherente con tu posicionamiento, sostenible con tu margen, construido alrededor de lo que valora tu cliente.</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Diseñar la fidelización por incentivo (el programa)</h3>
+      <p>Con el enfoque claro, diseñas la parte de <strong>fidelización por incentivo</strong>: las ventajas tangibles que premian la recompra y la lealtad. Este paso construye el «programa» en sí, las razones concretas que le das al cliente para volver.</p>
+      <p>Cómo diseñar la fidelización por incentivo:</p>
+      <ol>
+        <li><b>Elige el tipo de programa o ventajas:</b> un sistema de puntos (gana al comprar, canjea por ventajas), recompensas por recompra, ventajas de cliente frecuente, acceso anticipado a drops, niveles (tiers) según cuánto compran. Elige el que encaje con tu marca y tu enfoque.</li>
+        <li><b>Premia la recompra y la relación, no solo la primera compra:</b> el objetivo es incentivar que el cliente vuelva. Las ventajas deben premiar volver y seguir comprando, no solo llegar. Un programa bien diseñado hace que cada compra acerque a la siguiente ventaja.</li>
+        <li><b>Haz las ventajas deseables pero sostenibles:</b> lo bastante atractivas para mover al cliente, pero sostenibles para tu margen. El acceso anticipado a drops, la exclusividad y las ventajas de estatus a menudo fidelizan más que los descuentos y cuestan menos margen.</li>
+        <li><b>Mantenlo simple y claro:</b> un programa que el cliente no entiende no funciona. Que sea fácil de entender cómo se gana y qué se consigue. La simplicidad hace que el cliente participe; la complejidad lo aleja.</li>
+      </ol>
+      <p class="pull">Diseña un programa de incentivos que premie la lealtad de forma deseable y sostenible. Prioriza las ventajas que fidelizan mucho por poco coste: acceso, exclusividad, estatus.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La fidelización por incentivo diseñada: tipo de programa o ventajas, que premia la recompra, deseable y sostenible con el margen, simple y clara.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Integrar la fidelización por pertenencia (la comunidad)</h3>
+      <p>La fidelización más profunda no es por incentivo, es por <strong>pertenencia</strong>: el cliente vuelve porque se siente parte de algo. Este paso integra la fidelización con tu comunidad, construyendo la lealtad emocional que es más duradera que cualquier incentivo.</p>
+      <p>Cómo integrar la fidelización por pertenencia:</p>
+      <ol>
+        <li><b>Haz al cliente parte del mundo y la comunidad de la marca:</b> un cliente que se siente parte de tu comunidad y tu movimiento vuelve por pertenencia, no solo por ventajas. Se construye integrando al cliente en el mundo de la marca, no dándole puntos.</li>
+        <li><b>La pertenencia es más profunda y duradera que el incentivo:</b> un cliente fidelizado por ventajas se va si encuentra mejores ventajas en otro sitio; uno fidelizado por pertenencia se queda porque su identidad está ligada a la marca. Por eso las marcas más fuertes fidelizan por comunidad, no solo por programa.</li>
+        <li><b>Convierte a los clientes en miembros de la tribu:</b> el salto de «cliente» a «miembro de la comunidad» es el salto de fidelización más potente. Un cliente compra; un miembro pertenece, defiende y compra todo lo que sacas. La identidad compartida, los rituales y la pertenencia convierten clientes en miembros.</li>
+        <li><b>Combina pertenencia con incentivo:</b> las dos se potencian. Dar a los miembros de tu comunidad ventajas tangibles (acceso exclusivo, trato especial) une lo emocional y lo tangible, creando la fidelización más fuerte. Los mejores programas premian la pertenencia con exclusividad.</li>
+      </ol>
+      <p class="pull">La fidelización por pertenencia es la más profunda: intégrala con tu comunidad. Es lo que hace que un cliente no se vaya aunque otro le ofrezca mejor precio.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La fidelización por pertenencia integrada con tu comunidad: hacer al cliente parte del mundo, convertir clientes en miembros de la tribu, combinar pertenencia con incentivo.</li>
+      </ul>
+
+      <h3><span class="hn">2.5</span>Cuidar a los clientes VIP (tus mejores clientes)</h3>
+      <p>Dentro de tu base hay clientes que valen mucho más que la media: tus <strong>mejores clientes, los VIP.</strong> Este paso trata de cuidarlos especialmente, porque son los que más valor a largo plazo aportan y los que, bien cuidados, se convierten en tus mayores defensores y compradores recurrentes.</p>
+      <p>Cómo cuidar a los VIP:</p>
+      <ol>
+        <li><b>Identifica a tus mejores clientes:</b> los que más compran, más veces, más leales. Tus datos de clientes te dicen quiénes son. Aportan una parte desproporcionada de tu valor, así que merecen atención desproporcionada.</li>
+        <li><b>Dales un trato especial:</b> reconocimiento, ventajas exclusivas, acceso prioritario, atención personalizada, hacerlos sentir VIP. Refuerza enormemente su lealtad y su valor, y les demuestra que su relación con la marca importa.</li>
+        <li><b>Conviértelos en tus mayores defensores:</b> tus mejores clientes, bien cuidados, se convierten en tus embajadores más leales, los que difunden la marca, traen a gente y la defienden. Cuidar a los VIP no solo los retiene, los convierte en un motor de crecimiento.</li>
+        <li><b>Prioriza el valor sobre la igualdad:</b> no todos los clientes aportan lo mismo, y está bien cuidar más a los que más valor y lealtad aportan. Concentrar cuidado extra en tus VIP es una inversión de alto retorno, porque son los que más comprarán y más difundirán.</li>
+      </ol>
+      <p class="pull">Cuida especialmente a tus mejores clientes: aportan un valor desproporcionado. Concentrar cuidado en los que más aportan es una de las inversiones de fidelización de mayor retorno que existen.</p>
+
+      <h3><span class="hn">2.6</span>Ejecutar y comunicar el programa</h3>
+      <p>Un programa de fidelización solo funciona si los clientes <strong>lo conocen y lo usan.</strong> Este paso ejecuta y comunica el programa, para que no sea un sistema que existe pero nadie usa, sino una parte viva de la relación con tus clientes. Se apoya en tu email/SMS y tu tienda.</p>
+      <p>Cómo ejecutar y comunicar:</p>
+      <ol>
+        <li><b>Comunica el programa con claridad:</b> los clientes tienen que saber que existe, cómo funciona y qué consiguen. Comunícalo en la tienda, en los emails, en la postventa. Un programa que los clientes no conocen no fideliza a nadie.</li>
+        <li><b>Intégralo en la experiencia del cliente:</b> el programa debe estar presente de forma natural en la relación, en la tienda, en los emails (recordar el progreso, las ventajas), en la postventa (invitar a volver con la ventaja). Integrado, fideliza constantemente; aislado, se olvida.</li>
+        <li><b>Usa tu email/SMS para activarlo:</b> tus canales directos son ideales para comunicar el programa, recordar las ventajas, avisar de accesos exclusivos y hacer sentir especial al cliente. Recordarle que tiene una ventaja lo invita a volver.</li>
+        <li><b>Hazlo fácil de usar:</b> cuanto más fácil sea participar y disfrutar las ventajas, más se usa. La fricción de un programa complicado mata la participación. Simplicidad en el uso, como en el diseño.</li>
+      </ol>
+      <p class="pull">Un programa solo fideliza si se conoce, se usa y está integrado en la experiencia. Un gran programa que nadie conoce o usa no vale nada: la ejecución y la comunicación son lo que le dan vida.</p>
+
+      <h3><span class="hn">2.7</span>Mantener la coherencia con la marca y el margen</h3>
+      <p>Un programa de fidelización tiene dos riesgos que hay que vigilar: <strong>abaratar la marca y erosionar el margen.</strong> Este paso asegura que la fidelización refuerza la marca y es sostenible, en lugar de dañar el posicionamiento o hundir la rentabilidad. Se conecta directamente con el SOP de precios.</p>
+      <p>Cómo mantener la coherencia:</p>
+      <ol>
+        <li><b>Que el programa refuerce la marca, no la abarate:</b> un programa de descuentos constantes puede fidelizar a corto plazo pero abaratar la percepción de tu marca y entrenar a los clientes a comprar solo en rebaja. Diseña la fidelización para que refuerce tu marca (exclusividad, acceso, pertenencia, trato) más que para abaratarla.</li>
+        <li><b>Protege tu margen:</b> las ventajas cuestan margen. Vigila que el coste de tu fidelización sea sostenible. Las ventajas de bajo coste y alto valor percibido (acceso, exclusividad, estatus) fidelizan protegiendo el margen; los descuentos amplios lo comen. Prioriza las primeras.</li>
+        <li><b>Equilibra fidelizar y rentabilizar:</b> el objetivo es aumentar el valor a largo plazo del cliente, no regalar margen. Una fidelización que fideliza mucho pero a costa de todo el margen no cumple su objetivo. Equilibra ventajas atractivas con rentabilidad.</li>
+        <li><b>Fideliza por valor, no por precio a la baja:</b> como en el SOP de precios, fidelizar por valor (exclusividad, pertenencia, experiencia) es sostenible y refuerza la marca; hacerlo por precio a la baja es una carrera hacia el fondo que la abarata y come el margen.</li>
+      </ol>
+      <p class="pull">La fidelización debe reforzar la marca y proteger el margen, no dañarlos. La mejor fidelización suma al negocio y a la marca; no les resta.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Un programa que mantiene la coherencia con la marca (la refuerza, no la abarata) y protege el margen (fideliza por valor, no por descuento constante), coherente con el SOP de precios.</li>
+      </ul>
+
+      <h3><span class="hn">2.8</span>Medir y optimizar la fidelización</h3>
+      <p>El último paso convierte la fidelización en un sistema que <strong>mejora con datos.</strong> La fidelización se puede medir y optimizar, y hacerlo es lo que la vuelve cada vez más efectiva.</p>
+      <p>Cómo medir y optimizar:</p>
+      <ol>
+        <li><b>Mide las métricas de fidelización:</b> cuánto repiten tus clientes (tasa de recompra), cuánto vale un cliente a lo largo del tiempo (valor a largo plazo), qué proporción de tus ventas viene de clientes recurrentes frente a nuevos. Estas métricas te dicen si tu fidelización funciona.</li>
+        <li><b>Entiende qué fideliza de verdad:</b> los datos te dicen qué ventajas, qué acciones y qué partes del programa fidelizan más. Dobla en lo que funciona y ajusta lo que no.</li>
+        <li><b>Vigila el equilibrio coste-beneficio:</b> mide que el coste de tu fidelización (las ventajas) compense el valor que genera (la recompra y el valor a largo plazo aumentados). Una fidelización rentable genera más valor del que cuesta; ajústala si no lo hace.</li>
+        <li><b>Mejora el programa con el tiempo:</b> la fidelización no es estática. Con los datos y el aprendizaje, mejora tu programa, tus ventajas y tu integración con la comunidad. Un programa que evoluciona fideliza cada vez mejor.</li>
+      </ol>
+      <p class="pull">La fidelización se mide y se optimiza para ser cada vez más efectiva. Lo que se mide se mejora, y una fidelización optimizada con datos es una de las palancas de rentabilidad más potentes de la marca.</p>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des tu fidelización por cerrada hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre el concepto y el enfoque</p>
+      <ul class="check">
+        <li>Entiendo el valor del cliente a largo plazo y gestiono eso, no solo la primera venta.</li>
+        <li>He decidido mi enfoque de fidelización (peso de incentivo vs pertenencia) coherente con mi marca, margen y cliente.</li>
+      </ul>
+
+      <p class="mini">Sobre el incentivo y la pertenencia</p>
+      <ul class="check">
+        <li>Tengo diseñada la fidelización por incentivo (un programa o ventajas que premia la recompra, deseable y sostenible, simple).</li>
+        <li>Priorizo ventajas que fidelizan mucho por poco margen (acceso, exclusividad, estatus).</li>
+        <li>Combino pertenencia con incentivo para la fidelización más fuerte.</li>
+      </ul>
+
+      <p class="mini">Sobre los VIP y la ejecución</p>
+      <ul class="check">
+        <li>Identifico y cuido especialmente a mis mejores clientes (VIP), con trato especial y exclusividad.</li>
+        <li>Convierto a mis VIP en defensores de la marca.</li>
+        <li>Comunico e integro el programa en la experiencia del cliente, activándolo con email/SMS.</li>
+      </ul>
+
+      <p class="mini">Sobre la coherencia y la mejora</p>
+      <ul class="check">
+        <li>El programa refuerza mi marca en vez de abaratarla (fidelizo por valor, no por descuento constante).</li>
+        <li>Protejo mi margen y equilibro fidelizar con rentabilizar.</li>
+        <li>Mido la recompra y el valor a largo plazo del cliente.</li>
+        <li>Optimizo el programa con datos y lo mejoro con el tiempo.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 10.3 · Programa de fidelización / comunidad de clientes · v1.0 · Fase 10</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

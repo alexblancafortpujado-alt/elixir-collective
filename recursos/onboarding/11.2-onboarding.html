@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 11.2 — Onboarding de nuevos miembros</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 11 · Equipo, Delegación y Sistemas</p>
+    <h1 class="rv">Onboarding</h1>
+    <p class="meta rv">SOP 11.2 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Integrar para productividad y coherencia de marca</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que integres bien a las personas que traes a tu marca (empleados, freelancers, colaboradores), de forma que sean <strong>productivas rápido</strong> y, lo más importante en una marca de moda, que <span class="hl">entiendan y respeten el mundo de la marca</span>. Contratar bien es solo la mitad; la otra mitad es integrar bien.
+    </p>
+    <p>La idea que lo ordena todo: <strong>integrar a alguien no es solo enseñarle a hacer tareas, es transmitirle el mundo de la marca.</strong> Alguien puede saber hacer perfectamente su tarea técnica y aun así dañar la marca si no entiende su mundo: escribe con el tono equivocado, crea contenido que no encaja, atiende al cliente de forma incoherente.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 8 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que integres bien a las personas que traes a tu marca (empleados, freelancers, colaboradores), de forma que sean productivas rápido y, lo más importante en una marca de moda, que entiendan y respeten el mundo y la identidad de la marca. Una gran contratación mal integrada rinde poco, tarda en aportar, y puede incluso dañar la coherencia de la marca. Un buen onboarding es lo que convierte una contratación en valor real y rápido.</p>
+      <p>La idea que lo ordena todo, especialmente crítica en moda: <strong>integrar a alguien no es solo enseñarle a hacer tareas, es transmitirle el mundo de la marca.</strong> En un negocio genérico, onboardear es enseñar procesos. En una marca de moda con identidad fuerte es eso <em>y además</em> transmitir algo más difícil e importante: el mundo, la estética, el tono, los valores, el «porqué». Por eso el onboarding en moda tiene dos capas, y ambas son necesarias:</p>
+      <ul>
+        <li><b>La capa funcional (cómo hacer el trabajo):</b> las herramientas, los procesos, las tareas concretas, los sistemas. Es enseñar a la persona a ejecutar su función. Aquí tus SOPs hacen el trabajo pesado.</li>
+        <li><b>La capa de marca (cómo se hace aquí):</b> el mundo de la marca, su estética, su tono, sus valores, su cliente, su «porqué». Es transmitir la identidad para que la persona ejecute su función de forma coherente con la marca. Es la que más se descuida y la que más importa en moda.</li>
+      </ul>
+      <p>Descuidar la funcional deja a la persona perdida en el cómo; descuidar la de marca la deja ejecutando de forma incoherente con la identidad. La segunda idea clave: <strong>un buen onboarding acelera la productividad y previene los errores, es una inversión, no una pérdida de tiempo.</strong> El error del fundador ocupado es «no tengo tiempo para onboardear, que aprenda sobre la marcha». Falso ahorro: una persona mal integrada tarda mucho más en ser productiva, comete más errores (que tú corriges) y puede dañar la marca. El resultado es <span class="gold">un sistema de onboarding que cubre las dos capas</span>, apoyado en tus SOPs y adaptado al tipo de incorporación.</p>
+      <p class="pull">Lo que pasa si no lo haces: sueltas a la gente sin contexto y tardan una eternidad en ser productivos, cometiendo errores que tú tienes que corregir. Descuidas la capa de marca y la persona ejecuta bien técnicamente pero de forma incoherente con tu identidad, dañando la coherencia que tanto te costó construir. Sin buen onboarding, tus contrataciones rinden tarde y mal, y pueden diluir tu marca.</p>
+
+      <h3><span class="hn">1.2</span>Indicadores de éxito</h3>
+      <ul>
+        <li>Los nuevos miembros son <b>productivos rápido</b>, no tardan una eternidad en aportar.</li>
+        <li>Entienden y respetan el <b>mundo y la identidad de la marca</b>, no solo las tareas técnicas.</li>
+        <li>Cubres las <b>dos capas</b>: la funcional (cómo se hace) y la de marca (cómo se hace aquí).</li>
+        <li>Los nuevos cometen <b>menos errores</b> porque tienen contexto y estándares claros.</li>
+        <li>Tu onboarding <b>se apoya en tus SOPs</b>, no depende de explicarlo todo cada vez de cero.</li>
+        <li>Adaptas el onboarding al <b>tipo de incorporación</b> (empleado, freelancer, según el rol).</li>
+        <li>Cada persona que traes <b>aporta valor rápido sin diluir la coherencia</b> de tu marca.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Elementos necesarios</h3>
+      <ul>
+        <li>Tu <b>biblioteca de SOPs</b> (todas las fases): la base de la capa funcional. Lo documentado es lo que se enseña.</li>
+        <li>Tu <b>Brand Book y tu identidad de marca</b> (Fase 1): la base de la capa de marca. El mundo, la estética, el tono, los valores que transmitir.</li>
+        <li>Tu <b>concepto, avatar y mundo</b> (Fase 0): el «porqué» y el «para quién» de la marca, que el nuevo debe entender.</li>
+        <li>Claridad sobre el <b>rol concreto</b> de la persona (del SOP anterior): qué va a hacer, para enfocar su onboarding.</li>
+        <li>Los <b>accesos, herramientas y sistemas</b> que la persona necesitará: para prepararlos antes de que llegue.</li>
+        <li><b>Tiempo dedicado al onboarding</b> (o un proceso que lo minimice apoyándose en materiales): la inversión inicial que se recupera.</li>
+      </ul>
+
+      <h3><span class="hn">1.4</span>Principios no negociables</h3>
+      <ol>
+        <li><b>Integrar es transmitir el mundo, no solo enseñar tareas.</b> En moda, el onboarding transmite la identidad de la marca, no solo el cómo técnico. Las dos capas importan.</li>
+        <li><b>Las dos capas: funcional y de marca.</b> Enseña a ejecutar y a ejecutar en el mundo de la marca. Descuidar cualquiera falla.</li>
+        <li><b>El onboarding es inversión, no pérdida de tiempo.</b> El tiempo en integrar bien se recupera en productividad rápida y menos errores. No lo saltes por «no tener tiempo».</li>
+        <li><b>Apóyate en tus SOPs.</b> Lo documentado hace el onboarding eficiente y consistente. Los sistemas son la base de integrar sin explicar todo cada vez.</li>
+        <li><b>Da contexto, no solo instrucciones.</b> Entender el porqué (de la marca, del rol) hace a la persona autónoma y coherente, no solo un ejecutor de órdenes.</li>
+        <li><b>Adapta al tipo de incorporación.</b> Un empleado fijo y un freelancer puntual necesitan onboardings distintos. Ajusta la profundidad a la relación.</li>
+        <li><b>Protege la coherencia de la marca.</b> Alguien mal integrado puede diluir la marca. El onboarding protege la coherencia que tanto costó construir.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De soltar sin contexto a integrar para productividad y coherencia</h2>
+      <p>Ocho pasos: entender las dos capas, preparar el onboarding antes de que lleguen, transmitir el mundo de la marca, formar en la función con los SOPs, dar contexto y estándares, acompañar el arranque, adaptar según el tipo de incorporación, y sistematizar el onboarding.</p>
+
+      <h3><span class="hn">2.1</span>Entender las dos capas del onboarding</h3>
+      <p>Antes de montar nada, interioriza que <strong>un buen onboarding en moda tiene dos capas, y las dos son necesarias.</strong> Grabar esto evita el error más común: onboardear solo la parte funcional y descuidar la de marca, que es la que más importa en una marca con identidad.</p>
+      <p>Las dos capas:</p>
+      <ol>
+        <li><b>La capa funcional (cómo se hace el trabajo):</b> las tareas, las herramientas, los procesos, los sistemas. Es enseñar a la persona a ejecutar su función técnicamente. Sin esta capa, la persona no sabe hacer su trabajo. Tus SOPs cubren gran parte de esto.</li>
+        <li><b>La capa de marca (cómo se hace en esta marca):</b> el mundo, la estética, el tono, los valores, el cliente, el «porqué». Es transmitir la identidad para que la persona ejecute su función <em>de forma coherente con la marca</em>. Sin esta capa, ejecuta técnicamente bien pero de forma que no encaja.</li>
+        <li><b>Por qué las dos son necesarias en moda:</b> alguien puede hacer perfectamente su tarea técnica (escribir, crear contenido, atender) y aun así dañar la marca si no entiende su mundo. En una marca con identidad fuerte, la capa de marca es lo que asegura que la ejecución técnica sea coherente.</li>
+        <li><b>La capa de marca es la más descuidada y la más importante:</b> la mayoría de los onboardings se centran solo en lo funcional y descuidan lo de marca. En moda esto es un error grave, porque la coherencia de marca es un activo central, y una persona que no entiende el mundo lo diluye.</li>
+      </ol>
+      <p class="pull">Un buen onboarding cubre la capa funcional y la de marca. Enseñar a ejecutar sin transmitir el mundo deja a la persona ejecutando de forma incoherente con la identidad; transmitir el mundo sin enseñar a ejecutar la deja perdida en el cómo. Cubre las dos.</p>
+
+      <h3><span class="hn">2.2</span>Preparar el onboarding antes de que lleguen</h3>
+      <p>Un buen onboarding empieza <strong>antes de que la persona llegue.</strong> Este paso prepara todo para que el arranque sea fluido, en lugar de improvisar sobre la marcha. La preparación previa es lo que hace que la persona pueda empezar a aportar rápido en vez de perder tiempo en accesos y confusión.</p>
+      <p>Cómo preparar:</p>
+      <ol>
+        <li><b>Prepara los accesos y herramientas:</b> las cuentas, los accesos, las herramientas y los sistemas que la persona necesitará, listos antes de que llegue. Que alguien empiece y no pueda trabajar por falta de accesos es tiempo perdido y una mala primera impresión.</li>
+        <li><b>Reúne los materiales de onboarding:</b> los SOPs relevantes para su rol (capa funcional) y los materiales de marca (Brand Book, concepto, avatar; capa de marca). Tener el material listo hace el onboarding eficiente y consistente, sin depender de explicarlo todo de viva voz.</li>
+        <li><b>Define el plan de onboarding:</b> qué va a aprender la persona, en qué orden y en qué plazo. Un plan claro, aunque simple, da estructura: la persona sabe qué esperar y tú sabes qué cubrir.</li>
+        <li><b>Enfoca el onboarding al rol:</b> un editor de video, un atención al cliente y un asistente de producción necesitan onboardings distintos. Enfoca los materiales y el plan a su función concreta.</li>
+      </ol>
+      <p class="pull">Prepara el onboarding antes de que la persona llegue. La preparación previa es la mitad de un buen onboarding.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El onboarding preparado antes de la llegada: accesos y herramientas listos, materiales reunidos, plan definido, enfocado al rol.</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Transmitir el mundo de la marca (la capa de marca)</h3>
+      <p>Este es el paso que más se descuida y más importa en moda: <strong>transmitir el mundo, la identidad y el «porqué» de la marca.</strong> Antes o a la vez que enseñas las tareas, la persona tiene que entender en qué marca está trabajando, para poder ejecutar de forma coherente.</p>
+      <p>Cómo transmitir el mundo de la marca:</p>
+      <ol>
+        <li><b>Empieza por el «porqué» y el mundo:</b> el concepto, la historia, el enemigo, el mundo de la marca (Fase 0). La persona tiene que entender por qué existe la marca y qué representa, no solo qué hace. Entender el porqué es lo que le permite tomar buenas decisiones coherentes sin que se lo digas todo.</li>
+        <li><b>Transmite la identidad y la estética:</b> el Brand Book, los códigos visuales, la dirección de arte, el tono de voz (Fase 1). Tiene que conocer cómo se ve y cómo suena la marca, para que su trabajo encaje. Es crítico para cualquier rol que toque la parte visible.</li>
+        <li><b>Presenta al cliente (el avatar):</b> quién es el cliente de la marca (SOP 0.3), qué quiere, cómo habla, qué le importa. Un miembro que no conoce al avatar trabaja a ciegas.</li>
+        <li><b>Explica los valores y el estándar:</b> qué valora la marca, qué estándar de calidad, qué se hace y qué no. Los valores y el estándar guían las mil pequeñas decisiones que la persona tomará y que tú no puedes dictar una a una.</li>
+      </ol>
+      <p class="pull">Transmite el mundo de la marca para que la persona ejecute de forma coherente. Esta capa, la más descuidada, es la que protege la coherencia de tu marca cuando otros ejecutan. En moda, transmitir el mundo es tan importante como enseñar el trabajo.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La capa de marca transmitida (el porqué y el mundo, la identidad y la estética, el avatar, los valores y el estándar) para que la persona ejecute de forma coherente con la marca.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Formar en la función apoyándote en los SOPs</h3>
+      <p>Con el mundo de la marca transmitido, formas en la <strong>función concreta</strong>: cómo hacer el trabajo. Este paso cubre la capa funcional, y es donde tu biblioteca de SOPs hace el trabajo pesado, convirtiendo el onboarding funcional de una explicación agotadora en un proceso apoyado en materiales.</p>
+      <p>Cómo formar en la función:</p>
+      <ol>
+        <li><b>Apóyate en tus SOPs para enseñar el cómo:</b> los SOPs de las áreas que la persona va a trabajar son la guía de cómo se hace cada cosa en tu marca. En vez de explicar todo de viva voz (agotador e inconsistente), la persona aprende del SOP, que documenta el proceso y el estándar.</li>
+        <li><b>Enseña las herramientas y los sistemas:</b> las herramientas concretas que usará (la tienda, las de contenido, las de atención) y cómo funcionan tus sistemas. Tiene que manejarlas para ser productiva.</li>
+        <li><b>Combina el SOP con la práctica:</b> leer el SOP no basta, la persona aprende haciendo. Combina el material con la práctica guiada (hacer la tarea con acompañamiento al principio). El SOP da el marco; la práctica consolida el aprendizaje.</li>
+        <li><b>Enfoca la formación a su rol:</b> forma en lo que la persona va a hacer, no en todo. Un editor no necesita el onboarding de atención al cliente. Usa los SOPs relevantes a su función para un onboarding enfocado y eficiente.</li>
+      </ol>
+      <p class="pull">Forma en la función apoyándote en tus SOPs. Aquí es donde el trabajo de sistematizar tus procesos rinde: hace que integrar a alguien en una función sea rápido y consistente.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La capa funcional formada: apoyada en los SOPs relevantes, enseñando herramientas y sistemas, combinando SOP con práctica guiada, enfocada al rol.</li>
+      </ul>
+
+      <h3><span class="hn">2.5</span>Dar contexto y estándares claros</h3>
+      <p>Más allá de las tareas, la persona necesita <strong>contexto y estándares claros</strong> para trabajar bien de forma autónoma. Este paso asegura que entiende no solo qué hacer, sino con qué estándar y por qué, lo que la hace autónoma en lugar de un mero ejecutor que necesita instrucciones para todo.</p>
+      <p>Cómo dar contexto y estándares:</p>
+      <ol>
+        <li><b>Explica el porqué de las tareas, no solo el qué:</b> cuando la persona entiende por qué se hace algo, puede tomar buenas decisiones cuando surge algo no previsto. El contexto convierte a un ejecutor de instrucciones en alguien que entiende y decide bien.</li>
+        <li><b>Define el estándar de calidad claramente:</b> qué se considera un buen trabajo en tu marca, cuál es el nivel esperado. Sin un estándar claro, la persona no sabe si su trabajo está a la altura, y tú acabas rehaciendo o corrigiendo.</li>
+        <li><b>Clarifica las expectativas:</b> qué se espera de la persona (responsabilidades, plazos, forma de trabajar, comunicación). La ambigüedad genera fricción; la claridad, fluidez.</li>
+        <li><b>Da el marco para decidir, no solo instrucciones:</b> en lugar de dictar cada acción, da a la persona el marco (los valores, el estándar, el porqué) para que decida bien dentro de él. Esto es lo que la hace autónoma y escalable.</li>
+      </ol>
+      <p class="pull">Da contexto y estándares para hacer a la persona autónoma y coherente. El contexto y los estándares son lo que hace la delegación sostenible.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El contexto y los estándares dados (el porqué de las tareas, el estándar de calidad, las expectativas, el marco para decidir) que hacen a la persona autónoma y coherente.</li>
+      </ul>
+
+      <h3><span class="hn">2.6</span>Acompañar el arranque y dar feedback</h3>
+      <p>El onboarding no termina el primer día: hay que <strong>acompañar el arranque</strong> de la persona hasta que sea plenamente productiva. Este paso trata del acompañamiento inicial y el feedback, que consolidan el aprendizaje y corrigen el rumbo antes de que se afiancen malos hábitos.</p>
+      <p>Cómo acompañar el arranque:</p>
+      <ol>
+        <li><b>Acompaña más al principio, suelta progresivamente:</b> al arrancar, acompaña de cerca (más revisión, más disponibilidad para dudas), y ve soltando a medida que la persona demuestra que domina su función. Este acompañamiento decreciente consolida el aprendizaje sin ahogar.</li>
+        <li><b>Da feedback temprano y constructivo:</b> corregir pronto y con buen tono evita que se afiancen malos hábitos o errores. Un feedback temprano alinea a la persona con el estándar y la marca antes de que los errores se vuelvan costumbre.</li>
+        <li><b>Está disponible para las dudas:</b> al arrancar, la persona tendrá dudas. Estar disponible (o tener a alguien que lo esté) evita que se bloquee o cometa errores por no preguntar. La disponibilidad inicial acelera la productividad.</li>
+        <li><b>Verifica que las dos capas calan:</b> comprueba que la persona no solo ejecuta bien técnicamente, sino que lo hace de forma coherente con la marca. Si algo no encaja con el mundo de la marca, es el momento de corregirlo, antes de que se afiance.</li>
+      </ol>
+      <p class="pull">Acompaña el arranque con presencia y feedback decrecientes hasta la autonomía. Es lo que asegura que la inversión del onboarding da fruto.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El arranque acompañado: presencia y feedback decrecientes hasta la autonomía, feedback temprano y constructivo, disponibilidad para dudas, verificación de las dos capas.</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Adaptar el onboarding al tipo de incorporación</h3>
+      <p>No todas las incorporaciones necesitan el mismo onboarding. Un <strong>empleado fijo y un freelancer puntual</strong> requieren profundidades distintas. Este paso adapta el onboarding al tipo de relación, para invertir la profundidad adecuada: ni de más (perder tiempo) ni de menos (integrar mal).</p>
+      <p>Cómo adaptar según el tipo:</p>
+      <ol>
+        <li><b>Empleado (a tiempo completo o parcial):</b> merece el onboarding más completo, ambas capas a fondo, porque va a estar integrado en la marca de forma continua. La inversión se recupera a lo largo de toda su relación con la marca.</li>
+        <li><b>Freelancer o colaborador recurrente:</b> necesita un onboarding enfocado: la capa funcional de su tarea concreta, y la capa de marca en lo que afecta a su trabajo. Si crea contenido o toca la parte visible, necesita el mundo de la marca; si hace algo más técnico y aislado, menos.</li>
+        <li><b>Freelancer puntual (un proyecto):</b> un onboarding ligero y enfocado, lo justo para que haga bien ese proyecto, con el contexto de marca necesario para que encaje. No necesita el onboarding completo de un empleado, pero sí el contexto mínimo.</li>
+        <li><b>Servicio externo o agencia:</b> más que onboarding, necesitan un buen brief y el contexto de marca para entregar coherente. Dales tu Brand Book y el contexto necesario para que su trabajo encaje con tu marca.</li>
+      </ol>
+      <p>El principio de adaptación: <strong>más profundidad cuanto más integrada y continua sea la relación, y cuanto más toque el trabajo la identidad de la marca.</strong> Un empleado que toca la marca a diario necesita todo; un freelancer técnico puntual, lo justo.</p>
+      <p class="pull">Adapta la profundidad del onboarding al tipo de incorporación y a cuánto toca la marca. Ajustarla evita perder tiempo integrando de más a quien no lo necesita, y evita integrar de menos a quien sí.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El onboarding adaptado al tipo de incorporación: completo para empleados, enfocado para freelancers según su impacto en la marca, brief con contexto para servicios.</li>
+      </ul>
+
+      <h3><span class="hn">2.8</span>Sistematizar el onboarding</h3>
+      <p>El último paso convierte el onboarding en un <strong>sistema reproducible</strong>, para que integrar a cada nueva persona sea eficiente y consistente, no un esfuerzo que reinventas cada vez. Esto es lo que hace la construcción de equipo escalable.</p>
+      <p>Cómo sistematizar:</p>
+      <ol>
+        <li><b>Crea un onboarding documentado y reutilizable:</b> reúne los materiales (la introducción al mundo de la marca, los SOPs relevantes por rol, el plan) en un sistema reutilizable. Así cada nueva incorporación se integra con el mismo material probado. El onboarding se vuelve un proceso, no un esfuerzo puntual.</li>
+        <li><b>Ten «packs» de onboarding por tipo de rol:</b> materiales preparados para los roles que sueles incorporar (contenido, atención, producción). Un pack por rol hace la integración rápida y consistente: tomas el correspondiente en vez de empezar de cero.</li>
+        <li><b>Mejora el onboarding con cada incorporación:</b> cada persona que integras te enseña qué falta o qué se puede mejorar. Afina los materiales con el tiempo. Un onboarding que mejora con cada uso integra cada vez mejor.</li>
+        <li><b>El onboarding sistematizado hace el equipo escalable:</b> un onboarding documentado y reproducible te permite crecer el equipo sin que cada incorporación te consuma. Junto con tus SOPs, convierte la construcción de equipo de un cuello de botella en un proceso escalable.</li>
+      </ol>
+      <p class="pull">Sistematiza el onboarding para que integrar sea eficiente, consistente y escalable. Junto con tus SOPs, es lo que te permite construir equipo sin ahogarte integrando a cada uno.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El onboarding sistematizado (documentado y reutilizable, con packs por rol, que mejora con cada incorporación) que hace la construcción de equipo eficiente y escalable.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des tu onboarding por cerrado hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre las dos capas y la preparación</p>
+      <ul class="check">
+        <li>Entiendo las dos capas del onboarding (funcional y de marca) y cubro ambas.</li>
+        <li>Preparo el onboarding antes de que la persona llegue (accesos, materiales, plan, enfocado al rol).</li>
+      </ul>
+
+      <p class="mini">Sobre las dos capas en la práctica</p>
+      <ul class="check">
+        <li>Transmito el mundo de la marca (el porqué, la identidad, la estética, el avatar, los valores).</li>
+        <li>Formo en la función apoyándome en mis SOPs, combinando material con práctica guiada.</li>
+        <li>Doy contexto y estándares claros (el porqué, el estándar de calidad, las expectativas, el marco para decidir).</li>
+      </ul>
+
+      <p class="mini">Sobre el acompañamiento y la adaptación</p>
+      <ul class="check">
+        <li>Acompaño el arranque con presencia y feedback decrecientes hasta la autonomía.</li>
+        <li>Doy feedback temprano y constructivo y verifico que las dos capas calan.</li>
+        <li>Adapto la profundidad del onboarding al tipo de incorporación y a cuánto toca la marca.</li>
+      </ul>
+
+      <p class="mini">Sobre el sistema</p>
+      <ul class="check">
+        <li>Tengo un onboarding documentado y reutilizable.</li>
+        <li>Tengo packs de onboarding por tipo de rol.</li>
+        <li>Mejoro el onboarding con cada incorporación.</li>
+        <li>Entiendo que el onboarding sistematizado, con mis SOPs, hace el equipo escalable.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 11.2 · Onboarding de nuevos miembros · v1.0 · Fase 11</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

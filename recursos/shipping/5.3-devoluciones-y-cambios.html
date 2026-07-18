@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 5.3 — Gestión de devoluciones y cambios</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 5 · Operaciones, Inventario y Fulfillment</p>
+    <h1 class="rv">Devoluciones y cambios</h1>
+    <p class="meta rv">SOP 5.3 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Coste que se contiene, oportunidad que se aprovecha</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que gestiones <strong>las devoluciones y los cambios</strong> de forma que protejan tu margen, mantengan la confianza del cliente y —lo más importante— <span class="hl">te den información para reducirlas</span>. En moda online no son un caso excepcional: son una parte estructural del negocio.
+    </p>
+    <p>Una realidad que hay que asumir sin dramatizar: <strong>en moda online las devoluciones son altísimas, y la mayoría son por talla.</strong> No es un fallo tuyo puntual, es la naturaleza de vender ropa a distancia — y aceptarlo es lo que te permite gestionarlo como un sistema en vez de sufrirlo.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 8 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que gestiones las devoluciones y los cambios de forma que protejan tu margen, mantengan la confianza del cliente y, lo más importante, que te den información para reducirlas. En moda online, las devoluciones son una parte estructural del negocio, y una de las que más silenciosamente destruye la rentabilidad de las marcas que no las gestionan bien.</p>
+      <p>La realidad que hay que asumir: la mayoría de devoluciones son por talla. El cliente no puede probarse la prenda antes de comprar, así que compra con incertidumbre, y una parte importante devuelve porque «no le queda bien» o «no es su talla». Aceptarlo te permite gestionarlo como un sistema.</p>
+      <p>La idea central que ordena el SOP: una devolución es a la vez un coste que hay que controlar y una <span class="gold">oportunidad que hay que aprovechar</span>. Tiene dos caras:</p>
+      <ul>
+        <li><b>El coste:</b> cada devolución cuesta dinero real (envío de vuelta, reacondicionamiento, a veces producto que no se puede revender) y, sin control, se come el margen. Este lado hay que minimizarlo y contenerlo.</li>
+        <li><b>La oportunidad:</b> cómo gestionas una devolución define si el cliente vuelve o se va para siempre. Una devolución fácil y bien tratada puede fidelizar más que una compra sin problemas. Y cada devolución es información: te dice qué falla para poder corregirlo.</li>
+      </ul>
+      <p>El resultado concreto: una política de devoluciones y cambios clara y equilibrada, un proceso eficiente para gestionarlas, una estrategia para favorecer cambios sobre devoluciones, un sistema para reacondicionar y recuperar el producto devuelto, y un uso de los datos de devoluciones para reducirlas en el futuro.</p>
+      <p class="pull">El equilibrio que define toda la política: una política de devoluciones fácil vende más pero cuesta más; una restrictiva protege el margen pero frena la compra y molesta. Encontrar tu punto en ese equilibrio es una decisión estratégica, no una plantilla que se copia.</p>
+
+      <h3><span class="hn">1.2</span>Insumos necesarios</h3>
+      <ul>
+        <li><b>Tu política de envíos y el proceso de fulfillment:</b> las devoluciones son el reverso del envío y comparten logística.</li>
+        <li><b>El inventario sincronizado:</b> el producto devuelto y reacondicionado tiene que volver al stock correctamente.</li>
+        <li><b>La guía de tallas y la tabla de medidas</b> (SOP de patronaje): la primera línea de defensa contra la devolución número uno (por talla).</li>
+        <li><b>Los datos de devoluciones:</b> motivo, prenda, talla, con qué frecuencia…</li>
+        <li><b>Claridad sobre la normativa de tu mercado:</b> el derecho de desistimiento y las obligaciones legales varían por país (en la UE hay un derecho de desistimiento, verifica el tuyo). La política debe cumplir la ley.</li>
+        <li><b>Un sistema para gestionar las solicitudes</b> de devolución/cambio (el de tu tienda, apps de devoluciones, o un proceso manual al empezar).</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Principios no negociables</h3>
+      <ol>
+        <li><b>La devolución es coste Y oportunidad.</b> Contén el coste, pero aprovecha la oportunidad de fidelizar y de aprender. No la trates solo como un problema.</li>
+        <li><b>La talla es la causa número uno, atácala en origen.</b> La mejor devolución es la que no ocurre. Una buena guía de tallas previene más que cualquier gestión.</li>
+        <li><b>Facilita el cambio antes que la devolución.</b> Un cambio conserva la venta, una devolución la pierde. Orienta el proceso hacia el cambio cuando puedas.</li>
+        <li><b>Cumple la ley.</b> El derecho de devolución del cliente es legal en muchos mercados. Tu política debe respetarlo, no ir por debajo.</li>
+        <li><b>Trata bien al cliente que devuelve.</b> Cómo gestionas la devolución define si vuelve. Un buen trato en un mal momento fideliza.</li>
+        <li><b>Recupera el producto.</b> El producto devuelto es capital. Reacondiciónalo y devuélvelo al stock siempre que se pueda; no lo pierdas.</li>
+        <li><b>Usa los datos para reducir la causa.</b> Cada devolución es información. Si no corriges las causas, las repites cada colección.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De sufrir las devoluciones a gestionarlas y reducirlas</h2>
+      <p>Ocho pasos: prevenir en origen, definir la política, montar el proceso, favorecer el cambio, gestionar el trato al cliente, reacondicionar el producto, analizar los datos, y reducir las causas.</p>
+
+      <h3><span class="hn">2.1</span>Prevenir la devolución en origen (antes de que ocurra)</h3>
+      <p>La mejor gestión de devoluciones es <strong>evitar que sucedan</strong>. Como la causa número uno es la talla, atacar la incertidumbre de talla en la compra es la palanca más rentable de todo el SOP. Cada devolución prevenida no cuesta nada de gestionar.</p>
+      <ol>
+        <li><b>Una guía de tallas excelente:</b> publica en tu tienda una guía clara con las medidas reales de cada talla y cómo medirse para acertar. Sale directamente de tu tabla de medidas (SOP de patronaje) y es la herramienta que más devoluciones por talla previene.</li>
+        <li><b>Información de fit honesta:</b> indica el fit de cada prenda (oversize, regular, ajustado) y, si es útil, referencias tipo «si dudas entre dos tallas, elige…». Ayudar a elegir bien reduce el «no me quedó como esperaba».</li>
+        <li><b>Fotos y descripción fieles:</b> muchas devoluciones ocurren porque la prenda no era como el cliente imaginó (color distinto, material distinto). Fotos fieles (en cuerpos reales, color real) y descripciones honestas reducen la decepción.</li>
+        <li><b>Consistencia de tallaje:</b> si tu tallaje es consistente entre prendas (SOP de patronaje), el cliente que ya sabe «soy M en tu marca» acierta y no devuelve. La consistencia es prevención pura.</li>
+      </ol>
+      <p class="pull">La devolución más barata es la que no ocurre. Invertir en guía de tallas, información de fit y fotos fieles previene más devoluciones que cualquier optimización del proceso de gestión. Empieza por aquí.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Las medidas de prevención en marcha (guía de tallas clara, información de fit, fotos y descripciones fieles, tallaje consistente).</li>
+      </ul>
+
+      <h3><span class="hn">2.2</span>Definir la política de devoluciones y cambios</h3>
+      <p>Ahora defines <strong>tu política</strong>: las reglas de qué se puede devolver, en qué plazo, en qué condiciones y quién paga. Es una decisión estratégica sobre dónde te sitúas en el equilibrio «facilitar la venta vs proteger el margen».</p>
+      <ol>
+        <li><b>El plazo de devolución:</b> cuánto tiempo tiene el cliente para devolver (respetando el mínimo legal de tu mercado; muchas marcas ofrecen más que el mínimo para dar confianza).</li>
+        <li><b>Las condiciones:</b> en qué estado se acepta la prenda (sin usar, con etiquetas, en su empaque). Condiciones claras protegen tu capacidad de revender.</li>
+        <li><b>Quién paga el envío de devolución:</b> una de las decisiones que más pesa. <em>Devolución gratuita</em> = más confianza al comprar y más ventas, pero más coste y más devoluciones. <em>Pagada por el cliente</em> = protege margen y frena devoluciones frívolas, pero puede frenar la compra. Decide según tu posicionamiento, tu margen y tu cliente.</li>
+        <li><b>Reembolso vs cambio vs crédito de tienda:</b> define qué ofreces. El crédito de tienda o el cambio conservan el dinero dentro de la marca; el reembolso lo devuelve.</li>
+      </ol>
+      <p class="pull">Tu política es una decisión estratégica, no una plantilla. Una marca premium con buen margen puede permitirse devoluciones fáciles y gratuitas; una de margen ajustado necesita más protección. Elige conscientemente dónde te sitúas, comunícalo con claridad, y cumple la ley siempre.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Tu política de devoluciones y cambios definida (plazo, condiciones, quién paga el envío, tipo de compensación), equilibrada, clara y legal.</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Montar el proceso de gestión (eficiente)</h3>
+      <p>Con la política definida, monta el <strong>proceso para gestionar cada devolución</strong> de forma eficiente, para que no te consuma tiempo ni sea un caos improvisado cada vez.</p>
+      <ol>
+        <li><b>Un canal claro para solicitar la devolución/cambio:</b> cómo inicia el cliente el proceso (un formulario, un portal, un email). Cuanto más autoservicio, menos trabajo manual para ti. Hay apps que lo automatizan en plataformas como Shopify.</li>
+        <li><b>Los pasos definidos:</b> qué pasa desde que el cliente solicita hasta que se resuelve — aprobación, cómo devuelve la prenda, recepción, verificación del estado, y compensación (reembolso/cambio/crédito). Un flujo claro evita que cada caso sea una negociación.</li>
+        <li><b>La comunicación con el cliente en cada paso:</b> que sepa que su solicitud se recibió, que la prenda llegó, y cuándo se procesa su reembolso o cambio. Evita el ticket de «¿dónde está mi reembolso?».</li>
+        <li><b>Documentado para delegar:</b> como el fulfillment, el proceso debe poder ejecutarlo otra persona siguiendo pasos claros. Si solo tú sabes gestionarlas, es otro cuello de botella.</li>
+      </ol>
+      <p>La regla: un proceso claro convierte cada devolución en una rutina de minutos, no en un problema. El objetivo es que gestionar una devolución sea rápido y sistemático, para que el volumen (que será real) no te ahogue.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El proceso de gestión de devoluciones/cambios montado y documentado (canal, pasos, comunicación), eficiente y delegable.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Favorecer el cambio sobre la devolución</h3>
+      <p>Una devolución pierde la venta, un cambio la conserva. Este paso orienta el proceso para que, cuando sea posible, el cliente <strong>cambie</strong> (de talla, de color, de producto) en vez de devolver y pedir reembolso, recuperando la venta que de otro modo perderías.</p>
+      <ol>
+        <li><b>Ofrece el cambio como primera opción:</b> cuando el motivo es la talla (la causa número uno), un cambio de talla es la solución natural — el cliente quiere la prenda, solo en otra talla. Facilitarlo conserva la venta y satisface al cliente. Ponlo por delante en el proceso.</li>
+        <li><b>Ofrece crédito de tienda como alternativa al reembolso:</b> si el cliente no quiere un cambio directo, un crédito para gastar en tu tienda conserva el dinero dentro de la marca. Puedes incentivarlo (ej. un pequeño extra si eligen crédito), siempre respetando su derecho legal a un reembolso si lo exige.</li>
+        <li><b>Haz el cambio fácil:</b> cuanto más sencillo sea cambiar, más clientes lo elegirán sobre devolver. Un proceso de cambio complicado empuja al reembolso.</li>
+        <li><b>Respeta el derecho al reembolso:</b> favorecer el cambio no es negar el reembolso. Si el cliente quiere su dinero y le corresponde legalmente, dáselo con buen trato. Forzar a aceptar un crédito que no quiere daña la confianza más de lo que salva la venta.</li>
+      </ol>
+      <p class="pull">Facilita el cambio, ofrece el crédito, pero nunca atrapes al cliente. El objetivo es conservar la venta cuando el cliente está dispuesto, no obligarle. Un cambio voluntario fideliza; un reembolso negado, aleja.</p>
+
+      <h3><span class="hn">2.5</span>Cuidar el trato al cliente que devuelve</h3>
+      <p>Cómo tratas a un cliente en el momento de una devolución <strong>define si vuelve o se va para siempre.</strong> Una devolución es un momento de fricción, y gestionarlo con cuidado puede convertir un problema en fidelidad. Este es el lado «oportunidad» de la devolución.</p>
+      <ol>
+        <li><b>Haz que sea fácil y sin fricción:</b> un proceso complicado o que hace sentir al cliente como un problema genera resentimiento y no vuelve. Uno fácil y respetuoso le dice «esta marca me cuida incluso cuando algo no sale bien», y eso fideliza.</li>
+        <li><b>Responde con rapidez y buena actitud:</b> la velocidad y el tono importan. Un reembolso rápido y una comunicación amable convierten un mal momento en una buena impresión.</li>
+        <li><b>No hagas sentir mal al cliente por devolver:</b> devolver es su derecho y parte normal de comprar ropa online. Tratarlo con recelo o poner trabas daña la relación. La generosidad razonable se recuerda.</li>
+        <li><b>Convierte la devolución en confianza para la próxima compra:</b> un cliente que vive una devolución fácil compra con más confianza la próxima vez, porque sabe que el riesgo está cubierto. La buena gestión es marketing de retención.</li>
+      </ol>
+      <p class="pull">La devolución es un test de tu marca en un momento de fricción. Muchas marcas son geniales hasta que hay un problema; las que también lo son <em>cuando lo hay</em> son las que fidelizan. Trátala como una oportunidad de demostrar quién eres, no como una molestia.</p>
+
+      <h3><span class="hn">2.6</span>Reacondicionar y recuperar el producto</h3>
+      <p>El producto devuelto es <strong>capital</strong>: dinero de tu marca en forma de prenda. Este paso asegura que lo recuperes al stock siempre que sea posible, en vez de perderlo. Es el lado de «contener el coste».</p>
+      <ol>
+        <li><b>Verifica el estado de cada devolución:</b> al recibir la prenda, comprueba en qué estado vuelve. ¿Está como nueva (sin usar, con etiquetas) o tiene señales de uso/daño? Esto determina qué se puede hacer con ella.</li>
+        <li><b>Reacondiciona lo recuperable:</b> una prenda en buen estado se limpia/plancha/reempaqueta si hace falta y vuelve al stock para revenderse. Actualiza el inventario para reflejar la unidad recuperada. Cada prenda recuperada es capital que no pierdes.</li>
+        <li><b>Gestiona lo no revendible como nuevo:</b> una prenda con señales de uso pero en buen estado puede ir a un canal secundario (outlet, «segunda oportunidad» con descuento) en vez de perderse. Una dañada de verdad se descarta o se aprovecha (muestras, seeding).</li>
+        <li><b>Controla el coste del reacondicionamiento:</b> reacondicionar cuesta tiempo y a veces dinero. Es parte del coste real de la devolución (recuerda el SOP de costeo). Gestiónalo de forma eficiente para que recuperar el producto compense.</li>
+      </ol>
+      <p>La regla: el producto devuelto es capital que hay que recuperar, no basura que se pierde. Un sistema de reacondicionamiento que devuelve al stock las prendas recuperables reduce muchísimo el coste real de las devoluciones. Perder el producto devuelto es perder dos veces: la venta y el producto.</p>
+
+      <h3><span class="hn">2.7</span>Analizar los datos de devoluciones</h3>
+      <p>Cada devolución es <strong>información</strong>. Este paso convierte las devoluciones de un coste que sufres en un diagnóstico que usas para saber exactamente qué falla y poder corregirlo. Sin este análisis, repites las mismas devoluciones cada colección.</p>
+      <ol>
+        <li><b>Registra el motivo de cada devolución:</b> ¿talla? ¿no le gustó? ¿no era como esperaba? ¿defecto? ¿tarde? Sin registrar el motivo, no puedes diagnosticar nada. Pide siempre el motivo en el proceso.</li>
+        <li><b>Identifica patrones por prenda:</b> ¿hay prendas concretas que se devuelven mucho más que otras? Una prenda con tasa de devolución alta te está diciendo algo (talla mal, decepciona, la foto engaña).</li>
+        <li><b>Identifica patrones por talla:</b> ¿una talla concreta se devuelve más? Puede indicar un problema de tallaje/grading en esa talla (conecta con el SOP de patronaje). Si la L se devuelve el doble que las demás, quizá tu L talla mal.</li>
+        <li><b>Mira la tasa global y su evolución:</b> ¿cuál es tu tasa de devoluciones y sube o baja con el tiempo? Es un indicador de salud de tu operación y de tu producto.</li>
+      </ol>
+      <p class="pull">Las devoluciones son un diagnóstico gratuito de tus problemas de producto. El cliente te está diciendo, con su devolución, qué falla. Una marca que escucha esos datos mejora; una que solo las sufre, las repite.</p>
+
+      <h3><span class="hn">2.8</span>Reducir las causas y cerrar el ciclo</h3>
+      <p>El último paso cierra el bucle: usar el diagnóstico anterior para <strong>corregir las causas</strong> y reducir las devoluciones futuras. Aquí es donde el análisis se convierte en menos devoluciones y más margen.</p>
+      <ol>
+        <li><b>Corrige los problemas de tallaje:</b> si una talla o una prenda se devuelve mucho por fit, revisa el patrón/grading (SOP de patronaje) o mejora la información de tallas de esa prenda. Corregir la causa en origen elimina la devolución de raíz.</li>
+        <li><b>Mejora la información de las prendas problemáticas:</b> si una prenda se devuelve porque «no era como esperaba», el problema puede estar en las fotos o la descripción — mejóralas. A veces la prenda está bien y el problema es cómo se comunica.</li>
+        <li><b>Revisa las prendas que decepcionan:</b> si una prenda se devuelve mucho porque no gusta al recibirla, quizá haya un problema real de producto (calidad, tela, fit) que replantear en la siguiente colección o directamente no reponer.</li>
+        <li><b>Alimenta las decisiones de producto y producción:</b> los datos de devoluciones informan qué reponer, qué corregir y qué descartar (conecta con inventario y arquitectura de colección). Una prenda con alta devolución y bajo margen no debería repetirse.</li>
+      </ol>
+      <p class="pull">El objetivo final no es gestionar mejor las devoluciones, es tener menos. Gestionarlas bien contiene el daño; reducir sus causas lo elimina. Una marca madura usa el ciclo completo —prevenir, gestionar, analizar y corregir— para que su tasa baje colección tras colección, y ese descenso es margen recuperado.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Las causas de devolución identificadas siendo corregidas (tallaje, información, producto), y los datos integrados en las decisiones de producto y producción para reducir la tasa futura.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des la gestión de devoluciones por cerrada hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre la prevención</p>
+      <ul class="check">
+        <li>Tengo una guía de tallas clara con medidas reales y cómo medirse.</li>
+        <li>Informo del fit de cada prenda y uso fotos y descripciones fieles.</li>
+        <li>Mi tallaje es consistente para que el cliente acierte.</li>
+      </ul>
+
+      <p class="mini">Sobre la política y el proceso</p>
+      <ul class="check">
+        <li>Tengo una política de devoluciones clara, equilibrada y que cumple la ley (plazo, condiciones, quién paga, tipo de compensación).</li>
+        <li>Tengo un proceso de gestión eficiente, documentado y delegable.</li>
+        <li>El cliente recibe comunicación en cada paso de la devolución.</li>
+      </ul>
+
+      <p class="mini">Sobre el cambio y el trato</p>
+      <ul class="check">
+        <li>Favorezco el cambio y el crédito de tienda sobre el reembolso, sin negar nunca el derecho legal al reembolso.</li>
+        <li>Trato al cliente que devuelve con facilidad, rapidez y respeto.</li>
+        <li>Uso la devolución como oportunidad de fidelizar, no como molestia.</li>
+      </ul>
+
+      <p class="mini">Sobre la recuperación y los datos</p>
+      <ul class="check">
+        <li>Verifico el estado y reacondiciono el producto devuelto, devolviéndolo al stock cuando es posible.</li>
+        <li>Registro el motivo de cada devolución y analizo patrones por prenda y talla.</li>
+        <li>Vigilo mi tasa de devoluciones y su evolución.</li>
+        <li>Corrijo las causas (tallaje, información, producto) para reducir las devoluciones futuras.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 5.3 · Gestión de devoluciones y cambios · v1.0 · Fase 5</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>

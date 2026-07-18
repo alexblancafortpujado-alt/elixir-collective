@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOP 9.2 — Construcción de hype y waitlist previa</title>
+<style>
+  :root{
+    --bg:#0c0c0d;
+    --hi:#f4f4f5;
+    --ink:#e6e6e8;
+    --ink-dim:#d1d1d4;
+    --muted:#a3a3a8;
+    --faint:#747478;
+    --accent:#b3a6d4;
+    --line:rgba(244,244,246,.11);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    font-weight:400;line-height:1.76;letter-spacing:.001em;
+    font-size:18px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:rgba(244,244,246,.16);}
+
+  strong,b{color:var(--hi);font-weight:600;}
+  em,i{font-style:italic;color:var(--ink);}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(244,244,246,.32);}
+  .gold{color:var(--hi);border-bottom:1px solid rgba(179,166,212,.45);}
+
+  .page{max-width:1160px;margin:0 auto;padding:0 56px;display:grid;grid-template-columns:230px minmax(0,1fr);column-gap:96px;}
+  .masthead{grid-column:1 / -1;max-width:680px;padding-top:130px;}
+  .divider{grid-column:1 / -1;border-top:1px solid var(--line);margin:60px 0 0;}
+  .wrap{max-width:680px;padding:0 0 160px;}
+  section[id]{scroll-margin-top:40px;}
+
+  .toc-inner{position:sticky;top:44px;padding-top:64px;}
+  .toc-title{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 16px;}
+  .toc a{display:block;font-size:12.5px;line-height:1.45;color:var(--muted);text-decoration:none;border:0;border-left:1px solid transparent;padding:7px 0 7px 16px;transition:color .2s ease,border-color .2s ease;}
+  .toc a:hover{color:var(--ink);}
+  .toc a.active{color:#fff;border-left-color:var(--accent);}
+  .toc a .i{display:inline-block;width:26px;color:var(--accent);font-weight:500;}
+
+  .eyebrow{font-size:11px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);margin:0 0 30px;}
+  h1{font-weight:600;font-size:clamp(36px,8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 24px;color:var(--hi);}
+  .meta{font-size:11.5px;font-weight:500;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;}
+  .meta span{color:var(--faint);}
+  .lead-in{margin:48px 0 0;font-size:18px;line-height:1.72;color:var(--ink);font-weight:400;}
+  .lead-in .hl{color:var(--hi);font-style:italic;}
+
+  section{margin:90px 0 0;}
+  .sn{display:block;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;}
+  h2{font-weight:600;font-size:clamp(23px,4.6vw,31px);line-height:1.16;letter-spacing:-.018em;margin:0;color:var(--hi);}
+  h3{font-weight:600;font-size:20px;line-height:1.35;color:var(--hi);margin:66px 0 16px;letter-spacing:-.012em;}
+  h3 .hn{color:var(--accent);font-weight:500;margin-right:.5em;}
+
+  p{margin:24px 0;color:var(--ink-dim);}
+  .mini{display:block;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 4px;}
+  .mini.out{color:var(--muted);}
+
+  .pull{font-size:19px;line-height:1.62;font-style:italic;color:var(--ink);margin:46px 0;padding-left:26px;border-left:2px solid var(--accent);}
+  hr{height:0;border:0;border-top:1px solid var(--line);margin:90px 0;}
+
+  ul{list-style:none;padding:0;margin:22px 0;}
+  ul li{position:relative;padding:0 0 0 32px;margin:18px 0;line-height:1.72;color:var(--ink-dim);}
+  ul li::before{content:"";position:absolute;left:3px;top:.7em;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul li b{color:var(--hi);font-weight:600;}
+
+  ol{padding:0;margin:24px 0;counter-reset:li;list-style:none;}
+  ol li{position:relative;padding:0 0 0 38px;margin:18px 0;line-height:1.72;color:var(--ink-dim);counter-increment:li;}
+  ol li::before{content:counter(li);position:absolute;left:0;top:0;color:var(--accent);font-weight:600;font-size:14px;}
+  ol li b{color:var(--hi);font-weight:600;}
+
+  ul.check li{padding-left:32px;margin:13px 0;border-bottom:1px solid var(--line);padding-bottom:13px;}
+  ul.check li:last-child{border-bottom:0;}
+  ul.check li::before{background:transparent;border:1px solid var(--muted);border-radius:2px;width:12px;height:12px;top:.5em;}
+
+  footer{margin-top:116px;padding-top:28px;border-top:1px solid var(--line);text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .rv{opacity:0;transform:translateY(8px);animation:rise .7s ease forwards;}
+    @keyframes rise{to{opacity:1;transform:none;}}
+  }
+  @media (max-width:980px){
+    .page{display:block;max-width:760px;padding:0 28px;}
+    .masthead{max-width:none;padding-top:90px;}
+    .wrap{max-width:none;padding-bottom:110px;}
+    .toc-inner{position:static;padding:22px 24px;border:1px solid var(--line);border-radius:4px;margin-top:28px;}
+    .divider{margin-top:46px;}
+  }
+  @media (max-width:560px){.page{padding:0 18px;}.masthead{padding-top:72px;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow rv">Fase 9 · Lanzamiento, Drops y Marketing</p>
+    <h1 class="rv">Hype y waitlist</h1>
+    <p class="meta rv">SOP 9.2 &nbsp;<span>·</span>&nbsp; Versión 1.0 &nbsp;<span>·</span>&nbsp; Construir el deseo en las semanas antes del drop</p>
+
+    <p class="lead-in rv">
+      Este SOP existe para que domines <strong>la fase más importante y más ignorada de un lanzamiento: la construcción del deseo antes del drop.</strong> El SOP anterior te dio la estrategia completa con sus tres fases; este profundiza en la fase «antes», porque es <span class="hl">donde se gana o se pierde la mayoría de los lanzamientos</span>.
+    </p>
+    <p>La idea que lo separa todo: <strong>un drop no explota el día del lanzamiento, explota porque las semanas anteriores construiste el deseo que hace que explote.</strong> El día del drop es solo la detonación; la carga se coloca antes. Cuando una marca lanza y se agota en minutos, no es magia ni suerte.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-inner">
+      <p class="toc-title">Índice</p>
+      <a href="#b1"><span class="i">01</span>Fundamentos</a>
+      <a href="#b2"><span class="i">02</span>El proceso · 8 pasos</a>
+      <a href="#b3"><span class="i">03</span>Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <section id="b1">
+      <span class="sn">Bloque 1</span>
+      <h2>Fundamentos antes de empezar</h2>
+
+      <h3><span class="hn">1.1</span>Objetivo del SOP</h3>
+      <p>Este SOP existe para que domines la fase más importante y más ignorada de un lanzamiento: la construcción del deseo antes del drop. El SOP anterior te dio la estrategia completa de lanzamiento con sus tres fases; este profundiza en la fase «antes», porque es donde se gana o se pierde la mayoría de los lanzamientos, y porque las mecánicas concretas de generar hype y construir una waitlist merecen un tratamiento propio y detallado.</p>
+      <p>La idea central, y la que separa a las marcas cuyos drops se agotan de las que lanzan al vacío: un drop no explota el día del lanzamiento, explota porque las semanas anteriores construiste el deseo que hace que explote. El día del drop es solo la detonación; <span class="gold">la carga se coloca antes</span>. La marca que se agota trabajó su lanzamiento durante semanas; la que se queda con stock lo subió a la tienda el día y ya.</p>
+      <p>Dos conceptos que hay que dominar y que trabajan juntos: el <strong>hype</strong> es la energía de anticipación que construyes en tu audiencia antes del drop —es emocional: deseo, curiosidad, ganas—; la <strong>waitlist</strong> es la captura concreta de ese deseo en una lista de gente comprometida que ha dicho «yo lo quiero». El hype genera el deseo, la waitlist lo captura y lo compromete. Hype sin waitlist deja el deseo suelto, sin capturar; waitlist sin hype es una lista fría que no compra. Los mejores lanzamientos hacen las dos cosas. En moda esto pesa doble, porque el deseo es el motor de la compra: la gente compra ropa por deseo e identidad, no por necesidad.</p>
+      <p class="pull">Lo que pasa si no lo haces: lanzas «en frío» sin haber construido deseo, así que el día del drop nadie está esperando y las ventas son tibias. No capturas el interés en una waitlist, así que el deseo que sí generaste se disipa sin convertirse en ventas. Tu drop no explota porque no colocaste la carga antes.</p>
+
+      <h3><span class="hn">1.2</span>Indicadores de éxito</h3>
+      <ul>
+        <li>Llegas al día del drop con una <b>audiencia que ya lo espera y lo desea</b>, no en frío.</li>
+        <li>Has construido <b>hype real</b> en las semanas previas: la gente está pendiente y con ganas.</li>
+        <li>Tienes una <b>waitlist comprometida</b> de gente que ha dicho «yo lo quiero» antes del drop.</li>
+        <li>El tamaño y el compromiso de tu waitlist te indican la <b>demanda antes de lanzar</b>.</li>
+        <li>Tu drop <b>arranca fuerte</b> desde el primer momento, porque la demanda ya estaba creada y capturada.</li>
+        <li>Combinas <b>hype y waitlist</b>: generas deseo y lo capturas, no una cosa sin la otra.</li>
+        <li>Tu construcción de hype es <b>coherente con tu marca</b>, no ruido vacío que no sostienes.</li>
+      </ul>
+
+      <h3><span class="hn">1.3</span>Elementos necesarios</h3>
+      <ul>
+        <li><b>Tu estrategia de lanzamiento:</b> este SOP ejecuta en profundidad su fase «antes».</li>
+        <li><b>La colección lista</b> o casi lista: necesitas material (producto, historia, visuales) para construir el hype.</li>
+        <li><b>El concepto y la historia de la colección:</b> la narrativa sobre la que se construye el deseo.</li>
+        <li><b>Tu contenido y tus canales:</b> las herramientas para generar el hype.</li>
+        <li><b>Tu comunidad:</b> tu audiencia base a la que calentar, y tu mayor activo de hype.</li>
+        <li><b>Tu sistema de email y captación:</b> la infraestructura para montar la waitlist.</li>
+        <li><b>Una herramienta de waitlist:</b> un formulario, una landing, una función de «avísame», o la captación de email de tu tienda.</li>
+        <li><b>Un calendario de la fase previa:</b> para secuenciar la construcción del hype hacia la fecha del drop.</li>
+      </ul>
+
+      <h3><span class="hn">1.4</span>Principios no negociables</h3>
+      <ol>
+        <li><b>El drop se gana antes del drop.</b> La construcción del deseo en las semanas previas es donde se decide el lanzamiento. Es la fase más importante, no la saltes.</li>
+        <li><b>Hype y waitlist juntos.</b> Genera deseo (hype) Y captúralo (waitlist). Uno sin el otro desperdicia la mitad del potencial.</li>
+        <li><b>Construye deseo, no solo informes.</b> El hype es emocional. No es «el día X sale la colección», es hacer que la gente la desee antes de verla entera.</li>
+        <li><b>Revela progresivamente, no todo de golpe.</b> El deseo se construye por acumulación. Enseñar todo de una vez mata la expectación.</li>
+        <li><b>La waitlist debe premiar el compromiso.</b> Quien se apunta merece algo (acceso anticipado, exclusividad). Eso convierte la lista en ventas.</li>
+        <li><b>La comunidad es tu motor de hype.</b> Una comunidad activada amplifica el hype sola. Actívala como parte de la construcción.</li>
+        <li><b>Hype real, coherente con la marca.</b> El hype debe sostenerse con un producto que lo merezca. El hype vacío (mucho ruido, poco producto) quema la confianza.</li>
+      </ol>
+    </section>
+
+    <hr>
+
+    <section id="b2">
+      <span class="sn">Bloque 2</span>
+      <h2>El proceso · De una audiencia fría a una waitlist deseosa</h2>
+      <p>Ocho pasos: entender la mecánica del deseo, planificar la fase previa, arrancar el teaser, construir la narrativa, revelar progresivamente, montar la waitlist, activar la comunidad, y llegar al pico justo antes del drop.</p>
+
+      <h3><span class="hn">2.1</span>Entender cómo se construye el deseo antes de un drop</h3>
+      <p>Antes de ejecutar, entiende <strong>la mecánica de cómo se construye el deseo</strong>, porque generar hype no es hacer ruido, es aplicar una serie de principios psicológicos que hacen crecer la anticipación. Grabar esto te permite construir hype con intención, no al azar.</p>
+      <p>Los principios de la construcción del deseo:</p>
+      <ol>
+        <li><b>El deseo crece con la anticipación:</b> la expectación de algo que viene genera deseo. Cuando la gente sabe que algo está por llegar y lo espera, lo desea más que si aparece de golpe. Por eso se construye durante semanas, no en un día.</li>
+        <li><b>El misterio y la revelación parcial alimentan la curiosidad:</b> enseñar un poco (pero no todo) genera curiosidad, que es un motor de atención potente. La gente quiere ver el resto, quiere saber.</li>
+        <li><b>La narrativa crea conexión:</b> cuando la colección tiene una historia (su concepto, su mundo, su inspiración) y la cuentas antes del drop, la gente conecta emocionalmente con ella antes de verla entera. Esa conexión es deseo.</li>
+        <li><b>La escasez anticipada crea urgencia futura:</b> cuando la gente sabe de antemano que el drop será limitado, empieza a desear asegurar el suyo antes incluso de que salga. La anticipación de la escasez construye la urgencia que explotará el día del drop.</li>
+        <li><b>La comunidad amplifica el deseo:</b> cuando tu comunidad se anima y comparte la expectación, el hype se amplifica socialmente. Ver que otros lo esperan hace que tú también lo quieras: prueba social del deseo.</li>
+      </ol>
+      <p>La regla: <strong>el hype se construye aplicando la anticipación, el misterio, la narrativa, la escasez anticipada y la amplificación social.</strong> Generar deseo antes de un drop no es hacer ruido aleatorio, es aplicar estos principios de forma intencionada durante las semanas previas.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Entendidos los principios de construcción del deseo (anticipación, misterio, narrativa, escasez anticipada, amplificación social) para aplicarlos con intención.</li>
+      </ul>
+
+      <h3><span class="hn">2.2</span>Planificar la fase previa (la secuencia hacia el drop)</h3>
+      <p>El hype no se improvisa, se <strong>secuencia</strong>. Este paso planifica la fase previa como una escalada de deseo que crece hacia el día del drop. Un plan claro es lo que hace que el hype suba de forma constante en lugar de ser esfuerzos sueltos que no acumulan.</p>
+      <p>Cómo planificar la fase previa:</p>
+      <ol>
+        <li><b>Define la duración de la fase previa:</b> cuántas semanas antes del drop empiezas a construir hype. Suficiente para construir deseo (no un par de días), pero no tanto que la gente se canse o se olvide. La fase previa es de semanas, no de días ni de meses.</li>
+        <li><b>Diseña la escalada de deseo:</b> planifica cómo el hype crece hacia el drop, de menos a más intenso. Empieza sutil (primeros teasers, misterio) y sube la intensidad y la concreción a medida que se acerca la fecha (más revelación, la waitlist, el anuncio de la fecha, la cuenta atrás). El deseo debe estar en su máximo justo antes del drop.</li>
+        <li><b>Mapea qué comunicas cuándo:</b> secuencia los momentos clave: cuándo arranca el teasing, cuándo cuentas la historia, cuándo revelas producto, cuándo abres la waitlist, cuándo anuncias la fecha, la recta final. Todo mapeado en un calendario de la fase previa.</li>
+        <li><b>Coordina con tu contenido y canales:</b> la construcción del hype se ejecuta a través de tu contenido. Planifica qué contenido de hype sale en cada momento y en qué canales.</li>
+      </ol>
+      <p>La regla: <strong>el hype es una escalada planificada, no esfuerzos sueltos.</strong> Un plan claro convierte la construcción de hype de improvisación en una máquina de generar deseo.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El plan de la fase previa (duración, escalada de deseo, qué se comunica cuándo, coordinación con canales) mapeado en un calendario hacia el drop.</li>
+      </ul>
+
+      <h3><span class="hn">2.3</span>Arrancar con el teaser (crear el misterio)</h3>
+      <p>La fase previa arranca con el <strong>teasing</strong>: los primeros adelantos que crean misterio y despiertan la curiosidad, sin enseñarlo todo. Este es el inicio de la escalada, donde plantas la semilla del deseo.</p>
+      <p>Cómo arrancar con el teaser:</p>
+      <ol>
+        <li><b>Deja ver que algo viene, sin enseñarlo:</b> los primeros teasers insinúan que hay un lanzamiento en camino, sin revelar el qué. Un detalle, una sombra, una fecha misteriosa, una atmósfera. El objetivo es despertar la curiosidad, no informar. «¿Qué será esto?» es la reacción que buscas.</li>
+        <li><b>Crea misterio con revelación mínima:</b> enseña lo mínimo para intrigar. Un primer plano de una textura, un color, un detalle sin contexto, una pieza tapada. La revelación mínima alimenta la curiosidad porque la gente quiere ver más.</li>
+        <li><b>Genera preguntas, no respuestas:</b> el buen teaser hace que la gente se pregunte cosas (qué es, cuándo sale, cómo será). Las preguntas mantienen la atención y hacen que la gente esté pendiente de las siguientes pistas.</li>
+        <li><b>Coherente con el misterio de tu marca:</b> el teasing se hace con el estilo y la atmósfera de tu marca. Un teaser coherente con tu mundo, además de intrigar, refuerza la identidad.</li>
+      </ol>
+      <p class="pull">El teaser planta la semilla del deseo con misterio. El misterio del principio es lo que hace que la revelación posterior tenga fuerza.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>El teasing arrancado (adelantos misteriosos que crean curiosidad sin revelar, coherentes con tu marca) que planta la semilla del deseo.</li>
+      </ul>
+
+      <h3><span class="hn">2.4</span>Construir la narrativa de la colección</h3>
+      <p>A medida que avanza la fase previa, <strong>cuentas la historia de la colección</strong>: su concepto, su mundo, su inspiración. La narrativa es lo que convierte el misterio inicial en conexión emocional: la gente pasa de «¿qué será?» a «quiero entrar en ese mundo».</p>
+      <p>Cómo construir la narrativa:</p>
+      <ol>
+        <li><b>Cuenta el concepto y el mundo de la colección:</b> cada colección tiene un concepto, una historia, una inspiración. Cuéntala en la fase previa: de qué va, qué mundo representa, de dónde nace. Cuando la gente conoce la historia, conecta con ella antes de ver el producto entero.</li>
+        <li><b>Muestra el proceso y el «detrás»:</b> el contenido de cómo se hizo la colección, el proceso de diseño, la inspiración, el trabajo detrás, construye deseo y confianza. La gente valora y desea más lo que entiende y ve cómo se hizo.</li>
+        <li><b>Conecta la narrativa con tu avatar:</b> la historia debe conectar con lo que tu avatar desea, con su identidad, con su mundo. Una narrativa que toca a tu tribu genera deseo real; una genérica no conecta. La colección debe sentirse hecha para ellos.</li>
+        <li><b>Construye el mundo, no solo el producto:</b> la narrativa vende el mundo y la identidad de la colección, no solo las prendas. Ese deseo de mundo e identidad es más fuerte que el deseo de producto.</li>
+      </ol>
+      <p class="pull">La narrativa convierte el misterio en conexión emocional. No construyes hype solo enseñando producto, lo construyes contando una historia en la que la gente quiere entrar.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La narrativa de la colección construida en la fase previa (concepto, mundo, proceso, «detrás»), conectada con tu avatar, que convierte el misterio en conexión emocional.</li>
+      </ul>
+
+      <h3><span class="hn">2.5</span>Revelar el producto progresivamente</h3>
+      <p>A medida que se acerca el drop, <strong>revelas el producto poco a poco</strong>, no todo de golpe. La revelación progresiva construye el deseo pieza a pieza y mantiene la escalada de hype hacia el máximo.</p>
+      <p>Cómo revelar progresivamente:</p>
+      <ol>
+        <li><b>Enseña las piezas poco a poco:</b> en lugar de mostrar toda la colección de una vez, revela las prendas de forma escalonada hacia el drop. Cada revelación es un momento de deseo, y la gente espera la siguiente.</li>
+        <li><b>Empieza por las piezas que más deseo generan:</b> las hero pieces, las prendas más deseables, las que mejor representan la colección. Revelar primero lo que más deseo genera arranca fuerte y engancha.</li>
+        <li><b>Guarda algo para el final o el propio drop:</b> no reveles absolutamente todo antes. Guardar alguna pieza o detalle para el momento del lanzamiento mantiene una razón para estar presente el día del drop.</li>
+        <li><b>Cada revelación construye hacia el pico:</b> la revelación progresiva es parte de la escalada; cada prenda mostrada sube el deseo un poco más y lleva el hype hacia su máximo justo antes del drop.</li>
+      </ol>
+      <p class="pull">El deseo se construye revelando poco a poco, no todo de golpe. Enseñar la colección entera de una vez agota el deseo antes del drop; revelarla progresivamente lo construye pieza a pieza.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>Un plan de revelación progresiva del producto (piezas escalonadas, empezando por las más deseables, guardando algo para el final) que construye el deseo hacia el pico.</li>
+      </ul>
+
+      <h3><span class="hn">2.6</span>Montar y nutrir la waitlist (capturar el deseo)</h3>
+      <p>Aquí capturas todo el deseo construido en una <strong>waitlist</strong>: la lista concreta de gente comprometida que quiere el drop. Este es el paso que convierte el hype (energía difusa) en algo tangible y accionable. La waitlist es cómo el deseo se vuelve ventas.</p>
+      <p>Cómo montar y nutrir la waitlist:</p>
+      <ol>
+        <li><b>Crea la mecánica de captura:</b> monta la forma de apuntarse —un formulario, una landing, un «avísame», la captación de email, un registro—. Que sea fácil apuntarse. Es la infraestructura que convierte el interés en una lista concreta.</li>
+        <li><b>Invita a apuntarse en el momento de máximo deseo:</b> abre la waitlist cuando ya has construido deseo (tras el teasing y la narrativa), para que la gente se apunte deseosa, no fría. Y comunica claramente por qué apuntarse.</li>
+        <li><b>Premia el compromiso con acceso anticipado o exclusividad:</b> dale a los de la waitlist una razón real para apuntarse: acceso anticipado al drop (comprar antes que el público), exclusividad, una ventaja. Esto convierte la waitlist de una lista pasiva en gente comprometida que comprará, y refuerza la pertenencia (los de la lista son los «insiders»).</li>
+        <li><b>Nutre la waitlist hasta el drop:</b> una vez que la gente se apunta, mantenla caliente, comunícale, hazla sentir parte, dale las revelaciones antes que al público general. Una waitlist nutrida llega al drop deseosa; una que se apunta y luego se ignora, se enfría.</li>
+        <li><b>Lee la waitlist como señal de demanda:</b> el tamaño y el compromiso de tu waitlist te indican la demanda antes de lanzar, información valiosa para tus decisiones de producción y tus expectativas del drop.</li>
+      </ol>
+      <p class="pull">La waitlist captura el deseo y lo compromete. Es el puente entre el deseo que construiste y las ventas del lanzamiento, y una de las mecánicas más potentes que existen.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La waitlist montada (mecánica de captura, abierta en el momento de deseo, premiada con acceso anticipado, nutrida hasta el drop) que captura y compromete el deseo, y sirve de señal de demanda.</li>
+      </ul>
+
+      <h3><span class="hn">2.7</span>Activar la comunidad como motor de hype</h3>
+      <p>Tu <strong>comunidad</strong> es tu mayor amplificador de hype. Este paso la activa para que amplifique el deseo socialmente, convirtiendo el hype de algo que tú generas en algo que la comunidad propaga.</p>
+      <p>Cómo activar la comunidad:</p>
+      <ol>
+        <li><b>Haz a la comunidad parte de la construcción:</b> involúcrala en la fase previa, comparte con ellos, hazlos sentir insiders, dales las revelaciones primero, pídeles su opinión. Cuando la comunidad se siente parte del lanzamiento, se implica y lo espera con ganas.</li>
+        <li><b>Aprovecha la amplificación social:</b> cuando tu comunidad comparte el hype (comenta, comparte los teasers, habla del drop), el deseo se amplifica y llega a más gente. Ver que otros lo esperan hace que más gente lo desee.</li>
+        <li><b>Da a la comunidad acceso y exclusividad:</b> premia a tu comunidad con acceso anticipado, con ser los primeros, con exclusividad en el drop. Refuerza la pertenencia y convierte a la comunidad en la primera oleada de ventas y de hype.</li>
+        <li><b>Activa a los fans como difusores:</b> tus mayores fans son tus mejores propagadores. Actívalos, dales razones para difundir el drop, y amplificarán el deseo a su gente. El hype propagado por fans llega con confianza y credibilidad.</li>
+      </ol>
+      <p>La regla: <strong>la comunidad amplifica el hype de individual a colectivo.</strong> El hype que tú generas es limitado; el que amplifica tu comunidad es exponencial. Tu comunidad es la ventaja de lanzamiento que una marca sin comunidad no tiene.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La comunidad activada como motor de hype (parte de la construcción, amplificación social, acceso y exclusividad, fans como difusores) que amplifica el deseo de individual a colectivo.</li>
+      </ul>
+
+      <h3><span class="hn">2.8</span>Llegar al pico justo antes del drop (la recta final)</h3>
+      <p>El último paso es la <strong>recta final</strong>: los días u horas justo antes del drop, donde llevas el hype a su máximo y aseguras que la gente esté lista para comprar en el momento exacto. Este es el clímax de toda la construcción.</p>
+      <p>Cómo ejecutar la recta final:</p>
+      <ol>
+        <li><b>Lleva el hype al máximo:</b> en los días previos, sube la intensidad, completa la revelación (guardando quizás algo para el drop), la expectación en su punto álgido. Todo el trabajo de las semanas anteriores culmina en un pico de deseo justo antes del lanzamiento.</li>
+        <li><b>Anuncia la fecha y hora y crea la cuenta atrás:</b> comunica exactamente cuándo es el drop, para que la gente lo tenga marcado y esté lista. La cuenta atrás crea urgencia y mantiene a la gente pendiente del momento exacto.</li>
+        <li><b>Recuerda a la waitlist y la comunidad que están primeros:</b> comunícales su acceso anticipado o su ventaja, para que estén listos y sepan que son los primeros. La recta final activa a los que ya capturaste.</li>
+        <li><b>Prepara todo para la detonación:</b> asegura que la tienda está lista, el producto cargado, los emails de lanzamiento preparados, la comunicación del día lista. Todo debe estar preparado para convertir el deseo en ventas.</li>
+        <li><b>La anticipación de la escasez en su máximo:</b> en la recta final, recuerda (si es real) que el drop es limitado, que puede agotarse, que hay que estar listo. Es lo que hace que la gente compre en cuanto abre en lugar de «pensárselo».</li>
+      </ol>
+      <p class="pull">La recta final lleva el deseo a su máximo y prepara la detonación. Es el puente entre la construcción del deseo y el estallido del lanzamiento.</p>
+      <p class="mini out">Entregable de este paso</p>
+      <ul>
+        <li>La recta final ejecutada (hype al máximo, fecha y cuenta atrás, waitlist y comunidad preparadas, todo listo para el drop, anticipación de la escasez en su punto álgido) que lleva el deseo a su clímax.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="b3">
+      <span class="sn">Bloque 3</span>
+      <h2>Checklist de revisión final</h2>
+      <p>No des la fase previa por cerrada hasta poder marcar todo esto.</p>
+
+      <p class="mini">Sobre la comprensión y la planificación</p>
+      <ul class="check">
+        <li>Entiendo cómo se construye el deseo (anticipación, misterio, narrativa, escasez anticipada, amplificación social).</li>
+        <li>Tengo planificada la fase previa como una escalada de deseo mapeada en un calendario.</li>
+        <li>Combino hype (generar deseo) y waitlist (capturarlo), no una cosa sin la otra.</li>
+      </ul>
+
+      <p class="mini">Sobre la construcción del hype</p>
+      <ul class="check">
+        <li>Arranco con teasing que crea misterio y curiosidad sin revelar todo.</li>
+        <li>Construyo la narrativa de la colección (concepto, mundo, proceso) conectada con mi avatar.</li>
+        <li>Revelo el producto progresivamente, empezando por lo más deseable y guardando algo para el final.</li>
+      </ul>
+
+      <p class="mini">Sobre la waitlist</p>
+      <ul class="check">
+        <li>Tengo montada la mecánica de captura de la waitlist.</li>
+        <li>Abro la waitlist en el momento de máximo deseo y comunico por qué apuntarse.</li>
+        <li>Premio el compromiso de la waitlist con acceso anticipado o exclusividad.</li>
+        <li>Nutro la waitlist hasta el drop y la leo como señal de demanda.</li>
+      </ul>
+
+      <p class="mini">Sobre la comunidad y la recta final</p>
+      <ul class="check">
+        <li>Activo a mi comunidad como motor de hype (parte de la construcción, amplificación, fans difusores).</li>
+        <li>Doy a mi comunidad acceso y exclusividad en el drop.</li>
+        <li>En la recta final llevo el hype al máximo y anuncio la fecha con cuenta atrás.</li>
+        <li>Preparo a la waitlist y la comunidad para comprar primero, y dejo todo listo para la detonación.</li>
+        <li>Mantengo el hype real y coherente con un producto que lo merece.</li>
+      </ul>
+    </section>
+
+    <footer>SOP 9.2 · Construcción de hype y waitlist previa · v1.0 · Fase 9</footer>
+
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.rv').forEach(function(el,i){el.style.animationDelay=(i*0.08)+'s';});
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var current = window.scrollY, target = current, running = false;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function loop(){ current += (target - current) * 0.09; if (Math.abs(target - current) < 0.4){ current = target; window.scrollTo(0, current); running = false; return; } window.scrollTo(0, current); requestAnimationFrame(loop); }
+    function scrollToY(y){ target = Math.max(0, Math.min(y, maxScroll())); if (reduce){ window.scrollTo(0, target); current = target; return; } if (!running){ running = true; requestAnimationFrame(loop); } }
+    if (!reduce){
+      window.addEventListener('wheel', function(e){ if (e.ctrlKey) return; e.preventDefault(); var unit = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1); target = Math.max(0, Math.min(target + e.deltaY * unit, maxScroll())); if (!running){ running = true; requestAnimationFrame(loop); } }, { passive: false });
+      window.addEventListener('scroll', function(){ if (!running){ current = target = window.scrollY; } });
+      window.addEventListener('resize', function(){ target = Math.min(target, maxScroll()); });
+    }
+    document.querySelectorAll('.toc a').forEach(function(a){ a.addEventListener('click', function(e){ var el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); var y = el.getBoundingClientRect().top + window.scrollY - 32; scrollToY(y); history.replaceState(null, '', a.getAttribute('href')); }); });
+  })();
+  (function(){
+    var links = {};
+    document.querySelectorAll('.toc a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    var obs = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); if (links[en.target.id]) links[en.target.id].classList.add('active'); } }); }, { rootMargin: '-18% 0px -72% 0px', threshold: 0 });
+    document.querySelectorAll('section[id]').forEach(function(s){ obs.observe(s); });
+  })();
+</script>
+</body>
+</html>
