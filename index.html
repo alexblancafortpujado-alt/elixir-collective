@@ -9203,9 +9203,9 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
         <span>Inicio</span>
       </button>
-      <button class="tab-btn side-btn" data-tab="checklist" type="button">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 2 2 3-3"/><path d="m3 17 2 2 3-3"/><line x1="12" y1="6" x2="21" y2="6"/><line x1="12" y1="18" x2="21" y2="18"/><line x1="12" y1="12" x2="21" y2="12"/><path d="m3 12 2 2 3-3"/></svg>
-        <span>El Protocolo</span>
+      <button class="tab-btn side-btn" data-tab="modulos" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><polygon points="10 8 15 10.5 10 13" fill="currentColor" stroke="none"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        <span>Módulos</span>
       </button>
       <button class="tab-btn side-btn" data-tab="sops" type="button">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
@@ -9225,7 +9225,7 @@
         </div>
         <div class="level-card-title" id="levelCardTitle">Explorador</div>
         <div class="level-card-bar"><div class="level-card-fill" id="levelCardFill"></div></div>
-        <div class="level-card-meta" id="levelCardMeta">0/0 pasos · 0/9 módulos</div>
+        <div class="level-card-meta" id="levelCardMeta">0/0 pasos · 0/0 módulos</div>
       </div>
 
       <div class="sidebar-foot">
@@ -9250,7 +9250,7 @@
 
     <div class="inicio-cards">
       <div class="inicio-card inicio-card-progress ec-fade-up">
-        <div class="inicio-card-eyebrow">Progreso del protocolo</div>
+        <div class="inicio-card-eyebrow">Tu progreso</div>
         <div class="inicio-pct"><span id="inicioPct">0</span><span class="inicio-pct-sign">%</span></div>
         <div class="inicio-hero-meta">
           <span class="inicio-badge" id="inicioLevelBadge">Nivel · Explorador</span>
@@ -9274,7 +9274,7 @@
       <div class="inicio-modules-head">
         <div>
           <h2 class="inicio-modules-title">Tus módulos <span id="inicioModulesCount"></span></h2>
-          <p class="inicio-modules-sub">El protocolo, módulo a módulo</p>
+          <p class="inicio-modules-sub">Tu contenido, módulo a módulo</p>
         </div>
         <button class="inicio-see-all" type="button" id="inicioSeeAll">Ver todo
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
@@ -9317,6 +9317,39 @@
     </div>
   </div>
 </div><!-- /tab-panel checklist -->
+
+<div class="tab-panel" data-tab="modulos">
+  <!-- Grid view: all modules as cards -->
+  <div class="mod-wrap" id="modGridView">
+    <div class="mod-head">
+      <div class="mod-eyebrow"><span class="mod-eyebrow-dot"></span> Classroom</div>
+      <h1 class="mod-title">Módulos</h1>
+      <p class="mod-sub">Todo el contenido en vídeo, organizado por módulos. Avanza a tu ritmo y marca cada lección cuando la termines.</p>
+    </div>
+    <div class="mod-grid" id="modGrid"></div>
+  </div>
+
+  <!-- Course view: sidebar (groups → lessons) + player + checklist -->
+  <div class="mod-course" id="modCourseView" style="display:none;">
+    <button class="mod-back" id="modBackBtn" type="button"><span aria-hidden="true">←</span> Módulos</button>
+    <div class="mod-course-grid">
+      <aside class="mod-rail" id="modRail"></aside>
+      <section class="mod-lesson" id="modLesson"></section>
+    </div>
+  </div>
+</div><!-- /tab-panel modulos -->
+
+<!-- Módulos editor modal (admin) -->
+<div class="mod-modal-overlay" id="modModal" aria-hidden="true">
+  <div class="mod-modal" role="dialog" aria-modal="true">
+    <div class="mod-modal-head">
+      <h3 class="mod-modal-title" id="modModalTitle">Editar</h3>
+      <button class="mod-modal-x" id="modModalClose" type="button" aria-label="Cerrar">×</button>
+    </div>
+    <div class="mod-modal-body" id="modModalBody"></div>
+    <div class="mod-modal-foot" id="modModalFoot"></div>
+  </div>
+</div>
 
 <div class="tab-panel" data-tab="sops">
   <div class="section">
@@ -9452,6 +9485,191 @@
 </div>
 
 
+<style>
+  /* ═══════════════════════════════════════════════════════════════════
+     MÓDULOS (Classroom) — vídeos Vimeo + checklist por lección.
+     Reutiliza las variables "ink" del sistema global.
+     ═══════════════════════════════════════════════════════════════════ */
+  .mod-wrap { max-width: 1180px; margin: 0 auto; }
+  .mod-head { margin-bottom: 30px; }
+  .mod-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--text-tertiary); font-weight: 600; margin-bottom: 14px;
+  }
+  .mod-eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-secondary); }
+  .mod-title { font-size: clamp(34px, 5vw, 52px); font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
+  .mod-sub { color: var(--text-secondary); font-size: 16px; line-height: 1.55; max-width: 620px; margin: 0; }
+
+  .mod-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 22px; margin-top: 30px;
+    border-top: 1px solid var(--border); padding-top: 34px;
+  }
+
+  .mod-card {
+    position: relative; display: flex; flex-direction: column;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 20px; overflow: hidden; cursor: pointer;
+    transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+  }
+  .mod-card:hover { transform: translateY(-3px); border-color: var(--border-strong); background: var(--surface-raised); }
+  .mod-card-cover {
+    height: 190px; display: flex; align-items: center; justify-content: center;
+    font-size: 68px; background:
+      radial-gradient(120% 120% at 50% 0%, rgba(255,255,255,0.06), transparent 60%), #000;
+    border-bottom: 1px solid var(--border); position: relative;
+    background-size: cover; background-position: center;
+  }
+  .mod-card-cover img { width: 100%; height: 100%; object-fit: cover; }
+  .mod-card-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .mod-card-meta {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12.5px; color: var(--text-tertiary);
+  }
+  .mod-card-meta svg { width: 15px; height: 15px; opacity: 0.7; }
+  .mod-card-name { display: flex; align-items: center; gap: 9px; font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+  .mod-card-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .mod-card-desc { color: var(--text-secondary); font-size: 13.5px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .mod-card-prog { margin-top: auto; display: flex; align-items: center; gap: 10px; }
+  .mod-card-prog-bar { flex: 1; height: 4px; border-radius: 4px; background: rgba(255,255,255,0.08); overflow: hidden; }
+  .mod-card-prog-fill { height: 100%; background: var(--text-primary); width: 0%; transition: width 0.4s ease; border-radius: 4px; }
+  .mod-card-prog-pct { font-size: 12px; color: var(--text-tertiary); font-variant-numeric: tabular-nums; }
+  .mod-card-locked { position: absolute; top: 14px; right: 14px; color: var(--text-tertiary); }
+  .mod-card-adminrow { display: flex; gap: 6px; margin-top: 4px; }
+  .mod-mini-btn {
+    font-size: 11.5px; color: var(--text-secondary); background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border); border-radius: 8px; padding: 5px 10px; cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .mod-mini-btn:hover { background: rgba(255,255,255,0.1); color: var(--text-primary); }
+  .mod-mini-btn.danger:hover { color: var(--danger); border-color: rgba(252,165,165,0.4); }
+
+  .mod-card-new {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; min-height: 300px; border: 1.5px dashed var(--border-strong);
+    border-radius: 20px; background: transparent; cursor: pointer; color: var(--text-tertiary);
+    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+  }
+  .mod-card-new:hover { border-color: var(--text-secondary); color: var(--text-secondary); background: rgba(255,255,255,0.02); }
+  .mod-card-new-plus {
+    width: 54px; height: 54px; border-radius: 50%; border: 1.5px solid currentColor;
+    display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 300;
+  }
+
+  /* ── Course view ── */
+  .mod-course { max-width: 1320px; margin: 0 auto; }
+  .mod-back {
+    display: inline-flex; align-items: center; gap: 8px; background: none; border: none;
+    color: var(--text-secondary); font-size: 15px; cursor: pointer; padding: 4px 0; margin-bottom: 20px;
+    font-family: inherit; transition: color 0.2s ease;
+  }
+  .mod-back:hover { color: var(--text-primary); }
+  .mod-course-grid { display: grid; grid-template-columns: 320px 1fr; gap: 24px; align-items: start; }
+
+  .mod-rail { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 18px 16px; position: sticky; top: 20px; }
+  .mod-rail-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .mod-rail-emoji { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; background: rgba(255,255,255,0.06); border: 1px solid var(--border); flex: none; }
+  .mod-rail-title { font-size: 17px; font-weight: 700; flex: 1; }
+  .mod-rail-prog { height: 4px; border-radius: 4px; background: rgba(255,255,255,0.08); overflow: hidden; margin-bottom: 4px; }
+  .mod-rail-prog-fill { height: 100%; background: var(--text-primary); width: 0%; transition: width 0.4s ease; }
+  .mod-rail-prog-txt { font-size: 11.5px; color: var(--text-tertiary); text-align: right; margin-bottom: 16px; font-variant-numeric: tabular-nums; }
+
+  .mod-group { margin-bottom: 6px; }
+  .mod-group-head {
+    display: flex; align-items: center; gap: 8px; width: 100%; background: none; border: none;
+    color: var(--text-tertiary); font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase;
+    font-weight: 600; padding: 8px 8px; cursor: pointer; font-family: inherit; text-align: left;
+  }
+  .mod-group-head .mod-group-caret { transition: transform 0.2s ease; }
+  .mod-group.collapsed .mod-group-caret { transform: rotate(-90deg); }
+  .mod-group-count { margin-left: auto; font-variant-numeric: tabular-nums; }
+  .mod-group.collapsed .mod-group-lessons { display: none; }
+
+  .mod-lesson-item {
+    display: flex; align-items: center; gap: 10px; width: 100%; text-align: left;
+    background: none; border: none; color: var(--text-secondary); font-size: 14px;
+    padding: 9px 10px; border-radius: 10px; cursor: pointer; font-family: inherit;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .mod-lesson-item:hover { background: rgba(255,255,255,0.04); color: var(--text-primary); }
+  .mod-lesson-item.is-active { background: rgba(255,255,255,0.08); color: var(--text-primary); }
+  .mod-lesson-check { width: 17px; height: 17px; border-radius: 50%; border: 1.5px solid var(--border-strong); flex: none; display: flex; align-items: center; justify-content: center; }
+  .mod-lesson-item.done .mod-lesson-check { background: var(--success); border-color: var(--success); color: #0a0a0a; }
+  .mod-lesson-check svg { width: 11px; height: 11px; opacity: 0; }
+  .mod-lesson-item.done .mod-lesson-check svg { opacity: 1; }
+  .mod-lesson-name { flex: 1; }
+  .mod-rail-add { width: 100%; margin-top: 10px; border: 1px dashed var(--border-strong); background: none; color: var(--text-tertiary); border-radius: 10px; padding: 9px; font-size: 12.5px; cursor: pointer; font-family: inherit; transition: color 0.2s ease, border-color 0.2s ease; }
+  .mod-rail-add:hover { color: var(--text-secondary); border-color: var(--text-secondary); }
+
+  /* ── Lesson pane ── */
+  .mod-lesson { min-width: 0; }
+  .mod-lesson-eyebrow { font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-tertiary); font-weight: 600; margin-bottom: 8px; }
+  .mod-lesson-head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px; }
+  .mod-lesson-title { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; margin: 0; flex: 1; }
+  .mod-video { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #000; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+  .mod-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .mod-video-empty { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: var(--text-tertiary); font-size: 14px; }
+  .mod-video-empty svg { width: 40px; height: 40px; opacity: 0.5; }
+  .mod-body { margin-top: 22px; color: var(--text-secondary); font-size: 15.5px; line-height: 1.7; white-space: pre-wrap; }
+  .mod-checklist { margin-top: 26px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 22px 24px; }
+  .mod-checklist-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .mod-checklist-eyebrow { font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-tertiary); font-weight: 600; }
+  .mod-checklist-count { font-size: 12px; color: var(--text-tertiary); font-variant-numeric: tabular-nums; }
+  .mod-check-item { display: flex; align-items: flex-start; gap: 13px; padding: 13px 0; border-top: 1px solid var(--border); cursor: pointer; }
+  .mod-check-item:first-of-type { border-top: none; }
+  .mod-check-box { width: 22px; height: 22px; border-radius: 7px; border: 1.5px solid var(--border-strong); flex: none; display: flex; align-items: center; justify-content: center; margin-top: 1px; transition: background 0.15s ease, border-color 0.15s ease; }
+  .mod-check-item.done .mod-check-box { background: var(--success); border-color: var(--success); color: #0a0a0a; }
+  .mod-check-box svg { width: 13px; height: 13px; opacity: 0; }
+  .mod-check-item.done .mod-check-box svg { opacity: 1; }
+  .mod-check-text { font-size: 15px; line-height: 1.5; color: var(--text-primary); padding-top: 1px; }
+  .mod-check-item.done .mod-check-text { color: var(--text-tertiary); text-decoration: line-through; }
+  .mod-lesson-empty { color: var(--text-tertiary); font-size: 15px; padding: 60px 20px; text-align: center; }
+
+  .mod-icon-btn { width: 34px; height: 34px; border-radius: 9px; border: 1px solid var(--border); background: rgba(255,255,255,0.04); color: var(--text-secondary); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex: none; transition: background 0.2s ease, color 0.2s ease; }
+  .mod-icon-btn:hover { background: rgba(255,255,255,0.1); color: var(--text-primary); }
+  .mod-icon-btn svg { width: 16px; height: 16px; }
+
+  /* ── Modal ── */
+  .mod-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.72); backdrop-filter: blur(6px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 24px; }
+  .mod-modal-overlay.is-open { display: flex; }
+  .mod-modal { width: 100%; max-width: 540px; max-height: 88vh; overflow-y: auto; background: var(--surface); border: 1px solid var(--border-strong); border-radius: 20px; }
+  .mod-modal-head { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--surface); }
+  .mod-modal-title { font-size: 19px; font-weight: 700; margin: 0; }
+  .mod-modal-x { background: none; border: none; color: var(--text-secondary); font-size: 26px; line-height: 1; cursor: pointer; padding: 0 4px; }
+  .mod-modal-x:hover { color: var(--text-primary); }
+  .mod-modal-body { padding: 22px 24px; display: flex; flex-direction: column; gap: 16px; }
+  .mod-field { display: flex; flex-direction: column; gap: 7px; }
+  .mod-field label { font-size: 12.5px; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.01em; }
+  .mod-field label span { color: var(--text-tertiary); font-weight: 400; }
+  .mod-input, .mod-textarea, .mod-select {
+    background: #000; border: 1px solid var(--border-strong); border-radius: 10px; padding: 11px 13px;
+    color: var(--text-primary); font-size: 14.5px; font-family: inherit; width: 100%; resize: vertical;
+  }
+  .mod-input:focus, .mod-textarea:focus, .mod-select:focus { outline: none; border-color: var(--text-secondary); }
+  .mod-textarea { min-height: 90px; line-height: 1.55; }
+  .mod-emoji-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .mod-emoji-opt { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.03); font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .mod-emoji-opt.is-sel { border-color: var(--text-primary); background: rgba(255,255,255,0.1); }
+  .mod-checkedit-row { display: flex; align-items: center; gap: 8px; }
+  .mod-checkedit-row .mod-input { flex: 1; }
+  .mod-check-del { background: none; border: none; color: var(--text-tertiary); cursor: pointer; font-size: 20px; padding: 0 6px; }
+  .mod-check-del:hover { color: var(--danger); }
+  .mod-addcheck { align-self: flex-start; font-size: 13px; color: var(--text-secondary); background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 9px; padding: 8px 13px; cursor: pointer; font-family: inherit; }
+  .mod-addcheck:hover { background: rgba(255,255,255,0.1); color: var(--text-primary); }
+  .mod-modal-foot { display: flex; gap: 10px; justify-content: space-between; align-items: center; padding: 16px 24px 22px; border-top: 1px solid var(--border); }
+  .mod-btn { border: 1px solid var(--border-strong); background: rgba(255,255,255,0.05); color: var(--text-primary); border-radius: 11px; padding: 11px 20px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.2s ease; }
+  .mod-btn:hover { background: rgba(255,255,255,0.12); }
+  .mod-btn-primary { background: var(--text-primary); color: #0a0a0a; border-color: var(--text-primary); }
+  .mod-btn-primary:hover { background: #fff; }
+  .mod-btn-danger { color: var(--danger); border-color: transparent; background: none; }
+  .mod-btn-danger:hover { background: rgba(252,165,165,0.1); }
+
+  @media (max-width: 900px) {
+    .mod-course-grid { grid-template-columns: 1fr; }
+    .mod-rail { position: static; }
+  }
+</style>
 
 
 <script>
@@ -9500,8 +9718,8 @@
   // Flip to 'supabase' once Clerk ↔ Supabase JWT bridge is configured.
   // 'local' = legacy localStorage per browser.
   const STORAGE_MODE = 'supabase';
-  const SUPABASE_URL = 'https://wjdwigbizjsgkoaogubi.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndqZHdpZ2JpempzZ2tvYW9ndWJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNjk2NDcsImV4cCI6MjA5NDk0NTY0N30.tHid2u1P2paJMc-SpmFsD6WTHXGeeGVZ5qcpUjgbcGI';
+  const SUPABASE_URL = 'https://vrsawadqbvzkuitwrovz.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZyc2F3YWRxYnZ6a3VpdHdyb3Z6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ5Mzg3MDEsImV4cCI6MjEwMDUxNDcwMX0.i6l29fA_De9pl8cnYFK4V1P03JImEF7HCAwcbirLwY0';
 
   // ─── Access control (Skool subscription gate) ─────────────────────
   // Hardcoded so the owner can NEVER lock themselves out, even if
@@ -18703,6 +18921,35 @@
     if (flat.length === 0 || !doneMap || typeof doneMap !== 'object') return 0;
     return flat.filter(i => doneMap[checklistItemKey(i)]).length;
   }
+
+  // ── Tracking sobre Módulos ──
+  // El progreso de cada alumno vive en una única fila user_state
+  // (key = MOD_PROGRESS_KEY) cuyo value es { "modId/lessonId/stepId": 1 }.
+  // Los totales salen del árbol compartido classroomData.
+  function adminModuleList() {
+    return (typeof inicioModuleList === 'function')
+      ? inicioModuleList()
+      : (typeof classroomData !== 'undefined' ? classroomData : []);
+  }
+  function adminModuleTotals() {
+    const out = {}; let grand = 0;
+    for (const m of adminModuleList()) {
+      let steps = 0;
+      (m.groups || []).forEach(g => (g.lessons || []).forEach(l => { steps += lessonStepIds(l).length; }));
+      out[m.id] = steps; grand += steps;
+    }
+    out.__grand = grand;
+    return out;
+  }
+  function adminModuleDoneCount(moduleId, prog) {
+    const m = findModule(moduleId);
+    if (!m || !prog || typeof prog !== 'object') return 0;
+    let done = 0;
+    (m.groups || []).forEach(g => (g.lessons || []).forEach(l => {
+      lessonStepIds(l).forEach(s => { if (prog[_modCK(moduleId, l.id, s)]) done++; });
+    }));
+    return done;
+  }
   function adminRelativeTime(iso) {
     if (!iso) return '—';
     const t = new Date(iso).getTime();
@@ -18738,14 +18985,13 @@
     }
     refreshBtn && refreshBtn.classList.add('is-loading');
 
-    const totals = adminChecklistTotals();
+    const totals = adminModuleTotals();
     const moduleTotal = totals.__grand;
 
     try {
       const [stateRes, namesRes] = await Promise.all([
-        // All per-checklist doneMaps for every user. One row per
-        // (user, checklist) — we aggregate client-side.
-        supabaseClient.from('user_state').select('user_id, key, value, updated_at').like('key', 'checklist_done.%'),
+        // Una fila por usuario con TODO su progreso de módulos.
+        supabaseClient.from('user_state').select('user_id, value, updated_at').eq('key', MOD_PROGRESS_KEY),
         supabaseClient.from('user_state').select('user_id, value').eq('key', DISPLAY_NAME_KEY)
       ]);
       if (stateRes.error) throw stateRes.error;
@@ -18756,36 +19002,25 @@
         if (typeof r.value === 'string' && r.value.trim()) namesByUser[r.user_id] = r.value.trim();
       }
 
-      // Group rows by user_id → { [checklistId]: doneMap, latestUpdate }.
-      const byUser = new Map();
-      for (const row of (stateRes.data || [])) {
-        const checklistId = row.key.replace('checklist_done.', '');
-        if (!byUser.has(row.user_id)) byUser.set(row.user_id, { maps: {}, latestUpdate: null, updatedBy: {} });
-        const u = byUser.get(row.user_id);
-        u.maps[checklistId] = row.value || {};
-        u.updatedBy[checklistId] = row.updated_at;
-        if (!u.latestUpdate || row.updated_at > u.latestUpdate) u.latestUpdate = row.updated_at;
-      }
-
       const myId = (window.Clerk && window.Clerk.user) ? window.Clerk.user.id : null;
       const students = [];
-      for (const [userId, u] of byUser) {
-        const perChecklist = {};
+      for (const row of (stateRes.data || [])) {
+        const prog = (row.value && typeof row.value === 'object') ? row.value : {};
+        const perModule = {};
         let completed = 0;
-        for (const c of CHECKLISTS) {
-          const done = adminChecklistDoneCount(c.id, u.maps[c.id]);
-          perChecklist[c.id] = done;
+        for (const m of adminModuleList()) {
+          const done = adminModuleDoneCount(m.id, prog);
+          perModule[m.id] = done;
           completed += done;
         }
         students.push({
-          userId,
-          displayName: namesByUser[userId] || null,
+          userId: row.user_id,
+          displayName: namesByUser[row.user_id] || null,
           completed,
           percentage: moduleTotal > 0 ? Math.round((completed / moduleTotal) * 100) : 0,
-          perChecklist,
-          perChecklistUpdated: u.updatedBy,
-          updatedAt: u.latestUpdate,
-          isMe: userId === myId,
+          perModule,
+          updatedAt: row.updated_at,
+          isMe: row.user_id === myId,
         });
       }
       students.sort((a, b) => b.completed - a.completed);
@@ -18824,12 +19059,12 @@
   const ICON_CHEVRON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
   const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>';
 
-  // Name of the first not-yet-finished checklist — shown as "current module".
+  // Nombre del primer módulo no terminado — se muestra como "módulo actual".
   function currentModuleName(st, totals) {
-    for (const c of CHECKLISTS) {
-      const total = totals[c.id];
-      const done = st.perChecklist[c.id] || 0;
-      if (total > 0 && done < total) return c.name;
+    for (const m of adminModuleList()) {
+      const total = totals[m.id];
+      const done = (st.perModule && st.perModule[m.id]) || 0;
+      if (total > 0 && done < total) return m.title || 'Sin título';
     }
     return 'Completado';
   }
@@ -18905,39 +19140,21 @@
 
     const name = st.displayName || 'Sin nombre';
     const initial = (name || '?').charAt(0).toUpperCase();
-    const modulesDone = CHECKLISTS.filter(c => totals[c.id] > 0 && (st.perChecklist[c.id] || 0) === totals[c.id]).length;
+    const mods = adminModuleList();
+    const modulesDone = mods.filter(m => totals[m.id] > 0 && (st.perModule[m.id] || 0) === totals[m.id]).length;
 
-    const bars = CHECKLISTS.map(c => {
-      const total = totals[c.id];
-      const done = st.perChecklist[c.id] || 0;
+    const bars = mods.map(m => {
+      const total = totals[m.id];
+      const done = st.perModule[m.id] || 0;
       const empty = total === 0;
       const rate = empty ? 0 : Math.round((done / total) * 100);
       return ''
         + '<div class="track-modbar' + (empty ? ' is-empty' : '') + '">'
-        +   '<div class="track-modbar-row"><span class="track-modbar-name">' + escapeHtml(c.name) + '</span>'
+        +   '<div class="track-modbar-row"><span class="track-modbar-name">' + escapeHtml(m.title || 'Sin título') + '</span>'
         +     '<span class="track-modbar-count">' + (empty ? '—' : done + '/' + total) + '</span></div>'
         +   '<div class="track-modbar-bar"><div class="track-modbar-fill" style="width:' + rate + '%"></div></div>'
         + '</div>';
-    }).join('');
-
-    // Actividad reciente — derivada de cuándo se tocó cada checklist por
-    // última vez (Elixir no registra eventos granulares como Espresso).
-    const recent = Object.keys(st.perChecklistUpdated || {})
-      .map(id => ({ id, at: st.perChecklistUpdated[id] }))
-      .filter(x => x.at)
-      .sort((a, b) => (a.at < b.at ? 1 : -1))
-      .slice(0, 6)
-      .map(x => {
-        const c = CHECKLISTS.find(cc => cc.id === x.id);
-        return { label: 'Avanzó en ' + (c ? c.name : x.id), at: x.at };
-      });
-    const activityHtml = recent.length
-      ? '<ul class="track-activity">' + recent.map(a =>
-          '<li class="track-act-item"><span class="track-act-dot"></span>'
-          + '<div class="track-act-body"><div class="track-act-label">' + escapeHtml(a.label) + '</div>'
-          + '<div class="track-act-time">' + escapeHtml(adminRelativeTime(a.at)) + '</div></div></li>'
-        ).join('') + '</ul>'
-      : '<p class="track-act-empty">Aún no hay actividad.</p>';
+    }).join('') || '<p class="track-act-empty">Aún no hay módulos.</p>';
 
     detail.innerHTML = ''
       + '<button class="track-back" type="button" id="trackBackBtn">' + ICON_BACK + ' Volver a alumnos</button>'
@@ -18949,13 +19166,10 @@
       + '<div class="track-kpis">'
       +   _trackKpi('gauge', 'Progreso', st.percentage + '%', st.completed + '/' + moduleTotal + ' pasos')
       +   _trackKpi('check', 'Pasos hechos', st.completed, 'de ' + moduleTotal)
-      +   _trackKpi('layers', 'Módulos completos', modulesDone, 'de ' + CHECKLISTS.length)
+      +   _trackKpi('layers', 'Módulos completos', modulesDone, 'de ' + mods.length)
       +   _trackKpi('clock', 'Última actividad', adminRelativeTime(st.updatedAt), '')
       + '</div>'
-      + '<div class="track-grid2">'
-      +   '<div class="track-panel"><h2 class="track-panel-title">Progreso por módulo</h2>' + bars + '</div>'
-      +   '<div class="track-panel"><h2 class="track-panel-title">Actividad reciente</h2>' + activityHtml + '</div>'
-      + '</div>'
+      + '<div class="track-panel"><h2 class="track-panel-title">Progreso por módulo</h2>' + bars + '</div>'
       + '<div class="track-panel"><h2 class="track-panel-title">Deberes</h2>'
       +   '<p style="font-size:13px;color:rgba(255,255,255,0.45);margin:-10px 0 16px">Ponle tareas con fecha. Aparecen en su panel de Inicio.</p>'
       +   '<div id="trackTaskHost"></div>'
@@ -20445,6 +20659,514 @@
     });
   }
 
+  // ═══════════════════════════════════════════════════════════════════
+  // MÓDULOS (Classroom) — vídeos Vimeo + checklist por lección.
+  //
+  //  · El árbol de módulos es CONTENIDO COMPARTIDO: lo edita el admin y lo
+  //    ven todos los alumnos. Vive en la tabla public.app_content bajo la
+  //    clave 'classroom_v1'. Escrituras gated a admin en la UI.
+  //  · El PROGRESO (checks marcados) es POR-USUARIO: user_state → 'mod_progress_v1'.
+  // ═══════════════════════════════════════════════════════════════════
+  const MOD_CONTENT_KEY = 'classroom_v1';
+  const MOD_PROGRESS_KEY = 'mod_progress_v1';
+  const MOD_EMOJI_CHOICES = ['🎬','🧭','📼','🎭','🎯','🧠','🔥','💎','🚀','📈','✍️','🎨','📣','🏛️','⚡'];
+  const MOD_DOT_COLORS = ['#f5a623','#e5484d','#8b5cf6','#ec4899','#22c55e','#3b82f6','#eab308','#f97316'];
+
+  let classroomData = [];            // array of modules (shared tree)
+  let _modView = 'grid';             // 'grid' | 'course'
+  let _modCurModule = null;          // module id currently open
+  let _modCurLesson = null;          // lesson id currently open
+  let _modCollapsed = {};            // groupId -> true (collapsed)
+
+  function _modUid(prefix) {
+    return (prefix || 'x') + '-' + Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(-3);
+  }
+
+  function defaultClassroom() {
+    return [
+      {
+        id: 'market-fit', title: 'Market fit', emoji: '🎯', color: '#ec4899',
+        description: 'Cuello de botella: "mi contenido no consigue visitas". Encuentra el encaje entre lo que creas y lo que el mercado quiere ver.',
+        cover: '', visibility: 'visible',
+        groups: [
+          { id: 'g-bases', title: 'Bases', lessons: [
+            { id: 'l-cmf', title: 'CMF', vimeo: '', body: 'Pega aquí el enlace de Vimeo y escribe el guion de la lección.',
+              checklist: [
+                { id: 'c1', text: 'Entender qué es el Creator Market Fit.' },
+                { id: 'c2', text: 'Identificar si estás aplicando tips (micro) sin la estrategia base (macro).' },
+                { id: 'c3', text: 'Entender la importancia de crear tu MVS (Minimum Viable Strategy).' },
+                { id: 'c4', text: 'Empezar a publicar e iterar sin sobrepensar.' },
+              ] },
+            { id: 'l-gps', title: 'GPS', vimeo: '', body: '', checklist: [] },
+          ] },
+        ],
+      },
+    ];
+  }
+
+  // ── Carga / guardado del árbol compartido ──
+  async function loadClassroom() {
+    try {
+      if (supabaseClient) {
+        const { data, error } = await supabaseClient
+          .from('app_content').select('value').eq('key', MOD_CONTENT_KEY).maybeSingle();
+        if (error) throw error;
+        if (data && Array.isArray(data.value)) { classroomData = data.value; return; }
+        // Tabla vacía: sembramos el ejemplo (solo persiste si un admin guarda algo).
+        classroomData = defaultClassroom();
+        return;
+      }
+    } catch (e) {
+      console.warn('[modulos] load falló (¿tabla app_content sin crear?) — usando semilla local', e);
+    }
+    classroomData = defaultClassroom();
+  }
+
+  async function saveClassroom() {
+    try {
+      if (!supabaseClient) { console.warn('[modulos] sin supabase — no se persiste'); return; }
+      const { error } = await supabaseClient.from('app_content')
+        .upsert({ key: MOD_CONTENT_KEY, value: classroomData, updated_at: new Date().toISOString() });
+      if (error) throw error;
+    } catch (e) {
+      console.error('[modulos] guardar falló', e);
+      alert('No se pudo guardar. Revisa que la tabla app_content exista en Supabase (supabase-schema.sql).');
+    }
+  }
+
+  // ── Vimeo: normaliza cualquier link/ID a una URL de player embebible ──
+  function vimeoEmbedUrl(raw) {
+    if (!raw) return '';
+    const s = String(raw).trim();
+    // player.vimeo.com/video/ID ya es válido
+    let m = s.match(/player\.vimeo\.com\/video\/(\d+)(?:\?h=([0-9a-zA-Z]+))?/);
+    if (m) return 'https://player.vimeo.com/video/' + m[1] + (m[2] ? '?h=' + m[2] : '');
+    // vimeo.com/ID/HASH  (vídeo privado con hash de acceso)
+    m = s.match(/vimeo\.com\/(?:manage\/videos\/)?(\d+)(?:\/([0-9a-zA-Z]+))?/);
+    if (m) return 'https://player.vimeo.com/video/' + m[1] + (m[2] ? '?h=' + m[2] : '');
+    // ID a secas
+    if (/^\d+$/.test(s)) return 'https://player.vimeo.com/video/' + s;
+    return '';
+  }
+
+  // ── Progreso por-usuario ──
+  function modProgress() { return storeGet(MOD_PROGRESS_KEY) || {}; }
+  function _modCK(mId, lId, sId) { return mId + '/' + lId + '/' + sId; }
+  function lessonStepIds(lesson) {
+    return (lesson.checklist && lesson.checklist.length) ? lesson.checklist.map(c => c.id) : ['__seen'];
+  }
+  function lessonDoneCount(mId, lesson, prog) {
+    const p = prog || modProgress();
+    return lessonStepIds(lesson).filter(s => p[_modCK(mId, lesson.id, s)]).length;
+  }
+  function lessonIsDone(mId, lesson, prog) {
+    const steps = lessonStepIds(lesson);
+    return lessonDoneCount(mId, lesson, prog) >= steps.length;
+  }
+  function moduleStats(mod) {
+    const prog = modProgress();
+    let lessons = 0, steps = 0, done = 0;
+    (mod.groups || []).forEach(g => (g.lessons || []).forEach(l => {
+      lessons++; const sids = lessonStepIds(l); steps += sids.length;
+      done += sids.filter(s => prog[_modCK(mod.id, l.id, s)]).length;
+    }));
+    return { lessons, steps, done, pct: steps ? Math.round(done / steps * 100) : 0 };
+  }
+  function modSetCheck(mId, lId, sId, on) {
+    const p = modProgress();
+    const k = _modCK(mId, lId, sId);
+    if (on) p[k] = 1; else delete p[k];
+    storeSet(MOD_PROGRESS_KEY, p);
+  }
+
+  function findModule(id) { return classroomData.find(m => m.id === id) || null; }
+  function findLesson(mod, lId) {
+    for (const g of (mod.groups || [])) { const l = (g.lessons || []).find(x => x.id === lId); if (l) return { group: g, lesson: l }; }
+    return null;
+  }
+
+  // ── Iconos inline reutilizables ──
+  const MOD_SVG_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  const MOD_SVG_PLAY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16" fill="currentColor" stroke="none"/></svg>';
+  const MOD_SVG_PENCIL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
+  const MOD_SVG_LOCK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+
+  // ── Router del apartado ──
+  function renderModulos() {
+    if (_modView === 'course' && findModule(_modCurModule)) renderModCourse();
+    else openModGrid();
+  }
+  function openModGrid() {
+    _modView = 'grid';
+    document.getElementById('modGridView').style.display = '';
+    document.getElementById('modCourseView').style.display = 'none';
+    renderModGrid();
+  }
+  function openModule(id) {
+    const mod = findModule(id); if (!mod) return;
+    _modCurModule = id;
+    const first = findFirstLesson(mod);
+    _modCurLesson = first ? first.id : null;
+    _modView = 'course';
+    document.getElementById('modGridView').style.display = 'none';
+    document.getElementById('modCourseView').style.display = '';
+    renderModCourse();
+  }
+  function findFirstLesson(mod) {
+    for (const g of (mod.groups || [])) if ((g.lessons || []).length) return g.lessons[0];
+    return null;
+  }
+
+  // ── Grid de módulos ──
+  function renderModGrid() {
+    const grid = document.getElementById('modGrid'); if (!grid) return;
+    const admin = (typeof isAdminUser === 'function') && isAdminUser();
+    const visible = classroomData.filter(m => admin || (m.visibility || 'visible') !== 'hidden');
+    grid.innerHTML = '';
+    visible.forEach(mod => {
+      const st = moduleStats(mod);
+      const vis = mod.visibility || 'visible';
+      const locked = !admin && vis === 'private';
+      const dot = mod.color || MOD_DOT_COLORS[0];
+      const card = document.createElement('div');
+      card.className = 'mod-card';
+      const cover = mod.cover
+        ? '<div class="mod-card-cover" style="background-image:url(' + JSON.stringify(mod.cover) + ')"></div>'
+        : '<div class="mod-card-cover">' + (mod.emoji || '🎬') + '</div>';
+      card.innerHTML =
+        cover +
+        (locked ? '<div class="mod-card-locked">' + MOD_SVG_LOCK + '</div>' : '') +
+        '<div class="mod-card-body">' +
+          '<div class="mod-card-meta">' + MOD_SVG_PLAY +
+            '<span>' + st.lessons + ' ' + (st.lessons === 1 ? 'lección' : 'lecciones') + '</span>' +
+            (st.steps ? '<span>·</span><span>' + st.steps + ' pasos</span>' : '') +
+          '</div>' +
+          '<div class="mod-card-name"><span class="mod-card-dot" style="background:' + dot + '"></span>' + escapeHtml(mod.title || 'Sin título') + '</div>' +
+          '<div class="mod-card-desc">' + escapeHtml(mod.description || '') + '</div>' +
+          '<div class="mod-card-prog"><div class="mod-card-prog-bar"><div class="mod-card-prog-fill" style="width:' + st.pct + '%"></div></div><span class="mod-card-prog-pct">' + st.pct + '%</span></div>' +
+          (admin ? '<div class="mod-card-adminrow">' +
+            '<button class="mod-mini-btn" data-medit="' + mod.id + '">Editar</button>' +
+            '<button class="mod-mini-btn danger" data-mdel="' + mod.id + '">Eliminar</button>' +
+          '</div>' : '') +
+        '';
+      if (!locked) {
+        card.addEventListener('click', (e) => {
+          if (e.target.closest('[data-medit],[data-mdel]')) return;
+          openModule(mod.id);
+        });
+      }
+      grid.appendChild(card);
+    });
+    if (admin) {
+      const add = document.createElement('button');
+      add.className = 'mod-card-new'; add.type = 'button';
+      add.innerHTML = '<div class="mod-card-new-plus">+</div><div>Nuevo módulo</div>';
+      add.addEventListener('click', () => openModuleEditor(null));
+      grid.appendChild(add);
+    }
+    grid.querySelectorAll('[data-medit]').forEach(b => b.addEventListener('click', () => openModuleEditor(b.dataset.medit)));
+    grid.querySelectorAll('[data-mdel]').forEach(b => b.addEventListener('click', () => deleteModule(b.dataset.mdel)));
+  }
+
+  // ── Vista curso (rail + lección) ──
+  function renderModCourse() {
+    const mod = findModule(_modCurModule); if (!mod) { openModGrid(); return; }
+    const admin = (typeof isAdminUser === 'function') && isAdminUser();
+    if (!findLesson(mod, _modCurLesson)) { const f = findFirstLesson(mod); _modCurLesson = f ? f.id : null; }
+    renderModRail(mod, admin);
+    renderModLesson(mod, admin);
+  }
+
+  function renderModRail(mod, admin) {
+    const rail = document.getElementById('modRail'); if (!rail) return;
+    const prog = modProgress();
+    const st = moduleStats(mod);
+    let html =
+      '<div class="mod-rail-head">' +
+        '<div class="mod-rail-emoji">' + (mod.emoji || '🎬') + '</div>' +
+        '<div class="mod-rail-title">' + escapeHtml(mod.title || '') + '</div>' +
+        (admin ? '<button class="mod-icon-btn" data-medit-course="1" title="Editar módulo">' + MOD_SVG_PENCIL + '</button>' : '') +
+      '</div>' +
+      '<div class="mod-rail-prog"><div class="mod-rail-prog-fill" style="width:' + st.pct + '%"></div></div>' +
+      '<div class="mod-rail-prog-txt">' + st.done + '/' + st.steps + '</div>';
+
+    (mod.groups || []).forEach(g => {
+      const gl = g.lessons || [];
+      const doneL = gl.filter(l => lessonIsDone(mod.id, l, prog)).length;
+      const collapsed = _modCollapsed[g.id] ? ' collapsed' : '';
+      html += '<div class="mod-group' + collapsed + '" data-gid="' + g.id + '">' +
+        '<button class="mod-group-head" data-gtoggle="' + g.id + '">' +
+          '<svg class="mod-group-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>' +
+          '<span>' + escapeHtml(g.title || 'Grupo') + '</span>' +
+          '<span class="mod-group-count">' + doneL + '/' + gl.length + '</span>' +
+        '</button>' +
+        '<div class="mod-group-lessons">';
+      gl.forEach(l => {
+        const done = lessonIsDone(mod.id, l, prog) ? ' done' : '';
+        const active = l.id === _modCurLesson ? ' is-active' : '';
+        html += '<button class="mod-lesson-item' + done + active + '" data-lid="' + l.id + '">' +
+          '<span class="mod-lesson-check">' + MOD_SVG_CHECK + '</span>' +
+          '<span class="mod-lesson-name">' + escapeHtml(l.title || 'Lección') + '</span>' +
+        '</button>';
+      });
+      if (admin) html += '<button class="mod-rail-add" data-addlesson="' + g.id + '">+ Nueva lección</button>';
+      html += '</div></div>';
+    });
+    if (admin) html += '<button class="mod-rail-add" data-addgroup="1">+ Nuevo grupo</button>';
+    rail.innerHTML = html;
+
+    rail.querySelectorAll('[data-gtoggle]').forEach(b => b.addEventListener('click', () => {
+      const id = b.dataset.gtoggle; _modCollapsed[id] = !_modCollapsed[id];
+      b.closest('.mod-group').classList.toggle('collapsed', !!_modCollapsed[id]);
+    }));
+    rail.querySelectorAll('[data-lid]').forEach(b => b.addEventListener('click', () => {
+      _modCurLesson = b.dataset.lid; renderModCourse();
+    }));
+    if (admin) {
+      const ce = rail.querySelector('[data-medit-course]'); if (ce) ce.addEventListener('click', () => openModuleEditor(mod.id));
+      rail.querySelectorAll('[data-addlesson]').forEach(b => b.addEventListener('click', () => openLessonEditor(mod.id, b.dataset.addlesson, null)));
+      const ag = rail.querySelector('[data-addgroup]'); if (ag) ag.addEventListener('click', () => addGroup(mod.id));
+    }
+  }
+
+  function renderModLesson(mod, admin) {
+    const pane = document.getElementById('modLesson'); if (!pane) return;
+    const found = findLesson(mod, _modCurLesson);
+    if (!found) {
+      pane.innerHTML = '<div class="mod-lesson-empty">Este módulo aún no tiene lecciones.' +
+        (admin ? ' Usa “+ Nueva lección” en la barra lateral.' : '') + '</div>';
+      return;
+    }
+    const { group, lesson } = found;
+    // índice global de la lección dentro del módulo
+    const flat = []; (mod.groups || []).forEach(g => (g.lessons || []).forEach(l => flat.push(l)));
+    const idx = flat.findIndex(l => l.id === lesson.id) + 1;
+    const embed = vimeoEmbedUrl(lesson.vimeo);
+    const steps = lesson.checklist || [];
+    const prog = modProgress();
+    const doneN = steps.filter(c => prog[_modCK(mod.id, lesson.id, c.id)]).length;
+
+    let video;
+    if (embed) {
+      video = '<div class="mod-video"><iframe src="' + embed + '" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>';
+    } else {
+      video = '<div class="mod-video"><div class="mod-video-empty">' + MOD_SVG_PLAY +
+        '<span>' + (admin ? 'Añade el enlace de Vimeo con el lápiz de editar.' : 'Vídeo próximamente.') + '</span></div></div>';
+    }
+
+    let checklist = '';
+    if (steps.length) {
+      checklist = '<div class="mod-checklist"><div class="mod-checklist-head">' +
+        '<span class="mod-checklist-eyebrow">Checklist</span>' +
+        '<span class="mod-checklist-count">' + doneN + '/' + steps.length + '</span></div>';
+      steps.forEach(c => {
+        const on = !!prog[_modCK(mod.id, lesson.id, c.id)];
+        checklist += '<div class="mod-check-item' + (on ? ' done' : '') + '" data-cid="' + c.id + '">' +
+          '<span class="mod-check-box">' + MOD_SVG_CHECK + '</span>' +
+          '<span class="mod-check-text">' + escapeHtml(c.text || '') + '</span></div>';
+      });
+      checklist += '</div>';
+    } else if (!admin) {
+      // Sin checklist: permitir marcar como vista
+      const seen = !!prog[_modCK(mod.id, lesson.id, '__seen')];
+      checklist = '<div class="mod-checklist"><div class="mod-check-item' + (seen ? ' done' : '') + '" data-cid="__seen">' +
+        '<span class="mod-check-box">' + MOD_SVG_CHECK + '</span>' +
+        '<span class="mod-check-text">Marcar lección como vista</span></div></div>';
+    }
+
+    pane.innerHTML =
+      '<div class="mod-lesson-eyebrow">' + escapeHtml(group.title || '') + ' · Lección ' + idx + ' de ' + flat.length + '</div>' +
+      '<div class="mod-lesson-head"><h2 class="mod-lesson-title">' + escapeHtml(lesson.title || '') + '</h2>' +
+        (admin ? '<button class="mod-icon-btn" data-editlesson="1" title="Editar lección">' + MOD_SVG_PENCIL + '</button>' +
+                 '<button class="mod-icon-btn" data-dellesson="1" title="Eliminar lección">×</button>' : '') +
+      '</div>' +
+      video +
+      (lesson.body ? '<div class="mod-body">' + escapeHtml(lesson.body) + '</div>' : '') +
+      checklist;
+
+    pane.querySelectorAll('[data-cid]').forEach(el => el.addEventListener('click', () => {
+      const cid = el.dataset.cid;
+      const on = !el.classList.contains('done');
+      modSetCheck(mod.id, lesson.id, cid, on);
+      renderModCourse();
+    }));
+    if (admin) {
+      const el = pane.querySelector('[data-editlesson]'); if (el) el.addEventListener('click', () => openLessonEditor(mod.id, group.id, lesson.id));
+      const dl = pane.querySelector('[data-dellesson]'); if (dl) dl.addEventListener('click', () => deleteLesson(mod.id, lesson.id));
+    }
+  }
+
+  // ── Modal genérico ──
+  function openModModal(title, bodyEl, footEl) {
+    document.getElementById('modModalTitle').textContent = title;
+    const body = document.getElementById('modModalBody'); body.innerHTML = ''; body.appendChild(bodyEl);
+    const foot = document.getElementById('modModalFoot'); foot.innerHTML = ''; foot.appendChild(footEl);
+    document.getElementById('modModal').classList.add('is-open');
+  }
+  function closeModModal() { document.getElementById('modModal').classList.remove('is-open'); }
+
+  function _modField(labelHtml, inputEl) {
+    const w = document.createElement('div'); w.className = 'mod-field';
+    const lab = document.createElement('label'); lab.innerHTML = labelHtml;
+    w.appendChild(lab); w.appendChild(inputEl); return w;
+  }
+
+  // ── Editor de módulo ──
+  function openModuleEditor(moduleId) {
+    const editing = moduleId ? findModule(moduleId) : null;
+    const body = document.createElement('div');
+
+    const title = document.createElement('input'); title.className = 'mod-input'; title.value = editing ? (editing.title || '') : ''; title.placeholder = 'Ej. Market fit';
+    const desc = document.createElement('textarea'); desc.className = 'mod-textarea'; desc.value = editing ? (editing.description || '') : ''; desc.placeholder = 'Una frase sobre qué resuelve este módulo.';
+    const cover = document.createElement('input'); cover.className = 'mod-input'; cover.value = editing ? (editing.cover || '') : ''; cover.placeholder = 'https://… (opcional)';
+
+    // emoji picker
+    let selEmoji = editing ? (editing.emoji || '🎬') : '🎬';
+    const emojiRow = document.createElement('div'); emojiRow.className = 'mod-emoji-row';
+    MOD_EMOJI_CHOICES.forEach(e => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'mod-emoji-opt' + (e === selEmoji ? ' is-sel' : ''); b.textContent = e;
+      b.addEventListener('click', () => { selEmoji = e; emojiRow.querySelectorAll('.mod-emoji-opt').forEach(x => x.classList.remove('is-sel')); b.classList.add('is-sel'); });
+      emojiRow.appendChild(b);
+    });
+
+    // color picker (dots)
+    let selColor = editing ? (editing.color || MOD_DOT_COLORS[0]) : MOD_DOT_COLORS[0];
+    const colorRow = document.createElement('div'); colorRow.className = 'mod-emoji-row';
+    MOD_DOT_COLORS.forEach(c => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'mod-emoji-opt' + (c === selColor ? ' is-sel' : '');
+      b.innerHTML = '<span style="width:16px;height:16px;border-radius:50%;background:' + c + '"></span>';
+      b.addEventListener('click', () => { selColor = c; colorRow.querySelectorAll('.mod-emoji-opt').forEach(x => x.classList.remove('is-sel')); b.classList.add('is-sel'); });
+      colorRow.appendChild(b);
+    });
+
+    const vis = document.createElement('select'); vis.className = 'mod-select';
+    [['visible','Visible para todos'],['private','Privado (candado)'],['hidden','Oculto (solo admin)']].forEach(([v,l]) => {
+      const o = document.createElement('option'); o.value = v; o.textContent = l; if (editing && (editing.visibility||'visible') === v) o.selected = true; vis.appendChild(o);
+    });
+
+    body.appendChild(_modField('Título', title));
+    body.appendChild(_modField('Descripción', desc));
+    body.appendChild(_modField('Emoji de portada', emojiRow));
+    body.appendChild(_modField('Color del módulo', colorRow));
+    body.appendChild(_modField('Imagen de portada <span>(opcional, sustituye al emoji)</span>', cover));
+    body.appendChild(_modField('Visibilidad', vis));
+
+    const foot = document.createElement('div'); foot.style.display = 'contents';
+    const left = document.createElement('div');
+    if (editing) {
+      const del = document.createElement('button'); del.className = 'mod-btn mod-btn-danger'; del.textContent = 'Eliminar';
+      del.addEventListener('click', () => { closeModModal(); deleteModule(editing.id); });
+      left.appendChild(del);
+    }
+    const right = document.createElement('div'); right.style.display = 'flex'; right.style.gap = '10px';
+    const cancel = document.createElement('button'); cancel.className = 'mod-btn'; cancel.textContent = 'Cancelar'; cancel.addEventListener('click', closeModModal);
+    const save = document.createElement('button'); save.className = 'mod-btn mod-btn-primary'; save.textContent = 'Guardar';
+    save.addEventListener('click', async () => {
+      const payload = {
+        title: title.value.trim() || 'Sin título', description: desc.value.trim(),
+        emoji: selEmoji, color: selColor, cover: cover.value.trim(), visibility: vis.value,
+      };
+      if (editing) { Object.assign(editing, payload); }
+      else { classroomData.push(Object.assign({ id: _modUid('mod'), groups: [] }, payload)); }
+      closeModModal(); await saveClassroom(); renderModulos();
+    });
+    right.appendChild(cancel); right.appendChild(save);
+    foot.appendChild(left); foot.appendChild(right);
+
+    openModModal(editing ? 'Editar módulo' : 'Nuevo módulo', body, foot);
+  }
+
+  async function deleteModule(id) {
+    const mod = findModule(id); if (!mod) return;
+    if (!confirm('¿Eliminar el módulo “' + (mod.title || '') + '” y todas sus lecciones? Esta acción no se puede deshacer.')) return;
+    classroomData = classroomData.filter(m => m.id !== id);
+    if (_modCurModule === id) { _modView = 'grid'; _modCurModule = null; }
+    await saveClassroom(); renderModulos();
+  }
+
+  // ── Grupos ──
+  async function addGroup(moduleId) {
+    const mod = findModule(moduleId); if (!mod) return;
+    const name = prompt('Nombre del grupo (ej. Bases, Fit, Alma):', '');
+    if (name === null) return;
+    (mod.groups = mod.groups || []).push({ id: _modUid('g'), title: name.trim() || 'Grupo', lessons: [] });
+    await saveClassroom(); renderModCourse();
+  }
+
+  // ── Editor de lección ──
+  function openLessonEditor(moduleId, groupId, lessonId) {
+    const mod = findModule(moduleId); if (!mod) return;
+    const group = (mod.groups || []).find(g => g.id === groupId); if (!group) return;
+    const editing = lessonId ? (group.lessons || []).find(l => l.id === lessonId) : null;
+    const body = document.createElement('div');
+
+    const title = document.createElement('input'); title.className = 'mod-input'; title.value = editing ? (editing.title || '') : ''; title.placeholder = 'Ej. CMF';
+    const vimeo = document.createElement('input'); vimeo.className = 'mod-input'; vimeo.value = editing ? (editing.vimeo || '') : ''; vimeo.placeholder = 'https://vimeo.com/123456789';
+    const bodyTxt = document.createElement('textarea'); bodyTxt.className = 'mod-textarea'; bodyTxt.value = editing ? (editing.body || '') : ''; bodyTxt.placeholder = 'Texto de apoyo bajo el vídeo (opcional).';
+
+    // checklist editor
+    const checkWrap = document.createElement('div'); checkWrap.style.display = 'flex'; checkWrap.style.flexDirection = 'column'; checkWrap.style.gap = '8px';
+    function addCheckRow(text, id) {
+      const row = document.createElement('div'); row.className = 'mod-checkedit-row'; row.dataset.cid = id || _modUid('c');
+      const inp = document.createElement('input'); inp.className = 'mod-input'; inp.value = text || ''; inp.placeholder = 'Paso de la checklist…';
+      const del = document.createElement('button'); del.type = 'button'; del.className = 'mod-check-del'; del.textContent = '×';
+      del.addEventListener('click', () => row.remove());
+      row.appendChild(inp); row.appendChild(del); checkWrap.appendChild(row);
+    }
+    (editing && editing.checklist || []).forEach(c => addCheckRow(c.text, c.id));
+    const addBtn = document.createElement('button'); addBtn.type = 'button'; addBtn.className = 'mod-addcheck'; addBtn.textContent = '+ Añadir paso';
+    addBtn.addEventListener('click', () => addCheckRow('', null));
+    const checkContainer = document.createElement('div'); checkContainer.style.display = 'flex'; checkContainer.style.flexDirection = 'column'; checkContainer.style.gap = '10px';
+    checkContainer.appendChild(checkWrap); checkContainer.appendChild(addBtn);
+
+    body.appendChild(_modField('Título de la lección', title));
+    body.appendChild(_modField('Enlace de Vimeo', vimeo));
+    body.appendChild(_modField('Texto de apoyo <span>(opcional)</span>', bodyTxt));
+    body.appendChild(_modField('Checklist <span>(pasos accionables)</span>', checkContainer));
+
+    const foot = document.createElement('div'); foot.style.display = 'contents';
+    const left = document.createElement('div');
+    if (editing) {
+      const del = document.createElement('button'); del.className = 'mod-btn mod-btn-danger'; del.textContent = 'Eliminar';
+      del.addEventListener('click', () => { closeModModal(); deleteLesson(moduleId, editing.id); });
+      left.appendChild(del);
+    }
+    const right = document.createElement('div'); right.style.display = 'flex'; right.style.gap = '10px';
+    const cancel = document.createElement('button'); cancel.className = 'mod-btn'; cancel.textContent = 'Cancelar'; cancel.addEventListener('click', closeModModal);
+    const save = document.createElement('button'); save.className = 'mod-btn mod-btn-primary'; save.textContent = 'Guardar';
+    save.addEventListener('click', async () => {
+      const checklist = [];
+      checkWrap.querySelectorAll('.mod-checkedit-row').forEach(r => {
+        const t = r.querySelector('input').value.trim();
+        if (t) checklist.push({ id: r.dataset.cid, text: t });
+      });
+      const payload = { title: title.value.trim() || 'Sin título', vimeo: vimeo.value.trim(), body: bodyTxt.value.trim(), checklist };
+      if (editing) { Object.assign(editing, payload); }
+      else { const nl = Object.assign({ id: _modUid('l') }, payload); (group.lessons = group.lessons || []).push(nl); _modCurLesson = nl.id; }
+      closeModModal(); await saveClassroom(); renderModCourse();
+    });
+    right.appendChild(cancel); right.appendChild(save);
+    foot.appendChild(left); foot.appendChild(right);
+
+    openModModal(editing ? 'Editar lección' : 'Nueva lección', body, foot);
+  }
+
+  async function deleteLesson(moduleId, lessonId) {
+    const mod = findModule(moduleId); if (!mod) return;
+    const found = findLesson(mod, lessonId); if (!found) return;
+    if (!confirm('¿Eliminar la lección “' + (found.lesson.title || '') + '”?')) return;
+    found.group.lessons = (found.group.lessons || []).filter(l => l.id !== lessonId);
+    if (_modCurLesson === lessonId) { const f = findFirstLesson(mod); _modCurLesson = f ? f.id : null; }
+    await saveClassroom(); renderModCourse();
+  }
+
+  // Wiring de cierre del modal (una vez)
+  (function wireModModal() {
+    const x = document.getElementById('modModalClose'); if (x) x.addEventListener('click', closeModModal);
+    const ov = document.getElementById('modModal'); if (ov) ov.addEventListener('click', (e) => { if (e.target === ov) closeModModal(); });
+    const back = document.getElementById('modBackBtn'); if (back) back.addEventListener('click', openModGrid);
+  })();
+
   // ─── Tabs ─────────────────────────────────────────────────────────
   function setActiveTab(name) {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('is-active', b.dataset.tab === name));
@@ -20460,6 +21182,8 @@
       renderSkilltree();
     } else if (name === 'bossfight') {
       renderBossFight();
+    } else if (name === 'modulos') {
+      try { renderModulos(); } catch (e) { console.error('[modulos] render failed', e); }
     } else if (name === 'admin') {
       loadAdminData();
       if (typeof wireAccessAdminUI === 'function') wireAccessAdminUI();
@@ -20492,6 +21216,8 @@
       await loadDynamicAdmins();
       revealAdminTabIfNeeded();
     } catch (e) { console.error('[admin] dynamic admins load failed', e); }
+    // Cargar el árbol de Módulos compartido (contenido de admin, visible a todos).
+    try { await loadClassroom(); } catch (e) { console.error('[modulos] load failed', e); }
     // Wire fragmentos chip + modal and load the user's balance.
     try {
       if (typeof wireFragmentsUserUI === 'function') wireFragmentsUserUI();
@@ -20506,7 +21232,7 @@
     try {
       let saved = localStorage.getItem('active_tab_v1');
       // Legacy tab names from the Heroes App fork — demote to Inicio.
-      const LEGACY_TABS = ['skilltree', 'skilltree-v2', 'dashboard', 'habits', 'calendar', 'portal', 'bossfight'];
+      const LEGACY_TABS = ['skilltree', 'skilltree-v2', 'dashboard', 'habits', 'calendar', 'portal', 'bossfight', 'checklist'];
       if (LEGACY_TABS.indexOf(saved) >= 0) saved = 'inicio';
       setActiveTab(saved || 'inicio');
     } catch (e) {}
@@ -21221,12 +21947,17 @@
     return '';
   }
 
-  // Sum every checklist's done/total into one protocol-wide figure.
+  // Módulos visibles para el alumno (los borradores 'hidden' no cuentan).
+  function inicioModuleList() {
+    return (typeof classroomData !== 'undefined' ? classroomData : [])
+      .filter(m => (m.visibility || 'visible') !== 'hidden');
+  }
+  // Suma el progreso de todos los módulos en una sola cifra global.
   function inicioOverall() {
     let done = 0, total = 0;
-    for (const c of CHECKLISTS) {
-      const p = getChecklistProgress(c.id);
-      done += p.done; total += p.total;
+    for (const m of inicioModuleList()) {
+      const st = moduleStats(m);
+      done += st.done; total += st.steps;
     }
     return { done, total, pct: total > 0 ? Math.round((done / total) * 100) : 0 };
   }
@@ -21240,57 +21971,64 @@
   function levelTitle(modulesComplete) {
     return LEVEL_TITLES[Math.min(modulesComplete, LEVEL_TITLES.length - 1)];
   }
-  // Nº de checklists (módulos) terminados al 100%.
+  // Nº de módulos terminados al 100%.
   function modulesCompleteCount() {
-    return CHECKLISTS.filter(c => {
-      const p = getChecklistProgress(c.id);
-      return p.total > 0 && p.pct === 100;
+    return inicioModuleList().filter(m => {
+      const st = moduleStats(m);
+      return st.steps > 0 && st.pct === 100;
     }).length;
   }
 
   function renderInicioModules() {
     const wrap = document.getElementById('inicioModules');
     if (!wrap) return;
+    const mods = inicioModuleList();
     const countEl = document.getElementById('inicioModulesCount');
-    if (countEl) countEl.textContent = CHECKLISTS.length;
+    if (countEl) countEl.textContent = mods.length;
 
-    // "Active" module = the first one with content that isn't finished.
-    let activeId = null;
-    for (const c of CHECKLISTS) {
-      const p = getChecklistProgress(c.id);
-      if (p.total > 0 && p.pct < 100) { activeId = c.id; break; }
+    if (!mods.length) {
+      wrap.innerHTML = '<div class="inicio-modules-empty" style="color:var(--text-tertiary);font-size:14px;padding:8px 2px;">Aún no hay módulos. Ve a <strong>Módulos</strong> para crear el primero.</div>';
+      return;
     }
 
-    wrap.innerHTML = CHECKLISTS.map((c, i) => {
-      const p = getChecklistProgress(c.id);
-      const paso = checklistPaso(c.id);
-      const isActive = c.id === activeId;
+    // "Activo" = primer módulo con contenido que aún no está al 100%.
+    let activeId = null;
+    for (const m of mods) {
+      const st = moduleStats(m);
+      if (st.steps > 0 && st.pct < 100) { activeId = m.id; break; }
+    }
+
+    wrap.innerHTML = mods.map((m, i) => {
+      const st = moduleStats(m);
+      const isActive = m.id === activeId;
       const tag = isActive ? 'Activo' : '';
-      const meta = p.total > 0 ? (p.done + '/' + p.total + ' pasos · ' + paso) : 'Próximamente';
-      const sub = checklistSubtitle(c.id);
+      const meta = st.lessons > 0
+        ? (st.lessons + ' ' + (st.lessons === 1 ? 'lección' : 'lecciones') + (st.steps ? ' · ' + st.done + '/' + st.steps + ' pasos' : ''))
+        : 'Próximamente';
+      const dot = m.color || '#ffffff';
       return ''
-        + '<button class="folder ec-fade-up' + (isActive ? ' is-active' : '') + '" type="button" data-checklist="' + escapeHtml(c.id) + '" style="animation-delay:' + (i * 50) + 'ms">'
+        + '<button class="folder ec-fade-up' + (isActive ? ' is-active' : '') + '" type="button" data-modid="' + escapeHtml(m.id) + '" style="animation-delay:' + (i * 50) + 'ms">'
         +   '<div class="folder-tab-row"><div class="folder-tab">'
         +     (tag ? '<span class="folder-tab-tag">' + tag + '</span>' : '<span></span>')
         +   '</div></div>'
         +   '<div class="folder-body">'
         +     '<span class="folder-sheen"></span>'
         +     '<div class="folder-foot">'
-        +       '<span class="folder-dot"></span>'
-        +       '<div class="folder-name">' + escapeHtml(c.name) + '</div>'
-        +       (sub ? '<div class="folder-sub">' + escapeHtml(sub) + '</div>' : '')
+        +       '<span class="folder-dot" style="background:' + dot + '"></span>'
+        +       '<div class="folder-name">' + escapeHtml(m.title || 'Sin título') + '</div>'
+        +       (m.description ? '<div class="folder-sub">' + escapeHtml(m.description) + '</div>' : '')
         +       '<div class="folder-meta">' + escapeHtml(meta) + '</div>'
         +     '</div>'
-        +     '<div class="folder-bar"><div class="folder-fill" style="width:' + p.pct + '%"></div></div>'
+        +     '<div class="folder-bar"><div class="folder-fill" style="width:' + st.pct + '%"></div></div>'
         +   '</div>'
         + '</button>';
     }).join('');
 
     wrap.querySelectorAll('.folder').forEach(card => {
       card.addEventListener('click', () => {
-        const id = card.dataset.checklist;
-        setActiveTab('checklist');
-        try { openChecklistDetail(id); } catch (e) {}
+        const id = card.dataset.modid;
+        setActiveTab('modulos');
+        try { openModule(id); } catch (e) {}
       });
     });
   }
@@ -21331,11 +22069,11 @@
     if (pts)   pts.textContent = (o.done * POINTS_PER_STEP) + ' pts';
     if (title) title.textContent = levelTitle(modulesDone);
     if (fill)  fill.style.width = o.pct + '%';
-    if (meta)  meta.textContent = o.done + '/' + o.total + ' pasos · ' + modulesDone + '/' + CHECKLISTS.length + ' módulos';
+    if (meta)  meta.textContent = o.done + '/' + o.total + ' pasos · ' + modulesDone + '/' + inicioModuleList().length + ' módulos';
   }
 
   // Jump from the "Ver todo →" link to the full protocol grid.
-  document.getElementById('inicioSeeAll')?.addEventListener('click', () => setActiveTab('checklist'));
+  document.getElementById('inicioSeeAll')?.addEventListener('click', () => setActiveTab('modulos'));
 
   // ─── Student tasks (assigned by admins in Tracking) ───────────────
   // Stored in public.student_tasks. Admins create/delete tasks for any

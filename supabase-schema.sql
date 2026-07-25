@@ -176,6 +176,24 @@ create policy "student_tasks authed full" on public.student_tasks for all
   using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 
 
+-- ─── 10. app_content ──────────────────────────────────────────────────────
+-- Shared key/value store for admin-authored content that EVERY student sees
+-- (as opposed to user_state, which is per-user). The "Módulos" classroom
+-- tree lives here under key = 'classroom_v1'. Any authenticated user can
+-- read; writes are UI-gated to admins (isAdminUser() in index.html), same
+-- trade-off as the other shared tables — see SECURITY NOTE below.
+create table if not exists public.app_content (
+  key        text        primary key,
+  value      jsonb,
+  updated_at timestamptz not null default now()
+);
+
+alter table public.app_content enable row level security;
+drop policy if exists "app_content authed full" on public.app_content;
+create policy "app_content authed full" on public.app_content for all
+  using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
+
+
 -- ─────────────────────────────────────────────────────────────────────────
 -- SECURITY NOTE
 -- ─────────────────────────────────────────────────────────────────────────
